@@ -25,6 +25,7 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
+import org.egov.pt.repository.rowmapper.AssessmentRowMapper;
 import org.egov.pt.service.DiffService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.service.WorkflowService;
@@ -49,6 +50,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class PropertyValidator {
 
+    private final AssessmentRowMapper assessmentRowMapper;
+
 
     @Autowired
     private PropertyUtil propertyUtil;
@@ -69,6 +72,10 @@ public class PropertyValidator {
     
     @Autowired
     private WorkflowService workflowService;
+
+    PropertyValidator(AssessmentRowMapper assessmentRowMapper) {
+        this.assessmentRowMapper = assessmentRowMapper;
+    }
 
     /**
      * Validate the masterData and ctizenInfo of the given propertyRequest
@@ -380,7 +387,6 @@ public class PropertyValidator {
 					errorMap.put("INVALID OCCUPANCYTYPE TYPE ", "The OCCUPANCYTYPE TYPE '" + unit.getOccupancyType()
 							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
 				}
-
 			}
 
 		if (!CollectionUtils.isEmpty(errorMap))

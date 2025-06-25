@@ -204,7 +204,15 @@ public class User   {
         
         @JsonProperty("alternatemobilenumber")
         private String alternatemobilenumber;
-
+        
+        //**** Added title and samarga id
+        @JsonProperty("title")
+        private String title;
+        
+        @JsonProperty("samagraId")
+        private String samagraId;
+        
+        // *******
 
         public User addRolesItem(Role rolesItem) {
             if (this.roles == null) {

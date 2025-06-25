@@ -76,5 +76,15 @@ public class Unit {
 	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("arv")
 	private BigDecimal arv;
+	
+	//*** Added ratezone and roadfactor
+	
+	@JsonProperty("rateZone")
+	private String rateZone;
+		
+	@JsonProperty("roadFactor")
+	private String roadFactor;
+	
+	// *****
 
 }
