@@ -86,7 +86,7 @@ public class PropertyQueryBuilder {
 			
 			+   LEFT_JOIN  +  " {schema}.eg_pt_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 			
-			+	LEFT_JOIN  +  " {schema}.eg_pt_UNIT unit		          ON property.id =  unit.propertyid ";
+			+	LEFT_JOIN  +  " {schema}.eg_pt_UNIT unit		       ON property.id =  unit.propertyid ";
 
 	private static final String ID_QUERY = SELECT
 
