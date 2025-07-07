@@ -70,12 +70,12 @@ public class Address {
 	@JsonProperty("additionalDetails")
 	private Object additionalDetails;
 	
-	//******** Added ward and colony
+	//******** Added ward and zone
 	@JsonProperty("ward")
 	private String ward;
 
-	@JsonProperty("colony")
-	private String colony;
+	@JsonProperty("zone")
+	private String zone;
 		
 		//***********
 }

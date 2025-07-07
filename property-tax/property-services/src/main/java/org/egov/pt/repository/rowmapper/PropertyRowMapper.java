@@ -345,7 +345,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		.locality(locality)
 		.tenantId(tenanId)
 		.ward(rs.getString("ward"))
-		.colony(rs.getString("colony"))
+		.zone(rs.getString("zone"))
 		.build();
 	}
 	
