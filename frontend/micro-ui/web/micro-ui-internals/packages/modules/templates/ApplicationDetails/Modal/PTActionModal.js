@@ -3,20 +3,16 @@ import React, { useState, useEffect } from "react";
 
 import { configPTRejectApplication, configPTVerifyApplication, configPTApproverApplication, configPTAssessProperty } from "../config";
 import * as predefinedConfig from "../config";
-
+const textStyle = {
+  fontFamily: "Poppins",
+  fontWeight: "bold",
+  fontSize: "16px",
+  lineHeight: "100%",
+  letterSpacing: "0%",
+  color: "#4729A3"
+};
 const Heading = (props) => {
-  return <h1 className="heading-m" style={{   fontFamily: 'Poppins, sans-serif',
-    fontWeight: 500,
-    fontSize: '16px',
-    lineHeight: '100%',
-    letterSpacing: '0',
-    textDecoration: 'underline',
-    textDecorationStyle: 'solid',
-    textDecorationColor: '#4729A3',
-    textDecorationThickness: '1px',
-    textDecorationOffset: '2px',
-    color: '#4729A3',
-    marginBottom: '20px'}}>{props.label}</h1>;
+  return <h1 className="heading-m" style={textStyle}>{props.label}</h1>;
 };
 
 const Close = () => (
@@ -177,6 +173,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveOnSubmit={() => {}}
       isDisabled={!action.showFinancialYearsModal ? PTALoading || (action?.docUploadRequired && !uploadedFile) : !selectedFinancialYear}
       formId="modal-action"
+      
     >
       {financialYearsLoading ? (
         <Loader />

@@ -242,16 +242,24 @@ const TopBar = ({
       alignItems: "center",
       justifyContent: "space-between",
       borderBottom: "3px solid #4729A3",
-      width:"100%",
+      width: "100%",
       position: "absolute",
       right: "0",
       top: "0",
     }}>
       {/* Left Side */}
-     
 
+      <div> <img
+        src="https://tse4.mm.bing.net/th/id/OIP.LcAu4hLmyz-LQqUVPtVC9AHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        alt="Logo"
+        style={{
+          width: "59px",
+          height: "51px",
+          marginRight: "16px",
+          borderRadius: "50%",
+        }} /></div>
       {/* Right Side */}
-      <div style={{ display: "flex", alignItems: "center", gap: "20px",marginLeft: "auto" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "20px", marginLeft: "auto" }}>
         <button onClick={() => document.documentElement.style.fontSize = "smaller"} style={{ background: "none", border: "none" }}>A-</button>
         <button onClick={() => document.documentElement.style.fontSize = "larger"} style={{ background: "none", border: "none" }}>A+</button>
         {showLanguageChange && <ChangeLanguage dropdown={true} />}

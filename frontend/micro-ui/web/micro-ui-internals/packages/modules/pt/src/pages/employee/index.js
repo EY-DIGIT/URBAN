@@ -158,12 +158,12 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container" style={{ margin: "0px" }}>
-          {/* <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
+          <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
             </Link>{" "}
-            / <span>{getBreadCrumb()}</span>
-          </p>} */}
+            /<span>{getBreadCrumb()}</span>
+          </p>
           {/* {!isRes ? <div style={isNewRegistration ? { marginLeft: "12px" } : { marginLeft: "-4px" }}><PTBreadCrumbs location={location} /></div> : null} */}
           <PrivateRoute exact path={`${path}/`} component={() => <PTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute

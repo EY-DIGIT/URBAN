@@ -143,7 +143,7 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
   };
 
   const inputStyle = {
-    width: "213px",
+    width: "100%",
     padding: "8px",
     marginBottom: "1rem",
     borderRadius: "5px",
@@ -186,7 +186,7 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
 
   const searchButton = {
     padding: "10px 20px",
-    backgroundColor: "#4b0082",
+    backgroundColor: "#4729A3",
     color: "white",
     border: "none",
     borderRadius: "5px",
@@ -203,12 +203,12 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
   };
   return (
     <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} style={containerStyle} className="pt-property-search">
-      <div>
+      <div style={{width:"24%"}}>
         <h3 style={dtat}>CashDesk</h3>
 
         <div>
           <label style={labelStyle}>Assessment Year</label>
-          <select style={selectStyle} name="assessmentYear" ref={register}>
+          <select style={inputStyle} name="assessmentYear" ref={register}>
             <option value="">Select</option>
           </select>
         </div>
@@ -283,6 +283,7 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
             name="mobileNumber"
             inputRef={register}
             type="number"
+            style={inputStyle}
             componentInFront={<div style={{ marginRight: "5px" }}>+91</div>}
           />
         </SearchField>

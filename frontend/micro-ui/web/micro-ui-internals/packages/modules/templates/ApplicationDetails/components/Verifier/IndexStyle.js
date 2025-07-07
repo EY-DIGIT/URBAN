@@ -165,7 +165,7 @@ export default {
   },
   assessmentStyle: {
     fontFamily: 'Poppins, sans-serif',
-    fontWeight: 500,
+    fontWeight: "bold",
     fontSize: '16px',
     lineHeight: '100%',
     letterSpacing: '0',

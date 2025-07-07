@@ -38,7 +38,7 @@ export const configPTApproverApplication = ({
           //   ),
           // },
           {
-            label: t("ES_PT_ACTION_COMMENTS"),
+            label: t("Remark"),
             type: "textarea",
             populators: {
               name: "comments",

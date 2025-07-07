@@ -487,7 +487,7 @@ const styles = {
     marginBottom: "20px",
   },
   th: {
-    backgroundColor: "#d4c2f0",
+    backgroundColor: "#4729A34D",
     padding: "8px",
     border: "1px solid #ccc",
     textAlign: "left",
@@ -528,7 +528,7 @@ const styles = {
   },
   paymentButton: {
     padding: "10px 20px",
-    backgroundColor: "#7f4bea",
+    backgroundColor: "#4729A3",
     color: "white",
     border: "none",
     borderRadius: "4px",
@@ -557,6 +557,7 @@ const styles = {
     padding: "8px",
     border: "1px solid #ccc",
     borderRadius: "4px",
+    width: "100%"
   },
 
   modalOverlay: {
@@ -738,16 +739,16 @@ const ApplicationDetailsContent = ({
   //   }
   // };
   const toggleMode = (mode) => {
-  // Always set only the current mode
-  setSelectedModes([mode]);
+    // Always set only the current mode
+    setSelectedModes([mode]);
 
-  // Show UPI modal only when UPI is newly selected
-  if (mode === "UPI") {
-    setShowUPIModal(true);
-  } else {
-    setShowUPIModal(false);
-  }
-};
+    // Show UPI modal only when UPI is newly selected
+    if (mode === "UPI") {
+      setShowUPIModal(true);
+    } else {
+      setShowUPIModal(false);
+    }
+  };
 
   const closeUPIModal = () => {
     setShowUPIModal(false);
@@ -789,7 +790,7 @@ const ApplicationDetailsContent = ({
           </div>
 
           <div style={styles.column}>
-            <div style={styles.label}>Father/Husband (English)</div>
+            <div style={styles.label}>Father/Husband </div>
             <input
               type="text"
               readOnly
@@ -798,10 +799,6 @@ const ApplicationDetailsContent = ({
             />
           </div>
 
-          <div style={styles.column}>
-            <div style={styles.label}>Father/Husband (Hindi)</div>
-            <input type="text" readOnly value="N/A" style={styles.input} />
-          </div>
 
           <div style={styles.column}>
             <div style={styles.label}>Property ID</div>
@@ -941,81 +938,99 @@ const ApplicationDetailsContent = ({
       ))}
 
       {/* Property Area Details */}
-      <div style={styles.section}>
-        <div style={styles.heading}>Property Area Details</div>
-        <div style={{ borderRadius: "16px" }}>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                {["Usage Type", "Usage Factor", "Floor", "Construction %", "Area", "Rate", "ALV", "Discount", "TPV", "PTax"].map((head, i) => (
-                  <th key={i} style={styles.th}>
-                    {head}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {applicationData?.units?.map((unit, index) => (
-                <tr key={index}>
-                  <td style={styles.td}>{unit.usageCategory || "N/A"}</td>
-                  <td style={styles.td}>1.0</td>
-                  <td style={styles.td}>{unit.floorNo || "N/A"}</td>
-                  <td style={styles.td}>100%</td>
-                  <td style={styles.td}>{unit.constructionDetail?.builtUpArea || "N/A"}</td>
-                  <td style={styles.td}>10</td>
-                  <td style={styles.td}>1000</td>
-                  <td style={styles.td}>0</td>
-                  <td style={styles.td}>1000</td>
-                  <td style={styles.td}>100</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+   <div style={styles.section}>
+  <div style={styles.heading}>Property Area Details</div>
+  <div style={{ borderRadius: "16px", overflow: "hidden" }}>
+    <table style={styles.table}>
+      <thead>
+        <tr>
+          {[
+            "Usage Type",
+            "Usage Factor",
+            "Floor",
+            "Construction Type",
+            "Area (Sq feet)",
+            "Rate",
+            "ALV",
+            "Discount",
+            "TPV"
+          ].map((head, i) => (
+            <th key={i} style={styles.th}>
+              {head}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {applicationData?.units?.map((unit, index) => (
+          <tr key={index}>
+            <td style={styles.td}>{unit.usageCategory || "N/A"}</td>
+            <td style={styles.td}>1.0</td>
+            <td style={styles.td}>{unit.floorNo || "N/A"}</td>
+            <td style={styles.td}>{unit.constructionType || "RCC"}</td>
+            <td style={styles.td}>{unit.constructionDetail?.builtUpArea || "N/A"}</td>
+            <td style={styles.td}>10</td>
+            <td style={styles.td}>1000</td>
+            <td style={styles.td}>0</td>
+            <td style={styles.td}>1000</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-      {/* Tax Summary */}
-      <div style={styles.section}>
-        <div style={styles.heading}>Tax Summary</div>
-        <div style={{ borderRadius: "16px" }}>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                {[
-                  "ALV",
-                  "TPV",
-                  "Samrakshit",
-                  "Property Tax",
-                  "Education Cess",
-                  "Urban Dev. Cess",
-                  "Total",
-                  "Rebate",
-                  "Penalty",
-                  "Net Tax",
-                ].map((head, i) => (
-                  <th key={i} style={styles.th}>
-                    {head}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={styles.td}>1000</td>
-                <td style={styles.td}>1000</td>
-                <td style={styles.td}>0</td>
-                <td style={styles.td}>100</td>
-                <td style={styles.td}>2</td>
-                <td style={styles.td}>1</td>
-                <td style={styles.td}>103</td>
-                <td style={styles.td}>0</td>
-                <td style={styles.td}>0</td>
-                <td style={styles.td}>103</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+{/* Tax Summary */}
+<div style={styles.section}>
+  <div style={styles.heading}>Tax Summary</div>
+  <div style={{ borderRadius: "16px", overflow: "hidden" }}>
+    <table style={styles.table}>
+      <thead>
+        <tr>
+          {[
+            "Year",
+            "ALV",
+            "TPV",
+            "Sampatti Kar",
+            "Samekit Kar",
+            "Shiksha Upkar",
+            "Jal Abhikar",
+            "Jal Nikas Kar",
+            "Nagariya Vikas Upkar",
+            "Seva Shulk",
+            "Current Amount",
+            "Rebate",
+            "Penalty",
+            "Net Tax"
+          ].map((head, i) => (
+            <th key={i} style={styles.th}>
+              {head}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style={styles.td}>2025</td>
+          <td style={styles.td}>1000</td>
+          <td style={styles.td}>1000</td>
+          <td style={styles.td}>500</td>
+          <td style={styles.td}>50</td>
+          <td style={styles.td}>10</td>
+          <td style={styles.td}>5</td>
+          <td style={styles.td}>15</td>
+          <td style={styles.td}>8</td>
+          <td style={styles.td}>2</td>
+          <td style={styles.td}>1590</td>
+          <td style={styles.td}>0</td>
+          <td style={styles.td}>0</td>
+          <td style={styles.td}>1590</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
       {/* Payment Section */}
       <div style={styles.section}>
@@ -1082,7 +1097,7 @@ const ApplicationDetailsContent = ({
                 style={styles.input}
               />
             </div>
-            <div style={customStyles.cardWrapper}>
+            {/* <div style={customStyles.cardWrapper}>
               <div style={customStyles.cardHeader}>Lok Adalat Discount Summary</div>
 
               <div style={customStyles.dataRow}>
@@ -1109,7 +1124,7 @@ const ApplicationDetailsContent = ({
                 <div style={customStyles.labelText}>Total</div>
                 <div style={customStyles.valueText}>26790</div>
               </div>
-            </div>
+            </div> */}
           </div>
         )}
         {paymentType === "partial" && (
@@ -1143,7 +1158,7 @@ const ApplicationDetailsContent = ({
           </div>
         )}
         {/* Remarks */}
-     
+
 
         {/* Payment Mode */}
         {/* <div style={styles.checkboxGroup}>
@@ -1226,7 +1241,7 @@ const ApplicationDetailsContent = ({
                 }
               />
             </div>
-               
+
           </div>
         )}
         {selectedModes.includes("POS") && (
@@ -1341,14 +1356,14 @@ const ApplicationDetailsContent = ({
 
       </div>
       <div style={{ marginTop: "20px" }}>
-          <div style={styles.label}>
-            Remarks <span style={{ color: "red" }}>*</span>
-          </div>
-          <textarea
-            rows="3"
-            style={styles.remarkBox}
-          />
+        <div style={styles.label}>
+          Remarks <span style={{ color: "red" }}>*</span>
         </div>
+        <textarea
+          rows="3"
+          style={styles.remarkBox}
+        />
+      </div>
       <div style={{ marginTop: "30px" }}>
         <button
           style={styles.paymentButton}

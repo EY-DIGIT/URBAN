@@ -409,12 +409,14 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
         {isMobile ?
             <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, formState, setShowToast }} />
             :
-            <div>
+            <div style={{background:"white"}}>
                 {/* <Header>{t("PT_SEARCH_PROP_APP")}</Header> */}
+
                 < Card className={"card-search-heading"}>
+                
                     <span style={{
                         fontFamily: "Poppins",
-                        fontWeight: 500,
+                        fontWeight: "bold",
                         fontSize: "16px",
                         lineHeight: "42.5px",
                         letterSpacing: "3%",
@@ -427,7 +429,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                         width: "100%",
                         display: "flex", justifyContent: "space-between"
                     }}>
-                        <SearchField>
+                        <SearchField style={widthMx}>
                             <label style={{
                                 fontFamily: "Poppins",
                                 fontWeight: 400,
@@ -436,9 +438,9 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 letterSpacing: "0%",
                                 color: "#282828"
                             }}>{t("PT_APPLICATION_NO_LABEL")}</label>
-                            <TextInput name="acknowledgementIds" style={{borderRadius:"6px",height:"35px"}} inputRef={register({})} />
+                            <TextInput name="acknowledgementIds" style={{borderRadius:"6px",height:"35px",marginTop:"13px"}} inputRef={register({})} />
                         </SearchField>
-                        <SearchField>
+                        <SearchField style={widthMx}>
                             <label style={{
                                 fontFamily: "Poppins",
                                 fontWeight: 400,
@@ -447,9 +449,9 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 letterSpacing: "0%",
                                 color: "#282828"
                             }}>{t("PT_SEARCHPROPERTY_TABEL_PID")}</label>
-                            <TextInput name="propertyIds" style={{borderRadius:"6px",height:"35px"}} inputRef={register({})} />
+                            <TextInput name="propertyIds" style={{borderRadius:"6px",height:"35px",marginTop:"13px"}} inputRef={register({})} />
                         </SearchField>
-                        <SearchField>
+                        <SearchField style={widthMx}>
                             <label style={{
                                 fontFamily: "Poppins",
                                 fontWeight: 400,
@@ -459,7 +461,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 color: "#282828"
                             }}>{t("PT_OWNER_MOBILE_NO")}</label>
                             <MobileNumber
-                            style={{borderRadius:"6px",height:"35px"}}
+                            style={{borderRadius:"6px",height:"35px",marginTop:"13px"}}
                                 name="mobileNumber"
                                 inputRef={register({
                                     minLength: {
@@ -487,7 +489,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                         width: "100%",
                         display: "flex", justifyContent: "space-between"
                     }}>
-                        <SearchField>
+                        <SearchField style={widthMx}>
                             <label style={{
                                 fontFamily: "Poppins",
                                 fontWeight: 400,
@@ -501,7 +503,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 name="status"
                                 render={(props) => (
                                     <Dropdown
-                                        style={{ border: "1px solid", borderRadius:"6px",height:"35px"}}
+                                        style={{ border: "1px solid", borderRadius:"6px",height:"35px",marginTop:"13px"}}
                                         selected={props.value}
                                         select={props.onChange}
                                         onBlur={props.onBlur}
@@ -513,7 +515,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 )}
                             />
                         </SearchField>
-                        <SearchField>
+                        <SearchField style={widthMx}>
                             <label style={{
                                 fontFamily: "Poppins",
                                 fontWeight: 400,
@@ -523,12 +525,12 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 color: "#282828"
                             }}>{t("PT_FROM_DATE")}</label>
                             <Controller
-                                render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
+                                render={(props) => <DatePicker style={{marginTop:"13px"}} date={props.value} disabled={false} onChange={props.onChange} />}
                                 name="fromDate"
                                 control={control}
                             />
                         </SearchField>
-                        <SearchField>
+                        <SearchField style={widthMx}>
                             <label style={{
                                 fontFamily: "Poppins",
                                 fontWeight: 400,
@@ -538,7 +540,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                 color: "#282828"
                             }}>{t("PT_TO_DATE")}</label>
                             <Controller
-                                render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
+                                render={(props) => <DatePicker style={{marginTop:"13px"}} date={props.value} disabled={false} onChange={props.onChange} />}
                                 name="toDate"
                                 control={control}
                             />
@@ -649,4 +651,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
     </React.Fragment>
 }
 
+const widthMx ={
+    width:"100%"
+}
 export default PTSearchApplication

@@ -174,162 +174,287 @@
 // export default SubMenu;
 
 
-import React, { useRef, useEffect, useState } from "react";
+// import React, { useRef, useEffect, useState } from "react";
+// import { Loader } from "@egovernments/digit-ui-react-components";
+// import { useTranslation } from "react-i18next";
+// import logoImage from "../../assets/img/imageSv.svg";
+
+// const TextToImg = ({ name, toggleMenu }) => (
+//   <span
+//     className="user-img-txt"
+//     onClick={toggleMenu}
+//     title={name}
+//     style={{
+//       backgroundColor: "#4729A3",
+//       color: "#fff",
+//       borderRadius: "50%",
+//       width: "40px",
+//       height: "40px",
+//       display: "flex",
+//       justifyContent: "center",
+//       alignItems: "center",
+//       fontWeight: "bold",
+//       fontSize: "16px",
+//       cursor: "pointer", marginLeft: "auto",
+//       marginRight: "auto",
+//       marginTop: "10px",
+//       marginBottom: "10px",
+
+//     }}
+//   >
+//     {name?.[0]?.toUpperCase()}
+//   </span>
+// );
+// const SubMenu = ({ handleLogout, userDetails }) => {
+//   console.log("SubMenu component rendered", userDetails);
+//   const sidebarRef = useRef(null);
+//   const { isLoading, data } = Digit.Hooks.useAccessControl();
+//   const [search, setSearch] = useState("");
+//   const { t } = useTranslation();
+
+//   useEffect(() => {
+//     if (!isLoading) {
+//       sidebarRef.current.style.cursor = "pointer";
+//       collapseNav();
+//     }
+//   }, [isLoading]);
+//   const handleMenuClick = (itemName) => {
+//     console.log("Clicked menu:", itemName);
+//     if (itemName === "Log out") {
+//       // Trigger logout
+//       handleLogout();
+//       // Add actual logout logic here
+//     } else {
+//       // Navigate or take some action
+//       console.log(`Navigating to ${itemName}`);
+//       // For example, use React Router: navigate(`/path-for-${itemName.toLowerCase()}`)
+//     }
+//   };
+//   const expandNav = () => {
+//     sidebarRef.current.style.width = "240px";
+//     sidebarRef.current.style.overflow = "auto";
+//     sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
+//       element.style.display = "flex";
+//     });
+//   };
+
+//   const collapseNav = () => {
+//     sidebarRef.current.style.width = "100%";
+//     sidebarRef.current.style.overflow = "hidden";
+//     sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
+//       element.style.display = "none";
+//     });
+//   };
+
+//   const menuItems = [
+//     { name: "Property", icon: "🏠" },
+//     { name: "Water", icon: "🚰" },
+//     { name: "D2D", icon: "🏡" },
+//     { name: "Rental", icon: "📅" },
+//     { name: "Log out", icon: "🔁" },
+//   ];
+
+//   if (isLoading) return <Loader />;
+
+//   return (
+//     <div
+//       ref={sidebarRef}
+//       style={{
+//         width: "240px",
+//         backgroundColor: "#ffffff",
+//         minHeight: "100vh",
+//         borderRight: "1px solid #eee",
+//         display: "flex",
+//         flexDirection: "column",
+//         alignItems: "center",
+//         fontFamily: "Poppins, sans-serif",
+//         height: "100%"
+//       }}
+//     // onMouseOver={expandNav}
+//     // onMouseLeave={collapseNav}
+//     >
+//       {/* Logo */}
+//       <div style={{ width: "100%", borderBottom: "1px solid #6F3AFA", }}>
+//         <img
+//           src="https://tse4.mm.bing.net/th/id/OIP.LcAu4hLmyz-LQqUVPtVC9AHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+//           alt="Logo"
+//           style={{ width: "77px", height: "77px", display: "block", margin: "auto", padding: "10px 0" }}
+//         />
+
+//       </div>
+
+//       {/* Profile */}
+//       <div style={{ textAlign: "center", paddingBottom: "12px", borderBottom: "1px solid #6F3AFA", width: "100%" }}>
+//         {/* <img
+
+//           alt="User"
+//           style={{
+//             width: "56px",
+//             height: "56px",
+//             borderRadius: "50%",
+//             objectFit: "cover",
+//             marginBottom: "6px",
+//             display:"flex",
+//             margin: "auto",
+//           }}
+//         /> */}
+//         <TextToImg name={userDetails?.info?.name || "E"} />
+//         <div style={{ fontWeight: "600", fontSize: "14px", color: "#000" }}>{userDetails?.info?.name || "Unknown User"}</div>
+//         <div style={{ fontSize: "12px", color: "#888" }}>{userDetails?.info?.userName || "Unknown User"}</div>
+//       </div>
+
+//       {/* Menu */}
+//       <div style={{ width: "100%", marginTop: "20px" }}>
+//         {menuItems.map((item, index) => (
+//           <div
+//             onClick={() => handleMenuClick(item.name)}
+//             key={index}
+//             style={{
+//               display: "flex",
+//               alignItems: "center",
+//               padding: "14px 20px",
+//               gap: "10px",
+//               cursor: "pointer",
+//               fontSize: "14px",
+//               color: "#555",
+//               justifyContent: "space-between",
+//               transition: "background 0.2s",
+//             }}
+//           // onMouseOver={(e) => (e.currentTarget.style.background = "#f5f5f5")}
+//           // onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
+//           >
+//             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+//               <span>{item.icon}</span>
+//               <span>{item.name}</span>
+//             </div>
+//             {item.name !== "Log out" && <span style={{ fontSize: "14px" }}>›</span>}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default SubMenu;
+
+
+import React, { useState } from "react";
 import { Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import logoImage from "../../assets/img/imageSv.svg";
-
-const TextToImg = ({ name, toggleMenu }) => (
+import WaterSvg from "./Vector.svg"
+// Initial-letter user image
+const TextToImg = ({ name }) => (
   <span
-    className="user-img-txt"
-    onClick={toggleMenu}
     title={name}
     style={{
       backgroundColor: "#4729A3",
       color: "#fff",
       borderRadius: "50%",
-      width: "40px",
-      height: "40px",
+      width: "32px",
+      height: "32px",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       fontWeight: "bold",
-      fontSize: "16px",
-      cursor: "pointer", marginLeft: "auto",
-      marginRight: "auto",
-      marginTop: "10px",
-      marginBottom: "10px",
-
+      fontSize: "14px",
+      cursor: "pointer",
+      marginLeft: "16px"
     }}
   >
-    {name?.[0]?.toUpperCase()}
+    {name?.[0]?.toUpperCase() || "U"}
   </span>
 );
+
 const SubMenu = ({ handleLogout, userDetails }) => {
-  console.log("SubMenu component rendered", userDetails);
-  const sidebarRef = useRef(null);
-  const { isLoading, data } = Digit.Hooks.useAccessControl();
-  const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("Property");
+  const { isLoading } = Digit.Hooks.useAccessControl();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (!isLoading) {
-      sidebarRef.current.style.cursor = "pointer";
-      collapseNav();
-    }
-  }, [isLoading]);
-  const handleMenuClick = (itemName) => {
-    console.log("Clicked menu:", itemName);
-    if (itemName === "Log out") {
-      // Trigger logout
-      handleLogout();
-      // Add actual logout logic here
-    } else {
-      // Navigate or take some action
-      console.log(`Navigating to ${itemName}`);
-      // For example, use React Router: navigate(`/path-for-${itemName.toLowerCase()}`)
-    }
-  };
-  const expandNav = () => {
-    sidebarRef.current.style.width = "240px";
-    sidebarRef.current.style.overflow = "auto";
-    sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
-      element.style.display = "flex";
-    });
-  };
-
-  const collapseNav = () => {
-    sidebarRef.current.style.width = "100%";
-    sidebarRef.current.style.overflow = "hidden";
-    sidebarRef.current.querySelectorAll(".dropdown-link").forEach((element) => {
-      element.style.display = "none";
-    });
-  };
-
+console.log("userDetails",userDetails)
   const menuItems = [
     { name: "Property", icon: "🏠" },
     { name: "Water", icon: "🚰" },
-    { name: "D2D", icon: "🏡" },
     { name: "Rental", icon: "📅" },
+    { name: "Finance", icon: "🏦" },
     { name: "Log out", icon: "🔁" },
   ];
+
+  const handleMenuClick = (itemName) => {
+    if (itemName === "Log out") {
+      handleLogout?.();
+    } else {
+      setActiveTab(itemName);
+      console.log("Navigating to:", itemName);
+    }
+  };
 
   if (isLoading) return <Loader />;
 
   return (
     <div
-      ref={sidebarRef}
       style={{
-        width: "240px",
-        backgroundColor: "#ffffff",
-        minHeight: "100vh",
-        borderRight: "1px solid #eee",
+        width: "100%",
+        backgroundColor: "#4729A3",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
+        padding: "8px 16px",
         fontFamily: "Poppins, sans-serif",
-        height: "100%"
+        height: "60px",
+        boxSizing: "border-box",
+        marginTop: "74px"
       }}
-    // onMouseOver={expandNav}
-    // onMouseLeave={collapseNav}
     >
       {/* Logo */}
-      <div style={{ width: "100%", borderBottom: "1px solid #6F3AFA", }}>
-        <img
-          src="https://tse4.mm.bing.net/th/id/OIP.LcAu4hLmyz-LQqUVPtVC9AHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
-          alt="Logo"
-          style={{ width: "77px", height: "77px", display: "block", margin: "auto", padding: "10px 0" }}
-        />
+      {/* <img
+        src="https://tse4.mm.bing.net/th/id/OIP.LcAu4hLmyz-LQqUVPtVC9AHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+        alt="Logo"
+        style={{
+          width: "40px",
+          height: "40px",
+          marginRight: "16px",
+          borderRadius: "50%",
+        }}
+      /> */}
 
-      </div>
-
-      {/* Profile */}
-      <div style={{ textAlign: "center", paddingBottom: "12px", borderBottom: "1px solid #6F3AFA", width: "100%" }}>
-        {/* <img
-         
-          alt="User"
-          style={{
-            width: "56px",
-            height: "56px",
-            borderRadius: "50%",
-            objectFit: "cover",
-            marginBottom: "6px",
-            display:"flex",
-            margin: "auto",
-          }}
-        /> */}
-        <TextToImg name={userDetails?.info?.name || "E"} />
-        <div style={{ fontWeight: "600", fontSize: "14px", color: "#000" }}>{userDetails?.info?.name || "Unknown User"}</div>
-        <div style={{ fontSize: "12px", color: "#888" }}>{userDetails?.info?.userName || "Unknown User"}</div>
-      </div>
-
-      {/* Menu */}
-      <div style={{ width: "100%", marginTop: "20px" }}>
-        {menuItems.map((item, index) => (
+      {/* Menu Items */}
+      {menuItems.map((item, index) => {
+        const isActive = activeTab === item.name;
+        return (
           <div
-            onClick={() => handleMenuClick(item.name)}
             key={index}
+            onClick={() => handleMenuClick(item.name)}
             style={{
               display: "flex",
               alignItems: "center",
-              padding: "14px 20px",
-              gap: "10px",
-              cursor: "pointer",
+              gap: "6px",
+              padding: "6px 14px",
+              borderRadius: "20px",
+              backgroundColor: isActive ? "#A3BBF3" : "transparent",
+              color: isActive ? "#FFFFFF" : "#D6D6D6",
+              fontWeight: isActive ? "600" : "400",
               fontSize: "14px",
-              color: "#555",
-              justifyContent: "space-between",
+              cursor: "pointer",
+              marginRight: "12px",
               transition: "background 0.2s",
             }}
-          // onMouseOver={(e) => (e.currentTarget.style.background = "#f5f5f5")}
-          // onMouseOut={(e) => (e.currentTarget.style.background = "transparent")}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <span>{item.icon}</span>
-              <span>{item.name}</span>
-            </div>
-            {item.name !== "Log out" && <span style={{ fontSize: "14px" }}>›</span>}
+            <span>{item.icon}</span>
+            <span style={{
+              fontFamily: "Noto Sans",
+              fontWeight: 700,
+              fontStyle: "normal", // 'Display Bold' is not valid
+              fontSize: "14px",
+              lineHeight: "100%",
+              letterSpacing: "0%",
+              color: "var(--Color, #FFFFFF)",
+            }}>{item.name}</span>
           </div>
-        ))}
+        );
+      })}
+
+      {/* Right side: user + menu icon */}
+      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
+        <TextToImg name={userDetails?.info?.name || "U"} />
+        <span style={{ marginLeft: "16px", fontSize: "20px", color: "#D6D6D6", cursor: "pointer" }}>≡</span>
       </div>
     </div>
   );

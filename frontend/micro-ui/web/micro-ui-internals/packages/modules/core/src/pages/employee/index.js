@@ -387,9 +387,9 @@ const EmployeeApp = ({
           </div>
         </Route>
         <Route>
-          <div style={{ display: "flex", width: "100%" }}>
+          <div style={{width: "100%" }}>
             {/* Sidebar - 25% */}
-            <div style={{ width: "20%" }}>
+            <div style={{ width: "100%" }}>
               <TopBarSideBar
                 t={t}
                 stateInfo={stateInfo}
@@ -402,8 +402,8 @@ const EmployeeApp = ({
                 modules={modules}
               />
             </div>
-            <div style={{ width: "80%" }}>
-              <div className={` ${DSO ? "" : ""}`} style={{marginTop: "60px"}}>
+            <div style={{ width: "100%" }}>
+              <div className={` ${DSO ? "" : ""}`} style={{marginTop: ""}}>
                 <div className="employee-app-wrapper" style={{ margin: "0" }}>
                   <ErrorBoundary initData={initData}>
                     <AppModules stateCode={stateCode} userType="employee" modules={modules} appTenants={appTenants} />

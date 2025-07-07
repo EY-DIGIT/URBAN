@@ -624,7 +624,7 @@ function ApplicationDetailsContentVerifier({
       {/* For UM-4418 changes */}
 
       <div>
-        <div>
+        {/* <div>
           <label style={styles.sectionTitle}>Select Property ULB/ Year of Assessment</label>
         </div>
         <div style={styles.grid}>
@@ -633,13 +633,13 @@ function ApplicationDetailsContentVerifier({
 
             <input style={styles.input} value="2025-26" readOnly />
           </div>
-        </div>
+        </div> */}
         <AttachmentsSection
           t={t}
           documents={documents}
         />
 
-        <label style={styles.sectionTitle}>Ownership Details</label>
+        <div style={styles.sectionTitle}>Ownership Details</div>
         <div style={styles.grid}>
           <div>
             <label style={styles.label}>Ownership Type<span style={{ color: "red" }}>*</span></label>
@@ -711,7 +711,7 @@ function ApplicationDetailsContentVerifier({
                     }}
                   >
                     <option>{owner?.salutation}</option>
-                  
+
                   </select>
                   <input
                     style={{
@@ -739,7 +739,7 @@ function ApplicationDetailsContentVerifier({
                 <input style={styles.input} value={owner.relationship} readOnly />
               </div>
               <div>
-                <label style={styles.label}>Email Id</label>
+                <label style={styles.label}>Email ID</label>
                 <input style={styles.input} value={owner.emailId} readOnly />
               </div>
               <div>
@@ -764,7 +764,7 @@ function ApplicationDetailsContentVerifier({
 
 
 
-        <label style={styles.sectionTitle}>Property Address</label>
+        <div style={styles.sectionTitle}>Property Address</div>
         <div style={styles.grid}>
           <div><label style={styles.label}>Door/House No.<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.doorNo} readOnly /></div>
           <div><label style={styles.label}>Address<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.street} readOnly /></div>
@@ -775,40 +775,40 @@ function ApplicationDetailsContentVerifier({
         </div>
         <div style={styles.grid}>
           <div>
-            <label style={styles.sectionTitle}>Correspondence Address</label>
+            <div style={styles.sectionTitle}>Correspondence Address</div>
             <textarea style={styles.input} rows={3} value={owner?.permanentAddress} readOnly />
 
           </div>
           <div style={styles.checkboxLabel}>
             <input type="checkbox" checked readOnly />
-            <span style={{ marginLeft: "8px" }}>Same as property address</span>
+            <span style={{ marginLeft: "8px" }}>Same As Property Address</span>
           </div>
         </div>
 
 
-        <label style={styles.sectionTitle}>Assessment Details</label>
+        <div style={styles.sectionTitle}>Assessment Details</div>
         <div style={styles.grid}>
           <div><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} readOnly /></div>
-          <div><label style={styles.label}>Road factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.roadFactor} readOnly /></div>
+          <div><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.roadFactor} readOnly /></div>
           <div><label style={styles.label}>Old Property ID</label><input style={styles.input} value={application?.oldPropertyId || ""} readOnly /></div>
           <div><label style={styles.label}>Plot Area (sq.ft)</label><input style={styles.input} value={application?.landArea} readOnly /></div>
         </div>
 
-        <label style={styles.sectionTitle}>Property Details</label>
+        <div style={styles.sectionTitle}>Property Details</div>
         <div >
           <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
             <label style={{ ...styles.label, marginRight: "16px", minWidth: "120px" }}>Property Type</label>
             {/* <input style={styles.input} value={application?.propertyType || "Prefilled"} readOnly /> */}
           </div>
 
-          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "8px", border: "1px solid #ccc" }}>
+          <table style={{ width: "80%", borderCollapse: "collapse",margin:"auto", marginTop: "8px", border: "1px solid #ccc" }}>
             <thead style={{ background: "#f0f0f0", height: "40px" }}>
               <tr>
-                <th style={{ ...styles.label, textAlign: "left", padding: "14px" }}>Usage type</th>
-                <th style={{ ...styles.label, textAlign: "left", padding: "14px" }}>Usage factor</th>
-                <th style={{ ...styles.label, textAlign: "left", padding: "14px" }}>Floor number</th>
-                <th style={{ ...styles.label, textAlign: "left", padding: "14px" }}>Type of construction</th>
-                <th style={{ ...styles.label, textAlign: "left", padding: "14px" }}>Area (Sq feet)</th>
+                <th style={{ ...styles.labelTable}}>Usage Type</th>
+                <th style={{ ...styles.labelTable}}>Usage Factor</th>
+                <th style={{ ...styles.labelTable}}>Floor Number</th>
+                <th style={{ ...styles.labelTable}}>Type of Construction</th>
+                <th style={{ ...styles.labelTable}}>Area (Sq feet)</th>
               </tr>
             </thead>
             <tbody>
@@ -879,16 +879,18 @@ function ApplicationDetailsContentVerifier({
         <div >
           {/* Section Header */}
           <div>
-            <label style={styles.sectionTitle}>Other details</label>
+            <div style={styles.sectionTitle}>Other Details</div>
           </div>
-          <div>
-            {/* Exemption Dropdown */}
-            <label style={styles.label}>Exemption Applicable.</label>
-          </div>
-          <select style={styles.input} value={owner?.ownerType} disabled>
-            <option>{owner?.ownerType}</option>
-          </select>
+          <div style={styles.grid}>
+            <div>
+              {/* Exemption Dropdown */}
+              <label style={styles.label}>Exemption Applicable.</label>
 
+              <select style={styles.input} value={owner?.ownerType} disabled>
+                <option>{owner?.ownerType}</option>
+              </select>
+            </div>
+          </div>
           {/* Checkboxes */}
           <div style={{ display: "flex", gap: "20px", marginTop: "12px", marginBottom: "24px" }}>
             <label style={styles.checkboxLabel}>
@@ -906,11 +908,11 @@ function ApplicationDetailsContentVerifier({
           </div>
 
           {/* Self Declaration Section */}
-          <label style={{ ...styles.sectionTitle, marginBottom: "8px" }}>Self Declaration</label>
+          <div style={{ ...styles.sectionTitle, marginBottom: "8px" }}>Self Declaration</div>
           <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
             <input type="checkbox" checked readOnly style={{ marginTop: "4px" }} />
             <p style={{ fontSize: "14px", lineHeight: "1.6", color: "#333", margin: 0 }}>
-              मैं यह सत्यापित करता / करती हूं कि उपर्युक्त विवरणों में जो जानकारी दर्शायी गई है वह सही है। और | हमारी मिलकियत / भूमि के संबंध से विक्रय हेतु प्रस्तुत की है | इसका कोई भी सबूत मेरे पास उपलब्ध नहीं है | नोट - सम्पत्तिकर नगर पालिका (वार्षिक आयकर मूल्य का आकलन) नियम 1997 के नियम 10 (1) अंतर्गत विक्रय कारण बताकर कर निर्धारण विवरण (Self Assessment Form) के साथ दस्तावेज़ (Attachment) scan कर संलग्न करें | यह विवरणित विक्रयकृत नोट पर सत्यापित के प्रमाणस्वरूप होगी, जो कि अवैध पाए जाने पर सम्पत्ति का वार्षिक आयकर मूल्य एवं झूठी जानकारी पाए जाने पर झूठा जानकारी के आधार की राशि की पांच गुना राशि, अतिरिक्त कर की जा सकेगी।
+              मैं यह सत्यापित करता / करती हूं कि उपरोक्त विवरणी मे दी गयी जानकारी सत्य है। मैने / हमने जिस भवन/ भूमि के संबंध मे विवरणी प्रस्तुत की है उसका मैं स्वामी/अधिभोगी हूं इसमे कोई भी तथ्य छू पाये अथवा गलत नहीं है। नोट - मध्यप्रदेश नगर पालिका (वार्षिक भाड़ा मूल्य का अवधारणा) नियम 1997 के नियम 10 (1) अंतर्गत प्रत्येक भवन स्वामी को स्व निर्धारण विवरणी (Self Assessment Form) के साथ संलग्नक (Attachment) scan कर सब्मिट करें । स्व निर्धारण विवरणी मौके पर सत्यापन के अध्याधीन रहेगी, जाँच मे अंतर पाये जाने पर या अन्य कारण से आवश्यक पाये जाने पर वार्षिक भाड़ा मूल्य का पुर्निर्धारण किया जाएगा व 0 प्रतिशत से अधिक अंतर पाये जाने पर सम्पतिकर के पुर्निर्धारण के अंतर की राशि की पाँच गुना शास्ति ,अधिरोपित की जा सकेगी।
             </p>
           </div>
         </div>
@@ -976,7 +978,19 @@ const styles = {
     fontFamily: "Poppins, sans-serif",
   },
 
-
+labelTable:{
+   textAlign: "left",
+    padding: "8px",
+    border: "1px solid #ccc",
+    background: "#E8E8E8",
+    color: "#282828",
+    width: "240px",
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: "12px",
+    lineHeight: "130%",
+    letterSpacing: "0%"
+},
   sectionTitle: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: "bold",
@@ -989,7 +1003,8 @@ const styles = {
     textDecorationThickness: '1px',
     textDecorationOffset: '2px',
     color: '#4729A3',
-    marginBottom: '20px'
+    marginBottom: '20px',
+    marginTop: "25px"
 
   },
   label: {

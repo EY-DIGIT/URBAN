@@ -36,7 +36,7 @@ export default {
     color: '#282828',
     width: "200px"
   },
-   poppinsLabels: {
+  poppinsLabels: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: 400,
     fontSize: '16px',
@@ -58,15 +58,21 @@ export default {
   },
   table: {
     borderCollapse: "collapse",
-    width: "100%"
+    width: "80%",
+    // margin: "auto"
   },
   tableHeader: {
     textAlign: "left",
     padding: "8px",
     border: "1px solid #ccc",
-    background: "#E8E8E8",
+    background: "rgba(163, 187, 243, 0.5)",
     color: "#282828",
-    width:"240px"
+    width: "240px",
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: "12px",
+    lineHeight: "130%",
+    letterSpacing: "0%"
   },
   tableCell: {
     padding: "8px",
@@ -88,7 +94,7 @@ export default {
     cursor: "pointer",
   },
   addMoreLink: {
-    color: "purple",
+    color: "#4729A3",
     textDecoration: "underline",
     fontSize: "0.9rem"
   },
@@ -147,7 +153,10 @@ export default {
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",
-    border: "1px solid #D9D9D9"
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
+
   },
   inputFullWidth: {
     flexGrow: 1
@@ -181,17 +190,26 @@ export default {
     backgroundColor: "#f9f9f9"
   },
   assessmentStyle: {
+    background: '#4729A3',
     fontFamily: 'Poppins, sans-serif',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: '16px',
     lineHeight: '100%',
-    letterSpacing: '0',
+    letterSpacing: '0px',
     textDecorationStyle: 'solid',
     textDecorationColor: '#4729A3',
     textDecorationThickness: '1px',
-    textDecorationOffset: '2px',
-    color: '#4729A3',
-    marginBottom: '20px'
+    color: 'white',
+    marginBottom: '20px',
+    padding: '14px',
+    width: '52%',
+    borderBottomRightRadius: '20px',
+    borderTopRightRadius: '20px',
+    textAlign: "center",
+
+  },
+  styleMtop: {
+    marginTop: "30px"
   },
   assessmentStyles: {
     fontFamily: 'Poppins, sans-serif',
@@ -207,44 +225,64 @@ export default {
     marginBottom: '20px',
     display: "flex",
     alignItems: "center",
-    background: "#4729A34D",
+    // background: "#4729A34D",
     borderRadius: "20px",
-    width:"330px",
-    padding:"16px"
+    width: "330px",
+    // padding: "16px"
   },
 
   docBox: {
-    width: '300px',
+    // width: '300px',
     height: '33px',
     position: 'relative',
     borderWidth: '1px',
     borderRadius: '6px',
     background: 'var(--Color-bg-input, #FAFAFA)',
-    border: '1px solid #D9D9D9',
+    border: 'none',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop:"10px",
+    marginBottom:"10px"
   },
   textBox: {
     // width: "244.23472595214844px",
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",
-    border: "1px solid #D9D9D9"
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
+
   },
   widthInput: {
     width: "100%",
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",
-    border: "1px solid #D9D9D9"
-
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347",
+    // padding: "6px"
+  },
+  widthInputSha: {
+    width: "100%",
+    height: "35px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347",
+    padding: "6px"
   },
   widthInput300: {
     width: "32%",
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",
-    border: "1px solid #D9D9D9"
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
+
 
   },
   widthInputs: {
@@ -253,6 +291,34 @@ export default {
     borderWidth: "1px",
     borderRadius: "6px",
     border: "1px solid #D9D9D9",
-    padding: "10px"
-  }
+    padding: "10px",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
+  },
+  fileLabel: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    // backgroundColor: "#EDF0FC",,
+    height:"40px",
+    borderRadius: "10px",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347",
+    padding: "0 10px",
+    fontSize: "14px",
+    cursor: "pointer",
+    width: "100%",
+    position: "relative",
+  },
+
+  placeholderText: {
+    color: "#8A8A8A",
+    fontFamily: "Inter",
+  },
+
+  icon: {
+    display: "flex",
+    alignItems: "center",
+  },
+
 };

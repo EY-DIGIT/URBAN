@@ -49,7 +49,7 @@ const NewApplication = () => {
       altNumber: "",
       mobile: "",
       samagraID: "",
-      noSamagra: false, 
+      noSamagra: false,
     }
   ]);
   const [ownershipType, setOwnershipType] = useState(null);
@@ -63,7 +63,7 @@ const NewApplication = () => {
   });
   const [correspondenceAddress, setCorrespondenceAddress] = useState("");
   const [isSameAsPropertyAddress, setIsSameAsPropertyAddress] = useState(false);
-  const [rateZones,setRateZones]=useState([])
+  const [rateZones, setRateZones] = useState([])
   const [assessmentDetails, setAssessmentDetails] = useState({
     rateZone: null, // Usually fetched
     roadFactor: null,
@@ -76,6 +76,8 @@ const NewApplication = () => {
     floorNo: "",
     constructionType: "",
     area: "",
+    fromYear: "",
+    toYear: ""
   }]);
   const [propertyDetails, setPropertyDetails] = useState({
     propertyType: "",
@@ -168,11 +170,11 @@ const NewApplication = () => {
     // if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
     //   errors.samagraID = "Samagra ID must be digits only.";
     // }
-if (!owner.noSamagra) {
-  if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
-    errors.samagraID = "Samagra ID must be digits only.";
-  }
-}
+    if (!owner.noSamagra) {
+      if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
+        errors.samagraID = "Samagra ID must be digits only.";
+      }
+    }
     // ---- 5. Address ----
     if (!addressDetails.doorNo || addressDetails.doorNo.trim() === "") {
       errors.doorNo = "Door/House No is required.";
@@ -228,13 +230,13 @@ if (!owner.noSamagra) {
           city: "CityA",
           locality: {
             code: addressDetails.colony?.code || "SUN02",
-            area: addressDetails.zone?.code || "map with zone",
+            name: addressDetails.colony?.name || "map with zone",
           },
+          colony: addressDetails.zone?.code || "SUN02",
           street: addressDetails.address || "main",
           doorNo: addressDetails.doorNo || "23",
           pincode: addressDetails.pincode || "",
           ward: addressDetails.ward?.code || "1",
-          colony: addressDetails.colony?.code || "SUN02",
           documents: [],
         },
 
@@ -344,7 +346,7 @@ if (!owner.noSamagra) {
                 constructionType: unit.constructionType || null,
               },
               floorNo: parseInt(unit.floorNo) || 0,
-               rateZone: rateZones[0].code || "",
+              rateZone: rateZones[0].code || "",
               roadFactor: assessmentDetails.roadFactor?.code || "",
             })),
 
@@ -503,18 +505,18 @@ if (!owner.noSamagra) {
   const handleRoadFactorChange = (selected) => {
     setAssessmentDetails((prev) => ({ ...prev, roadFactor: selected }));
   };
-const updateRateZone =(value)=>{
-  console.log("fdsfdsfsdfdsfsdfsdf",value)
-  setRateZones(value);
-}
-useEffect(() => {
-  if (rateZones.length > 0) {
-    setAssessmentDetails(prev => ({
-      ...prev,
-      rateZone: rateZones[0].name,
-    }));
+  const updateRateZone = (value) => {
+    console.log("fdsfdsfsdfdsfsdfsdf", value)
+    setRateZones(value);
   }
-}, [rateZones]);
+  useEffect(() => {
+    if (rateZones.length > 0) {
+      setAssessmentDetails(prev => ({
+        ...prev,
+        rateZone: rateZones[0].name,
+      }));
+    }
+  }, [rateZones]);
   const addNewOwner = () => {
     setOwners([...owners, {}]); // Add a new empty owner object
     setIsJointStarted(true);
@@ -566,7 +568,7 @@ useEffect(() => {
             styles={styles}
             formErrors={formErrors}
           />
-
+          <div style={{ marginTop: "40px" }}></div>
           <div style={styles.assessmentStyle}>{t("Ownership Details")}</div>
 
           <OwnershipDetailsSection
@@ -580,7 +582,7 @@ useEffect(() => {
             styles={styles}
             formErrors={formErrors}
           />
-
+          <div style={styles.styleMtop}></div>
           <div style={styles.assessmentStyle}>{t("Property Address")}</div>
           <AddressSection
             t={t}
@@ -600,6 +602,7 @@ useEffect(() => {
             styles={styles}
             formErrors={formErrors}
           />
+          <div style={styles.styleMtop}></div>
           <div style={styles.assessmentStyle}>{t("Assessment Details")}</div>
           <AssessmentDetailsSection
             t={t}
@@ -610,7 +613,7 @@ useEffect(() => {
             formErrors={formErrors}
           />
 
-
+          <div style={styles.styleMtop}></div>
           <div style={styles.assessmentStyle}>{t("Property Details")}</div>
           <PropertyDetailsTableSection
             t={t}

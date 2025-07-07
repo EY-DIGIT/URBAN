@@ -151,6 +151,10 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
   const [constructionTypes, setConstructionTypes] = useState([]);
   const [floorList, setFloorList] = useState([]);
   const [occupancyTypes, setOccupancyTypes] = useState([]);
+  const currentYear = new Date().getFullYear();
+  const startYear = 2000;
+  const years = Array.from({ length: currentYear - startYear + 6 }, (_, i) => startYear + i);
+
 
   useEffect(() => {
     if (!isLoading && Menu?.PropertyTax?.UsageCategory) {
@@ -209,6 +213,10 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
   console.log("occupancyTypes", occupancyTypes)
   return (
     <div style={{ marginTop: "1rem" }}>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+        <label style={styles.poppinsLabel}>Property Type</label>
+        {/* <input style={styles.input} value={application?.propertyType || "Prefilled"} readOnly /> */}
+      </div>
       <table style={styles.table}>
         <thead>
           <tr>
@@ -216,7 +224,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
             <th style={styles.tableHeader}>{t("Usage Factor")}</th>
             <th style={styles.tableHeader}>{t("Floor No")}</th>
             <th style={styles.tableHeader}>{t("Type of Construction")}</th>
-            <th style={styles.tableHeader}>{t("Area")}</th>
+            <th style={styles.tableHeader}>{t("Area (Sq feet)")}</th>
             <th style={styles.tableHeader}>{t("From Year")}</th>
             <th style={styles.tableHeader}>{t("To Year")}</th>
           </tr>
@@ -226,7 +234,12 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
             <tr key={index}>
               <td style={styles.tableCell}>
                 <select
-                  style={styles.select}
+                  style={{
+                    ...styles.select,
+                    appearance: "auto", // enables the native arrow
+                    WebkitAppearance: "auto", // for Safari/Chrome
+                    MozAppearance: "auto", // for Firefox
+                  }}
                   value={unit.usageType}
                   onChange={(e) => handleUnitChange(index, "usageType", e.target.value)}
                 >
@@ -242,7 +255,12 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
 
               <td style={styles.tableCell}>
                 <select
-                  style={styles.select}
+                  style={{
+                    ...styles.select,
+                    appearance: "auto", // enables the native arrow
+                    WebkitAppearance: "auto", // for Safari/Chrome
+                    MozAppearance: "auto", // for Firefox
+                  }}
                   value={unit.usageFactor}
                   onChange={(e) => handleUnitChange(index, "usageFactor", e.target.value)}
                 >
@@ -256,7 +274,12 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
               </td>
               <td style={styles.tableCell}>
                 <select
-                  style={styles.select}
+                  style={{
+                    ...styles.select,
+                    appearance: "auto", // enables the native arrow
+                    WebkitAppearance: "auto", // for Safari/Chrome
+                    MozAppearance: "auto", // for Firefox
+                  }}
                   value={unit.floorNo}
                   onChange={(e) => handleUnitChange(index, "floorNo", e.target.value)}
                 >
@@ -270,7 +293,12 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
               </td>
               <td style={styles.tableCell}>
                 <select
-                  style={styles.select}
+                  style={{
+                    ...styles.select,
+                    appearance: "auto", // enables the native arrow
+                    WebkitAppearance: "auto", // for Safari/Chrome
+                    MozAppearance: "auto", // for Firefox
+                  }}
                   value={unit.constructionType}
                   onChange={(e) => handleUnitChange(index, "constructionType", e.target.value)}
                 >
@@ -288,42 +316,66 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
               <td style={styles.tableCell}>
                 <input
                   type="number"
-                  style={styles.select}
+                  style={{
+                    ...styles.select,
+                    appearance: "auto", // enables the native arrow
+                    WebkitAppearance: "auto", // for Safari/Chrome
+                    MozAppearance: "auto", // for Firefox
+                  }}
                   placeholder={t("Enter")}
                   value={unit.area}
                   onChange={(e) => handleUnitChange(index, "area", e.target.value)}
                 />
               </td>
               <td style={styles.tableCell}>
-                <select
-                  style={styles.select}
-                  value="select"
-                // onChange={(e) => handleUnitChange(index, "floorNo", e.target.value)}
-                >
-                  <option value="" disabled>{t("Select")}</option>
-                    <option value="Select" >{t("Select")}</option>
-                  {/* {floorList.map((floor) => (
-                    <option key={floor.code} value={floor.code}>
-                      {t(floor.i18nKey)}
-                    </option>
-                  ))} */}
-                </select>
-              </td>
-              <td style={styles.tableCell}>
-                <select
-                  style={styles.select}
-                  value="select"
-                // onChange={(e) => handleUnitChange(index, "floorNo", e.target.value)}
-                >
-                  <option value="" disabled>{t("Select")}</option>
-                   <option value="Select" >{t("Select")}</option>
-                  {/* {floorList.map((floor) => (
-                    <option key={floor.code} value={floor.code}>
-                      {t(floor.i18nKey)}
-                    </option>
-                  ))} */}
-                </select>
-              </td>
+        <select
+          style={{
+            ...styles.select,
+            appearance: "auto",
+            WebkitAppearance: "auto",
+            MozAppearance: "auto",
+          }}
+          value={unit.fromYear || ""}
+          onChange={(e) => {
+            handleUnitChange(index, "fromYear", e.target.value);
+
+            // Reset toYear if it’s less than new fromYear
+            if (unit.toYear && parseInt(e.target.value) > parseInt(unit.toYear)) {
+              handleUnitChange(index, "toYear", ""); // clear invalid toYear
+            }
+          }}
+        >
+          <option value="" disabled>{t("From Year")}</option>
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </td>
+
+      <td style={styles.tableCell}>
+        <select
+          style={{
+            ...styles.select,
+            appearance: "auto",
+            WebkitAppearance: "auto",
+            MozAppearance: "auto",
+          }}
+          value={unit.toYear || ""}
+          onChange={(e) => handleUnitChange(index, "toYear", e.target.value)}
+          disabled={!unit.fromYear}
+        >
+          <option value="" disabled>{t("To Year")}</option>
+          {years
+            .filter((year) => parseInt(year) >= parseInt(unit.fromYear || startYear))
+            .map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+        </select>
+      </td>
             </tr>
           ))}
         </tbody>
@@ -336,7 +388,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
         </p>
 
       )}
-      <div style={{ textAlign: "right", marginTop: "0.5rem" }}>
+      <div style={{ textAlign: "right", marginTop: "0.5rem", width: "80%" }}>
         <a href="#" style={styles.addMoreLink} onClick={(e) => { e.preventDefault(); addUnit(); }}>
           {t("Add more")}
         </a>
