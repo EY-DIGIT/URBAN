@@ -186,8 +186,8 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.id(unitId)
 				.rateZone(rs.getString("rateZone"))
 				.roadFactor(rs.getString("roadFactor"))
-				.toDate(rs.getString("toDate"))
-				.fromDate(rs.getString("fromDate"))
+				.toYear(rs.getString("toYear"))
+				.fromYear(rs.getString("fromYear"))
 				.build();
 		
 		currentProperty.addUnitsItem(unit);
