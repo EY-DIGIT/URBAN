@@ -279,6 +279,6 @@ public class OwnerInfo extends User {
 				+ ", BloodGroup=" + getBloodGroup() + ", IdentificationMark=" + getIdentificationMark()
 				+ ", Photo=" + getPhoto() + ", CreatedBy=" + getCreatedBy() + ", CreatedDate="
 				+ getCreatedDate() + ", LastModifiedBy=" + getLastModifiedBy() + ", LastModifiedDate="
-				+ getLastModifiedDate() + ", TenantId=" + getTenantId() + "]";
+				+ getLastModifiedDate() + ", TenantId=" + getTenantId() + ", SamagraId=" + getSamagraId() + ", hindiName=" + getHindiName() + ", SalutationHindi=" + getSalutationHindi() + "]";
 	}
 }
