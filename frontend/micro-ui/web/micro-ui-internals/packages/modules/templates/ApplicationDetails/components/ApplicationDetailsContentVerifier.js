@@ -710,7 +710,7 @@ function ApplicationDetailsContentVerifier({
                       // DO NOT use 'appearance: none' if you want the arrow
                     }}
                   >
-                    <option>{owner?.salutation}</option>
+                    <option>{owner?.salutationHindi}</option>
 
                   </select>
                   <input
@@ -723,7 +723,7 @@ function ApplicationDetailsContentVerifier({
                       backgroundColor: "#f9f9f9",
                       fontSize: "14px"
                     }}
-                    value={owner?.nameInHindi || ""}
+                    value={owner?.hindiName || ""}
                     readOnly
                   />
                 </div>
