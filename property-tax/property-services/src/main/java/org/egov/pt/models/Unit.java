@@ -85,11 +85,11 @@ public class Unit {
 	@JsonProperty("roadFactor")
 	private String roadFactor;
 	
-	@JsonProperty("toDate")
-	private String toDate;
+	@JsonProperty("toYear")
+	private String toYear;
 	
-	@JsonProperty("fromDate")
-	private String fromDate;
+	@JsonProperty("fromYear")
+	private String fromYear;
 	
 	// *****
 

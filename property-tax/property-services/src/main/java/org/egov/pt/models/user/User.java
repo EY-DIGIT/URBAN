@@ -204,7 +204,23 @@ public class User   {
         
         @JsonProperty("alternatemobilenumber")
         private String alternatemobilenumber;
-
+        
+        //**** Added title and samarga id
+        @JsonProperty("title")
+        private String title;
+        
+        @JsonProperty("samagraId")
+        private String samagraId;
+        
+    	// ***************** Added hindiName and salutationHindi
+    	
+    	@JsonProperty("hindiName")
+    	private String hindiName;
+    	
+    	@JsonProperty("salutationHindi")
+    	private String salutationHindi;
+    	
+    	//**************
 
         public User addRolesItem(Role rolesItem) {
             if (this.roles == null) {
