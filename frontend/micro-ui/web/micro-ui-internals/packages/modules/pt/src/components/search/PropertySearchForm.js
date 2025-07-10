@@ -199,18 +199,16 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
     lineHeight: '42.5px',
     letterSpacing: '3%',
     verticalAlign: 'middle',
-  color: "#4729A3"
+    color: "#4729A3"
   };
   return (
     <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} style={containerStyle} className="pt-property-search">
-      <div style={{width:"24%"}}>
+      <div style={{ width: "24%" }}>
         <h3 style={dtat}>CashDesk</h3>
 
         <div>
           <label style={labelStyle}>Assessment Year</label>
-          <select style={inputStyle} name="assessmentYear" ref={register}>
-            <option value="">Select</option>
-          </select>
+          <TextInput name="assessmentYear" inputRef={register} style={inputStyle} />
         </div>
 
         <h4 style={dtat}>Search Criteria</h4>
@@ -228,27 +226,21 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
 
         <SearchField style={colStyle}>
           <label style={labelStyle}>House Number</label>
-          <select name="houseNo" style={selectStyle} ref={register}>
-            <option value="">Select</option>
-          </select>
+          <TextInput name="houseNo" inputRef={register} style={inputStyle} />
         </SearchField>
- <SearchField style={colStyle}>
+        <SearchField style={colStyle}>
           <label style={labelStyle}>Colony</label>
           <TextInput name="colony" inputRef={register} style={inputStyle} />
         </SearchField>
         <SearchField style={colStyle}>
           <label style={labelStyle}>Ward</label>
-          <select name="ward" style={selectStyle} ref={register}>
-            <option value="">Select</option>
-            <option value="ward">ward</option>
-          </select>
+
+          <TextInput name="ward" inputRef={register} style={inputStyle} />
         </SearchField>
 
         <SearchField style={colStyle}>
           <label style={labelStyle}>Zone</label>
-          <select name="zone" style={selectStyle} ref={register}>
-            <option value="">Select</option>
-          </select>
+          <TextInput name="zone" inputRef={register} style={inputStyle} />
         </SearchField>
 
         <SearchField style={colStyle}>
@@ -256,7 +248,7 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
           <TextInput name="email" type="email" inputRef={register} style={inputStyle} />
         </SearchField>
 
-       
+
 
         {/* <SearchField style={colStyle}>
           <label style={labelStyle}>Locality / स्थानीयता</label>
@@ -286,11 +278,6 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
             style={inputStyle}
             componentInFront={<div style={{ marginRight: "5px" }}>+91</div>}
           />
-        </SearchField>
-
-        <SearchField style={colStyle}>
-          <label style={labelStyle}>Owner Name Hindi</label>
-          <TextInput name="ownerHindi" inputRef={register} style={inputStyle} />
         </SearchField>
 
         <SearchField style={colStyle}>

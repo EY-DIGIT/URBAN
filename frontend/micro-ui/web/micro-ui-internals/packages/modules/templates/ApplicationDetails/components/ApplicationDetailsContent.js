@@ -454,7 +454,12 @@ const styles = {
     color: "#4729A3",
     marginBottom: "16px"
   },
-  row: { display: "flex", flexWrap: "wrap", marginBottom: "10px" },
+  row: {
+  display: "grid",
+  gridTemplateColumns: "repeat(4, 1fr)",
+  gap: "10px",
+  marginBottom: "10px"
+},
   column: { flex: "1 1 200px", marginRight: "10px", marginBottom: "10px" },
   label: {
     marginBottom: "4px", fontFamily: "Poppins",
@@ -764,15 +769,7 @@ const ApplicationDetailsContent = ({
       <div style={styles.section}>
         <div style={styles.heading}>Consumer Details</div>
         <div style={styles.row}>
-          <div style={styles.column}>
-            <div style={styles.label}>Assessment Year</div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.financialYear || "N/A"}
-              style={styles.input}
-            />
-          </div>
+       
 
           <div style={styles.column}>
             <div style={styles.label}>Owner Name(English)</div>
@@ -784,20 +781,7 @@ const ApplicationDetailsContent = ({
             />
           </div>
 
-          <div style={styles.column}>
-            <div style={styles.label}>Owner Name (Hindi)</div>
-            <input type="text" readOnly value="N/A" style={styles.input} />
-          </div>
-
-          <div style={styles.column}>
-            <div style={styles.label}>Father/Husband </div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.owners?.[0]?.fatherOrHusbandName || "N/A"}
-              style={styles.input}
-            />
-          </div>
+        
 
 
           <div style={styles.column}>
@@ -810,16 +794,16 @@ const ApplicationDetailsContent = ({
             />
           </div>
 
-          <div style={styles.column}>
-            <div style={styles.label}>Old Property ID</div>
+        
+  <div style={styles.column}>
+            <div style={styles.label}>Mobile No.</div>
             <input
               type="text"
               readOnly
-              value={applicationData?.oldPropertyId || "N/A"}
+              value={applicationData?.owners?.[0]?.mobileNumber || "N/A"}
               style={styles.input}
             />
           </div>
-
           <div style={styles.column}>
             <div style={styles.label}>Exemption</div>
             <input
@@ -860,10 +844,6 @@ const ApplicationDetailsContent = ({
             <input type="text" readOnly value="N/A" style={styles.input} />
           </div>
 
-          <div style={styles.column}>
-            <div style={styles.label}>Rate Zone of Current Year</div>
-            <input type="text" readOnly value="N/A" style={styles.input} />
-          </div>
 
           <div style={styles.column}>
             <div style={styles.label}>Address</div>
@@ -875,56 +855,6 @@ const ApplicationDetailsContent = ({
             />
           </div>
 
-          <div style={styles.column}>
-            <div style={styles.label}>Property Area</div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.landArea || "N/A"}
-              style={styles.input}
-            />
-          </div>
-
-          <div style={styles.column}>
-            <div style={styles.label}>Mobile No.</div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.owners?.[0]?.mobileNumber || "N/A"}
-              style={styles.input}
-            />
-          </div>
-
-          <div style={styles.column}>
-            <div style={styles.label}>Email ID / ईमेल आईडी</div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.owners?.[0]?.emailId || "N/A"}
-              style={styles.input}
-            />
-          </div>
-
-          <div style={styles.column}>
-            <div style={styles.label}>Aadhaar</div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.owners?.[0]?.aadhaarNumber || "N/A"}
-              style={styles.input}
-            />
-          </div>
-
-          <div style={styles.column}>
-            <div style={styles.label}>Samagra ID</div>
-            <input
-              type="text"
-              readOnly
-              value={applicationData?.owners?.[0]?.samagraId || "N/A"}
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.column}></div>
         </div>
       </div>
 

@@ -771,7 +771,7 @@ function ApplicationDetailsContentVerifier({
           <div><label style={styles.label}>Pincode<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.pincode || ""} readOnly /></div>
           <div><label style={styles.label}>Colony<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.locality?.name} readOnly /></div>
           <div><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} readOnly /></div>
-          <div><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.locality?.area} readOnly /></div>
+          <div><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.zone} readOnly /></div>
         </div>
         <div style={styles.grid}>
           <div>
@@ -801,14 +801,16 @@ function ApplicationDetailsContentVerifier({
             {/* <input style={styles.input} value={application?.propertyType || "Prefilled"} readOnly /> */}
           </div>
 
-          <table style={{ width: "80%", borderCollapse: "collapse",margin:"auto", marginTop: "8px", border: "1px solid #ccc" }}>
+          <table style={{ width: "80%", borderCollapse: "collapse", margin: "auto", marginTop: "8px", border: "1px solid #ccc" }}>
             <thead style={{ background: "#f0f0f0", height: "40px" }}>
               <tr>
-                <th style={{ ...styles.labelTable}}>Usage Type</th>
-                <th style={{ ...styles.labelTable}}>Usage Factor</th>
-                <th style={{ ...styles.labelTable}}>Floor Number</th>
-                <th style={{ ...styles.labelTable}}>Type of Construction</th>
-                <th style={{ ...styles.labelTable}}>Area (Sq feet)</th>
+                <th style={{ ...styles.labelTable }}>Usage Type</th>
+                <th style={{ ...styles.labelTable }}>Usage Factor</th>
+                <th style={{ ...styles.labelTable }}>Floor Number</th>
+                <th style={{ ...styles.labelTable }}>Type of Construction</th>
+                <th style={{ ...styles.labelTable }}>Area (Sq feet)</th>
+                <th style={{ ...styles.labelTable }}>From Year</th>
+                <th style={{ ...styles.labelTable }}>To Year</th>
               </tr>
             </thead>
             <tbody>
@@ -866,6 +868,27 @@ function ApplicationDetailsContentVerifier({
                       value={unit?.constructionDetail?.builtUpArea || ""}
                       readOnly
                     />
+                  </td>
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <select
+                      disabled
+                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      value={unit.fromYear || ""}
+
+                    >
+                      <option value={unit?.fromYear}>{unit?.fromYear}</option>
+                    </select>
+                  </td>
+
+                  <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                    <select
+                      disabled
+                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      value={unit.toYear || ""}
+
+                    >
+                      <option value={unit?.toYear}>{unit?.toYear}</option>
+                    </select>
                   </td>
                 </tr>
               ))}
@@ -978,8 +1001,8 @@ const styles = {
     fontFamily: "Poppins, sans-serif",
   },
 
-labelTable:{
-   textAlign: "left",
+  labelTable: {
+    textAlign: "left",
     padding: "8px",
     border: "1px solid #ccc",
     background: "#E8E8E8",
@@ -990,7 +1013,7 @@ labelTable:{
     fontSize: "12px",
     lineHeight: "130%",
     letterSpacing: "0%"
-},
+  },
   sectionTitle: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: "bold",

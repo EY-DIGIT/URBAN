@@ -209,9 +209,9 @@ const NewApplication = () => {
     const totalUnitArea = unit.reduce((sum, u) => sum + Number(u.area || 0), 0);
     const plotArea = assessmentDetails.plotArea;
 
-    if (totalUnitArea > plotArea) {
-      errors.totalUnitArea = `Total unit area (${totalUnitArea} sq.ft) cannot exceed Plot Area (${plotArea} sq.ft).`;
-    }
+    // if (totalUnitArea > plotArea) {
+    //   errors.totalUnitArea = `Total unit area (${totalUnitArea} sq.ft) cannot exceed Plot Area (${plotArea} sq.ft).`;
+    // }
     // ---- Final Error Check ----
     setFormErrors(errors);
 
@@ -232,7 +232,7 @@ const NewApplication = () => {
             code: addressDetails.colony?.code || "SUN02",
             name: addressDetails.colony?.name || "map with zone",
           },
-          colony: addressDetails.zone?.code || "SUN02",
+          zone: addressDetails.zone?.code || "SUN02",
           street: addressDetails.address || "main",
           doorNo: addressDetails.doorNo || "23",
           pincode: addressDetails.pincode || "",
@@ -246,6 +246,7 @@ const NewApplication = () => {
           salutation: owner.title || "mr",
           title: "title",
           name: owner.name || `Owner ${index + 1}`,
+          salutationHindi:owner.hindiTitle,
           hindiName: owner.hindiName || "",
           fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
           gender: "MALE",
@@ -309,6 +310,8 @@ const NewApplication = () => {
             floorNo: parseInt(unit.floorNo) || 0,
             rateZone: rateZones[0].code || "",
             roadFactor: assessmentDetails.roadFactor?.code || "",
+            fromYear: unit.fromYear,
+            toYear: unit.toYear,
           })),
 
 
@@ -348,6 +351,8 @@ const NewApplication = () => {
               floorNo: parseInt(unit.floorNo) || 0,
               rateZone: rateZones[0].code || "",
               roadFactor: assessmentDetails.roadFactor?.code || "",
+              fromYear: unit.fromYear,
+              toYear: unit.toYear,
             })),
 
           basement1: null,
