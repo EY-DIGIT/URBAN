@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-css",
-  "version": "1.6.6",
+  "version": "1.7.40",
   "license": "MIT",
   "main": "dist/index.css",
   "engines": {
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "gulp build",
-    "build:prod": "NODE_ENV=production gulp build",
+    "build:prod": "cross-env NODE_ENV=production gulp build",
     "prepublish": "yarn build:prod",
     "deploy": "gulp && cp -R svg example && cp -R img example && gh-pages -d example"
   },
@@ -19,7 +19,7 @@
     "> 3%",
     "last 2 versions"
   ],
-    "resolutions": {
+  "resolutions": {
     "**/minimatch": "7.4.6",
     "**/glob": "7.2.3",
     "**/chokidar": "3.5.3"
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "autoprefixer": "10.4.4",
+    "cross-env": "^7.0.3",
     "cssnano": "4.1.11",
     "gh-pages": "3.2.3",
     "gulp": "4.0.2",
