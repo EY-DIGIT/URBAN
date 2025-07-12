@@ -121,7 +121,9 @@ public class WorkflowService {
 			request.getProperty().setPropertyId(pId);
 		}
 		
-		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
+//		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
+		// ******* update Status Value SAVE While Create Property
+		request.getProperty().setStatus(Status.SAVE);
 		request.getProperty().getWorkflow().setState(state);
 		request.getProperty().setProcessInstance(workflowReq.getProcessInstances().get(0));	
 		return state;

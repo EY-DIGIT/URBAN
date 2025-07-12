@@ -108,6 +108,9 @@ public class Property extends PropertyInfo {
 	
 	@JsonProperty("processInstance")
     private ProcessInstance processInstance;
+	
+	@JsonProperty("UpdateIMC")
+	private boolean UpdateIMC;
 
 
 	@Builder

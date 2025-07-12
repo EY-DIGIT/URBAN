@@ -65,8 +65,11 @@ public class PropertyController {
 
 
     @PostMapping("/_update")
-    public ResponseEntity<PropertyResponse> update(@Valid @RequestBody PropertyRequest propertyRequest) {
-
+//    public ResponseEntity<PropertyResponse> update(@Valid @RequestBody PropertyRequest propertyRequest) {
+    	public ResponseEntity<?> update(@Valid @RequestBody PropertyRequest propertyRequest) {
+    	if (!propertyRequest.getProperty().isUpdateIMC()) {
+    	    return new ResponseEntity<>("Update request rejected: isUpdateIMC=false", HttpStatus.OK);
+    	}
         Property property = propertyService.updateProperty(propertyRequest);
         ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
         PropertyResponse response = PropertyResponse.builder()

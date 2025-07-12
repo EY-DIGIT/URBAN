@@ -104,7 +104,9 @@ public class PropertyService {
 
 		} else {
 
-			request.getProperty().setStatus(Status.ACTIVE);
+			//request.getProperty().setStatus(Status.ACTIVE);
+			// ******* update Status Value SAVE While Create Property
+			request.getProperty().setStatus(Status.SAVE);
 		}
 
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
@@ -232,11 +234,14 @@ public class PropertyService {
 
 			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
 
+//			if (state.getIsStartState() == true
+//					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
+//					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 			if (state.getIsStartState() == true
-					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
-					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
+					&& !propertyFromSearch.getStatus().equals(Status.SAVE)) {
 
-				propertyFromSearch.setStatus(Status.INACTIVE);
+
+				propertyFromSearch.setStatus(Status.INWORKFLOW);
 				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
 				producer.push(tenantId, config.getPropertyEventInboxKafkaTopic(), OldPropertyRequest);
 
@@ -548,5 +553,6 @@ public class PropertyService {
         Integer count = repository.getCount(propertyCriteria, requestInfo);
         return count;
 	}
+	
 
 }
