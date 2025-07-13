@@ -107,6 +107,7 @@ public class TranslationService {
         propertyDetail.put("usageCategoryMinor", usageCategoryMinor);
         propertyDetail.put("ownershipCategory", ownershipCategory);
         propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
+        propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
         // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
@@ -128,6 +129,9 @@ public class TranslationService {
                 unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
                 unitMap.put("arv", unit.getArv());
                 unitMap.put("occupancyType", unit.getOccupancyType());
+                unitMap.put("constructionType", unit.getConstructionDetail().getConstructionType());
+                unitMap.put("rateZone", unit.getRateZone());
+                unitMap.put("roadFactor", unit.getRoadFactor());
 
                 String[] masterData = unit.getUsageCategory().split("\\.");
 

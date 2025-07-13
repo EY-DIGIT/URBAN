@@ -171,6 +171,16 @@ public class CalculatorUtils {
         details.add(MasterDetail.builder().name(CalculatorConstants.FIRE_CESS_MASTER).build());
         details.add(MasterDetail.builder().name(CalculatorConstants.CANCER_CESS_MASTER).build());
         details.add(MasterDetail.builder().name(CalculatorConstants.INTEREST_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.SANITATION_CESS_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.PTAX_CESS_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.DRAINAGE_CESS_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.WATER_CHARGES_CESS_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.EDUCATION_CESS_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.URBAN_CESS_ONE_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.URBAN_CESS_TWO_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.SERVICE_CHARGE_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.TAX_SLAB_MASTER).build());
+        
         ModuleDetail mdDtl = ModuleDetail.builder().masterDetails(details)
                 .moduleName(CalculatorConstants.PROPERTY_TAX_MODULE).build();
         MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(mdDtl)).tenantId(tenantId)

@@ -54,5 +54,9 @@ public class Calculation   {
 
         @JsonProperty("billingSlabIds")
         private List<String> billingSlabIds;
+        
+        List<PropertyFYDetails> propertyFYDetails;
+        
+        List<PropertyFYTaxSummary> propertyFYTaxSummaries;
 }
 
