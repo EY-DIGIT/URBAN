@@ -276,20 +276,16 @@
 
 // export default EmployeeSideBar;
 
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SubMenu from "./SubMenu";
 import { Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
 
-const EmployeeSideBar = ({handleLogout,userDetails}) => {
+const EmployeeSideBar = ({ handleLogout, userDetails }) => {
   const { isLoading, data } = Digit.Hooks.useAccessControl();
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
-  const [isExpanded, setIsExpanded] = useState(true); // toggle state
-
-  const toggleSidebar = () => setIsExpanded((prev) => !prev);
 
   const configEmployeeSideBar = {};
   const configEmployeeSideBar1 = {};
@@ -316,14 +312,57 @@ const EmployeeSideBar = ({handleLogout,userDetails}) => {
       }
     });
 
+  let res = [];
+
+  const restructureSidebar = () => {
+    const keys = Object.keys(configEmployeeSideBar);
+    keys.sort((a, b) => a.orderNumber - b.orderNumber);
+
+    for (let i = 0; i < keys.length; i++) {
+      const firstItem = configEmployeeSideBar[keys[i]][0];
+
+      if (firstItem.path.indexOf(".") === -1) {
+        const moduleName = firstItem.displayName?.toUpperCase() || keys[i].toUpperCase();
+        const navigationURL = firstItem.displayName === "Home" ? "/digit-ui/employee" : firstItem.navigationURL;
+
+        const item = {
+          moduleName,
+          icon: firstItem,
+          navigationURL,
+          type: "single",
+        };
+
+        if (moduleName === "HOME") {
+          res.unshift(item);
+        } else {
+          res.push(item);
+        }
+      } else {
+        res.push({
+          moduleName: keys[i].toUpperCase(),
+          links: configEmployeeSideBar[keys[i]],
+          icon: configEmployeeSideBar[keys[i]][0],
+          orderNumber: configEmployeeSideBar[keys[i]][0].orderNumber,
+        });
+      }
+    }
+
+    // Sort everything except HOME
+    if (!res.find((a) => a.moduleName === "HOME")) {
+      res.sort((a, b) => a.moduleName.localeCompare(b.moduleName));
+    }
+
+    return res;
+  };
+
+  const sidebarItems = restructureSidebar();
+
   if (isLoading) return <Loader />;
 
   return (
-    <div className={``} style={{height:"100%",position:"relative",zIndex:"2"}}>
-      {/* <button className="sidebar-toggle-btn" onClick={toggleSidebar}>
-        {isExpanded ? "<" : ">"}
-      </button> */}
-      <SubMenu handleLogout={handleLogout} userDetails={userDetails}/>
+    <div style={{ height: "100%", position: "relative", zIndex: "2",marginTop:"74px" }}>
+      {/* Search bar can be added here if needed */}
+      <SubMenu items={sidebarItems} handleLogout={handleLogout} userDetails={userDetails} />
     </div>
   );
 };

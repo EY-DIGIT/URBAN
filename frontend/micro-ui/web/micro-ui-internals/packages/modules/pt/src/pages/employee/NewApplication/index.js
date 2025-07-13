@@ -23,6 +23,9 @@ import CorrespondenceAddressSection from "./CorrespondenceAddressSection";
 const NewApplication = () => {
 
   const { t } = useTranslation();
+  const [proOwnerDetail, setProOwnerDetail] = useState(null);
+  const [showPreviewButton, setShowPreviewButton] = useState(false);
+  const [showAssessmentPop, setShowAssesmentPop] = useState(false);
   const [acknowledgmentNumber, setAcknowledgmentNumber] = useState("");
   const [propertyId, setPropertyId] = useState("");
   const [status, setStatus] = useState("");
@@ -118,6 +121,62 @@ const NewApplication = () => {
 
   let tenantIdss = Digit.ULBService.getCurrentTenantId();
   console.log(tenantIdss, "tenantIdss")
+  const {
+    isLoading: ptCalculationEstimateLoading,
+    data: ptCalculationEstimateData,
+    mutate: ptCalculationEstimateMutate,
+    error,
+  } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
+  const handleEstimate = () => {
+    const errors = {};
+    if (!selectedAssessmentYear) {
+      errors.selectedAssessmentYear = "Assessment year is required.";
+    }
+    setFormErrors(errors);
+    const payload = {
+      Assessment: {
+        financialYear: selectedAssessmentYear?.code,
+        propertyId: propertyId,
+        tenantId: "pg.citya",
+        source: "MUNICIPAL_RECORDS",
+        channel: "CITIZEN",
+        assessmentDate: Date.now(),
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        authToken: userInfo1?.authToken || "default-token",
+        userInfo: {
+          id: userInfo1?.id || 1,
+          uuid: userInfo1?.uuid || "default-uuid",
+          userName: userInfo1?.userName || "defaultuser",
+          name: userInfo1?.name || "Default User",
+          mobileNumber: userInfo1?.mobileNumber || "9999999999",
+          emailId: userInfo1?.emailId || "default@example.com",
+          locale: userInfo1?.locale || "en_IN",
+          type: userInfo1?.type || "CITIZEN",
+          roles: userInfo1?.roles || [],
+          active: userInfo1?.active !== false,
+          tenantId: userInfo1?.tenantId || "pg.citya",
+          permanentCity: userInfo1?.permanentCity || "pg.citya"
+        },
+        msgId: "1749797151521|en_IN",
+        plainAccessRequest: {}
+      }
+    };
+
+    ptCalculationEstimateMutate(payload, {
+      onSuccess: (data) => {
+        history.push({
+          pathname: "/digit-ui/employee/pt/PreviewDemand",
+          state: { data, proOwnerDetail }// send full object
+        });
+        console.log("Estimate success:", data);
+      },
+      onError: (error) => {
+        alert("Estimate error:", error);
+      },
+    });
+  };
   const handleSubmit = async () => {
     const errors = {};
 
@@ -246,7 +305,7 @@ const NewApplication = () => {
           salutation: owner.title || "mr",
           title: "title",
           name: owner.name || `Owner ${index + 1}`,
-          salutationHindi:owner.hindiTitle,
+          salutationHindi: owner.hindiTitle,
           hindiName: owner.hindiName || "",
           fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
           gender: "MALE",
@@ -389,10 +448,12 @@ const NewApplication = () => {
       onSuccess: (data) => {
         const property = data?.Properties?.[0];
         if (property) {
+          setProOwnerDetail(property);
           setAcknowledgmentNumber(property.acknowldgementNumber);
           setPropertyId(property.propertyId);
           setStatus(property.status);
-          setShowSuccessModal(true);
+          // setShowSuccessModal(true);
+          setShowPreviewButton(true);
         }
       },
       onError: (err) => {
@@ -402,9 +463,13 @@ const NewApplication = () => {
     });
   };
 
-
+  const backToNew = () => {
+    setShowPreviewButton(false);
+    setShowAssesmentPop(false);
+  }
   const PreviewDemand = () => {
-    history.push("/digit-ui/employee/pt/PreviewDemand");
+    setShowAssesmentPop(true);
+    // history.push("/digit-ui/employee/pt/PreviewDemand");
   };
   // const handleFileChange = (key, file) => {
   //   console.log("File changed for key:", key, "File:", file);
@@ -638,9 +703,40 @@ const NewApplication = () => {
             styles={styles}
             formErrors={formErrors}
           />
+          {showAssessmentPop && (
+            <div style={styles.modalOverlay}>
+              <div style={styles.modalContent}>
+
+                <div style={styles.poppinsLabel}>
+                  {t("Select Assessment Year")} <span className="mandatory" style={styles.mandatory}>*</span>
+                </div>
+                <Dropdown
+                  style={styles.widthInput300Ass}
+                  t={t}
+                  option={assessmentYears} // dynamic list
+                  selected={assessmentYears.find(item => item.code === selectedAssessmentYear?.code)}
+                  select={(value) => setSelectedAssessmentYear(value)}
+                  optionKey="name"
+                  placeholder={t("Select")}
+                />
+                {formErrors.selectedAssessmentYear && (
+                  <p style={{ color: "red", fontSize: "12px" }}>{formErrors.selectedAssessmentYear}</p>
+                )}
+                <div style={{ display: "flex", gap: "40px" }}>
+                  <SubmitBar label={t("Back")} onSubmit={backToNew} style={{ background: "#4729A3" }} />
+                  <SubmitBar label={t("Confirm")} onSubmit={handleEstimate} style={{ background: "#4729A3" }} />
+                </div>
+
+              </div>
+            </div>
+          )}
           <div style={styles.buttonContainer}>
-            <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#4729A3" }} />
-            <SubmitBar label={t("Submit")} onSubmit={handleSubmit} style={{ background: "#4729A3" }} />
+            {showPreviewButton && (
+              <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#4729A3" }} />
+            )}
+            {!showPreviewButton && (
+              <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#4729A3" }} />
+            )}
           </div>
         </div>
       )}

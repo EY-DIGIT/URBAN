@@ -284,7 +284,7 @@ const TopBar = ({
             </span>
           )}
         </div>
-        {/* {loggedIn && (
+        {loggedIn && (
             <div style={{height:"40px"}}>
           <Dropdown
             option={userOptions}
@@ -301,7 +301,7 @@ const TopBar = ({
             }
           />
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );

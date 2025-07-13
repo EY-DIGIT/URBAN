@@ -282,8 +282,15 @@ export default {
     border: "1px solid #D9D9D9",
     boxShadow: "0px 4px 4px 0px #00000040",
     background: "#A3BBF347"
-
-
+  },
+   widthInput300Ass: {
+    // width: "32%",
+    height: "35px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
   },
   widthInputs: {
     width: "32%",
@@ -320,5 +327,69 @@ export default {
     display: "flex",
     alignItems: "center",
   },
-
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: "2rem",
+    borderRadius: "8px",
+    minWidth: "400px",
+  },
+  modalHeader: {
+    color: "blue",
+    fontWeight: "bold",
+    fontSize: "18px",
+    marginBottom: "1rem",
+    textDecoration: "underline",
+  },
+  buttonRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "1rem",
+  },
+  cancelButton: {
+    border: "1px solid red",
+    color: "red",
+    padding: "8px 16px",
+    borderRadius: "4px",
+    backgroundColor: "white",
+    cursor: "pointer",
+  },
+  submitButton: {
+    backgroundColor: "indigo",
+    color: "white",
+    padding: "8px 16px",
+    borderRadius: "4px",
+    border: "none",
+    cursor: "pointer",
+  },
+  checkIcon: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "50%",
+    backgroundColor: "black",
+    border: "3px solid green",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "0 auto 1rem",
+    fontSize: "28px",
+    color: "white",
+  },
+  header: {
+    fontWeight: "bold",
+    fontSize: "18px",
+    marginBottom: "8px",
+    textAlign: "center"
+  },
 };

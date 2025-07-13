@@ -153,7 +153,17 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
   const [occupancyTypes, setOccupancyTypes] = useState([]);
   const currentYear = new Date().getFullYear();
   const startYear = 2000;
-  const years = Array.from({ length: currentYear - startYear + 6 }, (_, i) => startYear + i);
+
+  const years = Array.from({ length: currentYear - startYear + 6 }, (_, i) => {
+    const from = startYear + i;
+    const to = (from + 1).toString().slice(2);
+    return {
+      label: `${from}-${to}`,   // what user sees and what is stored
+      value: `${from}-${to}`,
+    };
+  });
+
+
 
 
   useEffect(() => {
@@ -328,54 +338,65 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
                 />
               </td>
               <td style={styles.tableCell}>
-        <select
-          style={{
-            ...styles.select,
-            appearance: "auto",
-            WebkitAppearance: "auto",
-            MozAppearance: "auto",
-          }}
-          value={unit.fromYear || ""}
-          onChange={(e) => {
-            handleUnitChange(index, "fromYear", e.target.value);
+                <select
+                  style={{
+                    ...styles.select,
+                    appearance: "auto",
+                    WebkitAppearance: "auto",
+                    MozAppearance: "auto",
+                  }}
+                  value={unit.fromYear || ""}
+                  onChange={(e) => {
+                    const selectedFrom = e.target.value;
+                    handleUnitChange(index, "fromYear", selectedFrom);
 
-            // Reset toYear if it’s less than new fromYear
-            if (unit.toYear && parseInt(e.target.value) > parseInt(unit.toYear)) {
-              handleUnitChange(index, "toYear", ""); // clear invalid toYear
-            }
-          }}
-        >
-          <option value="" disabled>{t("From Year")}</option>
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </td>
+                    // Reset toYear if it's less than new fromYear
+                    const fromBaseYear = parseInt(selectedFrom.split("-")[0]);
+                    const toBaseYear = unit.toYear ? parseInt(unit.toYear.split("-")[0]) : null;
 
-      <td style={styles.tableCell}>
-        <select
-          style={{
-            ...styles.select,
-            appearance: "auto",
-            WebkitAppearance: "auto",
-            MozAppearance: "auto",
-          }}
-          value={unit.toYear || ""}
-          onChange={(e) => handleUnitChange(index, "toYear", e.target.value)}
-          disabled={!unit.fromYear}
-        >
-          <option value="" disabled>{t("To Year")}</option>
-          {years
-            .filter((year) => parseInt(year) >= parseInt(unit.fromYear || startYear))
-            .map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-        </select>
-      </td>
+                    if (toBaseYear && fromBaseYear > toBaseYear) {
+                      handleUnitChange(index, "toYear", "");
+                    }
+                  }}
+                >
+                  <option value="" disabled>{t("From Year")}</option>
+                  {years.map((yearObj) => (
+                    <option key={yearObj.value} value={yearObj.value}>
+                      {yearObj.label}
+                    </option>
+                  ))}
+                </select>
+              </td>
+
+
+              <td style={styles.tableCell}>
+                <select
+                  style={{
+                    ...styles.select,
+                    appearance: "auto",
+                    WebkitAppearance: "auto",
+                    MozAppearance: "auto",
+                  }}
+                  value={unit.toYear || ""}
+                  onChange={(e) => handleUnitChange(index, "toYear", e.target.value)}
+                  disabled={!unit.fromYear}
+                >
+                  <option value="" disabled>{t("To Year")}</option>
+                  {years
+                    .filter((yearObj) => {
+                      const fromYearBase = parseInt(unit.fromYear?.split("-")[0] || startYear);
+                      const thisYearBase = parseInt(yearObj.value.split("-")[0]);
+                      return thisYearBase >= fromYearBase;
+                    })
+                    .map((yearObj) => (
+                      <option key={yearObj.value} value={yearObj.value}>
+                        {yearObj.label}
+                      </option>
+                    ))}
+                </select>
+              </td>
+
+
             </tr>
           ))}
         </tbody>
