@@ -880,13 +880,11 @@ public class EstimationService {
 
 	private List<BillingSlab> getSlabsForCalc(List<BillingSlab> billingSlabs, Unit unit) {
 
-		String fromYear = "2020-21";
-		String toYear = "2021-22";
 		ObjectMapper mapper = new ObjectMapper();
 		List<BillingSlab> matchingList1 = new ArrayList<>();
 		final String all = configs.getSlabValueAll();
-		Integer fromStartYear = Integer.parseInt(fromYear.split("-")[0]);
-		Integer toEndYear = Integer.parseInt(toYear.split("-")[0]) + 1;
+		Integer fromStartYear = Integer.parseInt(unit.getFromYear().split("-")[0]);
+		Integer toEndYear = Integer.parseInt(unit.getToYear().split("-")[0]) + 1;
 		BillingSlab billSlbs = null;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (fromStartYear != null && toEndYear != null) {
