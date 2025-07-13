@@ -42,6 +42,30 @@ public class CalculatorConstants {
 	public static final String PT_FIRE_CESS = "PT_FIRE_CESS";
 
 	public static final String PT_CANCER_CESS = "PT_CANCER_CESS";
+	
+	//**** Added Extra Cess
+	public static final String PT_SANITATION_CESS = "PT_SANITATION_CESS";
+	
+	public static final String PT_PTAX_CESS = "PT_PTAX_CESS";
+	
+	public static final String PT_DRAINAGE_CESS = "PT_DRAINAGE_CESS";
+	
+	public static final String PT_WATER_CHARGES_CESS = "PT_WATER_CHARGES_CESS";
+	
+	public static final String PT_EDUCATION_CESS = "PT_EDUCATION_CESS";
+	
+	public static final String PT_URBAN_CESS_ONE = "PT_URBAN_CESS_ONE";
+	
+	public static final String PT_URBAN_CESS_TWO = "PT_URBAN_CESS_TWO";
+	
+	public static final String PT_SERVICE_CHARGE = "PT_SERVICE_CHARGE";
+	
+	public static final String PT_PROPERTY_TAX = "PT_PROPERTY_TAX";
+	
+	public static final String PT_TPV = "PT_TPV";
+	
+	public static final String PT_ALV = "PT_ALV";
+	//******
 
 	public static final String PT_ADHOC_PENALTY = "PT_ADHOC_PENALTY";
 
@@ -109,6 +133,19 @@ public class CalculatorConstants {
 	public static final String CANCER_CESS_MASTER = "CancerCess";
 
 	public static final String INTEREST_MASTER = "Interest";
+	
+	//***** Added Extra Cess*****//
+	public static final String SANITATION_CESS_MASTER = "SanitationCess";
+	public static final String PTAX_CESS_MASTER = "PTAX";
+	public static final String DRAINAGE_CESS_MASTER = "DrainageCess";
+	public static final String WATER_CHARGES_CESS_MASTER = "WaterCharges";
+	public static final String EDUCATION_CESS_MASTER = "EducationCess";
+	public static final String URBAN_CESS_ONE_MASTER = "UrbanCessOne";
+	public static final String URBAN_CESS_TWO_MASTER = "UrbanCessTwo";
+	public static final String SERVICE_CHARGE_MASTER = "ServiceCharge";
+	public static final String TAX_SLAB_MASTER = "TaxSlab";
+	
+	//*************///
 
 	public static final List<String> PROPERTY_BASED_EXEMPTION_MASTERS = Collections.unmodifiableList(Arrays.asList(
 			USAGE_MAJOR_MASTER, USAGE_MINOR_MASTER, USAGE_SUB_MINOR_MASTER, USAGE_DETAIL_MASTER, OWNER_TYPE_MASTER));
@@ -255,6 +292,7 @@ public class CalculatorConstants {
 	
 	public static final String BILLING_SLAB_MATCH_ERROR_CODE = "NO_BILLING_SLAB_FOUND";
 	public static final String BILLING_SLAB_MATCH_ERROR_MESSAGE = "No matching slabs has been found for unit on FloorNo : {floor} of Area : {area} with usageCategoryDetail : {usageDetail}";
+	public static final String BILLING_SLAB_MATCH_ERROR_MESSAGE2 = "No matching slabs has been found for unit";
 
 	
 	public static final String BILLING_SLAB_MATCH_FLOOR = "{floor}";

@@ -171,8 +171,11 @@ public class PropertyValidator {
 			/*
 			 * update and mutation open state are same currently - Creation reason will change for begining of a workflow
 			 */
+//			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+//					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) 
+		// ******* Update If Condition after Status change = SAVE
 			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+					&& propertyFromSearch.getStatus().equals(Status.SAVE)) {
 				fieldsUpdated.remove("creationReason");
 				isstateUpdatable = true;
 
@@ -880,5 +883,4 @@ public class PropertyValidator {
 		
 		if(!property.getStatus().equals(Status.ACTIVE)) {throw new CustomException("EG_PT_ALTERNATE_INACTIVE","Alternate number details cannot be updated if status is not active");}
 	}
-
 }

@@ -16,7 +16,9 @@ public enum Status {
 	
 	CANCELLED ("CANCELLED"),
 	
-	REJECTED ("REJECTED");
+	REJECTED ("REJECTED"),
+	//***** Addedd SAVE STATUS
+	SAVE ("SAVE");
 
 	private String value;
 

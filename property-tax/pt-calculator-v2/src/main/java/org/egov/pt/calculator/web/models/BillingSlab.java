@@ -103,6 +103,24 @@ public class BillingSlab   {
         @JsonProperty("arvPercent")
         private Double arvPercent;
         
+        // Added extra fields for billing slab criteria    
+        
+        @JsonProperty("roadFactor")
+        private String roadFactor;
+        
+        @JsonProperty("rateZone")
+        private String rateZone;
+        
+        @JsonProperty("constructionType")
+        private String constructionType;
+        
+        @JsonProperty("validForm")
+        private String validForm;
+        
+        @JsonProperty("validTo")
+        private String validTo;
+            
+        
 /*        @NotNull
         @JsonProperty("fromDate")
         private Long fromDate;*/

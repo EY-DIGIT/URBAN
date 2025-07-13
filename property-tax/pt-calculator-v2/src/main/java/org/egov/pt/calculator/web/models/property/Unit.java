@@ -72,5 +72,18 @@ public class Unit   {
 
         @JsonProperty("arv")
         private BigDecimal arv;
+        
+        @JsonProperty("rateZone")
+    	private String rateZone;
+    		
+    	@JsonProperty("roadFactor")
+    	private String roadFactor;
+    	
+    	@JsonProperty("fromYear")
+    	private String fromYear;
+    	
+    	@JsonProperty("toYear")
+    	private String toYear;
+    	
 }
 

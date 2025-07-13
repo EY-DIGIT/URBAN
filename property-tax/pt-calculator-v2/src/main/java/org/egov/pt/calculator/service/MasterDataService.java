@@ -265,6 +265,7 @@ public class MasterDataService {
 		return calculateApplicables(payableTax, CessMap);
 	}
 	
+	
 	/**
 	 * Method to calculate exmeption based on the Amount and exemption map
 	 * 
@@ -308,6 +309,88 @@ public class MasterDataService {
 			else if (null != minAmt && currentApplicable.compareTo(minAmt) < 0)
 				currentApplicable = minAmt;
 		}
+		return currentApplicable;
+	}
+	/**
+	 * Gaurav Tyagi
+	 * Estimates the Tax Slab that needs to be applicable for the given tax amount
+	 * 
+	 * Returns Zero if no data is found for the given criteria
+	 * 
+	 * @param payableTax
+	 * @param assessmentYear
+	 * @return
+	 */
+	
+	public BigDecimal getTaxSlab(BigDecimal payableTax, String assessmentYear,List<Object> masterList) {
+		BigDecimal fireCess = BigDecimal.ZERO;
+
+		if (payableTax.doubleValue() == 0.0)
+			return fireCess;
+
+		List<Map<String, Object>> taxSlab = getTaxSlabApplicableMaster(assessmentYear,masterList);
+
+		return calculateTaxSlabApplicables(payableTax, taxSlab);
+	}
+	
+	public List<Map<String, Object>> getTaxSlabApplicableMaster(String assessmentYear, List<Object> masterList) {
+
+		List<Map<String, Object>> objToBeReturned = new ArrayList<>();
+		String maxYearFromTheList = "0";
+		Long maxStartTime = 0l;
+
+		for (Object object : masterList) {
+
+			Map<String, Object> objMap = (Map<String, Object>) object;
+			String objFinYear = ((String) objMap.get(CalculatorConstants.FROMFY_FIELD_NAME)).split("-")[0];
+			if(!objMap.containsKey(CalculatorConstants.STARTING_DATE_APPLICABLES)){
+				if (objFinYear.compareTo(assessmentYear.split("-")[0]) == 0)
+					objToBeReturned.add(objMap);  
+
+//				else if (assessmentYear.split("-")[0].compareTo(objFinYear) > 0 && maxYearFromTheList.compareTo(objFinYear) <= 0) {
+//					maxYearFromTheList = objFinYear;
+//					objToBeReturned.add(objMap);
+//				}
+			}
+		}
+		return objToBeReturned;
+	}
+	
+	public BigDecimal calculateTaxSlabApplicables(BigDecimal applicableAmount, List<Map<String, Object>> config) {
+
+		BigDecimal currentApplicable = BigDecimal.ZERO;
+
+		if (null == config)
+			return currentApplicable;
+
+	//	@SuppressWarnings("unchecked")
+	//	Map<String, Object> configMap = (Map<String, Object>) config;
+		for (Map<String, Object> map : config) {
+			
+		BigDecimal rate = null != map.get(CalculatorConstants.RATE_FIELD_NAME)
+				? BigDecimal.valueOf(((Number) map.get(CalculatorConstants.RATE_FIELD_NAME)).doubleValue())
+				: null;
+		BigDecimal maxAmt;
+		if(map.get(CalculatorConstants.MAX_AMOUNT_FIELD_NAME).equals("Infinity")) {
+			maxAmt = null != map.get(CalculatorConstants.MAX_AMOUNT_FIELD_NAME)
+				? new BigDecimal("1E+1000")
+				: null;
+		}else {
+			 maxAmt = null != map.get(CalculatorConstants.MAX_AMOUNT_FIELD_NAME)
+					? BigDecimal.valueOf(((Number) map.get(CalculatorConstants.MAX_AMOUNT_FIELD_NAME)).doubleValue())
+					: null;
+		}
+
+		BigDecimal minAmt = null != map.get(CalculatorConstants.MIN_AMOUNT_FIELD_NAME)
+				? BigDecimal.valueOf(((Number) map.get(CalculatorConstants.MIN_AMOUNT_FIELD_NAME)).doubleValue())
+				: null;
+
+		
+		if(applicableAmount.compareTo(minAmt) > 0 && applicableAmount.compareTo(maxAmt) < 0){
+			return (rate.divide(CalculatorConstants.HUNDRED));
+		}
+		}
+		
 		return currentApplicable;
 	}
 
