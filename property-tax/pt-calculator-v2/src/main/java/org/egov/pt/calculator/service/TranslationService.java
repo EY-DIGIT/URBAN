@@ -132,6 +132,8 @@ public class TranslationService {
                 unitMap.put("constructionType", unit.getConstructionDetail().getConstructionType());
                 unitMap.put("rateZone", unit.getRateZone());
                 unitMap.put("roadFactor", unit.getRoadFactor());
+                unitMap.put("fromYear", unit.getFromYear());
+                unitMap.put("toYear", unit.getToYear());
 
                 String[] masterData = unit.getUsageCategory().split("\\.");
 
