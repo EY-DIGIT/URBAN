@@ -122,6 +122,11 @@ public class NotificationService {
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		String localisedState = getLocalisedState(wf, completeMsgs);
+		
+		if(property.isUpdateIMC() && property.getCreationReason().equals(CreationReason.CREATE)) {
+			isCreate =true;
+		}
+		
 		switch (state) {
 
 		case WF_NO_WORKFLOW:

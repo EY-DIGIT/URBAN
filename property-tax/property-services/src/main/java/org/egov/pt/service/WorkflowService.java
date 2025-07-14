@@ -120,10 +120,7 @@ public class WorkflowService {
 			String pId = utils.getIdList(request.getRequestInfo(), property.getTenantId(), configs.getPropertyIdGenName(), configs.getPropertyIdGenFormat(), 1).get(0);
 			request.getProperty().setPropertyId(pId);
 		}
-		
-//		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
-		// ******* update Status Value SAVE While Create Property
-		request.getProperty().setStatus(Status.SAVE);
+		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
 		request.getProperty().getWorkflow().setState(state);
 		request.getProperty().setProcessInstance(workflowReq.getProcessInstances().get(0));	
 		return state;
