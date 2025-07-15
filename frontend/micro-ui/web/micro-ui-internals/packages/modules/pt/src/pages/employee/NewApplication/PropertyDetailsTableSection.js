@@ -141,11 +141,11 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
-  const { data: Menu = {}, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "UsageCategory") || {};
+  const { data: Menu = {}, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "UsageCategoryMajor") || {};
   const { data: MenuP = {}, isLoadings } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "ConstructionType") || {};
   const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
   const { data: OccupancyData = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OccupancyType") || {};
-  console.log("OccupancyDatabbMenuP", MenuP)
+  console.log("OccupancyDatabbMenuP", Menu)
 
   const [usageTypes, setUsageTypes] = useState([]);
   const [constructionTypes, setConstructionTypes] = useState([]);
@@ -167,8 +167,8 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
 
 
   useEffect(() => {
-    if (!isLoading && Menu?.PropertyTax?.UsageCategory) {
-      const usagecat = Menu.PropertyTax.UsageCategory;
+    if (!isLoading && Menu?.PropertyTax?.UsageCategoryMajor) {
+      const usagecat = Menu.PropertyTax.UsageCategoryMajor;
       const filtered = usagecat
         ?.filter((e) => e?.code)
         ?.map((item) => ({

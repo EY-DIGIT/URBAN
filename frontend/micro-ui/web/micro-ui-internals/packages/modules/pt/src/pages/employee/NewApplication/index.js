@@ -8,7 +8,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { PTService } from "../../../../../../libraries/src/services/elements/PT";
 import styles from "./IndexStyle"
 import OwnershipDetailsSection from "./OwnershipDetailsSection";
@@ -21,6 +21,25 @@ import SuccessModal from "./SuccessModal";
 import CorrespondenceAddressSection from "./CorrespondenceAddressSection";
 
 const NewApplication = () => {
+  const location = useLocation();
+  const {
+    generalDetails,
+    addressDetailsSet,
+    ownerDetails,
+    unitDetails,
+    propertyDocuments,
+    additionalDetails,
+    workflow,
+    processInstance,
+  } = location.state || {};
+  console.log("▶️ General Details:", generalDetails);
+  console.log("📍 Address Details:", addressDetailsSet);
+  console.log("👤 Owner Details:", ownerDetails);
+  console.log("🏢 Unit Details:", unitDetails);
+  console.log("📄 Property Documents:", propertyDocuments);
+  console.log("➕ Additional Details:", additionalDetails);
+  console.log("🔄 Workflow:", workflow);
+  console.log("🧾 Process Instance:", processInstance);
 
   const { t } = useTranslation();
   const [proOwnerDetail, setProOwnerDetail] = useState(null);
@@ -41,7 +60,7 @@ const NewApplication = () => {
 
   const [owners, setOwners] = useState([
     {
-      title: "",
+      title: "GFHGH",
       name: "",
       aadhaar: "",
       hindiTitle: "",
@@ -361,6 +380,7 @@ const NewApplication = () => {
         units: unit.map(unit => (
           {
             usageCategory: unit.usageType || "RESIDENTIAL",
+            usesCategoryMajor: unit.usageType || "RESIDENTIAL",
             occupancyType: unit.usageFactor || "SELFOCCUPIED",
             constructionDetail: {
               builtUpArea: unit.area || "3000",
@@ -378,7 +398,8 @@ const NewApplication = () => {
         propertyType: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
         noOfFloors: parseInt(unit.floorNo) || 1,
         superBuiltUpArea: null,
-        usageCategory: unit.usageType || "RESIDENTIAL",
+        // usageCategory: unit.usageType || "RESIDENTIAL",
+        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
 
         additionalDetails: {
           inflammable: false,
@@ -402,6 +423,7 @@ const NewApplication = () => {
           unit: unit.map(unit => (
             {
               usageCategory: unit.usageType || "RESIDENTIAL",
+              usesCategoryMajor: unit.usageType || "RESIDENTIAL",
               occupancyType: unit.usageFactor || "SELFOCCUPIED",
               constructionDetail: {
                 builtUpArea: unit.area || "3000",
@@ -478,6 +500,53 @@ const NewApplication = () => {
   //     [key]: file,
   //   }));
   // };
+
+  useEffect(() => {
+  if (!generalDetails) return;
+  setOwnershipType(generalDetails.ownershipCategory || null);
+}, [generalDetails]);
+useEffect(() => {
+  if (!ownerDetails || ownerDetails.length === 0) return;
+
+  const formatted = ownerDetails.map((owner) => ({
+    title: owner.salutation || "",
+    name: owner.name || "",
+    aadhaar: owner.aadhaarNumber || "",
+    hindiTitle: owner.salutationHindi || "",
+    hindiName: owner.hindiName || "",
+    fatherHusbandName: owner.fatherOrHusbandName || "",
+    relationship: owner.relationship || "",
+    email: owner.emailId || "",
+    altNumber: owner.altContactNumber || "",
+    mobile: owner.mobileNumber || "",
+    samagraID: owner.samagraId || "",
+    noSamagra: !owner.samagraId, // true if not available
+  }));
+
+  setOwners(formatted);
+}, [ownerDetails]);
+useEffect(() => {
+ 
+
+  if (addressDetailsSet) {
+    setAddressDetails({
+      doorNo: addressDetailsSet.doorNo || "",
+      address: addressDetailsSet.street || "",
+      pincode: addressDetailsSet.pincode || "",
+      colony: addressDetailsSet.locality
+        ? { code: addressDetailsSet.locality.code, name: addressDetailsSet.locality.name || addressDetailsSet.locality.code }
+        : null,
+      ward: addressDetailsSet.ward
+        ? { code: addressDetailsSet.ward, name: addressDetailsSet.ward }
+        : null,
+      zone: addressDetailsSet.zone
+        ? { code: addressDetailsSet.zone, name: addressDetailsSet.zone }
+        : null,
+    });
+  }
+}, [addressDetailsSet]);
+
+
   const handleFileChange = async (key, file) => {
     console.log("File changed for key:", key, "File:", file);
     try {
@@ -514,12 +583,26 @@ const NewApplication = () => {
     }
   };
 
-  const handleOwnershipTypeChange = (selected) => {
-    setOwnershipType(selected.code);
-    if (selected.code !== "JOINT") {
-      setOwners([{}]); // Reset to single owner if not joint
+  // const handleOwnershipTypeChange = (selected) => {
+  //   setOwnershipType(selected.code);
+  //   if (selected.code !== "JOINT") {
+  //     setOwners([{}]); // Reset to single owner if not joint
+  //   }
+  // };
+  const handleOwnershipTypeChange = (val) => {
+    console.log("Ownership type changed:", val);
+  setOwnershipType(val.code);
+
+  // ❗ Only reset if required. Don't reset if owners already exist.
+  if (val.code === "INDIVIDUAL.SINGLEOWNER") {
+    setOwners((prev) => [prev[0]]); // keep first only
+  } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
+    // Do nothing if owners already prefilled
+    if (owners.length === 0) {
+      setOwners([{}]); // fallback if empty
     }
-  };
+  }
+};
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAddressDetails((prev) => ({ ...prev, [name]: value }));

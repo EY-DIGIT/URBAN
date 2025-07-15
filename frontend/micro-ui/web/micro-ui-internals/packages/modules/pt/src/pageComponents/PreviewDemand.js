@@ -1,7 +1,7 @@
 
 
 
-import React,{useState} from "react";
+import React, { useState } from "react";
 import {
     Loader, Card,
     SubmitBar,
@@ -9,7 +9,7 @@ import {
     Dropdown,
     CheckBox,
 } from "@egovernments/digit-ui-react-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 const styles = {
     container: {
         padding: "20px",
@@ -155,6 +155,7 @@ const InputFieldNew = ({ label, value }) => (
     </div>
 );
 const PropertyForm = () => {
+    const history = useHistory();
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
@@ -164,9 +165,35 @@ const PropertyForm = () => {
 
     const propertyFYDetails = calculation?.propertyFYDetails || [];
     const taxSummaries = calculation?.propertyFYTaxSummaries || [];
-    console.log("propertyId", proOwnerDetail)
+    console.log("propertyDetail", proOwnerDetail)
     const owners = proOwnerDetail?.owners || [];
     const address = proOwnerDetail?.address || {};
+ const handleGobackEdit = () => {
+  history.push({
+    pathname: "/digit-ui/employee/pt/new-application",
+    state: {
+      generalDetails: {
+        propertyId: proOwnerDetail.propertyId,
+        oldPropertyId: proOwnerDetail.oldPropertyId,
+        creationReason: proOwnerDetail.creationReason,
+        propertyType: proOwnerDetail.propertyType,
+        ownershipCategory: proOwnerDetail.ownershipCategory,
+        usageCategory: proOwnerDetail.usageCategory,
+        noOfFloors: proOwnerDetail.noOfFloors,
+        landArea: proOwnerDetail.landArea,
+        source: proOwnerDetail.source,
+        channel: proOwnerDetail.channel,
+      },
+      addressDetailsSet: proOwnerDetail.address,
+      ownerDetails: proOwnerDetail.owners,
+      unitDetails: proOwnerDetail.units,
+      propertyDocuments: proOwnerDetail.documents,
+      additionalDetails: proOwnerDetail.additionalDetails,
+      workflow: proOwnerDetail.workflow,
+      processInstance: proOwnerDetail.processInstance,
+    },
+  });
+};
 
     return (
         <Card>
@@ -273,9 +300,10 @@ const PropertyForm = () => {
                     </tr>
                 </tbody>
             </table>
-
-            <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
-
+            <div style={{ display: "flex", width: "224px", marginLeft: "auto" }}>
+                <button style={styles.confirmBtn} onClick={() => handleGobackEdit(true)}>Back</button>
+                <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
+            </div>
 
 
             {showConfirmPopup && (
@@ -371,7 +399,7 @@ const PropertyForm = () => {
                         </p>
                         <p style={{ color: "#888", fontSize: "14px", marginBottom: "20px" }}>
                             Application Number<br />
-                           {proOwnerDetail?.acknowldgementNumber || "N/A"}
+                            {proOwnerDetail?.acknowldgementNumber || "N/A"}
                         </p>
                         <button
                             style={{

@@ -494,7 +494,7 @@ const getUsageCategoryList = (tenantId, moduleCode, type) => ({
     moduleDetails: [
       {
         moduleName: moduleCode,
-        masterDetails: [{ name: "UsageCategory" }],
+        masterDetails: [{ name: "UsageCategoryMajor" }],
       },
     ],
   },
@@ -1437,7 +1437,7 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getTLDocumentRequiredScreen(MdmsRes);
     case "MapConfig":
       return getMapConfig(MdmsRes);
-    case "UsageCategory":
+    case "UsageCategoryMajor":
       return getUsageCategory(MdmsRes);
     case "PTPropertyType":
       return getPTPropertyType(MdmsRes);

@@ -57,7 +57,7 @@ const OwnershipDetailsSection = ({
           {/* Name with Title */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
-              {t("Name")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("Owner Name")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <div style={styles.nameInputContainer}>
               <Dropdown
@@ -228,7 +228,8 @@ const OwnershipDetailsSection = ({
           style={styles.widthInput300}
           t={t}
           option={dropdownOptions}
-          selected={"ownershipType"}
+          // selected={"ownershipType"}
+           selected={dropdownOptions.find(opt => opt.code === ownershipType)}
           select={handleOwnershipTypeChange}
           optionKey="name"
           placeholder={t("Select")}

@@ -64,7 +64,7 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
       return useRoadFactor();
     case "Documents":
       return useDocumentRequiredScreen();
-    case "UsageCategory":
+    case "UsageCategoryMajor":
       return useUsageCategory();
     case "PTPropertyType":
       return usePTPropertyType();

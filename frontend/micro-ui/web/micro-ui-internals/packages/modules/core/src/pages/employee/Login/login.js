@@ -251,17 +251,18 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
   }, [user]);
 
   const onLogin = async (data) => {
-    if (!data.city) {
-      alert("Please Select City!");
-      return;
-    }
+    // if (!data.city) {
+    //   alert("Please Select City!");
+    //   return;
+    // }
     setDisable(true);
 
     const requestData = {
       ...data,
       userType: "EMPLOYEE",
     };
-    requestData.tenantId = data.city.code;
+    // requestData.tenantId = data.city.code;
+    requestData.tenantId = "pg.citya";
     delete requestData.city;
     try {
       const { UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
@@ -303,28 +304,28 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
           },
           isMandatory: true,
         },
-        {
-          label: t(city.label),
-          type: city.type,
-          populators: {
-            name: city.name,
-            customProps: {},
-            component: (props, customProps) => (
-              <Dropdown
-                style={{ border: "1px solid" }}
-                option={cities}
-                className="login-city-dd"
-                optionKey="i18nKey"
-                select={(d) => {
-                  props.onChange(d);
-                }}
-                t={t}
-                {...customProps}
-              />
-            ),
-          },
-          isMandatory: true,
-        },
+        // {
+        //   label: t(city.label),
+        //   type: city.type,
+        //   populators: {
+        //     name: city.name,
+        //     customProps: {},
+        //     component: (props, customProps) => (
+        //       <Dropdown
+        //         style={{ border: "1px solid" }}
+        //         option={cities}
+        //         className="login-city-dd"
+        //         optionKey="i18nKey"
+        //         select={(d) => {
+        //           props.onChange(d);
+        //         }}
+        //         t={t}
+        //         {...customProps}
+        //       />
+        //     ),
+        //   },
+        //   isMandatory: true,
+        // },
       ],
     },
   ];
@@ -358,7 +359,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
             <Header />
           </FormComposer>
         </div>
-        <div style={{ width: "100%", position: "relative" }}>
+        <div style={{ width: "100%", position: "relative",background: "linear-gradient(180deg, rgba(5, 117, 230, 0.5) 0%, rgba(89, 50, 234, 0.5) 84.79%, rgba(2, 27, 121, 0.5) 100%)" }}>
           <div style={{marginTop:"200px"}}>
             <div style={headingStyle}>e-<strong>NagarPalika</strong></div>
             <div style={subtitleStyle}><em>Your City, Your Services – One Login Away!</em></div>

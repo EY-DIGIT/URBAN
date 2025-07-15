@@ -212,6 +212,7 @@ const iconMap = {
 };
 
 const SubMenu = ({ items = [], handleLogout, userDetails }) => {
+  console.log("SubMenu items:", items);
   const { isLoading } = Digit.Hooks.useAccessControl();
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(null);

@@ -347,6 +347,7 @@ const AddressSection = ({
   formErrors,
   updateRateZone
 }) => {
+  console.log("addressDetails", addressDetails);
   const [boundaryData, setBoundaryData] = useState(null);
   const [zones, setZones] = useState([]);
   const [wards, setWards] = useState([]);
