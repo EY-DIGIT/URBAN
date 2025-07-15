@@ -248,7 +248,7 @@ public class PropertyService {
 				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
 			}
-			if (state.getIsStartState() == true
+			else if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
