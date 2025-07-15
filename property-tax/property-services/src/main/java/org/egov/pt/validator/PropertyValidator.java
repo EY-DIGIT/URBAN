@@ -168,14 +168,17 @@ public class PropertyValidator {
 			if (request.getProperty().getWorkflow() == null)
 				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
 			
+			// ******* Update If Condition after Status change = SAVE
+			if (property.isUpdateIMC() && property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())){
+				//	&& propertyFromSearch.getStatus().equals(Status.SAVE)) {
+				fieldsUpdated.remove("creationReason");
+				isstateUpdatable = true;
+			}
 			/*
 			 * update and mutation open state are same currently - Creation reason will change for begining of a workflow
 			 */
-//			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-//					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) 
-		// ******* Update If Condition after Status change = SAVE
-			if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
-					&& propertyFromSearch.getStatus().equals(Status.SAVE)) {
+			else if (property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())
+					&& propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
 				fieldsUpdated.remove("creationReason");
 				isstateUpdatable = true;
 

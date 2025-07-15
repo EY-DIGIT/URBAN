@@ -98,15 +98,18 @@ public class PropertyService {
 		enrichmentService.enrichCreateRequest(request);
 		String tenantId = request.getProperty().getTenantId();
 		userService.createUser(request);
+		boolean flag = config.getIsWorkflowEnabled();
 		if (config.getIsWorkflowEnabled()
-				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)) {
+				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD) && !request.getProperty().isUpdateIMC()) {
 			wfService.updateWorkflow(request, request.getProperty().getCreationReason());
 
 		} else {
-
-			//request.getProperty().setStatus(Status.ACTIVE);
-			// ******* update Status Value SAVE While Create Property
-			request.getProperty().setStatus(Status.SAVE);
+			if (request.getProperty().isUpdateIMC()) {
+				// ******* update Status Value SAVE While Create Property
+				request.getProperty().setStatus(Status.SAVE);
+			} else {
+				request.getProperty().setStatus(Status.ACTIVE);
+			}
 		}
 
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
@@ -233,15 +236,23 @@ public class PropertyService {
 		if(config.getIsWorkflowEnabled()) {
 
 			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
-
-//			if (state.getIsStartState() == true
-//					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
-//					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
-			if (state.getIsStartState() == true
+			
+			if (request.getProperty().isUpdateIMC() && state.getIsStartState() == true
 					&& !propertyFromSearch.getStatus().equals(Status.SAVE)) {
 
-
 				propertyFromSearch.setStatus(Status.INWORKFLOW);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
+				producer.push(tenantId, config.getPropertyEventInboxKafkaTopic(), OldPropertyRequest);
+
+				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
+				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+			}
+			else if (state.getIsStartState() == true
+					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
+					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
+
+				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
 				producer.push(tenantId, config.getPropertyEventInboxKafkaTopic(), OldPropertyRequest);
 
@@ -321,7 +332,19 @@ public class PropertyService {
 			 *
 			 * to create new entry for new Mutation
 			 */
-			if (state.getIsStartState() == true
+			if (request.getProperty().isUpdateIMC() && state.getIsStartState() == true
+					&& !propertyFromSearch.getStatus().equals(Status.SAVE)) {
+
+				propertyFromSearch.setStatus(Status.INWORKFLOW);
+				producer.push(tenantId, config.getUpdatePropertyTopic(), oldPropertyRequest);
+				producer.push(tenantId, config.getPropertyEventInboxKafkaTopic(), oldPropertyRequest);
+
+				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
+				/* save new record */
+				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+			} 
+			else if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
