@@ -614,6 +614,8 @@ public class EstimationService {
 						.estimateAmount(senitationCess.setScale(2, 2)).build());
 				payableTax = payableTax.add(senitationCess);
 				propertyTaxSummary.setPropertyTax(BigDecimal.ZERO);
+				propertyTaxSummary.setSamekit(senitationCess);
+				propertyTaxSummary.setUrbanTax(BigDecimal.ZERO);
 			}
 		}
 			
