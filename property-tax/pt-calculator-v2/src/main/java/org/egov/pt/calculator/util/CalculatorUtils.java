@@ -180,6 +180,7 @@ public class CalculatorUtils {
         details.add(MasterDetail.builder().name(CalculatorConstants.URBAN_CESS_TWO_MASTER).build());
         details.add(MasterDetail.builder().name(CalculatorConstants.SERVICE_CHARGE_MASTER).build());
         details.add(MasterDetail.builder().name(CalculatorConstants.TAX_SLAB_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.CONSOLIDATED_TAX_SLAB_MASTER).build());
         
         ModuleDetail mdDtl = ModuleDetail.builder().masterDetails(details)
                 .moduleName(CalculatorConstants.PROPERTY_TAX_MODULE).build();

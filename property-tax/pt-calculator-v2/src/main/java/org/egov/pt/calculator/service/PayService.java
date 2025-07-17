@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
+import org.egov.pt.calculator.web.models.PropertyFYTaxSummary;
 import org.egov.pt.calculator.web.models.TaxHeadEstimate;
 import org.egov.pt.calculator.web.models.collections.Payment;
 import org.egov.pt.calculator.web.models.collections.PaymentDetail;
@@ -72,8 +73,49 @@ public class PayService {
 		estimates.put(CalculatorConstants.PT_TIME_INTEREST, interest.setScale(2, 2));
 		return estimates;
 	}
+	
+	/**
+	 * Gaurav Tyagi
+	 * Updates the incoming demand with latest rebate, penalty  values if applicable
+	 * 
+	 * If the demand details are not already present then new demand details will be added
+	 * 
+	 * @param assessmentYear
+	 * @return
+	 */
 
+	public Map<String, BigDecimal> applyPenaltyAndRebate(PropertyFYTaxSummary propertyFYTaxSummary, Map<String, JSONArray> timeBasedExmeptionMasterMap,List<Payment> payments,TaxPeriod taxPeriod) {
 
+		
+		String assessmentYear = propertyFYTaxSummary.getYear();
+		BigDecimal propertyTax = propertyFYTaxSummary.getPropertyTax();
+		
+		BigDecimal taxAmt = BigDecimal.ZERO;
+		
+		if(Integer.parseInt(assessmentYear.split("-")[0]) < 2018) 
+			taxAmt = propertyFYTaxSummary.getTotalTax();
+		else
+			taxAmt = propertyFYTaxSummary.getTotalTax();
+		
+		
+		if (BigDecimal.ZERO.compareTo(taxAmt) >= 0)
+			return null;
+
+		Map<String, BigDecimal> estimates = new HashMap<>();
+
+		BigDecimal rebate = getRebate(propertyTax, assessmentYear,
+				timeBasedExmeptionMasterMap.get(CalculatorConstants.REBATE_MASTER));
+
+		BigDecimal penalty = BigDecimal.ZERO;
+
+		if (rebate.equals(BigDecimal.ZERO)) {
+			penalty = getPenalty(taxAmt, assessmentYear, timeBasedExmeptionMasterMap.get(CalculatorConstants.PENANLTY_MASTER));
+		}
+
+		estimates.put(CalculatorConstants.PT_TIME_REBATE, rebate.setScale(2, 2).negate());
+		estimates.put(CalculatorConstants.PT_TIME_PENALTY, penalty.setScale(2, 2));
+		return estimates;
+	}
 
 	/**
 	 * Returns the Amount of Rebate that can be applied on the given tax amount for

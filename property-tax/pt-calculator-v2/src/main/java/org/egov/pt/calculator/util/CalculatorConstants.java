@@ -144,6 +144,7 @@ public class CalculatorConstants {
 	public static final String URBAN_CESS_TWO_MASTER = "UrbanCessTwo";
 	public static final String SERVICE_CHARGE_MASTER = "ServiceCharge";
 	public static final String TAX_SLAB_MASTER = "TaxSlab";
+	public static final String CONSOLIDATED_TAX_SLAB_MASTER = "ConsolidatedTaxSlab";
 	
 	//*************///
 
