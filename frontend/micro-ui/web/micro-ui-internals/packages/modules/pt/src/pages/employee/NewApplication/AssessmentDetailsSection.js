@@ -16,7 +16,7 @@ const AssessmentDetailsSection = ({
     name: item.name, // Show year like "2024-25"
   }));
 
-  console.log("RoadFactors", RoadFactors);
+  console.log("RoadFactors", assessmentDetails);
   return (
     <div style={styles.formSection}>
       {/* Rate Zone */}

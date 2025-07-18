@@ -396,13 +396,13 @@ const Home = ({
   const titleStyle = {
     fontSize: "20px",
     fontWeight: "700",
-    color: "#5B21B6", // purple-700
+    color: "#6b133f", // purple-700
   };
 
   const linkStyle = {
     fontSize: "14px",
     fontWeight: "600",
-    color: "#5B21B6",
+    color: "#6b133f",
     textDecoration: "none",
   };
 

@@ -125,18 +125,23 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
               <CardSubHeader
                 style={
                   {
-                      marginTop: "32px", marginBottom: "8px", fontFamily: "Poppins",
-                      fontWeight: 500,
-                      fontSize: "16px",
-                      lineHeight: "100%",
-                      letterSpacing: "0%",
-                      verticalAlign: "bottom",
-                      textDecoration: "underline",
-                      textDecorationStyle: "solid",
-                      textDecorationOffset: "0%",
-                      textDecorationThickness: "0%",
-                      color: "#4729A3"
-                    }
+                    background: '#6b133f',
+                    fontFamily: 'Poppins, sans-serif',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    lineHeight: '100%',
+                    letterSpacing: '0px',
+                    textDecorationStyle: 'solid',
+                    textDecorationColor: '#6b133f',
+                    textDecorationThickness: '1px',
+                    color: 'white',
+                    marginBottom: '20px',
+                    padding: '14px',
+                    // width: '52%',
+                    // borderBottomRightRadius: '20px',
+                    // borderTopRightRadius: '20px',
+                    textAlign: "center",
+                  }
                 }
               >
                 {t(document?.title)}
@@ -162,9 +167,9 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
                       alignItems: "center",
                       gap: "6px",
                       padding: "6px 12px",
-                      border: "1px solid #4729A3",
+                      border: "1px solid #6b133f",
                       borderRadius: "20px",
-                      color: "#6B3FB2",
+                      color: "#6b133f",
                       textDecoration: "none",
                       fontWeight: 400,
                       fontSize: "12px",

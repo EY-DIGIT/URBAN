@@ -186,7 +186,7 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
 
   const searchButton = {
     padding: "10px 20px",
-    backgroundColor: "#4729A3",
+    backgroundColor: "#6b133f",
     color: "white",
     border: "none",
     borderRadius: "5px",
@@ -199,12 +199,12 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
     lineHeight: '42.5px',
     letterSpacing: '3%',
     verticalAlign: 'middle',
-    color: "#4729A3"
+    color: "#6b133f"
   };
   return (
     <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} style={containerStyle} className="pt-property-search">
       <div style={{ width: "24%" }}>
-        <h3 style={dtat}>CashDesk</h3>
+        <h3 style={dtat}>Cash Desk</h3>
 
         <div>
           <label style={labelStyle}>Assessment Year</label>

@@ -11,7 +11,7 @@ const SubmitBar = forwardRef((props, ref) => {
       style={{ ...props.style ,  
               marginTop: "1rem",
               // padding: "0.5rem 1.5rem",
-              backgroundColor: "#4729A3",
+              backgroundColor: "#6b133f",
               color: "white",
               border: "none",
               borderRadius: "5px",

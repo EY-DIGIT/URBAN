@@ -421,7 +421,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                         lineHeight: "42.5px",
                         letterSpacing: "3%",
                         verticalAlign: "middle",
-                        color: "#4729A3"
+                        color: "#6b133f"
                     }}>{t("Search Criteria")}</span>
                 </Card>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>

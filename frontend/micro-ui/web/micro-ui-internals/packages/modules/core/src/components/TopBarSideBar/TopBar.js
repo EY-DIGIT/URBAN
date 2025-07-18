@@ -5,7 +5,7 @@
 // import ChangeLanguage from "../ChangeLanguage";
 
 // const TextToImg = (props) => (
-//   <span className="user-img-txt" style={{backgroundColor:"#4729A3"}} onClick={props.toggleMenu} title={props.name}>
+//   <span className="user-img-txt" style={{backgroundColor:"#6b133f"}} onClick={props.toggleMenu} title={props.name}>
 //     {props?.name?.[0]?.toUpperCase()}
 //   </span>
 // );
@@ -170,7 +170,7 @@ const TextToImg = ({ name, toggleMenu }) => (
     onClick={toggleMenu}
     title={name}
     style={{
-      backgroundColor: "#4729A3",
+      backgroundColor: "#6b133f",
       color: "#fff",
       borderRadius: "50%",
       width: "40px",
@@ -241,7 +241,7 @@ const TopBar = ({
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      borderBottom: "3px solid #4729A3",
+      borderBottom: "3px solid #6b133f",
       width: "100%",
       position: "absolute",
       right: "0",

@@ -208,17 +208,14 @@ const ApplicationDetails = () => {
           lineHeight: '100%',
           letterSpacing: '0',
           textDecorationStyle: 'solid',
-          textDecorationColor: '#4729A3',
+          textDecorationColor: '#6b133f',
           textDecorationThickness: '1px',
           textDecorationOffset: '2px',
-          color: '#4729A3',
+          color: '#6b133f',
           marginBottom: '20px',
           display:"flex",
           alignItems:"center",
-          background:"#4729A34D",
-          borderRadius:"20px",
-          paddingLeft:"20px",
-          paddingRight:"20px"
+          borderRadius:"20px"
         }}>{t("PT_APPLICATION_TITLE")}</div>
         {dowloadOptions && dowloadOptions.length > 0 && (
           <MultiLink

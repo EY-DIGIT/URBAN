@@ -187,12 +187,7 @@ const ApplicationDetails = (props) => {
   return (
     <React.Fragment>
       {!isLoading ? (
-        <div style={{
-          backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
-          boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
-          padding: "16px",
-          border: "1px solid #000000",
-        }}>
+        <div >
           {/* <ApplicationDetailsContentVerifier
             applicationDetails={applicationDetails}
             workflowDetails={workflowDetails}

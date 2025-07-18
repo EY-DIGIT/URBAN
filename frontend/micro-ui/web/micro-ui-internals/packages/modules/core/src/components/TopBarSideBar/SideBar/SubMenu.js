@@ -259,7 +259,7 @@ const SubMenu = ({ items = [], handleLogout, userDetails }) => {
     <div
       style={{
         width: "100%",
-        backgroundColor: "#4729A3",
+        backgroundColor: "#6b133f",
         display: "flex",
         alignItems: "center",
         padding: "8px 16px",
