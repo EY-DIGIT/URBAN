@@ -238,14 +238,11 @@ public class PropertyService {
 			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
 			
 			if (request.getProperty().isUpdateIMC() && state.getIsStartState() == true
-					&& !propertyFromSearch.getStatus().equals(Status.SAVE)) {
+					&& propertyFromSearch.getStatus().equals(Status.SAVE)) {
 
 				propertyFromSearch.setStatus(Status.INWORKFLOW);
-				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
-				producer.push(tenantId, config.getPropertyEventInboxKafkaTopic(), OldPropertyRequest);
-
-				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
-				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
+				request.getProperty().setStatus(Status.INWORKFLOW);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
 			}
 			else if (state.getIsStartState() == true

@@ -119,11 +119,17 @@ public class NotificationService {
 		String msg = null;
 		
 		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
-		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
+		String state;
+		if (property.isUpdateIMC()) {
+			state = WF_STATUS_APPROVED;
+		} else {
+			state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
+		}
+
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		String localisedState = getLocalisedState(wf, completeMsgs);
 		
-		if(property.isUpdateIMC() && property.getCreationReason().equals(CreationReason.CREATE)) {
+		if(property.isUpdateIMC() && property.getCreationReason().equals(CreationReason.UPDATE)) {
 			isCreate =true;
 		}
 		

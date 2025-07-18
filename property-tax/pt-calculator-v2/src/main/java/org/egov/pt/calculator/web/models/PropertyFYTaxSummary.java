@@ -2,6 +2,8 @@ package org.egov.pt.calculator.web.models;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +30,9 @@ public class PropertyFYTaxSummary {
 	private BigDecimal rebate;
 	private BigDecimal penalty;
 	private BigDecimal netTax;
-	
+	@JsonIgnore
+	private BigDecimal cumulativeTax;
+	@JsonIgnore
+	private BigDecimal maxRateSlab;
 
 }
