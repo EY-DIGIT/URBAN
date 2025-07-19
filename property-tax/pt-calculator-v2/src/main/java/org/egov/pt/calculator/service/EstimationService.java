@@ -225,7 +225,9 @@ public class EstimationService {
 					OwnerInfo first = owners.iterator().next();
 				     ownerType = first.getOwnerType(); 
 				}
-				boolean isDharamShala = ownerType.equalsIgnoreCase("DHARAMSHALA");
+				boolean isDharamShala = false;
+				if(ownerType != null)
+				 isDharamShala = ownerType.equalsIgnoreCase("DHARAMSHALA");
 
 				// BillingSlab slab = getSlabForCalc(filteredBillingSlabs, unit);
 				/**
@@ -623,7 +625,7 @@ public class EstimationService {
 		propertyTaxSummary.setSevaKar(serviceCharge.setScale(2, 2));
 		payableTax = payableTax.add(serviceCharge);
 		
-		propertyTaxSummary.setTotalTax(payableTax);
+		propertyTaxSummary.setTotalTax(payableTax.setScale(0, RoundingMode.HALF_UP).setScale(2));
 		
 		cumulativeTotalTax = cumulativeTotalTax.add(payableTax);
 		propertyTaxSummary.setCumulativeTax(cumulativeTotalTax);
@@ -720,7 +722,7 @@ public class EstimationService {
             }
         }
 
-        return null; // If no matching rate found
+        return 0; // If no matching rate found
     }
 	
 	/**
@@ -1078,38 +1080,42 @@ public class EstimationService {
 			Map<String, Object> applicableOwnerType = mDataService.getApplicableMaster(financialYear,
 					ownerTypeMap.get(owner.getOwnerType()));
 				
-			if (applicableOwnerType.get("code").toString().startsWith("CENTGOV")) {
-			    taxAmt = propertyFYTaxSummary.getTotalTax();
-			    centerGov = true;
-			}  else if (applicableOwnerType.get("code").toString().equalsIgnoreCase("DHARAMSHALA")) {			   
-				taxAmt = BigDecimal.ZERO;
-			} else if(!applicableOwnerType.get("code").toString().startsWith("WIDOWSMINORSHANDICAP")){
-				taxAmt = propertyFYTaxSummary.getPropertyTax();
-			   
-			}
+			
 			BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, 2);
 			if (null != applicableOwnerType) {
+				
+				if (applicableOwnerType.get("code").toString().startsWith("CENTGOV")) {
+				    taxAmt = propertyFYTaxSummary.getTotalTax();
+				    centerGov = true;
+				}  else if (applicableOwnerType.get("code").toString().equalsIgnoreCase("DHARAMSHALA")) {			   
+					taxAmt = BigDecimal.ZERO;
+				} else if(!applicableOwnerType.get("code").toString().startsWith("WIDOWSMINORSHANDICAP")){
+					taxAmt = propertyFYTaxSummary.getPropertyTax();
+				   
+				}
 
 				BigDecimal currentExemption = mDataService.calculateApplicables(share,
 						applicableOwnerType.get(EXEMPTION_FIELD_NAME));
 
 				userExemption = userExemption.add(currentExemption);
+				
+				if (centerGov) {
+					propertyFYTaxSummary.setSevaKar(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
+					propertyFYTaxSummary.setEducationCess(BigDecimal.ZERO);
+					propertyFYTaxSummary.setJalKar(BigDecimal.ZERO);
+					propertyFYTaxSummary.setJalNikas(BigDecimal.ZERO);
+					propertyFYTaxSummary.setPropertyTax(BigDecimal.ZERO);
+					propertyFYTaxSummary.setSamekit(BigDecimal.ZERO);
+					propertyFYTaxSummary.setUrbanTax(BigDecimal.ZERO);
+					propertyFYTaxSummary.setTotalTax(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
+				}else {
+					propertyFYTaxSummary.setTotalTax(propertyFYTaxSummary.getTotalTax().subtract(userExemption).setScale(0, RoundingMode.HALF_UP).setScale(2));
+					propertyFYTaxSummary.setPropertyTax(propertyFYTaxSummary.getPropertyTax().subtract(userExemption));
+				}
 			}
 		}
 		
-		if (centerGov) {
-			propertyFYTaxSummary.setSevaKar(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
-			propertyFYTaxSummary.setEducationCess(BigDecimal.ZERO);
-			propertyFYTaxSummary.setJalKar(BigDecimal.ZERO);
-			propertyFYTaxSummary.setJalNikas(BigDecimal.ZERO);
-			propertyFYTaxSummary.setPropertyTax(BigDecimal.ZERO);
-			propertyFYTaxSummary.setSamekit(BigDecimal.ZERO);
-			propertyFYTaxSummary.setUrbanTax(BigDecimal.ZERO);
-			propertyFYTaxSummary.setTotalTax(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
-		}else {
-			propertyFYTaxSummary.setTotalTax(propertyFYTaxSummary.getTotalTax().subtract(userExemption).setScale(0, RoundingMode.HALF_UP).setScale(2));
-			propertyFYTaxSummary.setPropertyTax(propertyFYTaxSummary.getPropertyTax().subtract(userExemption));
-		}
+		
 		
 		return userExemption;
 	}
