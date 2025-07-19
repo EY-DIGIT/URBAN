@@ -169,15 +169,18 @@ const PropertyForm = () => {
     const history = useHistory();
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-
+    const [acknowledgmentNumber, setAcknowledgmentNumber] = useState("");
+    let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+    const tenantId = userInfo1?.tenantId;
+    const mutationUpdate = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
     const location = useLocation();
-    const { data, proOwnerDetail } = location.state || {}; // receive full object
+    const { data, proOwnerDetail,documents, checkboxes, rateZones ,owners,unit,assessmentDetails,propertyDetails,addressDetails,ownershipType,correspondenceAddress} = location.state || {}; // receive full object
     const calculation = data?.Calculation?.[0];
 
     const propertyFYDetails = calculation?.propertyFYDetails || [];
     const taxSummaries = calculation?.propertyFYTaxSummaries || [];
     console.log("propertyDetail", proOwnerDetail)
-    const owners = proOwnerDetail?.owners || [];
+    const ownersDetail = proOwnerDetail?.owners || [];
     const address = proOwnerDetail?.address || {};
     const handleGobackEdit = () => {
         history.push({
@@ -208,7 +211,191 @@ const PropertyForm = () => {
             },
         });
     };
+    const handleSubmitUpdate = async () => {
+    const payload = {
+      Property: {
+        updateIMC: true,
+        id: proOwnerDetail.address?.id,
+        propertyId: proOwnerDetail?.propertyId,
+        accountId: proOwnerDetail?.accountId,
+        acknowldgementNumber: proOwnerDetail?.acknowldgementNumber,
+        status: proOwnerDetail?.status,
+        tenantId: userInfo1?.tenantId,
+        oldPropertyId: assessmentDetails?.oldPropertyId,
+        address: {
+          city: "CityA",
+          locality: {
+            code: addressDetails.address?.colony?.code || "SUN02",
+            name: addressDetails.address?.colony?.name || "map with zone"
+          },
+          zone: addressDetails.address?.zone?.code || "SUN02",
+          street: addressDetails.address?.address || "main",
+          doorNo: addressDetails.address?.doorNo || "23",
+          pincode: addressDetails.address?.pincode || "",
+          ward: addressDetails.address?.ward?.code || "1",
+          documents: []
+        },
+        ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+         owners: owners?.map((owner, index) => ({
+          salutation: owner.title || "mr",
+          title: "title",
+          name: owner.name || `Owner ${index + 1}`,
+          salutationHindi: owner.hindiTitle,
+          hindiName: owner.hindiName || "",
+          fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
+          gender: "MALE",
+          aadhaarNumber: owner.aadhaar || "",
+          altContactNumber: owner.altNumber || "",
+          isCorrespondenceAddress: correspondenceAddress,
+          mobileNumber: owner.mobile || "9999999999",
+          emailId: owner.email || "",
+          ownerType: propertyDetails.exemption.code,
+          permanentAddress:
+            addressDetails.address || "23, main, PG_CITYA_REVENUE_SUN20, City A, ",
+          relationship: owner.relationship || "FATHER",
+          samagraId: owner.samagraID || "Samagra ID",
+          documents: [
+            {
+              fileStoreId:
+                documents.ownershipDoc?.fileStoreId || "45a107bf-358e-4527-9118-5beac81abfd6",
+              documentType: "OWNER.SPECIALCATEGORYPROOF.BPLDOCUMENT",
+            },
+            {
+              fileStoreId:
+                documents.photoId?.fileStoreId || "5d7b1c69-cb1e-4467-a5a2-77de5f124f3f",
+              documentType: "OWNER.IDENTITYPROOF.AADHAAR",
+            },
+          ],
+        })),
+        documents: [
+          {
+            documentType: "OWNER.IDENTITYPROOF.VOTERID",
+            fileStoreId: documents.photoId?.fileStoreId,
+            documentUid: documents.photoId?.documentUid
+          },
+          {
+            documentType: "OWNER.REGISTRATIONPROOF.SALEDEED",
+            fileStoreId: documents.sellersRegistry?.fileStoreId,
+            documentUid: documents.sellersRegistry?.documentUid
+          },
+          {
+            documentType: "OWNER.SPECIALCATEGORYPROOF.BPLDOCUMENT",
+            fileStoreId: documents.ownershipDoc?.fileStoreId,
+            documentUid: documents.ownershipDoc?.documentUid
+          },
+          {
+            documentType: "OWNER.USAGEPROOF.ELECTRICITYBILL",
+            fileStoreId: documents.lastTaxReceipt?.fileStoreId,
+            documentUid: documents.lastTaxReceipt?.documentUid
+          }
+        ],
+        units: unit.map(unit => ({
+          usageCategory: unit.usageType,
+          usesCategoryMajor: unit.usageType,
+          occupancyType: unit.usageFactor,
+          constructionDetail: {
+            builtUpArea: unit.area,
+            constructionType: unit.constructionType
+          },
+          floorNo: parseInt(unit.floorNo),
+          rateZone: rateZones?.[0]?.code,
+          roadFactor: assessmentDetails?.roadFactor?.code,
+          fromYear: unit.fromYear,
+          toYear: unit.toYear
+        })),
+        landArea: assessmentDetails?.plotArea,
+        propertyType: propertyDetails?.propertyType?.code,
+       noOfFloors: parseInt(unit.floorNo) || 1,
+        superBuiltUpArea: null,
+        // usageCategory: unit.usageType || "RESIDENTIAL",
+        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
+        additionalDetails: {
+          inflammable: false,
+          heightAbove36Feet: false,
+          propertyType: {
+            i18nKey: "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY",
+            code: propertyDetails?.propertyType?.code
+          },
+          mobileTower: checkboxes?.mobileTower,
+          bondRoad: checkboxes?.broadRoad,
+          advertisement: checkboxes?.advertisement,
+          builtUpArea: null,
+          noOfFloors: {
+            i18nKey: "PT_GROUND_FLOOR_OPTION",
+            code: 0
+          },
+          noOofBasements: {
+            i18nKey: "PT_NO_BASEMENT_OPTION",
+            code: 0
+          },
+          unit: unit.map(unit => ({
+            usageCategory: unit.usageType,
+            usesCategoryMajor: unit.usageType,
+            occupancyType: unit.usageFactor,
+            constructionDetail: {
+              builtUpArea: unit.area,
+              constructionType: unit.constructionType
+            },
+            floorNo: parseInt(unit.floorNo),
+            rateZone: rateZones?.[0]?.code,
+            roadFactor: assessmentDetails?.roadFactor?.code,
+            fromYear: unit.fromYear,
+            toYear: unit.toYear
+          })),
+          basement1: null,
+          basement2: null
+        },
+        workflow: {
+          action: "OPEN",
+          moduleName: "PT",
+          businessService: "PT.UPDATE"
+        },
+        channel: "CFC_COUNTER",
+        creationReason: "UPDATE",
+        source: "MUNICIPAL_RECORDS"
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        authToken: userInfo1?.authToken,
+        userInfo: {
+          id: userInfo1?.id,
+          uuid: userInfo1?.uuid,
+          userName: userInfo1?.userName,
+          name: userInfo1?.name,
+          mobileNumber: userInfo1?.mobileNumber,
+          emailId: userInfo1?.emailId,
+          locale: userInfo1?.locale,
+          type: userInfo1?.type,
+          roles: userInfo1?.roles,
+          active: userInfo1?.active !== false,
+          tenantId: userInfo1?.tenantId,
+          permanentCity: userInfo1?.permanentCity
+        },
+        msgId: "1749797151521|en_IN",
+        plainAccessRequest: {}
+      }
+    };
 
+        mutationUpdate.mutate(payload, {
+            onSuccess: (data) => {
+                const property = data?.Properties?.[0];
+                if (property) {
+                    //   setProOwnerDetail(property);
+                    setAcknowledgmentNumber(property.acknowldgementNumber);
+                    //   setPropertyId(property.propertyId);
+                    //   setStatus(property.status);
+                    //   // setShowSuccessModal(true);
+                    //   setShowPreviewButton(true);
+                    setShowConfirmPopup(false);
+                    setShowSuccessPopup(true);
+                }
+            },
+            onError: (err) => {
+                console.error(err);
+                alert(t("Submission failed"));
+            },
+        });
+    };
     return (
         <div style={{ position: "relative" }}>
             <button style={styles.downloadBtn}>⬇ Download</button>
@@ -222,13 +409,13 @@ const PropertyForm = () => {
                 </div>
             </div>
             <div style={styles.cardD}>
-                {owners.map((owner, index) => (
+                {ownersDetail.map((owner, index) => (
                     <React.Fragment key={owner.uuid || index}>
                         <div style={styles.sectionHeader}>Owner {index + 1}</div>
                         <div style={styles.rowOwnerName}>
                             <InputFieldNew label="Name" value={`${owner?.salutation || ""} ${owner?.name || "N/A"}`} />
                             <div style={{ marginBottom: "20px" }}></div>
-                            <InputFieldNew label="Father name" value={`${owner?.fatherOrHusbandName || "N/A"}`} />
+                            <InputFieldNew label="Father name" value={owner?.fatherOrHusbandName} />
                             <div style={{ marginBottom: "20px" }}></div>
                             <InputFieldNew label="Address" value={owner?.permanentAddress || "N/A"} />
                         </div>
@@ -308,7 +495,7 @@ const PropertyForm = () => {
                             </tr>
                         ))}
                         <tr>
-                            <td colSpan={13} style={{ ...styles.td, fontWeight: "bold",textAlign:"right" }}>TOTAL</td>
+                            <td colSpan={13} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
                             <td style={styles.td}>
                                 {
                                     taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)
@@ -371,8 +558,8 @@ const PropertyForm = () => {
                                     cursor: "pointer"
                                 }}
                                 onClick={() => {
-                                    setShowConfirmPopup(false);
-                                    setShowSuccessPopup(true);
+                                    handleSubmitUpdate();
+
                                     // Add actual form submission logic here if needed
                                 }}
                             >
@@ -416,7 +603,7 @@ const PropertyForm = () => {
                         </p>
                         <p style={{ color: "#888", fontSize: "14px", marginBottom: "20px" }}>
                             Application Number<br />
-                            {proOwnerDetail?.acknowldgementNumber || "N/A"}
+                            {acknowledgmentNumber || "N/A"}
                         </p>
                         <button
                             style={{

@@ -26,15 +26,29 @@ const OtherDetailsSection = ({
       setPropertyTypeOptions(options);
     }
   }, [Menu]);
+  // useEffect(() => {
+  //   if (OwnerType?.length) {
+  //     const options = OwnerType.map((item) => ({
+  //       code: item.code,
+  //       name: t(item.name),
+  //     }));
+  //     setOwnerTypeOptions(options);
+  //   }
+  // }, [isLoadingO, OwnerType]);
   useEffect(() => {
-    if (OwnerType?.length) {
-      const options = OwnerType.map((item) => ({
+  if (OwnerType?.length) {
+    const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
+
+    if (filteredItems.length) {
+      const options = filteredItems.map((item) => ({
         code: item.code,
         name: t(item.name),
       }));
       setOwnerTypeOptions(options);
     }
-  }, [isLoadingO, OwnerType]);
+  }
+}, [isLoadingO, OwnerType]);
+
   if (isLoading) return <Loader />;
   return (
 

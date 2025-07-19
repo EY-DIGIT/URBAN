@@ -439,7 +439,7 @@ import {
   StatusTable,
 } from "@egovernments/digit-ui-react-components";
 import { values } from "lodash";
-import React, { Fragment } from "react";
+import React, { Fragment,useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import BPADocuments from "./BPADocuments";
@@ -619,6 +619,45 @@ function ApplicationDetailsContentVerifier({
   const unitde = application?.units?.[0] || {};
   const documents = application?.documents || [];
   console.log("application", application)
+  let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+
+  const tenantId = userInfo1?.tenantId;
+
+  const fetchBill = async () => {
+      if (!application?.propertyId) return;
+  
+      try {
+        const billResponse = await Digit.PTService.fetchPaymentDetails({
+          tenantId,
+          consumerCodes: application?.propertyId,
+        });
+  
+        const BillList = billResponse?.Bill || [];
+        if (!BillList.length) {
+          // alert("❌ This bill has already been paid or is not valid.");
+          setBillFetch(null);
+          return;
+        }
+  
+        setBillFetch(BillList[0]); // set fresh bill
+      } catch (err) {
+        // console.error("Error fetching bill:", err);
+      }
+    };
+   useEffect(() => {
+  const propertyIdValid = applicationData?.propertyId;
+  const tenantIdValid = tenantId && tenantId !== "undefined";
+
+  if (propertyIdValid && tenantIdValid) {
+    console.log("✅ Fetching bill with:", {
+      propertyId: applicationData.propertyId,
+      tenantId,
+    });
+    fetchBill();
+  }
+}, [applicationData?.propertyId, tenantId]);
+
+  
   return (
     <div >
       {/* For UM-4418 changes */}

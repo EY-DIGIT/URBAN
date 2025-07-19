@@ -49,7 +49,7 @@ const ApplicationDetails = (props) => {
     isInfoLabel = false,
     clearDataDetails
   } = props;
-
+console.log("ApplicationDetails Props:", props);
   useEffect(() => {
     if (showToast) {
       workflowDetails.revalidate();

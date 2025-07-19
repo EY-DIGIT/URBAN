@@ -221,6 +221,7 @@ const PropertyDetails = () => {
               {
                 action: !fetchBillData?.Bill[0]?.totalAmount ? "MUTATE_PROPERTY" : "PT_TOTALDUES_PAY",
                 forcedName: "PT_OWNERSHIP_TRANSFER",
+                Bill: fetchBillData?.Bill[0],
                 AmountDueForPay: fetchBillData?.Bill[0]?.totalAmount,
                 isWarningPopUp: !fetchBillData?.Bill[0]?.totalAmount ? false : true,
                 redirectionUrl: {

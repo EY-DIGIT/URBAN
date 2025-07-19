@@ -437,7 +437,8 @@ import { useTranslation } from "react-i18next";
 import PropertyDocuments from "./PropertyDocuments";
 
 import TLCaption from "./TLCaption";
-
+import { CollectPayment } from "@egovernments/digit-ui-module-common/src/payments/employee/payment-collect";
+import { useQueryClient } from "react-query";
 
 const styles = {
   container: { fontFamily: "Arial", padding: "20px", fontSize: "14px" },
@@ -698,9 +699,8 @@ const ApplicationDetailsContent = ({
   oldValue,
   isInfoLabel = false
 }) => {
+
   const [showAssessmentPop, setShowAssesmentPop] = useState(false);
-  const [selectedAssessmentYear, setSelectedAssessmentYear] = useState(null);
-  const [showSummary, setShowSummary] = useState(false);
   const [selectedModes, setSelectedModes] = useState([]);
   const [estimateData, setEstimateData] = useState("");
   const [chequeDetails, setChequeDetails] = useState({
@@ -719,14 +719,18 @@ const ApplicationDetailsContent = ({
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [upiMobile, setUPIMobile] = useState("");
   const [paymentType, setPaymentType] = useState("full");
+  const [billFetch, setBillFetch] = useState(null);
   const [formErrors, setFormErrors] = useState({});
+  const [selectedMode, setSelectedMode] = useState("");
+  const [receiptNumber, setReceiptNumber] = useState("");
   const stateId = Digit.ULBService.getStateId();
   const tenantIdUniq = Digit.ULBService.getCurrentTenantId();
+  const billData = workflowDetails?.data?.actionState?.nextActions?.[1].Bill;
   const { isLoading: assessmentLoading, mutate: assessmentMutate } = Digit.Hooks.pt.usePropertyAssessment(tenantIdUniq);
   const toggleMode = (mode) => {
     // Always set only the current mode
     setSelectedModes([mode]);
-
+    setSelectedMode(mode);
     // Show UPI modal only when UPI is newly selected
     if (mode === "UPI") {
       setShowUPIModal(true);
@@ -747,8 +751,6 @@ const ApplicationDetailsContent = ({
     setShowAssesmentPop(true);
   };
 
-  console.log("applicationDetails", applicationDetails);
-
   const units = applicationDetails?.applicationData?.units;
 
   const formatYearRange = (fromYear, toYear) => {
@@ -759,13 +761,9 @@ const ApplicationDetailsContent = ({
     return `${start}-${end}`;                      // "2023-25"
   };
 
-const yearRange = Array.isArray(units) && units.length > 0
-  ? units[0].toYear
-  : "N/A";
-
-
-  console.log(yearRange);
-  // Output: "2024-25 to 2024-25"
+  const yearRange = Array.isArray(units) && units.length > 0
+    ? units[0].toYear
+    : "N/A";
 
   const { t } = useTranslation();
   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
@@ -778,11 +776,6 @@ const yearRange = Array.isArray(units) && units.length > 0
     error,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
   const handleEstimate = () => {
-    // const errors = {};
-    // if (!selectedAssessmentYear) {
-    //   errors.selectedAssessmentYear = "Assessment year is required.";
-    // }
-    // setFormErrors(errors);
     const payload = {
       Assessment: {
         financialYear: yearRange,
@@ -818,6 +811,7 @@ const yearRange = Array.isArray(units) && units.length > 0
       onSuccess: (data) => {
 
         setEstimateData(data);
+        fetchBill()
       },
       onError: (error) => {
         alert("Estimate error:", error);
@@ -858,40 +852,13 @@ const yearRange = Array.isArray(units) && units.length > 0
 
     assessmentMutate(payload, {
       onError: (error, variables) => {
-        
+        // fetchBill()
       },
       onSuccess: (data, variables) => {
-       console.log("Assessment data:", data);
       }
     });
   }
-  const fetchBillParams = { consumerCode: applicationData?.propertyId };
-// let ptCalculationEstimateDataCopy;
 
-// if (!ptCalculationEstimateDataCopy)
-//   ptCalculationEstimateDataCopy = ptCalculationEstimateData?.Calculation?.[0];
-
-const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
-  {
-    businessService: "PT",
-    ...fetchBillParams,
-    tenantId: tenantId,
-  },
-  {
-    enabled: !!applicationData?.propertyId, // cleaner boolean check
-  }
-);
-
-// useEffect to react to fetched bill
-
-
-useEffect(() => {
-  if (paymentDetails?.data) {
-    // perform actions when bill is fetched
-    console.log("Bill fetched:", paymentDetails.data);
-    // you can trigger further actions here
-  }
-}, [paymentDetails?.data]);
   useEffect(() => {
     if (yearRange && applicationData?.propertyId) {
       handleEstimate();
@@ -899,6 +866,138 @@ useEffect(() => {
     }
   }, [yearRange, applicationData?.propertyId]);
 
+  const handlePayment = async () => {
+    const tenantId = billData?.tenantId || "pg.citya";
+    const consumerCode = applicationData?.propertyId;
+    const selectedPaymentMode = selectedMode; // Make sure this is coming from your UI
+
+    try {
+      // ✅ Fetch fresh bill before processing
+      const billResponse = await Digit.PTService.fetchPaymentDetails({
+        tenantId,
+        consumerCodes: consumerCode,
+      });
+
+      const BillList = billResponse?.Bill || [];
+
+      // ❌ Abort if bill is already paid or not found
+      if (!BillList.length) {
+        alert("❌ This bill has already been paid or is not valid.");
+        return;
+      }
+
+      const bill = BillList[0]; // fresh bill
+
+      // ✅ Construct receipt request
+      const receiptRequest = {
+        Payment: {
+          mobileNumber: "9877272554" || bill?.mobileNumber,
+          paymentDetails: [
+            {
+              billId: bill.id,
+              businessService: bill.businessService,
+              totalDue: bill.totalAmount,
+              totalAmountPaid: bill.totalAmount,
+            },
+          ],
+          tenantId,
+          totalDue: bill.totalAmount,
+          totalAmountPaid: bill.totalAmount,
+          paymentMode: selectedPaymentMode,
+          payerName: bill?.payerName || "Default User",
+          paidBy: "OWNER",
+        },
+        RequestInfo: {
+          apiId: "Rainmaker",
+          authToken: userInfo1?.authToken || "default-token",
+          userInfo: {
+            id: userInfo1?.id || 1,
+            uuid: userInfo1?.uuid || "default-uuid",
+            userName: userInfo1?.userName || "defaultuser",
+            name: userInfo1?.name || "Default User",
+            mobileNumber: userInfo1?.mobileNumber || "9999999999",
+            emailId: userInfo1?.emailId || "default@example.com",
+            locale: userInfo1?.locale || "en_IN",
+            type: userInfo1?.type || "CITIZEN",
+            roles: userInfo1?.roles || [],
+            active: userInfo1?.active !== false,
+            tenantId: userInfo1?.tenantId || tenantId,
+            permanentCity: userInfo1?.permanentCity || tenantId
+          },
+          msgId: "1749797151521|en_IN",
+          plainAccessRequest: {}
+        }
+      };
+
+      // ✅ Make the API call
+      const response = await Digit.PaymentService.createReciept(tenantId, receiptRequest);
+
+      // ✅ Invalidate cache & show confirmation
+      // queryClient.invalidateQueries();
+      const receiptNumber = response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber;
+      setReceiptNumber(receiptNumber);
+      setShowConfirmation(true);
+      fetchBill(); // Refresh bill data after payment
+    } catch (error) {
+      const errorMsg = error?.response?.data?.Errors?.map((e) => e?.code)?.join(", ");
+      // console.error("❌ Error creating receipt:", errorMsg || error);
+      // alert(`Failed to create receipt: ${errorMsg || "Unknown error"}`);
+    }
+  };
+  const fetchBill = async () => {
+    if (!applicationData?.propertyId) return;
+
+    try {
+      const billResponse = await Digit.PTService.fetchPaymentDetails({
+        tenantId,
+        consumerCodes: applicationData?.propertyId,
+      });
+
+      const BillList = billResponse?.Bill || [];
+      if (!BillList.length) {
+        // alert("❌ This bill has already been paid or is not valid.");
+        setBillFetch(null);
+        return;
+      }
+
+      setBillFetch(BillList[0]); // set fresh bill
+    } catch (err) {
+      // console.error("Error fetching bill:", err);
+    }
+  };
+  // useEffect(() => {
+  //   const propertyIdValid = applicationData?.propertyId;
+  //   const tenantIdValid = tenantId && tenantId !== "undefined";
+
+  //   if (propertyIdValid && tenantIdValid) {
+  //     console.log("✅ Fetching bill with:", {
+  //       propertyId: applicationData.propertyId,
+  //       tenantId,
+  //     });
+  //     fetchBill();
+  //   }
+  // }, [applicationData?.propertyId, tenantId]);
+ useEffect(() => {
+  const propertyIdValid = applicationData?.propertyId;
+  const tenantIdValid = tenantId && tenantId !== "undefined";
+
+  let intervalId;
+
+  if (propertyIdValid && tenantIdValid) {
+    // Start interval loop
+    intervalId = setInterval(() => {
+      fetchBill();
+    }, 1000); // every 1 second
+  }
+
+  // Cleanup function to stop interval on unmount or dependency change
+  return () => {
+    if (intervalId) clearInterval(intervalId);
+  };
+}, [applicationData?.propertyId, tenantId]);
+
+
+console.log("Bill Fetch Data:", billFetch);
   return (
 
     <div>
@@ -956,14 +1055,14 @@ useEffect(() => {
             <input
               type="text"
               readOnly
-              value={applicationData?.address?.locality?.name || "N/A"}
+              value={applicationData?.address?.ward || "N/A"}
               style={styles.input}
             />
           </div>
 
           <div style={styles.column}>
             <div style={styles.label}>Zone</div>
-            <input type="text" readOnly value="N/A" style={styles.input} />
+            <input type="text" readOnly value={applicationData?.address?.zone || "N/A"} style={styles.input} />
           </div>
 
           <div style={styles.column}>
@@ -971,14 +1070,14 @@ useEffect(() => {
             <input
               type="text"
               readOnly
-              value={applicationData?.address?.colony || "N/A"}
+              value={applicationData?.address?.locality?.name || "N/A"}
               style={styles.input}
             />
           </div>
 
           <div style={styles.column}>
             <div style={styles.label}>Road Factor</div>
-            <input type="text" readOnly value="N/A" style={styles.input} />
+            <input type="text" readOnly value={applicationData?.units?.[0]?.roadFactor} style={styles.input} />
           </div>
 
 
@@ -1138,6 +1237,7 @@ useEffect(() => {
               <div style={styles.label}>Amount</div>
               <input
                 placeholder="XX.XX"
+                value={billFetch?.totalAmount || ""}
                 style={styles.input}
               />
             </div>
@@ -1145,7 +1245,7 @@ useEffect(() => {
             <div style={styles.column}>
               <div style={styles.label}>Arrear</div>
               <input
-                value="View Only"
+                value={"0"}
                 readOnly
                 style={styles.input}
               />
@@ -1154,7 +1254,7 @@ useEffect(() => {
             <div style={styles.column}>
               <div style={styles.label}>Payments Receivable</div>
               <input
-                value="View Only"
+                value={billFetch?.totalAmount || ""}
                 readOnly
                 style={styles.input}
               />
@@ -1168,34 +1268,7 @@ useEffect(() => {
                 style={styles.input}
               />
             </div>
-            {/* <div style={customStyles.cardWrapper}>
-              <div style={customStyles.cardHeader}>Lok Adalat Discount Summary</div>
 
-              <div style={customStyles.dataRow}>
-                <div style={customStyles.labelText}>Total Demant Without Lok Adalat Discount</div>
-                <div style={customStyles.valueText}>28087</div>
-              </div>
-
-              <div style={customStyles.dataRow}>
-                <div style={customStyles.labelTextRed}>Arrears Adithar Penalty</div>
-                <div style={customStyles.valueText}>2197</div>
-              </div>
-
-              <div style={customStyles.dataRow}>
-                <div style={customStyles.labelTextGreen}>Lok Adalat Discount %</div>
-                <div style={customStyles.valueText}>100%</div>
-              </div>
-
-              <div style={customStyles.dataRow}>
-                <div style={customStyles.labelTextRed}>Discount Given</div>
-                <div style={customStyles.valueText}>2197</div>
-              </div>
-
-              <div style={customStyles.totalRow}>
-                <div style={customStyles.labelText}>Total</div>
-                <div style={customStyles.valueText}>26790</div>
-              </div>
-            </div> */}
           </div>
         )}
         {paymentType === "partial" && (
@@ -1228,23 +1301,10 @@ useEffect(() => {
             <div style={styles.column}></div>
           </div>
         )}
-        {/* Remarks */}
 
-
-        {/* Payment Mode */}
-        {/* <div style={styles.checkboxGroup}>
-          {["Cash", "POS", "UPI", "Cheque"].map((mode) => (
-            <label key={mode} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <input type="radio" name="paymentMode"
-                checked={selectedModes.includes(mode)}
-                onChange={() => toggleMode(mode)} />
-              <span style={{ fontWeight: 500 }}>{mode}</span>
-            </label>
-          ))}
-        </div> */}
 
         <div style={styles.checkboxGroup}>
-          {["Cash", "POS", "UPI", "Cheque"].map((method) => (
+          {["CASH", "POS", "UPI", "Cheque"].map((method) => (
             <label key={method}>
               <input
                 type="radio"
@@ -1417,9 +1477,12 @@ useEffect(() => {
               <div style={styles.receiptText}>
                 Receipt Number
                 <br />
-                Example: PG-AC-1234
+                {receiptNumber}
               </div>
-              <button style={styles.homeButton} onClick={() => setShowConfirmation(false)}>
+              <button style={styles.homeButton} onClick={() => {
+                // 🏠 Navigate home or reset form here
+                window.location.href = "/digit-ui/employee"; // or use React Router
+              }}>
                 Home
               </button>
             </div>
@@ -1433,51 +1496,22 @@ useEffect(() => {
             style={styles.remarkBox}
           />
         </div>
-        {/* <div style={{ marginTop: "30px" }}>
-        <button
-          style={styles.paymentButton}
-          onClick={() => estimatePop()}
-        >
-          Assessment
-        </button>
-      </div> */}
+
         <div style={{ marginTop: "30px" }}>
           <button
-            style={styles.paymentButton}
-            onClick={() => setShowConfirmation(true)}
+            style={{
+              ...styles.paymentButton,
+              backgroundColor: billFetch?.totalAmount === 0 ? "#ccc" : styles.paymentButton.backgroundColor,
+              cursor: billFetch?.totalAmount === 0 ? "not-allowed" : "pointer"
+            }}
+            onClick={() => handlePayment()}
+            disabled={billFetch?.totalAmount === 0}
           >
             Collect Payment
           </button>
         </div>
+
       </div>
-
-      {/* {showAssessmentPop && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
-
-            <div style={styles.poppinsLabel}>
-              {t("Select Assessment Year")} <span className="mandatory" style={styles.mandatory}>*</span>
-            </div>
-            <Dropdown
-              style={styles.widthInput300Ass}
-              t={t}
-              option={assessmentYears} // dynamic list
-              selected={assessmentYears.find(item => item.code === selectedAssessmentYear?.code)}
-              select={(value) => setSelectedAssessmentYear(value)}
-              optionKey="name"
-              placeholder={t("Select")}
-            />
-            {formErrors.selectedAssessmentYear && (
-              <p style={{ color: "red", fontSize: "12px" }}>{formErrors.selectedAssessmentYear}</p>
-            )}
-            <div style={{ display: "flex", gap: "40px" }}>
-              <SubmitBar label={t("Back")} onSubmit={backToNew} style={{ background: "#6b133f" }} />
-              <SubmitBar label={t("Confirm")} onSubmit={handleEstimate} style={{ background: "#6b133f" }} />
-            </div>
-
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
