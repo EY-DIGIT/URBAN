@@ -1,6 +1,7 @@
 package org.egov.pt.calculator.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -182,13 +183,6 @@ public class EstimationService {
 		String assessmentYear = detail.getFinancialYear();
 		String tenantId = property.getTenantId();
 
-		BigDecimal pt_taxAmt = BigDecimal.ZERO;
-		BigDecimal TPV = BigDecimal.ZERO;
-		BigDecimal ALV = BigDecimal.ZERO;
-		BigDecimal propertyTax = BigDecimal.ZERO;
-		BigDecimal sampatikar = BigDecimal.ZERO;
-		BigDecimal urbanCess = BigDecimal.ZERO;
-
 		if (criteria.getFromDate() == null || criteria.getToDate() == null)
 			enrichmentService.enrichDemandPeriod(criteria, assessmentYear, masterMap);
 
@@ -223,12 +217,17 @@ public class EstimationService {
 			for (Unit unit : detail.getUnits()) {
 				
 				boolean isResidential = unit.getUsageCategoryMajor().equals("RESIDENTIAL");
-				boolean isNonResidential = unit.getUsageCategoryMajor().equals("NONRESIDENTIAL");
-				boolean isCommercial = unit.getUsageCategoryMajor().equals("COMMERCIAL");
-				boolean isIndustrial = unit.getUsageCategoryMajor().equals("INDUSTRIAL");
 				boolean isSelfOccupied = unit.getOccupancyType().equals("SELFOCCUPIED");
-				boolean isRented = unit.getOccupancyType().equals("RENTED");
 				boolean isOpenLand = unit.getConstructionType().equals("OPENLAND");
+				String ownerType = null;
+				Set<OwnerInfo> owners = detail.getOwners();
+				if(owners.size() == 1) {
+					OwnerInfo first = owners.iterator().next();
+				     ownerType = first.getOwnerType(); 
+				}
+				boolean isDharamShala = false;
+				if(ownerType != null)
+				 isDharamShala = ownerType.equalsIgnoreCase("DHARAMSHALA");
 
 				// BillingSlab slab = getSlabForCalc(filteredBillingSlabs, unit);
 				/**
@@ -296,17 +295,14 @@ public class EstimationService {
 					}					
 					
 					/**
-					 * Calculates 10% of the current unit tax if the construction type is not null.
+					 * Calculates 10% of the current unit tax if the construction type is not Open Land.
 					 */
 
 					if (!isOpenLand) {
-						if (isResidential && (isSelfOccupied || isRented)) {
-							currentUnitTax = currentUnitTax.subtract(
-									currentUnitTax.multiply(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(100)));
-						} else if (isCommercial || isIndustrial || isNonResidential) {
-							currentUnitTax = currentUnitTax.subtract(
-									currentUnitTax.multiply(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(100)));
-						}
+
+						currentUnitTax = currentUnitTax.subtract(
+								currentUnitTax.multiply(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(100)));
+
 					}
 					unitTPV = currentUnitTax;
 					propertyFYDetails.setTpv(unitTPV);
@@ -316,7 +312,7 @@ public class EstimationService {
 					 * Calculates 50% of the TPV if the usage type is residential and Occupancy type is SelfOccupied.
 					 */
 
-					if (isResidential && isSelfOccupied) {
+					if (isResidential && isSelfOccupied && !isDharamShala) {
 						List<Object> pTaxCessMasterList = timeBasedExemptionMasterMap
 								.get(CalculatorConstants.PTAX_CESS_MASTER);
 						unit_PT_taxAmt = mDataService.getCess(unitTPV, assessmentYear, pTaxCessMasterList);
@@ -546,7 +542,7 @@ public class EstimationService {
 		
 		BigDecimal payableTax = propertyTaxCess;
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
-		
+
 		List<Object> taxSlabList = timeBasedExemeptionMasterMap.get(CalculatorConstants.TAX_SLAB_MASTER);
 
 		BigDecimal taxSlabRate = mDataService.getTaxSlab(TPV, assessmentYear, taxSlabList);
@@ -563,6 +559,7 @@ public class EstimationService {
 				estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_PROPERTY_TAX)
 						.estimateAmount(propertyTaxCess.setScale(2, 2)).build());
 				propertyTaxSummary.setPropertyTax(propertyTaxCess.setScale(2, 2));
+				payableTax = payableTax.add(propertyTaxCess);
 				// Sanitation Cess
 				List<Object> senitationCessMasterList = timeBasedExemeptionMasterMap
 						.get(CalculatorConstants.SANITATION_CESS_MASTER);
@@ -628,10 +625,11 @@ public class EstimationService {
 		propertyTaxSummary.setSevaKar(serviceCharge.setScale(2, 2));
 		payableTax = payableTax.add(serviceCharge);
 		
-		propertyTaxSummary.setTotalTax(payableTax);
+		propertyTaxSummary.setTotalTax(payableTax.setScale(0, RoundingMode.HALF_UP).setScale(2));
 		
 		cumulativeTotalTax = cumulativeTotalTax.add(payableTax);
 		propertyTaxSummary.setCumulativeTax(cumulativeTotalTax);
+		
 		// usage exemption
 		usageExemption = usageExemption.setScale(2, 2).negate();
 		estimates.add(
@@ -642,11 +640,13 @@ public class EstimationService {
 				.get(FINANCIALYEAR_MASTER_KEY);
 		
 		// owner exemption
-		BigDecimal userExemption = getExemption(detail.getOwners(), payableTax, assessmentYear,
-				propertyBasedExemptionMasterMap).setScale(2, 2).negate();
+		BigDecimal userExemption = getExemption(detail.getOwners(), payableTax, propertyTaxSummary.getYear(),
+				propertyBasedExemptionMasterMap, propertyTaxSummary).setScale(2, 2).negate();
 		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_OWNER_EXEMPTION).estimateAmount(userExemption).build());
-		payableTax = payableTax.add(userExemption);
-		
+		if(userExemption != null && userExemption.compareTo(BigDecimal.ZERO) != 0) {
+			payableTax = propertyTaxSummary.getTotalTax().setScale(0, RoundingMode.HALF_UP).setScale(2);
+		}
+
 		Map<String, Object> finYearMap = financialYearMaster.get(assessmentYear);
 		Long fromDate = (Long) finYearMap.get(FINANCIAL_YEAR_STARTING_DATE);
 		Long toDate = (Long) finYearMap.get(FINANCIAL_YEAR_ENDING_DATE);
@@ -675,7 +675,10 @@ public class EstimationService {
 			propertyTaxSummary.setRebate(rebate);
 			propertyTaxSummary.setPenalty(penalty);
 			payableTax = payableTax.add(rebate).add(penalty);
-			propertyTaxSummary.setNetTax(payableTax);
+			propertyTaxSummary.setNetTax(payableTax.setScale(0, RoundingMode.HALF_UP).setScale(2));
+		}else {
+			
+			propertyTaxSummary.setNetTax(propertyTaxSummary.getTotalTax().setScale(0, RoundingMode.HALF_UP).setScale(2));
 		}
 		
 
@@ -719,7 +722,7 @@ public class EstimationService {
             }
         }
 
-        return null; // If no matching rate found
+        return 0; // If no matching rate found
     }
 	
 	/**
@@ -1061,12 +1064,13 @@ public class EstimationService {
 	 * Applies discount on Total tax amount OwnerType based on exemptions.
 	 */
 	private BigDecimal getExemption(Set<OwnerInfo> owners, BigDecimal taxAmt, String financialYear,
-			Map<String, Map<String, List<Object>>> propertyMasterMap) {
+			Map<String, Map<String, List<Object>>> propertyMasterMap, PropertyFYTaxSummary propertyFYTaxSummary) {
 
 		Map<String, List<Object>> ownerTypeMap = propertyMasterMap.get(OWNER_TYPE_MASTER);
 		BigDecimal userExemption = BigDecimal.ZERO;
+		boolean centerGov = false;
 		final int userCount = owners.size();
-		BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, 2);
+
 
 		for (OwnerInfo owner : owners) {
 
@@ -1075,15 +1079,44 @@ public class EstimationService {
 
 			Map<String, Object> applicableOwnerType = mDataService.getApplicableMaster(financialYear,
 					ownerTypeMap.get(owner.getOwnerType()));
-
+				
+			
+			
 			if (null != applicableOwnerType) {
-
+				
+				if (applicableOwnerType.get("code").toString().startsWith("CENTGOV")) {
+				    taxAmt = propertyFYTaxSummary.getTotalTax();
+				    centerGov = true;
+				}  else if (applicableOwnerType.get("code").toString().equalsIgnoreCase("DHARAMSHALA")) {			   
+					taxAmt = BigDecimal.ZERO;
+				} else if(!applicableOwnerType.get("code").toString().startsWith("WIDOWSMINORSHANDICAP")){
+					taxAmt = propertyFYTaxSummary.getPropertyTax();
+				   
+				}
+				BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, 2);
 				BigDecimal currentExemption = mDataService.calculateApplicables(share,
 						applicableOwnerType.get(EXEMPTION_FIELD_NAME));
 
 				userExemption = userExemption.add(currentExemption);
+				
+				if (centerGov) {
+					propertyFYTaxSummary.setSevaKar(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
+					propertyFYTaxSummary.setEducationCess(BigDecimal.ZERO);
+					propertyFYTaxSummary.setJalKar(BigDecimal.ZERO);
+					propertyFYTaxSummary.setJalNikas(BigDecimal.ZERO);
+					propertyFYTaxSummary.setPropertyTax(BigDecimal.ZERO);
+					propertyFYTaxSummary.setSamekit(BigDecimal.ZERO);
+					propertyFYTaxSummary.setUrbanTax(BigDecimal.ZERO);
+					propertyFYTaxSummary.setTotalTax(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
+				}else {
+					propertyFYTaxSummary.setTotalTax(propertyFYTaxSummary.getTotalTax().subtract(userExemption).setScale(0, RoundingMode.HALF_UP).setScale(2));
+					propertyFYTaxSummary.setPropertyTax(propertyFYTaxSummary.getPropertyTax().subtract(userExemption));
+				}
 			}
 		}
+		
+		
+		
 		return userExemption;
 	}
 

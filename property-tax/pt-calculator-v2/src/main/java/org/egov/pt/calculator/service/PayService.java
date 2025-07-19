@@ -95,7 +95,7 @@ public class PayService {
 		if(Integer.parseInt(assessmentYear.split("-")[0]) < 2018) 
 			taxAmt = propertyFYTaxSummary.getTotalTax();
 		else
-			taxAmt = propertyFYTaxSummary.getTotalTax();
+			taxAmt = propertyFYTaxSummary.getCumulativeTax();
 		
 		
 		if (BigDecimal.ZERO.compareTo(taxAmt) >= 0)
