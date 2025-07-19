@@ -634,11 +634,13 @@ function ApplicationDetailsContentVerifier({
             <input style={styles.input} value="2025-26" readOnly />
           </div>
         </div> */}
+        <div style={styles.card}>
         <AttachmentsSection
           t={t}
           documents={documents}
         />
-
+</div>
+        <div style={styles.card}>
         <div style={styles.sectionTitle}>Ownership Details</div>
         <div style={styles.grid}>
           <div>
@@ -662,30 +664,12 @@ function ApplicationDetailsContentVerifier({
                   <select
                     value={owner?.salutation}
                     disabled
-                    style={{
-                      padding: "9px",
-                      border: "1px solid #ccc",
-                      borderRadius: "8px 0 0 8px",
-                      backgroundColor: "#f9f9f9",
-                      width: "80px",
-                      textAlign: "center",
-                      fontSize: "14px",
-                      cursor: "default"
-                      // DO NOT use 'appearance: none' if you want the arrow
-                    }}
+                    style={styles.widthInput}
                   >
                     <option>{owner?.salutation}</option>
                   </select>
                   <input
-                    style={{
-                      flex: 1,
-                      padding: "8px",
-                      border: "1px solid #ccc",
-                      borderLeft: "none",
-                      borderRadius: "0 8px 8px 0",
-                      backgroundColor: "#f9f9f9",
-                      fontSize: "14px"
-                    }}
+                   style={styles.input}
                     value={owner?.name || ""}
                     readOnly
                   />
@@ -698,31 +682,13 @@ function ApplicationDetailsContentVerifier({
                   <select
                     value={owner?.salutation}
                     disabled
-                    style={{
-                      padding: "9px",
-                      border: "1px solid #ccc",
-                      borderRadius: "8px 0 0 8px",
-                      backgroundColor: "#f9f9f9",
-                      width: "80px",
-                      textAlign: "center",
-                      fontSize: "14px",
-                      cursor: "default"
-                      // DO NOT use 'appearance: none' if you want the arrow
-                    }}
+                    style={styles.widthInput}
                   >
                     <option>{owner?.salutationHindi}</option>
 
                   </select>
                   <input
-                    style={{
-                      flex: 1,
-                      padding: "8px",
-                      border: "1px solid #ccc",
-                      borderLeft: "none",
-                      borderRadius: "0 8px 8px 0",
-                      backgroundColor: "#f9f9f9",
-                      fontSize: "14px"
-                    }}
+                     style={styles.input}
                     value={owner?.hindiName || ""}
                     readOnly
                   />
@@ -761,8 +727,8 @@ function ApplicationDetailsContentVerifier({
             </div>
           </React.Fragment>
         ))}
-
-
+</div>
+ <div style={styles.card}>
 
         <div style={styles.sectionTitle}>Property Address</div>
         <div style={styles.grid}>
@@ -773,10 +739,12 @@ function ApplicationDetailsContentVerifier({
           <div><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} readOnly /></div>
           <div><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.zone} readOnly /></div>
         </div>
-        <div style={styles.grid}>
+        </div>
+         <div style={styles.card}>
+        <div >
           <div>
             <div style={styles.sectionTitle}>Correspondence Address</div>
-            <textarea style={styles.input} rows={3} value={owner?.permanentAddress} readOnly />
+            <textarea style={styles.widthInputs} rows={3} value={owner?.permanentAddress} readOnly />
 
           </div>
           <div style={styles.checkboxLabel}>
@@ -785,7 +753,8 @@ function ApplicationDetailsContentVerifier({
           </div>
         </div>
 
-
+</div>
+ <div style={styles.card}>
         <div style={styles.sectionTitle}>Assessment Details</div>
         <div style={styles.grid}>
           <div><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} readOnly /></div>
@@ -793,7 +762,8 @@ function ApplicationDetailsContentVerifier({
           <div><label style={styles.label}>Old Property ID</label><input style={styles.input} value={application?.oldPropertyId || ""} readOnly /></div>
           <div><label style={styles.label}>Plot Area (sq.ft)</label><input style={styles.input} value={application?.landArea} readOnly /></div>
         </div>
-
+</div>
+ <div style={styles.card}>
         <div style={styles.sectionTitle}>Property Details</div>
         <div >
           <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
@@ -801,7 +771,7 @@ function ApplicationDetailsContentVerifier({
             {/* <input style={styles.input} value={application?.propertyType || "Prefilled"} readOnly /> */}
           </div>
 
-          <table style={{ width: "80%", borderCollapse: "collapse", margin: "auto", marginTop: "8px", border: "1px solid #ccc" }}>
+          <table style={{ width: "80%", borderCollapse: "collapse", marginTop: "8px", border: "1px solid #ccc" }}>
             <thead style={{ background: "#f0f0f0", height: "40px" }}>
               <tr>
                 <th style={{ ...styles.labelTable }}>Usage Type</th>
@@ -820,7 +790,7 @@ function ApplicationDetailsContentVerifier({
                     <select
                       value={unit?.usageCategory || ""}
                       disabled
-                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      style={{border: "none", background: "none", width: "100%" }}
                     >
                       <option value={unit?.usageCategory || ""}>{unit?.usageCategory || ""}</option>
 
@@ -831,7 +801,7 @@ function ApplicationDetailsContentVerifier({
                     <select
                       value={unit?.occupancyType || ""}
                       disabled
-                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      style={{border: "none", background: "none", width: "100%" }}
                     >
                       <option value={unit?.occupancyType || ""}>{unit?.occupancyType || ""}</option>
 
@@ -842,7 +812,7 @@ function ApplicationDetailsContentVerifier({
                     <select
                       value={unit?.floorNo?.toString() || ""}
                       disabled
-                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      style={{border: "none", background: "none", width: "100%" }}
                     >
 
                       <option value={unit?.floorNo?.toString() || ""}>{unit?.floorNo?.toString() || ""}</option>
@@ -854,7 +824,7 @@ function ApplicationDetailsContentVerifier({
                     <select
                       value={unit?.constructionDetail?.constructionType || ""}
                       disabled
-                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      style={{border: "none", background: "none", width: "100%" }}
                     >
                       <option value={unit?.constructionDetail?.constructionType || ""}>{unit?.constructionDetail?.constructionType || ""}</option>
 
@@ -864,7 +834,7 @@ function ApplicationDetailsContentVerifier({
 
                   <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                     <input
-                      style={{ ...styles.input, border: "none", background: "none" }}
+                      style={{border: "none", background: "none" }}
                       value={unit?.constructionDetail?.builtUpArea || ""}
                       readOnly
                     />
@@ -872,7 +842,7 @@ function ApplicationDetailsContentVerifier({
                   <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                     <select
                       disabled
-                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      style={{border: "none", background: "none", width: "100%" }}
                       value={unit.fromYear || ""}
 
                     >
@@ -883,7 +853,7 @@ function ApplicationDetailsContentVerifier({
                   <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                     <select
                       disabled
-                      style={{ ...styles.input, border: "none", background: "none", width: "100%" }}
+                      style={{border: "none", background: "none", width: "100%" }}
                       value={unit.toYear || ""}
 
                     >
@@ -897,9 +867,9 @@ function ApplicationDetailsContentVerifier({
 
           </table>
         </div>
+</div>
 
-
-        <div >
+        <div style={styles.card}>
           {/* Section Header */}
           <div>
             <div style={styles.sectionTitle}>Other Details</div>
@@ -931,7 +901,7 @@ function ApplicationDetailsContentVerifier({
           </div>
 
           {/* Self Declaration Section */}
-          <div style={{ ...styles.sectionTitle, marginBottom: "8px" }}>Self Declaration</div>
+          <div style={{ ...styles.label, marginBottom: "8px" }}>Self Declaration</div>
           <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
             <input type="checkbox" checked readOnly style={{ marginTop: "4px" }} />
             <p style={{ fontSize: "14px", lineHeight: "1.6", color: "#333", margin: 0 }}>
@@ -941,6 +911,7 @@ function ApplicationDetailsContentVerifier({
         </div>
 
       </div>
+       <div style={styles.card}>
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
         <React.Fragment>
           {/* <BreakLine /> */}
@@ -992,20 +963,48 @@ function ApplicationDetailsContentVerifier({
         </React.Fragment>
       )}
     </div>
+    </div>
   );
 }
 
 const styles = {
+    card: {
+    backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
+    padding: "16px",
+    // border: "1px solid #000000",
+    marginBottom:"22px",
+    borderRadius: "12px",
+  },
   container: {
     padding: "24px",
     fontFamily: "Poppins, sans-serif",
   },
-
+    widthInput: {
+    width: "20%",
+    height: "40px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347",
+    // padding: "6px"
+  },
+ widthInputs: {
+    width: "32%",
+    height: "72px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    border: "1px solid #D9D9D9",
+    padding: "10px",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
+  },
   labelTable: {
     textAlign: "left",
     padding: "8px",
     border: "1px solid #ccc",
-    background: "#E8E8E8",
+    background: "rgba(163, 187, 243, 0.5)",
     color: "#282828",
     width: "240px",
     fontFamily: "Inter",
@@ -1015,19 +1014,22 @@ const styles = {
     letterSpacing: "0%"
   },
   sectionTitle: {
+   background: '#6b133f',
     fontFamily: 'Poppins, sans-serif',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: '16px',
     lineHeight: '100%',
-    letterSpacing: '0',
-    // textDecoration: 'underline',
+    letterSpacing: '0px',
     textDecorationStyle: 'solid',
-    textDecorationColor: '#4729A3',
+    textDecorationColor: '#6b133f',
     textDecorationThickness: '1px',
-    textDecorationOffset: '2px',
-    color: '#4729A3',
+    color: 'white',
     marginBottom: '20px',
-    marginTop: "25px"
+    padding: '14px',
+    // width: '52%',
+    // borderBottomRightRadius: '20px',
+    // borderTopRightRadius: '20px',
+    textAlign: "center",
 
   },
   label: {
@@ -1040,12 +1042,14 @@ const styles = {
     width: "200px"
   },
   input: {
-    width: "100%",
-    padding: "6px",
-    marginBottom: "10px",
-    borderRadius: "4px",
-    border: "1px solid #aaa",
-    boxSizing: "border-box",
+   width: "100%",
+    height: "40px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    // border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347",
+    padding: "10px",
   },
   grid: {
     display: "grid",

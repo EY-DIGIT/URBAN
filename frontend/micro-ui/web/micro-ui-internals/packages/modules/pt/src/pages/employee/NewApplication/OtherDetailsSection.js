@@ -14,7 +14,7 @@ const OtherDetailsSection = ({
   const stateId = Digit.ULBService.getStateId();
   const { data: Menu = {}, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "AssessmentYear") || {};
   const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
-  console.log("OwnerTypeMenu", Menu)
+  console.log("OwnerTypeMenu", OwnerType)
   const [propertyTypeOptions, setPropertyTypeOptions] = useState([]);
   const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
   useEffect(() => {
@@ -117,7 +117,7 @@ const OtherDetailsSection = ({
       </div>
 
       {/* Self Declaration */}
-      <div style={styles.assessmentStyle}>{t("Self Declaration")}</div>
+      <div style={styles.poppinsLabel}>{t("Self Declaration")}</div>
       <label style={styles.poppinsTextStyle}>
         <input
           style={{ marginRight: "10px" }}

@@ -98,6 +98,8 @@ public class TranslationService {
         propertyDetail.put("propertySubType", propertySubType);
         propertyDetail.put("assessmentNumber", assessment.getAssessmentNumber());
         propertyDetail.put("assessmentDate", assessment.getAssessmentDate());
+        
+        propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
         if(assessment.getAdditionalDetails()!=null){
 

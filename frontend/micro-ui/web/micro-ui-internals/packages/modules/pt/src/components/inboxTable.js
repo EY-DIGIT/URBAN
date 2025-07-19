@@ -21,7 +21,7 @@
 //          <div style={{ border: "1px solid #ccc", borderRadius: "10px", overflow: "hidden", marginTop: "20px" }}>
 //                         <table style={{ borderCollapse: "collapse", width: "100%" }}>
 //                             <thead>
-//                                 <tr style={{ backgroundColor: "#e2d6f9" }}>
+//                                 <tr style={{ backgroundColor: "#6b133f" }}>
 //                                     <th style={headerStyle}>Application No</th>
 //                                     <th style={headerStyle}>Property ID</th>
 //                                     <th style={headerStyle}>Owner Name</th>
@@ -137,7 +137,7 @@ const PTinboxTable = () => {
             <div style={{ border: "1px solid #ccc", borderRadius: "10px", overflow: "hidden", marginTop: "20px", background: "white" ,margin:"20px"}}>
                 <table style={{ borderCollapse: "collapse", width: "100%" }}>
                     <thead>
-                        <tr style={{ backgroundColor: "#e2d6f9" }}>
+                        <tr style={{ backgroundColor: "#6b133f" }}>
                             <th style={headerStyle}>Application No</th>
                             <th style={headerStyle}>Property ID</th>
                             <th style={headerStyle}>Owner Name</th>
@@ -245,7 +245,7 @@ const headerStyle = {
     textAlign: "left",
     fontWeight: "600",
     fontSize: "14px",
-    color: "#333",
+    color: "white",
     borderBottom: "1px solid #ddd",
 };
 

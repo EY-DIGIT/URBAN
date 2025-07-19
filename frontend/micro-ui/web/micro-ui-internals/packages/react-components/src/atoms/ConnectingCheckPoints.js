@@ -6,10 +6,10 @@ export const CheckPoint = (props) => {
     <div className={props.isCompleted ? "checkpoint-done" : "checkpoint"} key={props.keyValue} >
       {props.isCompleted ? (
         <h2 style={{
-          borderColor: "#4729A3",
+          borderColor: "#6b133f",
           borderBottomWidth: "1px",
           borderStyle: "solid",
-          backgroundColor: "#4729A3",
+          backgroundColor: "#6b133f",
         }}></h2>) : (<h2></h2>)}
       <header>
         {props.label}

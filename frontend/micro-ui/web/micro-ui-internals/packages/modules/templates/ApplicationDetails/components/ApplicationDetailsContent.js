@@ -427,10 +427,12 @@
 // export default ApplicationDetailsContent;
 
 import {
-  Card
+  Card,
+  Dropdown,
+  SubmitBar
 } from "@egovernments/digit-ui-react-components";
 import { values } from "lodash";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PropertyDocuments from "./PropertyDocuments";
 
@@ -439,8 +441,13 @@ import TLCaption from "./TLCaption";
 
 const styles = {
   container: { fontFamily: "Arial", padding: "20px", fontSize: "14px" },
-  section: { marginBottom: "20px", marginTop: "20px" },
-  heading: {
+  section: {
+    marginBottom: "20px", marginTop: "20px", backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
+    padding: "16px",
+    borderRadius: "12px",
+  },
+  assessmentStyle: {
     fontFamily: "Poppins",
     fontWeight: 500,
     fontSize: "16px",
@@ -451,15 +458,15 @@ const styles = {
     textDecorationStyle: "solid",
     textDecorationOffset: "0%",
     textDecorationThickness: "0%",
-    color: "#4729A3",
+    color: "#6b133f",
     marginBottom: "16px"
   },
   row: {
-  display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
-  gap: "10px",
-  marginBottom: "10px"
-},
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: "10px",
+    marginBottom: "10px"
+  },
   column: { flex: "1 1 200px", marginRight: "10px", marginBottom: "10px" },
   label: {
     marginBottom: "4px", fontFamily: "Poppins",
@@ -492,7 +499,7 @@ const styles = {
     marginBottom: "20px",
   },
   th: {
-    backgroundColor: "#4729A34D",
+    backgroundColor: "#6b133f",
     padding: "8px",
     border: "1px solid #ccc",
     textAlign: "left",
@@ -502,7 +509,7 @@ const styles = {
     lineHeight: "175%",
     letterSpacing: "-1%",
     verticalAlign: "middle",
-    color: "#282828"
+    color: "white"
   },
   td: {
     padding: "8px",
@@ -524,16 +531,18 @@ const styles = {
     letterSpacing: "0%", color: "#6D6969"
   },
   remarkBox: {
-    width: "100%",
-    height: "60px",
-    padding: "6px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-    marginTop: "10px",
+    width: "32%",
+    height: "72px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    border: "1px solid #D9D9D9",
+    padding: "10px",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347"
   },
   paymentButton: {
     padding: "10px 20px",
-    backgroundColor: "#4729A3",
+    backgroundColor: "#6b133f",
     color: "white",
     border: "none",
     borderRadius: "4px",
@@ -559,10 +568,15 @@ const styles = {
   },
 
   input: {
-    padding: "8px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-    width: "100%"
+    width: "100%",
+    height: "35px",
+    borderWidth: "1px",
+    borderRadius: "6px",
+    border: "1px solid #D9D9D9",
+    boxShadow: "0px 4px 4px 0px #00000040",
+    background: "#A3BBF347",
+    padding: "10px"
+
   },
 
   modalOverlay: {
@@ -647,57 +661,29 @@ const styles = {
     marginRight: "auto",
     display: "flex"
   },
+  assessmentStyle: {
+    background: '#6b133f',
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    lineHeight: '100%',
+    letterSpacing: '0px',
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#6b133f',
+    textDecorationThickness: '1px',
+    color: 'white',
+    marginBottom: '20px',
+    padding: '14px',
+    // width: '52%',
+    // borderBottomRightRadius: '20px',
+    // borderTopRightRadius: '20px',
+    textAlign: "center",
+
+  },
 };
 
 
-const customStyles = {
-  cardWrapper: {
-    fontFamily: "Poppins, sans-serif",
-    border: "1px solid #E0E0E0",
-    borderRadius: "8px",
-    width: "fit-content",
-    minWidth: "400px",
-    overflow: "hidden",
-    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
-  },
-  cardHeader: {
-    backgroundColor: "#C4B8E7",
-    color: "#fff",
-    fontWeight: 500,
-    padding: "10px 16px",
-    fontSize: "14px",
-  },
-  dataRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "10px 16px",
-    fontSize: "14px",
-    borderBottom: "1px solid #f0f0f0",
-  },
-  labelText: {
-    color: "#000",
-    fontWeight: 400,
-  },
-  labelTextRed: {
-    color: "#DB1F1F",
-    fontWeight: 400,
-  },
-  labelTextGreen: {
-    color: "#28A745",
-    fontWeight: 400,
-  },
-  valueText: {
-    fontWeight: 500,
-    color: "#000",
-  },
-  totalRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "10px 16px",
-    fontWeight: 600,
-    fontSize: "14px",
-  },
-};
+
 
 const ApplicationDetailsContent = ({
   applicationDetails,
@@ -712,8 +698,11 @@ const ApplicationDetailsContent = ({
   oldValue,
   isInfoLabel = false
 }) => {
+  const [showAssessmentPop, setShowAssesmentPop] = useState(false);
+  const [selectedAssessmentYear, setSelectedAssessmentYear] = useState(null);
   const [showSummary, setShowSummary] = useState(false);
   const [selectedModes, setSelectedModes] = useState([]);
+  const [estimateData, setEstimateData] = useState("");
   const [chequeDetails, setChequeDetails] = useState({
     issueDate: "",
     chequeNumber: "",
@@ -730,19 +719,10 @@ const ApplicationDetailsContent = ({
   const [showUPIModal, setShowUPIModal] = useState(false);
   const [upiMobile, setUPIMobile] = useState("");
   const [paymentType, setPaymentType] = useState("full");
-
-  // const toggleMode = (mode) => {
-  //     setSelectedModes("");
-  //   const newSelection = selectedModes.includes(mode)
-  //     ? selectedModes.filter((m) => m !== mode)
-  //     : [...selectedModes, mode];
-
-  //   setSelectedModes(newSelection);
-
-  //   if (mode === "UPI" && !selectedModes.includes("UPI")) {
-  //     setShowUPIModal(true);
-  //   }
-  // };
+  const [formErrors, setFormErrors] = useState({});
+  const stateId = Digit.ULBService.getStateId();
+  const tenantIdUniq = Digit.ULBService.getCurrentTenantId();
+  const { isLoading: assessmentLoading, mutate: assessmentMutate } = Digit.Hooks.pt.usePropertyAssessment(tenantIdUniq);
   const toggleMode = (mode) => {
     // Always set only the current mode
     setSelectedModes([mode]);
@@ -759,17 +739,174 @@ const ApplicationDetailsContent = ({
     setShowUPIModal(false);
   };
 
+  const backToNew = () => {
+    // setShowPreviewButton(false);
+    setShowAssesmentPop(false);
+  }
+  const estimatePop = () => {
+    setShowAssesmentPop(true);
+  };
+
   console.log("applicationDetails", applicationDetails);
+
+  const units = applicationDetails?.applicationData?.units;
+
+  const formatYearRange = (fromYear, toYear) => {
+    if (fromYear === toYear) return fromYear;
+
+    const start = fromYear?.split("-")[0];         // "2023"
+    const end = toYear?.split("-")[1];             // "25"
+    return `${start}-${end}`;                      // "2023-25"
+  };
+
+const yearRange = Array.isArray(units) && units.length > 0
+  ? units[0].toYear
+  : "N/A";
+
+
+  console.log(yearRange);
+  // Output: "2024-25 to 2024-25"
+
   const { t } = useTranslation();
+  let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+
+  const tenantId = userInfo1?.tenantId;
+  const {
+    isLoading: ptCalculationEstimateLoading,
+    data: ptCalculationEstimateData,
+    mutate: ptCalculationEstimateMutate,
+    error,
+  } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
+  const handleEstimate = () => {
+    // const errors = {};
+    // if (!selectedAssessmentYear) {
+    //   errors.selectedAssessmentYear = "Assessment year is required.";
+    // }
+    // setFormErrors(errors);
+    const payload = {
+      Assessment: {
+        financialYear: yearRange,
+        propertyId: applicationData?.propertyId,
+        tenantId: "pg.citya",
+        source: "MUNICIPAL_RECORDS",
+        channel: "CITIZEN",
+        assessmentDate: Date.now(),
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        authToken: userInfo1?.authToken || "default-token",
+        userInfo: {
+          id: userInfo1?.id || 1,
+          uuid: userInfo1?.uuid || "default-uuid",
+          userName: userInfo1?.userName || "defaultuser",
+          name: userInfo1?.name || "Default User",
+          mobileNumber: userInfo1?.mobileNumber || "9999999999",
+          emailId: userInfo1?.emailId || "default@example.com",
+          locale: userInfo1?.locale || "en_IN",
+          type: userInfo1?.type || "CITIZEN",
+          roles: userInfo1?.roles || [],
+          active: userInfo1?.active !== false,
+          tenantId: userInfo1?.tenantId || "pg.citya",
+          permanentCity: userInfo1?.permanentCity || "pg.citya"
+        },
+        msgId: "1749797151521|en_IN",
+        plainAccessRequest: {}
+      }
+    };
+
+    ptCalculationEstimateMutate(payload, {
+      onSuccess: (data) => {
+
+        setEstimateData(data);
+      },
+      onError: (error) => {
+        alert("Estimate error:", error);
+      },
+    });
+  };
+  const handleAssessment = () => {
+    const payload = {
+      Assessment: {
+        financialYear: yearRange,
+        propertyId: applicationData?.propertyId,
+        tenantId: "pg.citya",
+        source: "MUNICIPAL_RECORDS",
+        channel: "CFC_COUNTER",
+        assessmentDate: Date.now(),
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        authToken: userInfo1?.authToken || "default-token",
+        userInfo: {
+          id: userInfo1?.id || 1,
+          uuid: userInfo1?.uuid || "default-uuid",
+          userName: userInfo1?.userName || "defaultuser",
+          name: userInfo1?.name || "Default User",
+          mobileNumber: userInfo1?.mobileNumber || "9999999999",
+          emailId: userInfo1?.emailId || "default@example.com",
+          locale: userInfo1?.locale || "en_IN",
+          type: userInfo1?.type || "CITIZEN",
+          roles: userInfo1?.roles || [],
+          active: userInfo1?.active !== false,
+          tenantId: userInfo1?.tenantId || "pg.citya",
+          permanentCity: userInfo1?.permanentCity || "pg.citya"
+        },
+        msgId: "1749797151521|en_IN",
+        plainAccessRequest: {}
+      }
+    };
+
+    assessmentMutate(payload, {
+      onError: (error, variables) => {
+        
+      },
+      onSuccess: (data, variables) => {
+       console.log("Assessment data:", data);
+      }
+    });
+  }
+  const fetchBillParams = { consumerCode: applicationData?.propertyId };
+// let ptCalculationEstimateDataCopy;
+
+// if (!ptCalculationEstimateDataCopy)
+//   ptCalculationEstimateDataCopy = ptCalculationEstimateData?.Calculation?.[0];
+
+const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
+  {
+    businessService: "PT",
+    ...fetchBillParams,
+    tenantId: tenantId,
+  },
+  {
+    enabled: !!applicationData?.propertyId, // cleaner boolean check
+  }
+);
+
+// useEffect to react to fetched bill
+
+
+useEffect(() => {
+  if (paymentDetails?.data) {
+    // perform actions when bill is fetched
+    console.log("Bill fetched:", paymentDetails.data);
+    // you can trigger further actions here
+  }
+}, [paymentDetails?.data]);
+  useEffect(() => {
+    if (yearRange && applicationData?.propertyId) {
+      handleEstimate();
+      handleAssessment();
+    }
+  }, [yearRange, applicationData?.propertyId]);
 
   return (
 
     <div>
       {/* Consumer Details */}
       <div style={styles.section}>
-        <div style={styles.heading}>Consumer Details</div>
+        <div style={styles.assessmentStyle}>Consumer Details</div>
         <div style={styles.row}>
-       
+
 
           <div style={styles.column}>
             <div style={styles.label}>Owner Name(English)</div>
@@ -781,7 +918,7 @@ const ApplicationDetailsContent = ({
             />
           </div>
 
-        
+
 
 
           <div style={styles.column}>
@@ -794,8 +931,8 @@ const ApplicationDetailsContent = ({
             />
           </div>
 
-        
-  <div style={styles.column}>
+
+          <div style={styles.column}>
             <div style={styles.label}>Mobile No.</div>
             <input
               type="text"
@@ -858,115 +995,119 @@ const ApplicationDetailsContent = ({
         </div>
       </div>
 
+      <div style={styles.section}>
+        {applicationDetails?.applicationDetails?.map((detail, index) => (
+          <>
 
-      {applicationDetails?.applicationDetails?.map((detail, index) => (
-        <>
+            {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
 
-          {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
-
-        </>
-      ))}
-
-      {/* Property Area Details */}
-   <div style={styles.section}>
-  <div style={styles.heading}>Property Area Details</div>
-  <div style={{ borderRadius: "16px", overflow: "hidden" }}>
-    <table style={styles.table}>
-      <thead>
-        <tr>
-          {[
-            "Usage Type",
-            "Usage Factor",
-            "Floor",
-            "Construction Type",
-            "Area (Sq feet)",
-            "Rate",
-            "ALV",
-            "Discount",
-            "TPV"
-          ].map((head, i) => (
-            <th key={i} style={styles.th}>
-              {head}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {applicationData?.units?.map((unit, index) => (
-          <tr key={index}>
-            <td style={styles.td}>{unit.usageCategory || "N/A"}</td>
-            <td style={styles.td}>1.0</td>
-            <td style={styles.td}>{unit.floorNo || "N/A"}</td>
-            <td style={styles.td}>{unit.constructionType || "RCC"}</td>
-            <td style={styles.td}>{unit.constructionDetail?.builtUpArea || "N/A"}</td>
-            <td style={styles.td}>10</td>
-            <td style={styles.td}>1000</td>
-            <td style={styles.td}>0</td>
-            <td style={styles.td}>1000</td>
-          </tr>
+          </>
         ))}
-      </tbody>
-    </table>
-  </div>
-</div>
+      </div>
+      {/* Property Area Details */}
+      <div style={styles.section}>
+        <div style={styles.assessmentStyle}>Property Area Details</div>
+        <div style={{ borderRadius: "16px", overflow: "hidden" }}>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                {[
+                  "Usage Type",
+                  "Usage Factor",
+                  "Floor",
+                  "Construction Type",
+                  "Area (Sq feet)",
+                  "Rate",
+                  "ALV",
+                  "Discount",
+                  "TPV"
+                ].map((head, i) => (
+                  <th key={i} style={styles.th}>
+                    {head}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {estimateData?.Calculation?.[0]?.propertyFYDetails?.map((detail, index) => (
+                <tr key={index}>
+                  <td style={styles.td}>{detail.usageType || "N/A"}</td>
+                  <td style={styles.td}>{detail.usageFactor || "1.0"}</td>
+                  <td style={styles.td}>{detail.floorNo || "N/A"}</td>
+                  <td style={styles.td}>{detail.constructionType || "RCC"}</td>
+                  <td style={styles.td}>{detail.area || "N/A"}</td>
+                  <td style={styles.td}>{detail.factor || "N/A"}</td>
+                  <td style={styles.td}>{detail.alv || 0}</td>
+                  <td style={styles.td}>0</td> {/* Assuming Discount not provided */}
+                  <td style={styles.td}>{detail.tpv || 0}</td>
+                </tr>
+              ))}
+            </tbody>
 
-{/* Tax Summary */}
-<div style={styles.section}>
-  <div style={styles.heading}>Tax Summary</div>
-  <div style={{ borderRadius: "16px", overflow: "hidden" }}>
-    <table style={styles.table}>
-      <thead>
-        <tr>
-          {[
-            "Year",
-            "ALV",
-            "TPV",
-            "Sampatti Kar",
-            "Samekit Kar",
-            "Shiksha Upkar",
-            "Jal Abhikar",
-            "Jal Nikas Kar",
-            "Nagariya Vikas Upkar",
-            "Seva Shulk",
-            "Current Amount",
-            "Rebate",
-            "Penalty",
-            "Net Tax"
-          ].map((head, i) => (
-            <th key={i} style={styles.th}>
-              {head}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style={styles.td}>2025</td>
-          <td style={styles.td}>1000</td>
-          <td style={styles.td}>1000</td>
-          <td style={styles.td}>500</td>
-          <td style={styles.td}>50</td>
-          <td style={styles.td}>10</td>
-          <td style={styles.td}>5</td>
-          <td style={styles.td}>15</td>
-          <td style={styles.td}>8</td>
-          <td style={styles.td}>2</td>
-          <td style={styles.td}>1590</td>
-          <td style={styles.td}>0</td>
-          <td style={styles.td}>0</td>
-          <td style={styles.td}>1590</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+          </table>
+        </div>
+      </div>
+
+      {/* Tax Summary */}
+      <div style={styles.section}>
+        <div style={styles.assessmentStyle}>Tax Summary</div>
+        <div style={{ borderRadius: "16px", overflow: "hidden" }}>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                {[
+                  "Year",
+                  "ALV",
+                  "TPV",
+                  "Sampatti Kar",
+                  "Samekit Kar",
+                  "Shiksha Upkar",
+                  "Jal Abhikar",
+                  "Jal Nikas Kar",
+                  "Nagariya Vikas Upkar",
+                  "Seva Shulk",
+                  "Current Amount",
+                  "Rebate",
+                  "Penalty",
+                  "Net Tax"
+                ].map((head, i) => (
+                  <th key={i} style={styles.th}>
+                    {head}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {estimateData?.Calculation?.[0]?.propertyFYTaxSummaries?.map((summary, index) => (
+                <tr key={index}>
+                  <td style={styles.td}>{summary.year}</td>
+                  <td style={styles.td}>{summary.alv}</td>
+                  <td style={styles.td}>{summary.tpv}</td>
+                  <td style={styles.td}>{summary.propertyTax}</td>
+                  <td style={styles.td}>{summary.samekit}</td>
+                  <td style={styles.td}>{summary.educationCess}</td>
+                  <td style={styles.td}>{summary.jalKar}</td>
+                  <td style={styles.td}>{summary.jalNikas}</td>
+                  <td style={styles.td}>{summary.urbanTax}</td>
+                  <td style={styles.td}>{summary.sevaKar}</td>
+                  <td style={styles.td}>{summary.totalTax}</td>
+                  <td style={styles.td}>{summary.rebate}</td>
+                  <td style={styles.td}>{summary.penalty}</td>
+                  <td style={styles.td}>{summary.netTax}</td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
 
 
       {/* Payment Section */}
       <div style={styles.section}>
 
 
-        <div style={styles.heading}>Payment Amount</div>
+        <div style={styles.assessmentStyle}>Payment Amount</div>
 
         {/* Payment Type Toggle */}
         <div style={{ marginTop: "16px", display: "flex", gap: "20px", alignItems: "center" }}>
@@ -1283,25 +1424,60 @@ const ApplicationDetailsContent = ({
               </button>
             </div>
           </div>)}
-
-      </div>
-      <div style={{ marginTop: "20px" }}>
-        <div style={styles.label}>
-          Remarks <span style={{ color: "red" }}>*</span>
+        <div style={{ marginTop: "20px" }}>
+          <div style={styles.label}>
+            Remarks <span style={{ color: "red" }}>*</span>
+          </div>
+          <textarea
+            rows="3"
+            style={styles.remarkBox}
+          />
         </div>
-        <textarea
-          rows="3"
-          style={styles.remarkBox}
-        />
-      </div>
-      <div style={{ marginTop: "30px" }}>
+        {/* <div style={{ marginTop: "30px" }}>
         <button
           style={styles.paymentButton}
-          onClick={() => setShowConfirmation(true)}
+          onClick={() => estimatePop()}
         >
-          Collect Payment
+          Assessment
         </button>
+      </div> */}
+        <div style={{ marginTop: "30px" }}>
+          <button
+            style={styles.paymentButton}
+            onClick={() => setShowConfirmation(true)}
+          >
+            Collect Payment
+          </button>
+        </div>
       </div>
+
+      {/* {showAssessmentPop && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+
+            <div style={styles.poppinsLabel}>
+              {t("Select Assessment Year")} <span className="mandatory" style={styles.mandatory}>*</span>
+            </div>
+            <Dropdown
+              style={styles.widthInput300Ass}
+              t={t}
+              option={assessmentYears} // dynamic list
+              selected={assessmentYears.find(item => item.code === selectedAssessmentYear?.code)}
+              select={(value) => setSelectedAssessmentYear(value)}
+              optionKey="name"
+              placeholder={t("Select")}
+            />
+            {formErrors.selectedAssessmentYear && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors.selectedAssessmentYear}</p>
+            )}
+            <div style={{ display: "flex", gap: "40px" }}>
+              <SubmitBar label={t("Back")} onSubmit={backToNew} style={{ background: "#6b133f" }} />
+              <SubmitBar label={t("Confirm")} onSubmit={handleEstimate} style={{ background: "#6b133f" }} />
+            </div>
+
+          </div>
+        </div>
+      )} */}
     </div>
   );
 };

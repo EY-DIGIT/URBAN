@@ -121,7 +121,7 @@ const AttachmentsSection = ({ t, styles, handleFileChange, formErrors }) => {
       width="16"
       height="16"
       fill="none"
-      stroke="#1E509E"
+      stroke="#6b133f"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

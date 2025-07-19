@@ -53,6 +53,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     ["/digit-ui/employee/pt/new-application"]: "ES_TITLE_NEW_PROPERTY_APPLICATION",
     ["/digit-ui/employee/pt/search"]: "PT_COMMON_SEARCH_PROPERTY_SUB_HEADER",
     ["/digit-ui/employee/pt/application-search"]: "ES_COMMON_APPLICATION_SEARCH",
+     ["/digit-ui/employee/pt/PreviewDemand"]: "PreviewDemand",
   };
 
   const getBreadCrumb = () => {
@@ -64,6 +65,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("digit-ui/employee/pt/property-mutate-docs-required")) return t("PT_REQIURED_DOC_TRANSFER_OWNERSHIP");
     else if (location.pathname.includes("/digit-ui/employee/pt/property-mutate/")) return t("ES_TITLE_MUTATE_PROPERTY");
     else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
+    else if (location.pathname.includes("/digit-ui/employee/pt/PreviewDemand/")) return t("PreviewDemand");
   };
 
   const PTBreadCrumbs = ({ location }) => {
@@ -87,6 +89,11 @@ const EmployeeApp = ({ path, url, userType }) => {
         content: t("PT_COMMON_SEARCH_PROPERTY_SUB_HEADER"),
         show: location.pathname.includes("/pt/search") || location.pathname.includes("/pt/ptsearch") ? true : false,
       },
+      //   {
+      //   path: "/digit-ui/employee/pt/PreviewDemand",
+      //   content: t("Preview Demand"),
+      //   show: location.pathname.includes("/pt/PreviewDemand") || location.pathname.includes("/pt/ptPreviewDemand") ? true : false,
+      // },
       {
         path: "digit-ui/employee/pt/property-mutate-docs-required",
         content: t("PT_REQIURED_DOC_TRANSFER_OWNERSHIP"),

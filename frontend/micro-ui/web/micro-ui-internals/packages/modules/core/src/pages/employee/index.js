@@ -36,7 +36,7 @@
 
 //   const titleStyle = {
 //     fontWeight: "bold",
-//     color: "#1a5fc2",
+//     color: "#6b133f",
 //     marginBottom: "8px",
 //   };
 
@@ -273,7 +273,7 @@ const columnStyle = {
 
 const titleStyle = {
   fontWeight: "bold",
-  color: "#1a5fc2",
+  color: "#6b133f",
   marginBottom: "8px",
 };
 
