@@ -1081,7 +1081,7 @@ public class EstimationService {
 					ownerTypeMap.get(owner.getOwnerType()));
 				
 			
-			BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, 2);
+			
 			if (null != applicableOwnerType) {
 				
 				if (applicableOwnerType.get("code").toString().startsWith("CENTGOV")) {
@@ -1093,7 +1093,7 @@ public class EstimationService {
 					taxAmt = propertyFYTaxSummary.getPropertyTax();
 				   
 				}
-
+				BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, 2);
 				BigDecimal currentExemption = mDataService.calculateApplicables(share,
 						applicableOwnerType.get(EXEMPTION_FIELD_NAME));
 
