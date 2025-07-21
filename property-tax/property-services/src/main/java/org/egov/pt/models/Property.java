@@ -111,6 +111,9 @@ public class Property extends PropertyInfo {
 	
 	@JsonProperty("updateIMC")
 	private boolean updateIMC;
+	
+	@JsonProperty("imcPropertyId")
+	private String imcPropertyId;
 
 
 	@Builder
@@ -119,7 +122,7 @@ public class Property extends PropertyInfo {
 			String propertyType, String ownershipCategory, List<OwnerInfo> owners, Institution institution,
 			CreationReason creationReason, String usageCategory, Long noOfFloors, Double landArea,
 			BigDecimal superBuiltUpArea, Source source, Channel channel, List<Document> documents, List<Unit> units,
-			JsonNode additionalDetails, AuditDetails auditDetails, ProcessInstance workflow,boolean updateIMC) {
+			JsonNode additionalDetails, AuditDetails auditDetails, ProcessInstance workflow,boolean updateIMC,String imcPropertyId) {
 		super(id, propertyId, surveyId, linkedProperties, tenantId, accountId, oldPropertyId, status, address);
 		this.acknowldgementNumber = acknowldgementNumber;
 		this.propertyType = propertyType;
@@ -139,6 +142,7 @@ public class Property extends PropertyInfo {
 		this.auditDetails = auditDetails;
 		this.workflow = workflow;
 		this.updateIMC =updateIMC;
+		this.imcPropertyId =imcPropertyId;
 	}
 
 	public Property addOwnersItem(OwnerInfo ownersItem) {

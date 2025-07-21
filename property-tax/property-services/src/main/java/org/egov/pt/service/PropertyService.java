@@ -96,9 +96,7 @@ public class PropertyService {
 
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
-		String tenantId = request.getProperty().getTenantId();
 		userService.createUser(request);
-		boolean flag = config.getIsWorkflowEnabled();
 		if (config.getIsWorkflowEnabled()
 				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD) && !request.getProperty().isUpdateIMC()) {
 			wfService.updateWorkflow(request, request.getProperty().getCreationReason());
@@ -147,11 +145,42 @@ public class PropertyService {
 
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
-		else if(isNumberDifferent)
+		else if (isNumberDifferent)
 			processMobileNumberUpdate(request, propertyFromSearch);
-			
-		else
+		 else
 			processPropertyUpdate(request, propertyFromSearch);
+
+		request.getProperty().setWorkflow(null);
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+	}
+	
+	/**
+	 * Updates the property Content
+	 *
+	 * handles multiple processes
+	 *
+	 * Update Content
+	 *
+	 * Mutation
+	 *
+	 * @param request PropertyRequest containing list of properties to be update
+	 * @return List of updated properties
+	 */
+	public Property updatePropertyContent(PropertyRequest request) {
+
+		Property propertyFromRequest = request.getProperty();
+		PropertyCriteria criteria = propertyValidator.getPropertyCriteriaForSearch(request);
+		List<Property> propertiesFromSearchResponse = searchProperty(criteria, request.getRequestInfo());
+		Property propertyFromSearch = unmaskingUtil.getPropertyUnmasked(request,propertyFromRequest,propertiesFromSearchResponse);
+		propertyValidator.validateCommonUpdateInformation(request, propertyFromSearch);
+
+		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
+		
+		boolean isNumberDifferent = checkIsRequestForMobileNumberUpdate(request, propertyFromSearch);
+
+		processPropertyContentUpdate(request, propertyFromSearch);
 
 		request.getProperty().setWorkflow(null);
 
@@ -222,8 +251,9 @@ public class PropertyService {
 			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
 		}
 
-
-		enrichmentService.enrichAssignes(request.getProperty());
+		if (!request.getProperty().isUpdateIMC()) {
+			enrichmentService.enrichAssignes(request.getProperty());
+		}
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
@@ -235,13 +265,17 @@ public class PropertyService {
 
 		if(config.getIsWorkflowEnabled()) {
 
-			State state = wfService.updateWorkflow(request, CreationReason.UPDATE);
+			State state;
+			if (request.getProperty().isUpdateIMC()) {
+				state = wfService.updateWorkflow(request, CreationReason.CREATE);
+			} else {
+				state = wfService.updateWorkflow(request, CreationReason.UPDATE);
+			}
 			
-			if (request.getProperty().isUpdateIMC() && state.getIsStartState() == true
-					&& propertyFromSearch.getStatus().equals(Status.SAVE)) {
+			if (request.getProperty().isUpdateIMC() && (propertyFromSearch.getStatus().equals(Status.SAVE))) {
 
 				propertyFromSearch.setStatus(Status.INWORKFLOW);
-				request.getProperty().setStatus(Status.INWORKFLOW);
+				//request.getProperty().setStatus(Status.INWORKFLOW);
 				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
 			}
@@ -574,5 +608,106 @@ public class PropertyService {
         return count;
 	}
 	
+	
+	
+	private void processPropertyUpdateIMC(PropertyRequest request, Property propertyFromSearch) {
 
+		String tenantId = request.getProperty().getTenantId();
+		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
+		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
+			userService.createUser(request);
+		} else if (request.getProperty().getSource().toString().equals("WS")
+				&& CreationReason.UPDATE.equals(request.getProperty().getCreationReason())) {
+			userService.updateUser(request);
+		} else {
+			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
+		}
+
+
+		enrichmentService.enrichAssignes(request.getProperty());
+		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
+
+		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
+				.requestInfo(request.getRequestInfo())
+				.property(propertyFromSearch)
+				.build();
+
+		util.mergeAdditionalDetails(request, propertyFromSearch);
+
+		if(config.getIsWorkflowEnabled()) {
+
+			if (request.getProperty().isUpdateIMC() && ((request.getProperty().getStatus().equals(Status.SAVE))
+					|| request.getProperty().getStatus().equals(Status.INWORKFLOW))
+							&& !(request.getProperty().getWorkflow().getAction().equals("APPROVE")))   {
+
+				propertyFromSearch.setStatus(Status.INWORKFLOW);
+				request.getProperty().setStatus(Status.INWORKFLOW);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+			}
+			else if ( request.getProperty().getStatus().equals(Status.INWORKFLOW) && request.getProperty().getWorkflow().getAction().equals("APPROVE")){
+				/*
+				 * If property is In Workflow then continue
+				 */
+				request.getProperty().setStatus(Status.ACTIVE);
+				//String imcPropertyId = util.getIdList(request.getRequestInfo(), tenantId, config.getPropertyIdGenName(), config.getPropertyIdGenFormat(), 1).get(0);
+				// Prepend "IMC-" prefix
+				String imcPropertyId = "IMC-" + request.getProperty().getPropertyId();
+				request.getProperty().setImcPropertyId(imcPropertyId);
+				log.info("Property Id Generated after Approved ::"+imcPropertyId);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+			}
+
+		} else {
+
+			/*
+			 * If no workflow then update property directly with mutation information
+			 */
+			producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
+			producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+		}
+	}
+	
+	private void processPropertyContentUpdate(PropertyRequest request, Property propertyFromSearch) {
+
+		String tenantId = request.getProperty().getTenantId();
+		propertyValidator.validateRequestForContentUpdate(request, propertyFromSearch);
+//		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
+//			userService.createUser(request);
+//		} else 
+//			if (request.getProperty().getSource().toString().equals("WS")
+//				&& CreationReason.UPDATE.equals(request.getProperty().getCreationReason())) {
+//		userService.updateUser(request);
+//		} else {
+//			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
+//		}
+
+
+		//enrichmentService.enrichAssignes(request.getProperty());
+		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
+
+		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
+				.requestInfo(request.getRequestInfo())
+				.property(propertyFromSearch)
+				.build();
+
+		util.mergeAdditionalDetails(request, propertyFromSearch);
+
+		if(config.getIsWorkflowEnabled()) {
+
+
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+
+		} else {
+
+			/*
+			 * If no workflow then update property directly with mutation information
+			 */
+			producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
+			producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
+		}
+	}
+	
 }

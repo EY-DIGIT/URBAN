@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -160,6 +161,17 @@ public class PropertyController {
         List<Property> properties = propertyEncryptionService.updateOldData(propertyCriteria, requestInfoWrapper.getRequestInfo());
         PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
                         responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @PutMapping("/_update")
+    public ResponseEntity<PropertyResponse> updateContent(@Valid @RequestBody PropertyRequest propertyRequest) {
+        Property property = propertyService.updatePropertyContent(propertyRequest);
+        ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
+        PropertyResponse response = PropertyResponse.builder()
+                .properties(Arrays.asList(property))
+                .responseInfo(resInfo)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

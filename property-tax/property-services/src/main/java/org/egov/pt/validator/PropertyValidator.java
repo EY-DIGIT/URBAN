@@ -164,16 +164,19 @@ public class PropertyValidator {
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
 		
 		if (configs.getIsWorkflowEnabled()) {
-
-			if (request.getProperty().getWorkflow() == null)
-				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
 			
-			// ******* Update If Condition after Status change = SAVE
-			if (property.isUpdateIMC() && property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState())){
-				//	&& propertyFromSearch.getStatus().equals(Status.SAVE)) {
+			if ((property.isUpdateIMC() &&  propertyFromSearch.getStatus().equals(Status.SAVE)) || request.getProperty().getWorkflow() == null){
 				fieldsUpdated.remove("creationReason");
 				isstateUpdatable = true;
 			}
+			else if (request.getProperty().getWorkflow() == null)
+				throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
+			
+			// ******* Update If Condition after Status change = SAVE
+//			if (property.isUpdateIMC() &&  propertyFromSearch.getStatus().equals(Status.SAVE)){
+//				fieldsUpdated.remove("creationReason");
+//				isstateUpdatable = true;
+//			}
 			/*
 			 * update and mutation open state are same currently - Creation reason will change for begining of a workflow
 			 */
@@ -188,8 +191,62 @@ public class PropertyValidator {
 						property.getAcknowldgementNumber());
 				BusinessService businessService = workflowService.getBusinessService(property.getTenantId(),
 						property.getWorkflow().getBusinessService(), request.getRequestInfo());
-				isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
+				isstateUpdatable = true;
+				//isstateUpdatable = workflowService.isStateUpdatable(currentState.getState(), businessService);
 			}
+
+		} else {
+			/*
+			 * Creation reason will always change if worklfow is disabled
+			 */
+			isstateUpdatable = true;
+			fieldsUpdated.remove("creationReason");
+		}
+
+		// third variable is needed only for mutation
+		List<String> objectsAdded = diffService.getObjectsAdded(property, propertyFromSearch, "");
+		objectsAdded.removeAll(Arrays.asList("TextNode", "Role", "NullNode", "LongNode", "JsonNodeFactory", "IntNode",
+				"ProcessInstance"));
+
+		if (!isstateUpdatable && (!CollectionUtils.isEmpty(objectsAdded) || !CollectionUtils.isEmpty(fieldsUpdated)))
+			throw new CustomException("EG_PT_WF_UPDATE_ERROR",
+					"The current state of workflow does not allow changes to property");
+		
+	    
+        /*
+         * Blocking owner changes in update flow
+         */
+		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
+		List<String> uuidsNotFound = new ArrayList<>();
+
+		if (!CollectionUtils.isEmpty(uuidsNotFound))
+			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
+
+		if(searchOwnerUuids.size() != request.getProperty().getOwners().size())
+			errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR", "Update request cannot change owner Information please use mutation process");
+		
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+    }
+    
+  public void validateRequestForContentUpdate(PropertyRequest request, Property propertyFromSearch){ 
+    	
+    	Property property = request.getProperty();
+    	Map<String, String> errorMap = new HashMap<>();
+    	
+        if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
+            validateAssessees(request,propertyFromSearch, errorMap);
+
+        Boolean isstateUpdatable =  false;
+
+		// third variable is needed only for mutation
+		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
+		
+		if (configs.getIsWorkflowEnabled()) {
+
+			// ******* Update IDf Condition after Status change = SAVE
+				fieldsUpdated.remove("creationReason");
+				isstateUpdatable = true;
 
 		} else {
 			/*
