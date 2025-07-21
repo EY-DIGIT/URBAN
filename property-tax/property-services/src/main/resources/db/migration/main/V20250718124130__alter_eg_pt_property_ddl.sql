@@ -1,1 +1,0 @@
-ALTER TABLE public.eg_pt_property ADD column imcpropertyid varchar(128) NULL;
