@@ -113,6 +113,10 @@ public class PropertyService {
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(),request);
 		request.getProperty().setWorkflow(null);
+		
+		if(!request.getProperty().getStatus().equals(Status.ACTIVE)) {
+			request.getProperty().setPropertyId(null);
+		}
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
@@ -152,6 +156,10 @@ public class PropertyService {
 
 		request.getProperty().setWorkflow(null);
 
+		if(!request.getProperty().getStatus().equals(Status.ACTIVE)) {
+			request.getProperty().setPropertyId(null);
+		}
+		
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
 	}
@@ -183,6 +191,10 @@ public class PropertyService {
 		processPropertyContentUpdate(request, propertyFromSearch);
 
 		request.getProperty().setWorkflow(null);
+		
+		if(!request.getProperty().getStatus().equals(Status.ACTIVE)) {
+			request.getProperty().setPropertyId(null);
+		}
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
@@ -270,6 +282,10 @@ public class PropertyService {
 				state = wfService.updateWorkflow(request, CreationReason.CREATE);
 			} else {
 				state = wfService.updateWorkflow(request, CreationReason.UPDATE);
+			}
+			
+			if(request.getProperty().getPropertyId() == null) {
+				request.getProperty().setPropertyId(propertyFromSearch.getPropertyId());
 			}
 			
 			if (request.getProperty().isUpdateIMC() && (propertyFromSearch.getStatus().equals(Status.SAVE))) {
@@ -650,11 +666,6 @@ public class PropertyService {
 				 * If property is In Workflow then continue
 				 */
 				request.getProperty().setStatus(Status.ACTIVE);
-				//String imcPropertyId = util.getIdList(request.getRequestInfo(), tenantId, config.getPropertyIdGenName(), config.getPropertyIdGenFormat(), 1).get(0);
-				// Prepend "IMC-" prefix
-				String imcPropertyId = "IMC-" + request.getProperty().getPropertyId();
-				request.getProperty().setImcPropertyId(imcPropertyId);
-				log.info("Property Id Generated after Approved ::"+imcPropertyId);
 				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 				producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
 			}
@@ -694,6 +705,10 @@ public class PropertyService {
 
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 
+		if(request.getProperty().getPropertyId() == null) {
+			request.getProperty().setPropertyId(propertyFromSearch.getPropertyId());
+		}
+		
 		if(config.getIsWorkflowEnabled()) {
 
 
