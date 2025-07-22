@@ -114,9 +114,6 @@ public class PropertyService {
 		producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(),request);
 		request.getProperty().setWorkflow(null);
 		
-		if(!request.getProperty().getStatus().equals(Status.ACTIVE)) {
-			request.getProperty().setPropertyId(null);
-		}
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
@@ -156,9 +153,6 @@ public class PropertyService {
 
 		request.getProperty().setWorkflow(null);
 
-		if(!request.getProperty().getStatus().equals(Status.ACTIVE)) {
-			request.getProperty().setPropertyId(null);
-		}
 		
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
@@ -192,9 +186,6 @@ public class PropertyService {
 
 		request.getProperty().setWorkflow(null);
 		
-		if(!request.getProperty().getStatus().equals(Status.ACTIVE)) {
-			request.getProperty().setPropertyId(null);
-		}
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
