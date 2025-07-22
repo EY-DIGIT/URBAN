@@ -313,18 +313,26 @@ public class EstimationService {
 					 */
 
 					if (isResidential && isSelfOccupied && !isDharamShala) {
-						List<Object> pTaxCessMasterList = timeBasedExemptionMasterMap
-								.get(CalculatorConstants.PTAX_CESS_MASTER);
-						unit_PT_taxAmt = mDataService.getCess(unitTPV, assessmentYear, pTaxCessMasterList);
-						// Urban Cess
-						urbanCessMasterList = timeBasedExemptionMasterMap
-								.get(CalculatorConstants.URBAN_CESS_ONE_MASTER);
+
+					    if (isEligibleForPtaxCess(propertyFYDetails.getYear())) {
+					        List<Object> pTaxCessMasterList = timeBasedExemptionMasterMap
+					                .get(CalculatorConstants.PTAX_CESS_MASTER);
+					        unit_PT_taxAmt = mDataService.getCess(unitTPV, assessmentYear, pTaxCessMasterList);
+					    } else {
+					        unit_PT_taxAmt = unitTPV;
+					    }
+
+					    // Always apply this Urban Cess when self-occupied & residential and not Dharamshala
+					    urbanCessMasterList = timeBasedExemptionMasterMap
+					            .get(CalculatorConstants.URBAN_CESS_ONE_MASTER);
 
 					} else {
-						urbanCessMasterList = timeBasedExemptionMasterMap
-								.get(CalculatorConstants.URBAN_CESS_TWO_MASTER);
-						unit_PT_taxAmt = unitTPV;
+					    // In all other cases
+					    urbanCessMasterList = timeBasedExemptionMasterMap
+					            .get(CalculatorConstants.URBAN_CESS_TWO_MASTER);
+					    unit_PT_taxAmt = unitTPV;
 					}
+
 					if (unitUrbanCess != null) {
 						unitUrbanCess = mDataService.getCess(unitTPV, assessmentYear, urbanCessMasterList);
 					}
@@ -1651,5 +1659,45 @@ public class EstimationService {
 		}
 		return ownerInfo;
 	}
+	
+	/**
+	 * Determines eligibility for applying Property Tax Cess based on the assessment year.
+	 * 
+	 * <p>This method returns {@code true} if:
+	 * <ul>
+	 *   <li>The assessment year is before "2023-24", or</li>
+	 *   <li>The assessment year matches the current financial year (April to March)</li>
+	 * </ul>
+	 * 
+	 * <p>It returns {@code false} for:
+	 * <ul>
+	 *   <li>The financial years "2023-24" and "2024-25"</li>
+	 *   <li>Any future financial years beyond the current one</li>
+	 * </ul>
+	 *
+	 * @param assessmentYear the assessment year in format "YYYY-YY" (e.g., "2022-23")
+	 * @return {@code true} if eligible for cess logic, otherwise {@code false}
+	 */
+	
+	public boolean isEligibleForPtaxCess(String assessmentYear) {
+	    if (assessmentYear == null) return false;
+
+	    try {
+	        int inputStartYear = Integer.parseInt(assessmentYear.split("-")[0].trim());
+
+	        // Calculate current financial year start
+	        LocalDate today = LocalDate.now();
+	        int currentFYStart = today.getMonthValue() >= 4 ? today.getYear() : today.getYear() - 1;
+
+	        // Logic:
+	        // Return true if assessmentYear < 2023
+	        // OR if assessmentYear == current financial year
+	        return (inputStartYear < 2023) || (inputStartYear == currentFYStart);
+	    } catch (Exception e) {
+	        return false;
+	    }
+	}
+
+
 
 }
