@@ -165,7 +165,7 @@ public class PropertyController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    @PostMapping("/_updateContent")
+    @PostMapping("/content/_update")
     public ResponseEntity<PropertyResponse> updateContent(@Valid @RequestBody PropertyRequest propertyRequest) {
         Property property = propertyService.updatePropertyContent(propertyRequest);
         ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(propertyRequest.getRequestInfo(), true);
