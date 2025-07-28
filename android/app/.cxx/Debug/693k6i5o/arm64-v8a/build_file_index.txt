@@ -1,0 +1,2 @@
+/Users/ayushrajgupta/Desktop/Urban/node_modules/react-native-webview/android/build/generated/source/codegen/jni/CMakeLists.txt
+/Users/ayushrajgupta/Desktop/Urban/node_modules/react-native/ReactAndroid/cmake-utils/default-app-setup/CMakeLists.txt

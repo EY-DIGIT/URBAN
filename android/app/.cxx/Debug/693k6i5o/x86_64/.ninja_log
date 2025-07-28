@@ -1,0 +1,15 @@
+# ninja log v5
+55	16800	1753692270985539929	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/react/renderer/components/RNCWebViewSpec/Props.cpp.o	4029d2a5e55e45a2
+44	17596	1753692271796569002	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/react/renderer/components/RNCWebViewSpec/ComponentDescriptors.cpp.o	2af9afd3dd4bcaff
+49	15284	1753692269477407886	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/react/renderer/components/RNCWebViewSpec/EventEmitters.cpp.o	3d9b4355dec3d6ac
+37	13343	1753692267559715605	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/RNCWebViewSpec-generated.cpp.o	4251e76d519511b3
+60	12750	1753692266955083707	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/react/renderer/components/RNCWebViewSpec/RNCWebViewSpecJSI-generated.cpp.o	997984ba410c53af
+79	9871	1753692264096498227	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/react/renderer/components/RNCWebViewSpec/States.cpp.o	cf9eb08af5921c8a
+18331	18914	1753692273119417048	/Users/ayushrajgupta/Desktop/Urban/android/app/build/intermediates/cxx/Debug/693k6i5o/obj/x86_64/libappmodules.so	8adf08820da8f5fa
+78	1060	1753692903283802813	build.ninja	d5f99335b9386026
+1	115	0	/Users/ayushrajgupta/Desktop/Urban/android/app/.cxx/Debug/693k6i5o/x86_64/CMakeFiles/cmake.verify_globs	8bfef4dd665af742
+69	15097	1753692269316911905	RNCWebViewSpec_autolinked_build/CMakeFiles/react_codegen_RNCWebViewSpec.dir/react/renderer/components/RNCWebViewSpec/ShadowNodes.cpp.o	ff7ee3df69dbdaa5
+32	14958	1753692269168530620	CMakeFiles/appmodules.dir/OnLoad.cpp.o	e1c0a35b23e65fe8
+28	18331	1753692272531701419	CMakeFiles/appmodules.dir/Users/ayushrajgupta/Desktop/Urban/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	a91237186d36b1a
+1	33	0	/Users/ayushrajgupta/Desktop/Urban/android/app/.cxx/Debug/693k6i5o/x86_64/CMakeFiles/cmake.verify_globs	8bfef4dd665af742
+0	46	0	/Users/ayushrajgupta/Desktop/Urban/android/app/.cxx/Debug/693k6i5o/x86_64/CMakeFiles/cmake.verify_globs	8bfef4dd665af742
