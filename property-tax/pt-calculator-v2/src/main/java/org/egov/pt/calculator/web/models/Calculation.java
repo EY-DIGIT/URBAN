@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonPropertyOrder({"tenantId","totalAmount","taxAmount","exemption","rebate","exemption","penalty"})
+@JsonPropertyOrder({"tenantId","totalAmount","taxAmount","exemption","rebate","exemption","penalty","arrear","currentYearTax"})
 public class Calculation   {
 	
         @JsonProperty("serviceNumber")
@@ -58,5 +58,12 @@ public class Calculation   {
         List<PropertyFYDetails> propertyFYDetails;
         
         List<PropertyFYTaxSummary> propertyFYTaxSummaries;
+        
+        @JsonProperty("arrear")
+        private BigDecimal arrear;
+        
+        @JsonProperty("currentYearTax")
+        private BigDecimal currentYearTax;
+        
 }
 

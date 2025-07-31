@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -216,9 +218,9 @@ public class EstimationService {
 			
 			for (Unit unit : detail.getUnits()) {
 				
-				boolean isResidential = unit.getUsageCategoryMajor().equals("RESIDENTIAL");
-				boolean isSelfOccupied = unit.getOccupancyType().equals("SELFOCCUPIED");
-				boolean isOpenLand = unit.getConstructionType().equals("OPENLAND");
+				boolean isResidential = unit.getUsageCategoryMajor().equals(PT_TYPE_RESIDENTIAL);
+				boolean isSelfOccupied = unit.getOccupancyType().equals(PT_TYPE_SELFOCCUPIED);
+				boolean isOpenLand = unit.getConstructionType().equals(PT_TYPE_OPENLAND);
 				String ownerType = null;
 				Set<OwnerInfo> owners = detail.getOwners();
 				if(owners.size() == 1) {
@@ -550,6 +552,20 @@ public class EstimationService {
 		
 		BigDecimal payableTax = propertyTaxCess;
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
+		String ownerType = null;
+		Set<OwnerInfo> owners = detail.getOwners();
+		if(owners.size() == 1) {
+			OwnerInfo first = owners.iterator().next();
+		     ownerType = first.getOwnerType(); 
+		}
+		
+		if(ownerType != null && ownerType.equalsIgnoreCase("WIDOWSMINORSHANDICAP")) {
+			TPV = TPV.subtract(BigDecimal.valueOf(12000));
+			if (TPV.compareTo(BigDecimal.ZERO) < 0) {
+			    TPV = BigDecimal.ZERO;
+			}
+		}
+		  
 
 		List<Object> taxSlabList = timeBasedExemeptionMasterMap.get(CalculatorConstants.TAX_SLAB_MASTER);
 
@@ -562,12 +578,11 @@ public class EstimationService {
 				// taxes
 				// ***** Gaurav Tyagi
 
-				estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ALV).estimateAmount(ALV.setScale(2, 2)).build());
-				estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TPV).estimateAmount(TPV.setScale(2, 2)).build());
 				estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_PROPERTY_TAX)
 						.estimateAmount(propertyTaxCess.setScale(2, 2)).build());
 				propertyTaxSummary.setPropertyTax(propertyTaxCess.setScale(2, 2));
 				payableTax = payableTax.add(propertyTaxCess);
+				
 				// Sanitation Cess
 				List<Object> senitationCessMasterList = timeBasedExemeptionMasterMap
 						.get(CalculatorConstants.SANITATION_CESS_MASTER);
@@ -621,6 +636,9 @@ public class EstimationService {
 				propertyTaxSummary.setPropertyTax(BigDecimal.ZERO);
 				propertyTaxSummary.setSamekit(senitationCess);
 				propertyTaxSummary.setUrbanTax(BigDecimal.ZERO);
+				propertyTaxSummary.setEducationCess(BigDecimal.ZERO);
+				propertyTaxSummary.setJalKar(BigDecimal.ZERO);
+				propertyTaxSummary.setJalNikas(BigDecimal.ZERO);
 			}
 		}
 			
@@ -648,10 +666,17 @@ public class EstimationService {
 				.get(FINANCIALYEAR_MASTER_KEY);
 		
 		// owner exemption
-		BigDecimal userExemption = getExemption(detail.getOwners(), payableTax, propertyTaxSummary.getYear(),
-				propertyBasedExemptionMasterMap, propertyTaxSummary).setScale(2, 2).negate();
-		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_OWNER_EXEMPTION).estimateAmount(userExemption).build());
-		if(userExemption != null && userExemption.compareTo(BigDecimal.ZERO) != 0) {
+		List<TaxHeadEstimate> updatedEstimates = getExemption(detail.getOwners(), payableTax,
+				propertyBasedExemptionMasterMap, propertyTaxSummary, estimates);
+		boolean isOwnerExemptionZero = updatedEstimates.stream()
+			    .filter(e -> "PT_OWNER_EXEMPTION".equalsIgnoreCase(e.getTaxHeadCode()))
+			    .anyMatch(e -> e.getEstimateAmount().compareTo(BigDecimal.ZERO) == 0);
+		if(updatedEstimates!= null ) {
+			estimates.clear();                
+			estimates.addAll(updatedEstimates);
+			
+		}
+		if(!isOwnerExemptionZero) {
 			payableTax = propertyTaxSummary.getTotalTax().setScale(0, RoundingMode.HALF_UP).setScale(2);
 		}
 
@@ -689,7 +714,6 @@ public class EstimationService {
 			propertyTaxSummary.setNetTax(propertyTaxSummary.getTotalTax().setScale(0, RoundingMode.HALF_UP).setScale(2));
 		}
 		
-
 		// AdHoc Values (additional rebate or penalty manually entered by the employee)
 		if (null != detail.getAdhocPenalty())
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ADHOC_PENALTY)
@@ -704,8 +728,8 @@ public class EstimationService {
 	@SuppressWarnings("unchecked")
 	public static Integer getMaxRate(String zone, String usageType, String constructionType, List<Object> slabList) {
 
-		if(!usageType.equalsIgnoreCase("RESIDENTIAL"))
-			usageType = "NONRESIDENTIAL";
+		if(!usageType.equalsIgnoreCase(PT_TYPE_RESIDENTIAL))
+			usageType = PT_TYPE_NONRESIDENTIAL;
         for (Object slabObj : slabList) {
             Map<String, Object> slab = (Map<String, Object>) slabObj;
 
@@ -760,7 +784,25 @@ public class EstimationService {
 		String assessmentNumber = null != detail.getAssessmentNumber() ? detail.getAssessmentNumber()
 				: criteria.getAssessmentNumber();
 		String tenantId = null != property.getTenantId() ? property.getTenantId() : criteria.getTenantId();
-
+		
+		BigDecimal finalAmount = BigDecimal.ZERO;
+		BigDecimal finalTaxAmount = BigDecimal.ZERO;
+		BigDecimal arrear = BigDecimal.ZERO;
+		BigDecimal currentYearTax = BigDecimal.ZERO;
+		for(PropertyFYTaxSummary taxSummary : propertyFYTaxSummary) {
+			finalAmount = finalAmount.add(taxSummary.getTotalTax());
+			finalTaxAmount = finalTaxAmount.add(taxSummary.getNetTax());
+			if(Integer.parseInt(taxSummary.getYear().split("-")[0])<Integer.parseInt(assessmentYear.split("-")[0])) {
+				arrear = arrear.add(taxSummary.getNetTax());
+				
+			}else {
+				currentYearTax = currentYearTax.add(taxSummary.getNetTax());
+				
+			}
+		}
+		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_CURRENT_YEAR_TAX).estimateAmount(currentYearTax.setScale(2, 2)).build());
+		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ARREAR).estimateAmount(arrear.setScale(2, 2)).build());
+		
 		Map<String, Category> taxHeadCategoryMap = ((List<TaxHeadMaster>) masterMap.get(TAXHEADMASTER_MASTER_KEY))
 				.stream().collect(Collectors.toMap(TaxHeadMaster::getCode, TaxHeadMaster::getCategory));
 
@@ -780,11 +822,8 @@ public class EstimationService {
 			switch (category) {
 
 			case TAX:
-				if (estimate.getTaxHeadCode().equalsIgnoreCase(PT_TPV))
-					ptTax = ptTax.add(estimate.getEstimateAmount());
-				else if (estimate.getTaxHeadCode().equalsIgnoreCase(PT_ALV))
-					ALV = ALV.add(estimate.getEstimateAmount());
-				else
+				if (!estimate.getTaxHeadCode().equalsIgnoreCase(PT_CURRENT_YEAR_TAX) &&
+						!estimate.getTaxHeadCode().equalsIgnoreCase(PT_ARREAR))
 					taxAmt = taxAmt.add(estimate.getEstimateAmount());
 				break;
 
@@ -815,13 +854,7 @@ public class EstimationService {
 				rebate = rebate.add(decimalEstimate.getEstimateAmount());
 		}
 		
-		BigDecimal finalAmount = BigDecimal.ZERO;
-		BigDecimal finalTaxAmount = BigDecimal.ZERO;
 		
-		for(PropertyFYTaxSummary taxSummary : propertyFYTaxSummary) {
-			finalAmount = finalAmount.add(taxSummary.getTotalTax());
-			finalTaxAmount = finalTaxAmount.add(taxSummary.getNetTax());
-		}
 		
 		BigDecimal totalAmount = taxAmt.add(penalty).add(rebate).add(exemption);
 		// false in the argument represents that the demand shouldn't be updated from
@@ -839,7 +872,7 @@ public class EstimationService {
 	
 
 		  return Calculation.builder().totalAmount(finalAmount.subtract(collectedAmtForOldDemand)).taxAmount(finalTaxAmount)
-				.penalty(penalty).exemption(exemption).rebate(rebate).fromDate(criteria.getFromDate())
+				.penalty(penalty).exemption(exemption).rebate(rebate).arrear(arrear).currentYearTax(currentYearTax).fromDate(criteria.getFromDate())
 				.toDate(criteria.getToDate()).tenantId(tenantId).serviceNumber(property.getPropertyId())
 				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).propertyFYDetails(propertyFYDetails)
 				.propertyFYTaxSummaries(propertyFYTaxSummary).build();
@@ -1071,62 +1104,122 @@ public class EstimationService {
 	/**
 	 * Applies discount on Total tax amount OwnerType based on exemptions.
 	 */
-	private BigDecimal getExemption(Set<OwnerInfo> owners, BigDecimal taxAmt, String financialYear,
-			Map<String, Map<String, List<Object>>> propertyMasterMap, PropertyFYTaxSummary propertyFYTaxSummary) {
+	private List<TaxHeadEstimate> getExemption(Set<OwnerInfo> owners, BigDecimal taxAmt,
+	        Map<String, Map<String, List<Object>>> propertyMasterMap,
+	        PropertyFYTaxSummary propertyFYTaxSummary,
+	        List<TaxHeadEstimate> originalEstimates) {
 
-		Map<String, List<Object>> ownerTypeMap = propertyMasterMap.get(OWNER_TYPE_MASTER);
-		BigDecimal userExemption = BigDecimal.ZERO;
-		boolean centerGov = false;
-		final int userCount = owners.size();
+	    Map<String, List<Object>> ownerTypeMap = propertyMasterMap.get(OWNER_TYPE_MASTER);
+	    BigDecimal userExemption = BigDecimal.ZERO;
+	    final int userCount = owners.size();
 
+	    // List to return
+	    List<TaxHeadEstimate> taxEstimates = new ArrayList<>();
 
-		for (OwnerInfo owner : owners) {
+	    // Tax base mapping
+	    Map<String, Function<PropertyFYTaxSummary, BigDecimal>> taxSourceMap = Map.of(
+	        "TOTAL_TAX", PropertyFYTaxSummary::getTotalTax,
+	        "PROPERTY_TAX", PropertyFYTaxSummary::getPropertyTax,
+	        "ZERO", p -> BigDecimal.ZERO
+	    );
 
-			if (null == ownerTypeMap.get(owner.getOwnerType()))
-				continue;
+	    // Post-action logic for summary
+	    Map<String, BiConsumer<PropertyFYTaxSummary, BigDecimal>> postActionsMap = Map.of(
+	        "CENTER_GOV_RULE", (summary, exemption) -> {
+	            BigDecimal scaled = exemption.setScale(0, RoundingMode.HALF_UP).setScale(2);
+	            summary.setSevaKar(scaled);
+	            summary.setEducationCess(BigDecimal.ZERO);
+	            summary.setJalKar(BigDecimal.ZERO);
+	            summary.setJalNikas(BigDecimal.ZERO);
+	            summary.setPropertyTax(BigDecimal.ZERO);
+	            summary.setSamekit(BigDecimal.ZERO);
+	            summary.setUrbanTax(BigDecimal.ZERO);
+	            summary.setTotalTax(scaled);
+	        },
+	        "DEFAULT", (summary, exemption) -> {
+	        	if (exemption.compareTo(BigDecimal.ZERO) > 0) {
+	                BigDecimal reducedPropertyTax = summary.getPropertyTax().subtract(exemption);
+	                summary.setPropertyTax(reducedPropertyTax);
 
-			Map<String, Object> applicableOwnerType = mDataService.getApplicableMaster(financialYear,
-					ownerTypeMap.get(owner.getOwnerType()));
-				
-			
-			
-			if (null != applicableOwnerType) {
-				
-				if (applicableOwnerType.get("code").toString().startsWith("CENTGOV")) {
-				    taxAmt = propertyFYTaxSummary.getTotalTax();
-				    centerGov = true;
-				}  else if (applicableOwnerType.get("code").toString().equalsIgnoreCase("DHARAMSHALA")) {			   
-					taxAmt = BigDecimal.ZERO;
-				} else if(!applicableOwnerType.get("code").toString().startsWith("WIDOWSMINORSHANDICAP")){
-					taxAmt = propertyFYTaxSummary.getPropertyTax();
-				   
-				}
-				BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, 2);
-				BigDecimal currentExemption = mDataService.calculateApplicables(share,
-						applicableOwnerType.get(EXEMPTION_FIELD_NAME));
+	                summary.setTotalTax(summary.getTotalTax()
+	                    .subtract(reducedPropertyTax)
+	                    .setScale(0, RoundingMode.HALF_UP)
+	                    .setScale(2));
+	            }
+	        }
+	    );
 
-				userExemption = userExemption.add(currentExemption);
-				
-				if (centerGov) {
-					propertyFYTaxSummary.setSevaKar(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
-					propertyFYTaxSummary.setEducationCess(BigDecimal.ZERO);
-					propertyFYTaxSummary.setJalKar(BigDecimal.ZERO);
-					propertyFYTaxSummary.setJalNikas(BigDecimal.ZERO);
-					propertyFYTaxSummary.setPropertyTax(BigDecimal.ZERO);
-					propertyFYTaxSummary.setSamekit(BigDecimal.ZERO);
-					propertyFYTaxSummary.setUrbanTax(BigDecimal.ZERO);
-					propertyFYTaxSummary.setTotalTax(userExemption.setScale(0, RoundingMode.HALF_UP).setScale(2));
-				}else {
-					propertyFYTaxSummary.setTotalTax(propertyFYTaxSummary.getTotalTax().subtract(userExemption).setScale(0, RoundingMode.HALF_UP).setScale(2));
-					propertyFYTaxSummary.setPropertyTax(propertyFYTaxSummary.getPropertyTax().subtract(userExemption));
-				}
-			}
-		}
-		
-		
-		
-		return userExemption;
+	    for (OwnerInfo owner : owners) {
+	        if (ownerTypeMap.get(owner.getOwnerType()) == null)
+	            continue;
+
+	        Map<String, Object> applicableOwnerType = mDataService.getApplicableMaster(
+	            propertyFYTaxSummary.getYear(),
+	            ownerTypeMap.get(owner.getOwnerType()));
+
+	        if (applicableOwnerType != null) {
+	            String appliesOn = (String) applicableOwnerType.getOrDefault("appliesOn", "PROPERTY_TAX");
+	            Function<PropertyFYTaxSummary, BigDecimal> taxGetter =
+	                taxSourceMap.getOrDefault(appliesOn, PropertyFYTaxSummary::getPropertyTax);
+
+	            taxAmt = taxGetter.apply(propertyFYTaxSummary);
+	            BigDecimal share = taxAmt.divide(BigDecimal.valueOf(userCount), 2, RoundingMode.HALF_UP);
+
+	            BigDecimal currentExemption = mDataService.calculateApplicables(
+	                share, applicableOwnerType.get(EXEMPTION_FIELD_NAME));
+
+	            userExemption = userExemption.add(currentExemption);
+
+	            String postAction = (String) applicableOwnerType.get("postAction");
+	            String action = postAction != null ? postAction : "DEFAULT";
+
+	            postActionsMap.getOrDefault(action, postActionsMap.get("DEFAULT"))
+	                          .accept(propertyFYTaxSummary, userExemption);
+
+	            // Now build updated tax estimates using original list
+	            for (TaxHeadEstimate original : originalEstimates) {
+	                String code = original.getTaxHeadCode();
+	                Category category = original.getCategory();
+
+	                if ("CENTER_GOV_RULE".equalsIgnoreCase(action)) {
+	                    if ("PT_SERVICE_CHARGE".equalsIgnoreCase(code)) {
+	                        taxEstimates.add(TaxHeadEstimate.builder()
+	                            .taxHeadCode(code)
+	                            .estimateAmount(userExemption)
+	                            .category(category)
+	                            .build());
+	         
+	                    } else {
+	                        taxEstimates.add(TaxHeadEstimate.builder()
+	                            .taxHeadCode(code)
+	                            .estimateAmount(BigDecimal.ZERO)
+	                            .category(category)
+	                            .build());
+	                    } 
+	                } else {
+	                    // Default case — only modify PT_PROPERTY_TAX and PT_TOTAL_TAX
+	                    if ("PT_PROPERTY_TAX".equalsIgnoreCase(code)) {
+	                        BigDecimal reduced = original.getEstimateAmount().subtract(userExemption).max(BigDecimal.ZERO);
+	                        taxEstimates.add(TaxHeadEstimate.builder()
+	                            .taxHeadCode(code)
+	                            .estimateAmount(reduced)
+	                            .category(category)
+	                            .build());
+	                    } else {
+	                        // Pass through other heads untouched
+	                        taxEstimates.add(original);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    taxEstimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_OWNER_EXEMPTION).estimateAmount(userExemption).build());
+	    return taxEstimates;
 	}
+
+
+
+
 
 	/**
 	 * Returns the appropriate exemption object from the usage masters

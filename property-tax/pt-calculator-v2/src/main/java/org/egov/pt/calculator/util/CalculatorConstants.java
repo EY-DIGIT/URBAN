@@ -19,6 +19,10 @@ public class CalculatorConstants {
 	 */
 	
 	public static final String PT_TYPE_VACANT_LAND = "VACANT"; 
+	public static final String PT_TYPE_RESIDENTIAL = "RESIDENTIAL";
+	public static final String PT_TYPE_NONRESIDENTIAL = "NONRESIDENTIAL";
+	public static final String PT_TYPE_SELFOCCUPIED = "SELFOCCUPIED";
+	public static final String PT_TYPE_OPENLAND = "OPENLAND";
 	
 	/*
 	 * tax head codes constants
@@ -65,6 +69,10 @@ public class CalculatorConstants {
 	public static final String PT_TPV = "PT_TPV";
 	
 	public static final String PT_ALV = "PT_ALV";
+	
+	public static final String PT_CURRENT_YEAR_TAX = "PT_CURRENT_YEAR_TAX";
+	
+	public static final String PT_ARREAR = "PT_ARREAR";
 	//******
 
 	public static final String PT_ADHOC_PENALTY = "PT_ADHOC_PENALTY";
