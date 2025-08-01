@@ -294,6 +294,7 @@ public class PropertyValidator {
 		Property property = request.getProperty();
 		validateIds(request, errorMap);
 		validateMobileNumber(request, errorMap);
+		validateFields(request, errorMap);
 
 		
 		CreationReason reason = property.getCreationReason();
