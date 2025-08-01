@@ -313,4 +313,14 @@ public class PropertyRepository {
 		});
 	}
 	
+	public int deleteUnits(List<String> units) {
+		String query = queryBuilder.deleteUnits(units);
+		int update = 0;
+		if (query != null) {
+			 update = jdbcTemplate.update(query);
+		}
+		return update;
+		
+	}
+	
 }

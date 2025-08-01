@@ -16,6 +16,7 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.UserDetailResponse;
@@ -684,7 +685,16 @@ public class PropertyService {
 		} else {
 			request.getProperty().setOwners(util.getCopyOfOwners(propertyFromSearch.getOwners()));
 		}
-
+		
+		List<Unit> units = propertyFromSearch.getUnits();
+		List<String> id = new ArrayList<>();
+		for(Unit unit : units) {
+			id.add(unit.getId());
+		}	
+		if(id != null) {
+			int deleteUnits = repository.deleteUnits(id);
+			log.info("Rows affected : "+deleteUnits);
+		}
 
 		//enrichmentService.enrichAssignes(request.getProperty());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);

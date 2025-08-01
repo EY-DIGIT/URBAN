@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pt.config.PropertyConfiguration;
@@ -119,6 +120,10 @@ public class PropertyQueryBuilder {
 			+   LEFT_JOIN  +  " EG_PT_DOCUMENT owndoc         ON owner.ownerinfouuid = owndoc.entityid "
 
 			+	LEFT_JOIN  +  " EG_PT_UNIT unit		          ON property.id =  unit.propertyid ";
+	
+	
+	// Deleting unit in case of IMC demand update
+	private final String deleteUnitQuery = "delete from eg_pt_unit where id in ( ";
 	
 
 	private final String paginationWrapper = "SELECT * FROM "
@@ -410,5 +415,12 @@ public class PropertyQueryBuilder {
 	
     public String getTotalApplicationsCountQueryString(PropertyCriteria criteria) {
 		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
+    }
+    
+    public String deleteUnits(List<String> units) {
+    	String result = units.stream()
+    		    .map(s -> "'" + s + "'")
+    		    .collect(Collectors.joining(","));
+    	return deleteUnitQuery+result+ " )";
     }
 }
