@@ -1102,7 +1102,6 @@ const CreateProperty = () => {
 
           <div style={styles.card}>
             <div style={styles.assessmentStyle}>{t("Ownership Details")}</div>
-
             <OwnershipDetailsSection
               t={t}
               ownershipType={ownershipType}

@@ -281,7 +281,7 @@
 
 
 
-import React, { useCallback, useMemo, useEffect } from "react"
+import React, { useCallback, useMemo, useEffect, useState } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card, MobileNumber, Loader, CardText, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
@@ -298,6 +298,53 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
             sortOrder: "DESC"
         }
     })
+
+    const [gridColumns, setGridColumns] = useState(3);
+
+    // Add CSS to hide dropdown input and fix styling
+    React.useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = `
+            .digit-dropdown .digit-dropdown-input {
+                display: none !important;
+            }
+            .digit-dropdown .digit-dropdown-selected {
+                background: white !important;
+                border: 1px solid #ccc !important;
+                border-radius: 6px !important;
+                height: 48px !important;
+                padding: 14px 16px !important;
+                font-size: 16px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                cursor: pointer !important;
+            }
+            .digit-dropdown .digit-dropdown-options {
+                top: 100% !important;
+                bottom: auto !important;
+            }
+        `;
+        document.head.appendChild(style);
+        return () => document.head.removeChild(style);
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            if (width <= 600) {
+                setGridColumns(1);
+            } else if (width <= 900) {
+                setGridColumns(2);
+            } else {
+                setGridColumns(3);
+            }
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     useEffect(() => {
         register("offset", 0)
         register("limit", 10)
@@ -403,17 +450,96 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
         setValue("offset", getValues("offset") - getValues("limit"))
         handleSubmit(onSubmit)()
     }
+    // Styles
+    const containerStyle = {
+        background: "white",
+        padding: "40px",
+        margin: "0 auto",
+        width: "100%",
+        maxWidth: "1400px",
+        borderRadius: "0",
+        boxShadow: "none",
+        boxSizing: "border-box",
+        minHeight: "100vh"
+    };
+
+    const gridStyle = {
+        display: "grid",
+        gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
+        gap: "2.5rem 2rem",
+        marginBottom: "2rem",
+        width: "100%"
+    };
+
+    const fieldStyle = {
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        minWidth: "0"
+    };
+
+    const labelStyle = {
+        fontFamily: "Poppins",
+        fontWeight: 400,
+        fontSize: "14px",
+        lineHeight: "22px",
+        letterSpacing: "0%",
+        color: "#282828",
+        whiteSpace: "nowrap",
+        marginBottom: "8px"
+    };
+
+    const inputStyle = {
+        borderRadius: "6px",
+        height: "48px",
+        padding: "14px 16px",
+        border: "1px solid #ccc",
+        fontSize: "16px",
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: "250px",
+        boxSizing: "border-box",
+        transition: "border-color 0.2s ease"
+    };
+
+    const dropdownStyle = {
+        borderRadius: "6px",
+        height: "48px",
+        border: "1px solid #ccc",
+        fontSize: "16px",
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: "250px",
+        boxSizing: "border-box",
+        position: "relative"
+    };
+
+    const datePickerStyle = {
+        width: "100%",
+        maxWidth: "100%",
+        minWidth: "250px",
+        height: "48px"
+    };
+
+    const buttonContainerStyle = {
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        gap: "1rem",
+        marginTop: "3rem",
+        gridColumn: "1 / -1",
+        paddingTop: "1rem",
+        borderTop: "1px solid #f0f0f0"
+    };
+
     let validation = {}
 
     return <React.Fragment>
         {isMobile ?
             <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, formState, setShowToast }} />
             :
-            <div style={{background:"white"}}>
-                {/* <Header>{t("PT_SEARCH_PROP_APP")}</Header> */}
-
-                < Card className={"card-search-heading"}>
-                
+            <div style={containerStyle}>
+                <Card className={"card-search-heading"} style={{marginBottom: "2rem"}}>
                     <span style={{
                         fontFamily: "Poppins",
                         fontWeight: "bold",
@@ -425,145 +551,138 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                     }}>{t("Search Criteria")}</span>
                 </Card>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                    <div style={{
-                        width: "100%",
-                        display: "flex", justifyContent: "space-between"
-                    }}>
-                        <SearchField style={widthMx}>
-                            <label style={{
-                                fontFamily: "Poppins",
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                letterSpacing: "0%",
-                                color: "#282828"
-                            }}>{t("PT_APPLICATION_NO_LABEL")}</label>
-                            <TextInput name="acknowledgementIds" style={{borderRadius:"6px",height:"35px",marginTop:"13px"}} inputRef={register({})} />
+                    <div style={gridStyle}>
+                        <SearchField style={fieldStyle}>
+                            <label style={labelStyle}>{t("Application No.")}</label>
+                            <TextInput name="acknowledgementIds" style={inputStyle} inputRef={register({})} />
                         </SearchField>
-                        <SearchField style={widthMx}>
-                            <label style={{
-                                fontFamily: "Poppins",
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                letterSpacing: "0%",
-                                color: "#282828"
-                            }}>{t("PT_SEARCHPROPERTY_TABEL_PID")}</label>
-                            <TextInput name="propertyIds" style={{borderRadius:"6px",height:"35px",marginTop:"13px"}} inputRef={register({})} />
+                        
+                        <SearchField style={fieldStyle}>
+                            <label style={labelStyle}>{t("Property ID")}</label>
+                            <TextInput name="propertyIds" style={inputStyle} inputRef={register({})} />
                         </SearchField>
-                        <SearchField style={widthMx}>
-                            <label style={{
-                                fontFamily: "Poppins",
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                letterSpacing: "0%",
-                                color: "#282828"
-                            }}>{t("PT_OWNER_MOBILE_NO")}</label>
-                            <MobileNumber
-                            style={{borderRadius:"6px",height:"35px",marginTop:"13px"}}
-                                name="mobileNumber"
-                                inputRef={register({
-                                    minLength: {
-                                        value: 10,
-                                        message: t("CORE_COMMON_MOBILE_ERROR"),
-                                    },
-                                    maxLength: {
-                                        value: 10,
-                                        message: t("CORE_COMMON_MOBILE_ERROR"),
-                                    },
-                                    pattern: {
-                                        value: /[6789][0-9]{9}/,
-                                        //type: "tel",
-                                        message: t("CORE_COMMON_MOBILE_ERROR"),
-                                    },
-                                })}
-                                type="number"
-                                componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>}
-                            //maxlength={10}
-                            />
+                        
+                        <SearchField style={fieldStyle}>
+                            <label style={labelStyle}>{t("Owner Mobile No.")}</label>
+                            <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
+                                <div style={{ 
+                                    padding: "14px 16px",
+                                    backgroundColor: "#f5f5f5",
+                                    border: "1px solid #ccc",
+                                    borderRight: "none",
+                                    borderRadius: "6px 0 0 6px",
+                                    height: "48px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    fontSize: "16px",
+                                    boxSizing: "border-box"
+                                }}>
+                                    +91
+                                </div>
+                                <input
+                                    name="mobileNumber"
+                                    type="number"
+                                    ref={register({
+                                        minLength: {
+                                            value: 10,
+                                            message: t("CORE_COMMON_MOBILE_ERROR"),
+                                        },
+                                        maxLength: {
+                                            value: 10,
+                                            message: t("CORE_COMMON_MOBILE_ERROR"),
+                                        },
+                                        pattern: {
+                                            value: /[6789][0-9]{9}/,
+                                            message: t("CORE_COMMON_MOBILE_ERROR"),
+                                        },
+                                    })}
+                                    style={{
+                                        ...inputStyle,
+                                        borderRadius: "0 6px 6px 0",
+                                        borderLeft: "none",
+                                        flex: 1,
+                                        minWidth: "200px"
+                                    }}
+                                />
+                            </div>
                             <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError>
                         </SearchField>
-                    </div>
-                    <div style={{
-                        width: "100%",
-                        display: "flex", justifyContent: "space-between"
-                    }}>
-                        <SearchField style={widthMx}>
-                            <label style={{
-                                fontFamily: "Poppins",
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                letterSpacing: "0%",
-                                color: "#282828"
-                            }}>{t("ES_SEARCH_PROPERTY_STATUS")}</label>
-                            <Controller
-                                control={control}
-                                name="status"
-                                render={(props) => (
-                                    <Dropdown
-                                        style={{ border: "1px solid", borderRadius:"6px",height:"35px",marginTop:"13px"}}
-                                        selected={props.value}
-                                        select={props.onChange}
-                                        onBlur={props.onBlur}
-                                        option={applicationStatuses}
-                                        optionKey="i18nKey"
-                                        t={t}
-                                        disable={false}
-                                    />
-                                )}
-                            />
+
+                        <SearchField style={fieldStyle}>
+                            <label style={labelStyle}>{t("Application Status")}</label>
+                            <div style={{ 
+                                position: "relative", 
+                                zIndex: 10,
+                                width: "100%"
+                            }}>
+                                <Controller
+                                    control={control}
+                                    name="status"
+                                    render={(props) => (
+                                        <div style={{ position: "relative" }}>
+                                            <Dropdown
+                                                style={dropdownStyle}
+                                                selected={props.value}
+                                                select={props.onChange}
+                                                onBlur={props.onBlur}
+                                                option={applicationStatuses}
+                                                optionKey="i18nKey"
+                                                t={t}
+                                                disable={false}
+                                            />
+                                        </div>
+                                    )}
+                                />
+                            </div>
                         </SearchField>
-                        <SearchField style={widthMx}>
-                            <label style={{
-                                fontFamily: "Poppins",
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                letterSpacing: "0%",
-                                color: "#282828"
-                            }}>{t("PT_FROM_DATE")}</label>
-                            <Controller
-                                render={(props) => <DatePicker style={{marginTop:"13px"}} date={props.value} disabled={false} onChange={props.onChange} />}
-                                name="fromDate"
-                                control={control}
-                            />
+
+                        <SearchField style={fieldStyle}>
+                            <label style={labelStyle}>{t("From Date")}</label>
+                            <div style={datePickerStyle}>
+                                <Controller
+                                    render={(props) => (
+                                        <DatePicker 
+                                            date={props.value} 
+                                            disabled={false} 
+                                            onChange={props.onChange}
+                                        />
+                                    )}
+                                    name="fromDate"
+                                    control={control}
+                                />
+                            </div>
                         </SearchField>
-                        <SearchField style={widthMx}>
-                            <label style={{
-                                fontFamily: "Poppins",
-                                fontWeight: 400,
-                                fontSize: "14px",
-                                lineHeight: "22px",
-                                letterSpacing: "0%",
-                                color: "#282828"
-                            }}>{t("PT_TO_DATE")}</label>
-                            <Controller
-                                render={(props) => <DatePicker style={{marginTop:"13px"}} date={props.value} disabled={false} onChange={props.onChange} />}
-                                name="toDate"
-                                control={control}
-                            />
+
+                        <SearchField style={fieldStyle}>
+                            <label style={labelStyle}>{t("To Date")}</label>
+                            <div style={datePickerStyle}>
+                                <Controller
+                                    render={(props) => (
+                                        <DatePicker 
+                                            date={props.value} 
+                                            disabled={false} 
+                                            onChange={props.onChange}
+                                        />
+                                    )}
+                                    name="toDate"
+                                    control={control}
+                                />
+                            </div>
                         </SearchField>
-                    </div>
-                    <div style={{ display: "flex", width: "100%", justifyContent: "end", alignItems: "center" }}>
-                        {/* <SearchField className="submit" style={{width:"120px"}}> */}
-                        <div>
+
+                        <div style={buttonContainerStyle}>
                             <button
+                                type="button"
                                 style={{
-                                    width: "120px",
-                                    height: "38px",
-                                    marginTop: "1rem",              // Optional vertical spacing
-                                    borderRadius: "4px",
-                                    borderWidth: "1px",
-                                    border: "1px solid #FF4C51",
-                                    color: "#FF4C51",
+                                    padding: "12px 24px",
                                     backgroundColor: "white",
-                                    fontSize: "16px",
-                                    fontWeight: "500",
-                                    fontFamily: "Poppins, sans-serif",
+                                    color: "#F47738",
+                                    border: "1px solid #F47738",
+                                    borderRadius: "5px",
                                     cursor: "pointer",
-                                    marginRight: "20px"
+                                    fontSize: "14px",
+                                    fontWeight: "500",
+                                    minWidth: "100px"
                                 }}
                                 onClick={() => {
                                     reset({
@@ -583,34 +702,25 @@ const PTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                                     previousPage();
                                 }}
                             >
-                                {t(`ES_COMMON_CLEAR_ALL`)}
+                                {t("CLEAR ALL")}
+                            </button>
+                            <button
+                                type="submit"
+                                style={{
+                                    padding: "12px 24px",
+                                    backgroundColor: "#6b133f",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    fontSize: "14px",
+                                    fontWeight: "500",
+                                    minWidth: "100px"
+                                }}
+                            >
+                                {t("Search")}
                             </button>
                         </div>
-                        {/* <p style={{ marginTop: "10px" }}
-                                onClick={() => {
-                                    reset({
-                                        acknowledgementIds: "",
-                                        fromDate: "",
-                                        toDate: "",
-                                        propertyIds: "",
-                                        mobileNumber: "",
-                                        status: "",
-                                        creationReason: "",
-                                        offset: 0,
-                                        limit: 10,
-                                        sortBy: "commencementDate",
-                                        sortOrder: "DESC"
-                                    });
-                                    setShowToast(null);
-                                    previousPage();
-                                }}>{t(`ES_COMMON_CLEAR_ALL`)}</p> */}
-                        {/* </SearchField> */}
-                        {/* <SearchField className="submit" style={{width:"120px"}}> */}
-                        <div style={{ width: "120px", marginRight: "20px" }}>
-                            <SubmitBar label={t("ES_COMMON_SEARCH")} submit style={{ width: "120px" }} />
-                        </div>
-                        {/* </SearchField> */}
-
                     </div>
                 </SearchForm>
                 {!isLoading && data?.display ? <Card style={{ marginTop: 20 }}>

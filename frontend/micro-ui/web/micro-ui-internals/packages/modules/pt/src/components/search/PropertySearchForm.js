@@ -103,7 +103,7 @@
 
 // export default SearchPTID;
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   SearchField,
   SearchForm,
@@ -122,6 +122,27 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
   });
 
   const formValue = watch();
+  
+  const [gridColumns, setGridColumns] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width <= 480) {
+        setGridColumns(1);
+      } else if (width <= 768) {
+        setGridColumns(2);
+      } else if (width <= 1200) {
+        setGridColumns(3);
+      } else {
+        setGridColumns(4);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const containerStyle = {
     margin: "2rem auto",
@@ -130,7 +151,9 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
     backgroundColor: "#fff",
     borderRadius: "10px",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-    fontFamily: "Arial, sans-serif"
+    fontFamily: "Arial, sans-serif",
+    display: "flex",
+    flexDirection: "column"
   };
 
   const labelStyle = {
@@ -140,14 +163,18 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
     fontSize: '14px',
     lineHeight: '22px',
     letterSpacing: '0%',
+    whiteSpace: 'nowrap'
   };
 
   const inputStyle = {
     width: "100%",
-    padding: "8px",
+    minWidth: "200px",
+    padding: "12px",
     marginBottom: "1rem",
     borderRadius: "5px",
-    border: "1px solid #ccc"
+    border: "1px solid #ccc",
+    fontSize: "14px",
+    boxSizing: "border-box"
   };
 
   const selectStyle = {
@@ -155,42 +182,48 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
   };
 
   const rowStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    // gap: "1rem"
+    display: "grid",
+    gridTemplateColumns: `repeat(${gridColumns}, 1fr)`,
+    gap: "1rem"
   };
 
   const colStyle = {
-    // flex: "1 1 calc(33.333% - 1rem)",
-    minWidth: "250px",
-    marginRight: "0px"
+    display: "flex",
+    flexDirection: "column"
   };
 
   const buttonContainer = {
     display: "flex",
     justifyContent: "flex-end",
-    marginTop: "1.5rem",
+    alignItems: "center",
+    marginTop: "2rem",
     gap: "1rem",
-    marginLeft: "auto",
-    marginRight: "20px",
+    width: "100%",
+    gridColumn: "1 / -1"
   };
 
   const clearButton = {
-    padding: "10px 20px",
+    padding: "12px 24px",
     backgroundColor: "white",
-    color: "red",
-    border: "1px solid red",
+    color: "#F47738",
+    border: "1px solid #F47738",
     borderRadius: "5px",
-    cursor: "pointer"
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: "500",
+    minWidth: "80px"
   };
 
   const searchButton = {
-    padding: "10px 20px",
+    padding: "12px 24px",
     backgroundColor: "#6b133f",
     color: "white",
     border: "none",
     borderRadius: "5px",
-    cursor: "pointer"
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: "500",
+    minWidth: "80px"
   };
   const dtat = {
     fontFamily: 'Poppins',
@@ -201,19 +234,47 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
     verticalAlign: 'middle',
     color: "#6b133f"
   };
+  const headerGridStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.5rem",
+    marginBottom: "2rem"
+  };
+
+  const headerItemStyle = {
+    display: "flex",
+    flexDirection: "column"
+  };
+
+  const sectionTitleStyle = {
+    ...dtat,
+    marginBottom: "0.5rem"
+  };
+
+  const mainWrapperStyle = {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%"
+  };
+
   return (
     <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} style={containerStyle} className="pt-property-search">
-      <div style={{ width: "24%" }}>
-        <h3 style={dtat}>Cash Desk</h3>
-
-        <div>
-          <label style={labelStyle}>Assessment Year</label>
-          <TextInput name="assessmentYear" inputRef={register} style={inputStyle} />
+      <div style={mainWrapperStyle}>
+        <div style={headerGridStyle}>
+          <div style={headerItemStyle}>
+            <h3 style={sectionTitleStyle}>Cash Desk</h3>
+          </div>
+          
+          <div style={headerItemStyle}>
+            <label style={labelStyle}>Assessment Year</label>
+            <TextInput name="assessmentYear" inputRef={register} style={{...inputStyle, maxWidth: "200px"}} />
+          </div>
+          
+          <div style={headerItemStyle}>
+            <h4 style={sectionTitleStyle}>Search Criteria</h4>
+          </div>
         </div>
-
-        <h4 style={dtat}>Search Criteria</h4>
-      </div>
-      <div style={rowStyle}>
+        <div style={rowStyle}>
         <SearchField style={colStyle}>
           <label style={labelStyle}>Property ID</label>
           <TextInput name="propertyIds" inputRef={register} style={inputStyle} />
@@ -284,11 +345,12 @@ const SearchPTID = ({ tenantId, t, PTSearchFields = {}, searchBy = "propertyId",
           <label style={labelStyle}>Owner Name English</label>
           <TextInput name="ownerEnglish" inputRef={register} style={inputStyle} />
         </SearchField>
-      </div>
 
-      <div style={buttonContainer}>
-        <button type="button" style={clearButton} onClick={() => { reset(); onReset(); }}>Clear</button>
-        <button type="submit" style={searchButton}>Search</button>
+        <div style={buttonContainer}>
+          <button type="button" style={clearButton} onClick={() => { reset(); onReset(); }}>Clear</button>
+          <button type="submit" style={searchButton}>Search</button>
+        </div>
+        </div>
       </div>
     </SearchForm>
   );
