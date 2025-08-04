@@ -30,8 +30,11 @@ import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.util.UnmaskingUtil;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.pt.web.contracts.SMSRequest;
+import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -113,9 +116,13 @@ public class PropertyService {
 
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(),request);
+		
 		request.getProperty().setWorkflow(null);
 		
-
+		/* Send SMS */
+		
+		sendSmsPropertyCreation(request.getProperty().getOwners().get(0).getMobileNumber(),request.getProperty().getAcknowldgementNumber());
+		
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
 		//return request.getProperty();
@@ -724,6 +731,22 @@ public class PropertyService {
 			producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 			producer.pushAfterEncrytpion(config.getPropertyEventInboxKafkaTopic(), request);
 		}
+	}
+	
+	@Autowired
+	private CustomKafkaTemplate<String, SMSRequest> kafkaTemplate;
+	
+	@Value("${kafka.topics.notification.sms}")
+	private String smsTopic;
+	
+	private void  sendSmsPropertyCreation(String mobileNo,String applicationNo) {
+		String message = getPropertyCreationMessage(applicationNo);
+		kafkaTemplate.send(smsTopic, new SMSRequest(mobileNo,message));
+	}
+	
+	private String getPropertyCreationMessage(String applicationNo) {
+		String propertyCreationMessage = "Dear Citizen, Your application has been successfully submitted. Your Application Number is %s. Please keep it for future reference. Access your application here: var – Indore Municipal Corporation आदरणीय नागरिक, आपका आवेदन सफलतापूर्वक जमा हो गया है। आपका आवेदन क्रमांक है %s । कृपया इसे भविष्य के संदर्भ हेतु सुरक्षित रखें। अपने आवेदन को देखने के लिए यहां जाएं: var – इंदौर नगर निगम";
+		return String.format(propertyCreationMessage, applicationNo, applicationNo);
 	}
 	
 }
