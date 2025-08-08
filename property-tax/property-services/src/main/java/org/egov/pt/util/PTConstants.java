@@ -185,6 +185,7 @@ public class PTConstants {
 
 	public static final String NOTIFICATION_MODULENAME = "rainmaker-pt";
 	
+	
 	/* PT notif loc codes */
 	
 	public static final String WF_MT_STATUS_OPEN_CODE = "PT_NOTIF_WF_MT_OPEN";
@@ -213,6 +214,17 @@ public class PTConstants {
 	public static final String UPDATE_NO_WORKFLOW = "PT_NOTIF_WF_UPDATE_NONE";
 	
 	public static final String CREATE_NOTIF_CODE = "PT_NOTIF_CREATE";
+	
+	
+	// Add new One
+	
+	public static final String WF_UPDATE_STATUS_OPEN_CODE_IMC  = "PT_NOTIF_WF_OPEN_IMC";
+	
+	public static final String WF_UPDATE_STATUS_CHANGE_CODE_REJECTED = "PT_NOTIF_WF_STATUS_CHANGE_REJECTED_IMC";
+	
+	public static final String WF_UPDATE_STATUS_CHANGE_CODE_SENDBACK = "PT_NOTIF_WF_STATUS_CHANGE_SENDBACK_IMC";
+	
+	public static final String WF_UPDATE_STATUS_APPROVED_CODE_IMC =   "PT_NOTIF_WF_APPROVED_IMC";
 	
 	
 	/* ASSESSMENT CONSTANTS */
@@ -268,6 +280,7 @@ public class PTConstants {
     public static final String PT_OLD_MOBILENUMBER = "{oldmobilenumber}";
     
     public static final String PT_NEW_MOBILENUMBER = "{newmobilenumber}";
+    
     
     // PROPERTY & MUTATION
     public static final String NOTIFICATION_APPID =  "{APPID}";

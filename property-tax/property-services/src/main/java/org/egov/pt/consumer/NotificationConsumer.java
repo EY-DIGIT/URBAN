@@ -64,17 +64,11 @@ public class NotificationConsumer {
 				// Adding in MDC so that tracer can add it in header
 				MDC.put(TENANTID_MDC_STRING, tenantId);
 
-				//Checking if UpdateIMC is true 
-				if(request.getProperty().isUpdateIMC() && CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
-					log.warn("For PropertyId "+request.getProperty().getPropertyId()+" Not Able to Send Notifctaion because UpdateIMC is true ");
+				if (PTConstants.MUTATION_PROCESS_CONSTANT.contains(request.getProperty().getCreationReason().toString())) {
+					notifService.sendNotificationForMutation(request);
+				} else {
+					notifService.sendNotificationForUpdate(request);
 				}
-				else if (PTConstants.MUTATION_PROCESS_CONSTANT.contains(request.getProperty().getCreationReason().toString())) {
-
-						notifService.sendNotificationForMutation(request);
-					} else {
-
-						notifService.sendNotificationForUpdate(request);
-					}
 				}
 
 

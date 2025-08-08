@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.Category;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.event.Event;
@@ -22,9 +23,11 @@ import org.egov.pt.models.workflow.Action;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
+import org.egov.pt.web.contracts.Email;
 import org.egov.pt.web.contracts.EmailRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.SMSRequest;
+import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -122,6 +125,7 @@ public class NotificationService {
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+		//log.info("Complete Locatisation Message :: "+completeMsgs);
 		String localisedState = getLocalisedState(wf, completeMsgs);
 		
 		switch (state) {
@@ -133,7 +137,7 @@ public class NotificationService {
 
 		case WF_STATUS_OPEN:
 			createOrUpdate = isCreate ? CREATE_STRING : UPDATE_STRING;
-			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_OPEN_CODE, completeMsgs, createOrUpdate);
+			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_OPEN_CODE_IMC, completeMsgs, createOrUpdate);
 			break;
 
 		case WF_STATUS_APPROVED:
@@ -148,7 +152,8 @@ public class NotificationService {
 			break;
 		}
 
-		msg = replaceCommonValues(property, msg, localisedState);
+//		msg = replaceCommonValues(property, msg, localisedState);
+		msg = replaceCommonValuesNew(property, msg, localisedState);
 		prepareMsgAndSend(propertyRequest, msg,state);
 	}
 
@@ -236,6 +241,14 @@ public class NotificationService {
 		if (configs.getIsWorkflowEnabled())
 			msg = msg.replace(NOTIFICATION_STATUS, localisedState);
 		return msg;
+	}
+	
+	private String replaceCommonValuesNew(Property property, String customizedMsg, String localisedState) {
+
+		customizedMsg = customizedMsg.replace(NOTIFICATION_APPID,property.getAcknowldgementNumber());
+		if (configs.getIsWorkflowEnabled())
+			customizedMsg = customizedMsg.replace(NOTIFICATION_STATUS, localisedState);
+		return customizedMsg;
 	}
 	
 	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {

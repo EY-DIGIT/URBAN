@@ -1,5 +1,7 @@
 package org.egov.pt.web.contracts;
 
+import org.egov.pt.models.enums.Category;
+
 import lombok.*;
 
 
@@ -11,5 +13,4 @@ import lombok.*;
 public class SMSRequest {
     private String mobileNumber;
     private String message;
-
 }
