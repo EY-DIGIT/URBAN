@@ -671,12 +671,9 @@ public class EstimationService {
 		boolean isOwnerExemptionZero = updatedEstimates.stream()
 			    .filter(e -> "PT_OWNER_EXEMPTION".equalsIgnoreCase(e.getTaxHeadCode()))
 			    .anyMatch(e -> e.getEstimateAmount().compareTo(BigDecimal.ZERO) == 0);
-		if(updatedEstimates!= null ) {
+		if(!isOwnerExemptionZero) {
 			estimates.clear();                
 			estimates.addAll(updatedEstimates);
-			
-		}
-		if(!isOwnerExemptionZero) {
 			payableTax = propertyTaxSummary.getTotalTax().setScale(0, RoundingMode.HALF_UP).setScale(2);
 		}
 
@@ -800,8 +797,8 @@ public class EstimationService {
 				
 			}
 		}
-		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_CURRENT_YEAR_TAX).estimateAmount(currentYearTax.setScale(2, 2)).build());
-		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ARREAR).estimateAmount(arrear.setScale(2, 2)).build());
+		//estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_CURRENT_YEAR_TAX).estimateAmount(currentYearTax.setScale(2, 2)).build());
+		//estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ARREAR).estimateAmount(arrear.setScale(2, 2)).build());
 		
 		Map<String, Category> taxHeadCategoryMap = ((List<TaxHeadMaster>) masterMap.get(TAXHEADMASTER_MASTER_KEY))
 				.stream().collect(Collectors.toMap(TaxHeadMaster::getCode, TaxHeadMaster::getCategory));
@@ -822,8 +819,7 @@ public class EstimationService {
 			switch (category) {
 
 			case TAX:
-				if (!estimate.getTaxHeadCode().equalsIgnoreCase(PT_CURRENT_YEAR_TAX) &&
-						!estimate.getTaxHeadCode().equalsIgnoreCase(PT_ARREAR))
+				//if (!estimate.getTaxHeadCode().equalsIgnoreCase(PT_CURRENT_YEAR_TAX) && !estimate.getTaxHeadCode().equalsIgnoreCase(PT_ARREAR))
 					taxAmt = taxAmt.add(estimate.getEstimateAmount());
 				break;
 
