@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.collection.BillResponse;
 import org.egov.pt.models.enums.Category;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
@@ -56,6 +57,9 @@ public class NotificationService {
 
 	@Value("${notification.url}")
 	private String notificationURL;
+	
+	@Autowired
+	BillingService billingService;
 
 
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
@@ -125,8 +129,9 @@ public class NotificationService {
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		//log.info("Complete Locatisation Message :: "+completeMsgs);
 		String localisedState = getLocalisedState(wf, completeMsgs);
+		
+		String templateID = getMessageTemplate(completeMsgs, state);
 		
 		switch (state) {
 
@@ -141,9 +146,16 @@ public class NotificationService {
 			break;
 
 		case WF_STATUS_APPROVED:
+			BillResponse billingResponse = billingService.fetchBill(property, propertyRequest.getRequestInfo());
 			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
 			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_APPROVED_CODE, completeMsgs, createOrUpdate);
+			msg = replaceCommonValuesApproved(billingResponse, msg, localisedState);
 			sendNotificationForCitizenFeedback(property,completeMsgs,createOrUpdate);
+			break;
+			
+		case WF_STATUS_REJECTED:
+			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
+			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_CHANGE_CODE_REJECTED, completeMsgs, createOrUpdate);
 			break;
 
 		default:
@@ -153,10 +165,32 @@ public class NotificationService {
 		}
 
 //		msg = replaceCommonValues(property, msg, localisedState);
+//		prepareMsgAndSend(propertyRequest, msg,state);
 		msg = replaceCommonValuesNew(property, msg, localisedState);
-		prepareMsgAndSend(propertyRequest, msg,state);
+		prepareMsgAndSendNew(propertyRequest, msg,state,templateID);
 	}
 
+	
+	private String getMessageTemplate(String completeMessage,String status){
+		String templateId = null;
+		
+		switch (status) {
+		
+		case WF_STATUS_OPEN:
+			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_CREATE, completeMessage);
+			break;
+			
+		case WF_STATUS_APPROVED:
+			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_CREATE, completeMessage);
+			break;
+
+		case WF_STATUS_REJECTED:
+			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_CREATE, completeMessage);
+			break;
+		}
+		
+		return templateId;
+	}
 
 	/**
 	 * Method to prepare msg for create/update process
@@ -248,6 +282,12 @@ public class NotificationService {
 		customizedMsg = customizedMsg.replace(NOTIFICATION_APPID,property.getAcknowldgementNumber());
 		if (configs.getIsWorkflowEnabled())
 			customizedMsg = customizedMsg.replace(NOTIFICATION_STATUS, localisedState);
+		return customizedMsg;
+	}
+	
+	private String replaceCommonValuesApproved(BillResponse billResponse, String customizedMsg, String localisedState) {
+		String demandAmount = billResponse.getBill().get(0).getTotalAmount().toString();
+		customizedMsg = customizedMsg.replace(DEMAND_AMOUNT,demandAmount);
 		return customizedMsg;
 	}
 	
@@ -361,8 +401,52 @@ public class NotificationService {
 			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
 			notifUtil.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
 		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
 			List<EmailRequest> emailRequests = notifUtil.createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId);
+			notifUtil.sendEmail(emailRequests, tenantId);
+		}
+	}
+	
+	private void prepareMsgAndSendNew(PropertyRequest request, String msg, String state,String templateId) {
+
+		Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
+		Map<String, String> mobileNumberToOwner = new HashMap<>();
+		String tenantId = request.getProperty().getTenantId();
+		String moduleName = request.getProperty().getWorkflow().getModuleName();
+
+		String action;
+		if(request.getProperty().getWorkflow()!=null)
+			action = request.getProperty().getWorkflow().getAction();
+		else
+			action = WF_NO_WORKFLOW;
+
+		List<String> configuredChannelNames =  notifUtil.fetchChannelList(new RequestInfo(), tenantId, moduleName, action);
+		Set<String> mobileNumbers = new HashSet<>();
+
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+			    mobileNumbers.add(owner.getMobileNumber());
+		});		
+
+		List<SMSRequest> mailRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequestNew(msg, mobileNumberToOwner,templateId);
+		notifUtil.sendSMS(smsRequests, property.getTenantId());
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
+			notifUtil.sendSMS(smsRequests, tenantId);
+		}
+		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+			Boolean isActionReq = false;
+			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
+				isActionReq = true;
+
+			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
+			notifUtil.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
+		}
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)  ) {
+			List<EmailRequest> emailRequests = notifUtil.createEmailRequestFromSMSRequests(requestInfo,mailRequests, tenantId);
 			notifUtil.sendEmail(emailRequests, tenantId);
 		}
 	}

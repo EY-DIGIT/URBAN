@@ -216,7 +216,7 @@ public class PTConstants {
 	public static final String CREATE_NOTIF_CODE = "PT_NOTIF_CREATE";
 	
 	
-	// Add new One
+	// Add new One Notification Status
 	
 	public static final String WF_UPDATE_STATUS_OPEN_CODE_IMC  = "PT_NOTIF_WF_OPEN_IMC";
 	
@@ -225,6 +225,8 @@ public class PTConstants {
 	public static final String WF_UPDATE_STATUS_CHANGE_CODE_SENDBACK = "PT_NOTIF_WF_STATUS_CHANGE_SENDBACK_IMC";
 	
 	public static final String WF_UPDATE_STATUS_APPROVED_CODE_IMC =   "PT_NOTIF_WF_APPROVED_IMC";
+	
+	public static final String DEMAND_AMOUNT = "{DEMAND}";
 	
 	
 	/* ASSESSMENT CONSTANTS */
@@ -474,6 +476,9 @@ public class PTConstants {
     public static final String CREATIONREASON_REPLACE = "$creationReason";
 
     public static final String TRANSACTIONID_REPLACE = "{TRANSACTION_ID}";
+    
+    // SMS Template  Creation Type
 
+    public static final String TEMPLATE_ID_PT_CREATE = "PT_NOTIF_DLT_TMPLT_ID_CREATE";
 }
 
