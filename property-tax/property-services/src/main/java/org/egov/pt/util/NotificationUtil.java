@@ -186,6 +186,16 @@ public class NotificationUtil {
         }
         return smsRequest;
     }
+    
+    public List<SMSRequest> createSMSRequestWithTemplate(String message, Map<String, String> mobileNumberToOwnerName,String templateID) {
+    	
+        List<SMSRequest> smsRequest = new LinkedList<>();
+        for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
+            String customizedMsg = message.replace(NOTIFICATION_OWNERNAME, entryset.getValue());
+            smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg, templateID));
+        }
+        return smsRequest;
+    }
 
 
     /**

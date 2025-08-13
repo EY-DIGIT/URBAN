@@ -13,4 +13,14 @@ import lombok.*;
 public class SMSRequest {
     private String mobileNumber;
     private String message;
+    
+    //adding new Fields Status
+    private String  templateId;
+
+	public SMSRequest(String mobileNumber, String message) {
+		super();
+		this.mobileNumber = mobileNumber;
+		this.message = message;
+	}
+    
 }

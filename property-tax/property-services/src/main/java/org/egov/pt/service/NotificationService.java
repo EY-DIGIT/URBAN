@@ -431,7 +431,7 @@ public class NotificationService {
 		});		
 
 		List<SMSRequest> mailRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
-		List<SMSRequest> smsRequests = notifUtil.createSMSRequestNew(msg, mobileNumberToOwner,templateId);
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequestWithTemplate(msg, mobileNumberToOwner,templateId);
 		notifUtil.sendSMS(smsRequests, property.getTenantId());
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
