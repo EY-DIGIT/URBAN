@@ -97,15 +97,15 @@ public class PropertyValidator {
 		if (!CollectionUtils.isEmpty(units))
 			validateUnits(request, errorMap);
 		
+		//		validate Registry Id
+		validateRegistryId(request, errorMap);
 		
 		Set<String> uniqueOwnerSet = owners.stream()
 				.map(owner -> owner.getName() + owner.getMobileNumber()).collect(Collectors.toSet());
 		
 		if (uniqueOwnerSet.size() != owners.size())
 			throw new CustomException("EG_PT_OWNER INFO ERROR", "Duplicate Owners in the request");
-			
 		
-
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
@@ -295,6 +295,9 @@ public class PropertyValidator {
 		validateIds(request, errorMap);
 		validateMobileNumber(request, errorMap);
 		validateFields(request, errorMap);
+		
+		//validate Registry ID
+		validateRegistryId(request, errorMap);
 
 		
 		CreationReason reason = property.getCreationReason();
@@ -948,4 +951,41 @@ public class PropertyValidator {
 		
 		if(!property.getStatus().equals(Status.ACTIVE)) {throw new CustomException("EG_PT_ALTERNATE_INACTIVE","Alternate number details cannot be updated if status is not active");}
 	}
+	
+	
+	/**
+	 * Validates the Registry Id
+	 * 
+	 * @param request The propertyRequest received for create or update
+	 */
+	private void validateRegistryId(PropertyRequest request, Map<String, String> errorMap) {
+
+		Property property = request.getProperty();
+
+		if (!isRegistryIdValid(property.getRegistryId()))
+			errorMap.put("INVALID REGISTRY ID", "Registry Id is not valid : " + property.getRegistryId());
+
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+	}
+
+/**
+ * Validates if the Registry Id is 19 digit length & alphanumeric 
+ * 
+ * @param registryId The registryId to be validated
+ * @return True if valid registryId else false
+ */
+private Boolean isRegistryIdValid(String registryId) {
+
+	if (registryId == null)
+		return true;
+	else  // Check length & alphanumeric
+	    if (!registryId.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z0-9]{19}$")) return false;
+		
+		//Start First Two Char with  "MP"
+		//if (!registryId.matches("^MP[A-Za-z0-9]{17}$")) return false;
+	else
+		return true;
+}
+
 }
