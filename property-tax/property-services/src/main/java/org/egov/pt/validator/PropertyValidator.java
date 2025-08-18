@@ -977,7 +977,7 @@ public class PropertyValidator {
  */
 private Boolean isRegistryIdValid(String registryId) {
 
-	if (registryId == null)
+	if (registryId == null || registryId.isEmpty())
 		return true;
 	else  // Check length & alphanumeric
 	    if (!registryId.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z0-9]{19}$")) return false;
