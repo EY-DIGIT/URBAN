@@ -480,5 +480,12 @@ public class PTConstants {
     // SMS Template  Creation Type
 
     public static final String TEMPLATE_ID_PT_CREATE = "PT_NOTIF_DLT_TMPLT_ID_CREATE";
+    
+    public static final String TEMPLATE_ID_PT_REJECT = "PT_NOTIF_DLT_TMPLT_ID_REJECT";
+    
+    public static final String TEMPLATE_ID_PT_APPROVE = "PT_NOTIF_DLT_TMPLT_ID_APPROVE";
+    
+    public static final String TEMPLATE_ID_PT_PAYMENT = "PT_NOTIF_DLT_TMPLT_ID_PAYMENT";
+    
 }
 

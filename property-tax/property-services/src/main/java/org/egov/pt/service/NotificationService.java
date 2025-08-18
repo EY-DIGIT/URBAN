@@ -181,11 +181,11 @@ public class NotificationService {
 			break;
 			
 		case WF_STATUS_APPROVED:
-			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_CREATE, completeMessage);
+			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_APPROVE, completeMessage);
 			break;
 
 		case WF_STATUS_REJECTED:
-			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_CREATE, completeMessage);
+			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_REJECT, completeMessage);
 			break;
 		}
 		
@@ -432,7 +432,7 @@ public class NotificationService {
 
 		List<SMSRequest> mailRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequestWithTemplate(msg, mobileNumberToOwner,templateId);
-		notifUtil.sendSMS(smsRequests, property.getTenantId());
+//		notifUtil.sendSMS(smsRequests, property.getTenantId());
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			notifUtil.sendSMS(smsRequests, tenantId);
