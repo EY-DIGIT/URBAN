@@ -114,6 +114,9 @@ public class Property extends PropertyInfo {
 	
 	@JsonProperty("registryId")
 	private String registryId;
+	
+	@JsonProperty("essentialTax")
+	private String essentialTax;
 
 	@Builder
 	public Property(String id, String propertyId, String surveyId, List<String> linkedProperties, String tenantId,
@@ -121,7 +124,7 @@ public class Property extends PropertyInfo {
 			String propertyType, String ownershipCategory, List<OwnerInfo> owners, Institution institution,
 			CreationReason creationReason, String usageCategory, Long noOfFloors, Double landArea,
 			BigDecimal superBuiltUpArea, Source source, Channel channel, List<Document> documents, List<Unit> units,
-			JsonNode additionalDetails, AuditDetails auditDetails, ProcessInstance workflow,boolean updateIMC,String registryId) {
+			JsonNode additionalDetails, AuditDetails auditDetails, ProcessInstance workflow,boolean updateIMC,String registryId,String essentialTax) {
 		super(id, propertyId, surveyId, linkedProperties, tenantId, accountId, oldPropertyId, status, address);
 		this.acknowldgementNumber = acknowldgementNumber;
 		this.propertyType = propertyType;
@@ -142,6 +145,7 @@ public class Property extends PropertyInfo {
 		this.workflow = workflow;
 		this.updateIMC =updateIMC;
 		this.registryId=registryId;
+		this.essentialTax=essentialTax;
 	}
 
 	public Property addOwnersItem(OwnerInfo ownersItem) {

@@ -1,0 +1,1 @@
+ALTER TABLE public.eg_pt_property ADD column essentialtax varchar(256) NULL;

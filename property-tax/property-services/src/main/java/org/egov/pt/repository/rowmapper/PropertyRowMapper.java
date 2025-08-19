@@ -101,6 +101,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.noOfFloors(rs.getLong("noOfFloors"))
 						.surveyId(rs.getString("surveyId"))
 						.registryId(rs.getString("registryId"))
+						.essentialTax(rs.getString("essentialTax"))
 						.linkedProperties(linkedProperties)
 						.auditDetails(auditdetails)
 						.institution(institute)
