@@ -25,7 +25,6 @@ public class PropertyFYDetails {
 	private BigDecimal area;
 	private Double factor;
 	private BigDecimal alv;
-	@JsonIgnore
 	private BigDecimal tpv;
 	@JsonIgnore
 	private BigDecimal ptax;
@@ -35,5 +34,6 @@ public class PropertyFYDetails {
 	private String rateZone;
 	@JsonIgnore
 	private BigDecimal rateSlab;
+	private int discount;
 
 }

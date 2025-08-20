@@ -304,7 +304,7 @@ public class EstimationService {
 
 						currentUnitTax = currentUnitTax.subtract(
 								currentUnitTax.multiply(BigDecimal.valueOf(10)).divide(BigDecimal.valueOf(100)));
-
+					propertyFYDetails.setDiscount(10);
 					}
 					unitTPV = currentUnitTax;
 					propertyFYDetails.setTpv(unitTPV);
