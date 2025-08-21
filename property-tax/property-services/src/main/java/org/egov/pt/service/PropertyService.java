@@ -171,14 +171,7 @@ public class PropertyService {
 		
 		
 		Property propertySearch = null;
-
-		try {
-		    Thread.sleep(2000);
-		} catch (InterruptedException e) {
-		    Thread.currentThread().interrupt();
-		    throw new RuntimeException("Thread interrupted while waiting", e);
-		}
-
+		if(request.getProperty().getWorkflow() != null && request.getProperty().getWorkflow().getAction() == "APPROVE") {
 		while (true) {
 			log.info("Searching proprty to validate the status ACTIVE");
 		    propertySearch = unmaskingUtil.getPropertyUnmasked(request, propertyFromRequest, propertiesFromSearchResponse);
@@ -216,7 +209,7 @@ public class PropertyService {
 		}
 
 		request.getProperty().setWorkflow(null);
-		
+		}
 		
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
