@@ -171,7 +171,7 @@ public class PropertyService {
 		
 		
 		Property propertySearch = null;
-		if(request.getProperty().getWorkflow() != null && request.getProperty().getWorkflow().getAction() == "APPROVE") {
+		if(request.getProperty().getWorkflow() != null && request.getProperty().getWorkflow().getAction().equals("APPROVE")) {
 		while (true) {
 			log.info("Searching proprty to validate the status ACTIVE");
 		    propertySearch = unmaskingUtil.getPropertyUnmasked(request, propertyFromRequest, propertiesFromSearchResponse);
@@ -207,9 +207,8 @@ public class PropertyService {
 		    }
 		    }
 		}
-
-		request.getProperty().setWorkflow(null);
 		}
+		request.getProperty().setWorkflow(null);
 		
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
