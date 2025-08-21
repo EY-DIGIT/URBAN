@@ -202,6 +202,7 @@ public class PropertyService {
 						.requestInfo(request.getRequestInfo())
 						.assessment(assessment)
 						.build();
+				log.info("AssessmentRequest: {}", assessementRequest);
 				Optional<Object> fetchResult = serviceRequestRepository.fetchResult(new StringBuilder(uri), assessementRequest);
 				log.info("Received response from : "+uri);
 				
