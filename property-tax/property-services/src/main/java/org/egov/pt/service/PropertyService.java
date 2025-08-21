@@ -1,34 +1,43 @@
 package org.egov.pt.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
 
+import org.apache.kafka.clients.consumer.internals.Fetch;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.Assessment.Source;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
+import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.user.CreateUserRequest;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.util.EncryptionDecryptionUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.util.UnmaskingUtil;
 import org.egov.pt.validator.PropertyValidator;
+import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.Email;
 import org.egov.pt.web.contracts.EmailRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -91,6 +100,9 @@ public class PropertyService {
 
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
+    
+    @Autowired
+    private ServiceRequestRepository serviceRequestRepository;
 
 	/**
 	 * Enriches the Request and pushes to the Queue
@@ -157,6 +169,51 @@ public class PropertyService {
 		 else
 			processPropertyUpdate(request, propertyFromSearch);
 		
+		
+		Property propertySearch = null;
+
+		try {
+		    Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		    Thread.currentThread().interrupt();
+		    throw new RuntimeException("Thread interrupted while waiting", e);
+		}
+
+		while (true) {
+			log.info("Searching proprty to validate the status ACTIVE");
+		    propertySearch = unmaskingUtil.getPropertyUnmasked(request, propertyFromRequest, propertiesFromSearchResponse);
+		    log.info("Status fetched from updated property : "+propertySearch.getStatus());
+		    if (propertySearch != null) {
+		    if (propertySearch.getStatus()!=null && Status.ACTIVE.toString().equals(propertySearch.getStatus())) {
+		    	LocalDate today = LocalDate.now();
+		        int year = today.getYear();
+		        int month = today.getMonthValue();
+		    	String uri = "http://localhost:8080/property-services/assessment/_create";
+		    	log.info("Sending Reqeust to : "+uri);
+		    	Assessment assessment = new Assessment();
+		    	assessment.setTenantId(propertySearch.getTenantId());
+		    	assessment.setPropertyId(propertySearch.getPropertyId());
+		    	assessment.setFinancialYear((month >= 4 ? year : year - 1) + "-" + ((month >= 4 ? year + 1 : year) % 100));
+		    	assessment.setAssessmentDate(System.currentTimeMillis());
+		    	assessment.setSource(Source.MUNICIPAL_RECORDS);
+		    	assessment.setChannel(Channel.CFC_COUNTER);
+		    	assessment.setStatus(Status.ACTIVE);
+				AssessmentRequest assessementRequest = AssessmentRequest.builder()
+						.requestInfo(request.getRequestInfo())
+						.assessment(assessment)
+						.build();
+				Optional<Object> fetchResult = serviceRequestRepository.fetchResult(new StringBuilder(uri), assessementRequest);
+				log.info("Received response from : "+uri);
+				
+				if(fetchResult.isPresent()) {
+					log.info("Assessment done sucssessfully");
+				}
+
+		        break; 
+		    }
+		    }
+		}
+
 		request.getProperty().setWorkflow(null);
 		
 		
