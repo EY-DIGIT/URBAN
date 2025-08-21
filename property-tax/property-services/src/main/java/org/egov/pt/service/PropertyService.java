@@ -103,6 +103,9 @@ public class PropertyService {
     
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
+    
+    @Autowired
+	private AssessmentService assessmentService;
 
 	/**
 	 * Enriches the Request and pushes to the Queue
@@ -138,6 +141,8 @@ public class PropertyService {
 		//return request.getProperty();
 	}
 
+	
+	
 	/**
 	 * Updates the property
 	 *
@@ -173,11 +178,13 @@ public class PropertyService {
 		Property propertySearch = null;
 		if(request.getProperty().getWorkflow() != null && request.getProperty().getWorkflow().getAction().equals("APPROVE")) {
 		while (true) {
+			propertyFromRequest = request.getProperty();
+			propertiesFromSearchResponse.get(0).setStatus(request.getProperty().getStatus());
 			log.info("Searching proprty to validate the status ACTIVE");
 		    propertySearch = unmaskingUtil.getPropertyUnmasked(request, propertyFromRequest, propertiesFromSearchResponse);
 		    log.info("Status fetched from updated property : "+propertySearch.getStatus());
 		    if (propertySearch != null) {
-		    if (propertySearch.getStatus()!=null && Status.ACTIVE.toString().equals(propertySearch.getStatus())) {
+		    	if (propertySearch.getStatus()!=null && propertySearch.getStatus().equals(Status.ACTIVE)) {
 		    	LocalDate today = LocalDate.now();
 		        int year = today.getYear();
 		        int month = today.getMonthValue();
@@ -196,13 +203,11 @@ public class PropertyService {
 						.assessment(assessment)
 						.build();
 				log.info("AssessmentRequest: {}", assessementRequest);
-				Optional<Object> fetchResult = serviceRequestRepository.fetchResult(new StringBuilder(uri), assessementRequest);
-				log.info("Received response from : "+uri);
-				
-				if(fetchResult.isPresent()) {
-					log.info("Assessment done sucssessfully");
-				}
-
+			
+			Assessment assessmentResponse =	assessmentService.createAssessment(assessementRequest);
+			if(assessmentResponse!= null) {
+				log.info("Assessment done sucssessfully :: "+ assessmentResponse);
+			}
 		        break; 
 		    }
 		    }
