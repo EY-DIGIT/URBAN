@@ -3,6 +3,7 @@ package org.egov.pt.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.collection.BillResponse;
-import org.egov.pt.models.enums.Category;
+import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.event.Event;
@@ -32,6 +33,7 @@ import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
@@ -60,6 +62,9 @@ public class NotificationService {
 	
 	@Autowired
 	BillingService billingService;
+	
+	@Autowired
+	private PropertyService propertyService;
 
 
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
@@ -107,16 +112,26 @@ public class NotificationService {
 		}
 	}
 
+
+
+	
 	public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {
 
 		Property property = propertyRequest.getProperty();
 		String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+		String templateID = getMessageTemplate(CompleteMsgs, "PAYMENT");
 		
-			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
-						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
-			msg = replaceCommonValues(property, msg, "");		
-			prepareMsgAndSend(propertyRequest, msg,"");
+		String msg = getMsgForUpdate(property, NOTIF_PAYMENT_SUCCESS_IMC, CompleteMsgs, "");
+		
+//			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
+//						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
+//			msg = replaceCommonValues(property, msg, "");		
+//		    prepareMsgAndSend(propertyRequest, msg,"");
+			msg = replaceCommonValuesPayment(property, msg, Amount.toString());
+			prepareMsgAndSendNew(propertyRequest, msg,"",templateID);
 	}
+	
+	
 	
 	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {
 
@@ -146,11 +161,13 @@ public class NotificationService {
 			break;
 
 		case WF_STATUS_APPROVED:
+			propertyService.callCreateAssessment(propertyRequest);
 			BillResponse billingResponse = billingService.fetchBill(property, propertyRequest.getRequestInfo());
+			log.info("Billing Response :: "+billingResponse);
 			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
 			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_APPROVED_CODE, completeMsgs, createOrUpdate);
 			msg = replaceCommonValuesApproved(billingResponse, msg, localisedState);
-			sendNotificationForCitizenFeedback(property,completeMsgs,createOrUpdate);
+			//sendNotificationForCitizenFeedback(property,completeMsgs,createOrUpdate);
 			break;
 			
 		case WF_STATUS_REJECTED:
@@ -164,9 +181,9 @@ public class NotificationService {
 			break;
 		}
 
-//		msg = replaceCommonValues(property, msg, localisedState);
+		msg = replaceCommonValues(property, msg, localisedState);
 //		prepareMsgAndSend(propertyRequest, msg,state);
-		msg = replaceCommonValuesNew(property, msg, localisedState);
+//		msg = replaceCommonValuesNew(property, msg, localisedState);
 		prepareMsgAndSendNew(propertyRequest, msg,state,templateID);
 	}
 
@@ -187,6 +204,10 @@ public class NotificationService {
 		case WF_STATUS_REJECTED:
 			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_REJECT, completeMessage);
 			break;
+			
+		case WF_STATUS_PAYMENT:
+			templateId = notifUtil.getMessageTemplate(TEMPLATE_ID_PT_PAYMENT, completeMessage);
+			break;	
 		}
 		
 		return templateId;
@@ -277,18 +298,24 @@ public class NotificationService {
 		return msg;
 	}
 	
-	private String replaceCommonValuesNew(Property property, String customizedMsg, String localisedState) {
+	private String replaceCommonValuesPayment(Property property, String customizedMsg, String billAmount) {
 
-		customizedMsg = customizedMsg.replace(NOTIFICATION_APPID,property.getAcknowldgementNumber());
-		if (configs.getIsWorkflowEnabled())
-			customizedMsg = customizedMsg.replace(NOTIFICATION_STATUS, localisedState);
+		customizedMsg = customizedMsg.replace(NOTIFICATION_PROPERTYID,property.getPropertyId()).replace(NOTIFICATION_AMOUNT, billAmount)
+				.replace(PAYMENT_DATE, new Date().toString());
 		return customizedMsg;
 	}
 	
 	private String replaceCommonValuesApproved(BillResponse billResponse, String customizedMsg, String localisedState) {
-		String demandAmount = billResponse.getBill().get(0).getTotalAmount().toString();
-		customizedMsg = customizedMsg.replace(DEMAND_AMOUNT,demandAmount);
-		return customizedMsg;
+	    String demandAmount = "0"; // default or fallback value
+
+	    if (billResponse != null 
+	            && billResponse.getBill() != null 
+	            && !billResponse.getBill().isEmpty() 
+	            && billResponse.getBill().get(0).getTotalAmount() != null) {
+	        demandAmount = billResponse.getBill().get(0).getTotalAmount().toString();
+	    }
+
+	    return customizedMsg.replace(DEMAND_AMOUNT, demandAmount);
 	}
 	
 	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {

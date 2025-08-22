@@ -228,6 +228,13 @@ public class PTConstants {
 	
 	public static final String DEMAND_AMOUNT = "{DEMAND}";
 	
+	public static final String NOTIF_PAYMENT_SUCCESS_IMC =   "PT_NOTIF_PAYMENT_SUCCESS_IMC";
+	
+	public static final String PAYMENT_DATE = "{DATE}";
+	
+	public static final String WF_STATUS_PAYMENT = "PAYMENT";
+	
+	
 	
 	/* ASSESSMENT CONSTANTS */
 	
