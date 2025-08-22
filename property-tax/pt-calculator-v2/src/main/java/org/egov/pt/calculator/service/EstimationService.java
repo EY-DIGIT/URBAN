@@ -1138,7 +1138,7 @@ public class EstimationService {
 	                summary.setPropertyTax(reducedPropertyTax);
 
 	                summary.setTotalTax(summary.getTotalTax()
-	                    .subtract(reducedPropertyTax)
+	                    .subtract(summary.getPropertyTax())
 	                    .setScale(0, RoundingMode.HALF_UP)
 	                    .setScale(2));
 	            }
