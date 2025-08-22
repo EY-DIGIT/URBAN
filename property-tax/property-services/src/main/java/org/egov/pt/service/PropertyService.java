@@ -16,8 +16,6 @@ import jakarta.validation.Valid;
 import org.apache.kafka.clients.consumer.internals.Fetch;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Assessment;
-import org.egov.pt.models.Assessment.Source;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -37,7 +35,6 @@ import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.util.UnmaskingUtil;
 import org.egov.pt.validator.PropertyValidator;
-import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.Email;
 import org.egov.pt.web.contracts.EmailRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -104,9 +101,6 @@ public class PropertyService {
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
     
-    @Autowired
-	private AssessmentService assessmentService;
-
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
@@ -343,51 +337,7 @@ public class PropertyService {
 		}
 	}
 	
-	public void callCreateAssessment(PropertyRequest request){
-		
-		Property propertyFromRequest = request.getProperty();
-		PropertyCriteria criteria = propertyValidator.getPropertyCriteriaForSearch(request);
-		List<Property> propertiesFromSearchResponse = searchProperty(criteria, request.getRequestInfo());
-		
-		Property propertySearch = null;
-		if(request.getProperty().getWorkflow() != null && request.getProperty().getWorkflow().getAction().equals("APPROVE")) {
-		while (true) {
-//			propertyFromRequest = request.getProperty();
-//			propertiesFromSearchResponse.get(0).setStatus(request.getProperty().getStatus());
-			log.info("Searching proprty to validate the status ACTIVE");
-		    propertySearch = unmaskingUtil.getPropertyUnmasked(request, propertyFromRequest, propertiesFromSearchResponse);
-		    log.info("Status fetched from updated property : "+propertySearch.getStatus());
-		    if (propertySearch != null) {
-		    	if (propertySearch.getStatus()!=null && propertySearch.getStatus().equals(Status.ACTIVE)) {
-		    	LocalDate today = LocalDate.now();
-		        int year = today.getYear();
-		        int month = today.getMonthValue();
-		    	String uri = "http://localhost:8080/property-services/assessment/_create";
-		    	log.info("Sending Reqeust to : "+uri);
-		    	Assessment assessment = new Assessment();
-		    	assessment.setTenantId(propertySearch.getTenantId());
-		    	assessment.setPropertyId(propertySearch.getPropertyId());
-		    	assessment.setFinancialYear((month >= 4 ? year : year - 1) + "-" + ((month >= 4 ? year + 1 : year) % 100));
-		    	assessment.setAssessmentDate(System.currentTimeMillis());
-		    	assessment.setSource(Source.MUNICIPAL_RECORDS);
-		    	assessment.setChannel(Channel.CFC_COUNTER);
-		    	assessment.setStatus(Status.ACTIVE);
-				AssessmentRequest assessementRequest = AssessmentRequest.builder()
-						.requestInfo(request.getRequestInfo())
-						.assessment(assessment)
-						.build();
-				log.info("AssessmentRequest: {}", assessementRequest);
-			
-			Assessment assessmentResponse =	assessmentService.createAssessment(assessementRequest);
-			if(assessmentResponse!= null) {
-				log.info("Assessment done sucssessfully :: "+ assessmentResponse);
-			}
-		        break; 
-		    }
-		    }
-		}
-		}
-	}
+	
 	
 	/*
 		Method to update owners mobile number

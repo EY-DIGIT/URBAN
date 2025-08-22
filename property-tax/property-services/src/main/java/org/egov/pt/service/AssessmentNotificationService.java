@@ -2,6 +2,7 @@ package org.egov.pt.service;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,14 +13,19 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.Assessment.Source;
 import org.egov.pt.models.collection.BillResponse;
+import org.egov.pt.models.enums.Channel;
+import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.UnmaskingUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.EmailRequest;
+import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,6 +52,12 @@ public class AssessmentNotificationService {
     private MultiStateInstanceUtil centralInstanceUtil;
 
     private UnmaskingUtil unmaskingUtil;
+    
+    @Autowired
+    private PropertyRepository propertyRepository;
+    
+    @Autowired
+    AssessmentService assessmentService;
 
     @Autowired
     public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService, MultiStateInstanceUtil centralInstanceUtil, UnmaskingUtil unmaskingUtil) {
@@ -273,6 +285,73 @@ public class AssessmentNotificationService {
         }
 
         return messageTemplate;
+    }
+    
+    
+ // Calling Create Assessment //
+    public void callCreateAssessment(PropertyRequest request) {
+
+        Property propertyFromRequest = request.getProperty();
+
+        if (request.getProperty().getWorkflow() != null
+                && "APPROVE".equals(request.getProperty().getWorkflow().getAction())) {
+
+            int maxRetries = 5;
+            int attempts = 0;
+            boolean success = false;
+
+            while (attempts < maxRetries) {
+                attempts++;
+                log.info("Attempt {} to validate property status ACTIVE", attempts);
+
+                String propertyStatus = propertyRepository.getPropertyStatus(propertyFromRequest.getPropertyId());
+                log.info("Status fetched from updated property : {}", propertyStatus);
+
+                if (propertyStatus.equals("ACTIVE")) {
+                    LocalDate today = LocalDate.now();
+                    int year = today.getYear();
+                    int month = today.getMonthValue();
+
+                    String uri = "http://localhost:8080/property-services/assessment/_create";
+                    log.info("Sending Request to : {}", uri);
+
+                    Assessment assessment = new Assessment();
+                    assessment.setTenantId(propertyFromRequest.getTenantId());
+                    assessment.setPropertyId(propertyFromRequest.getPropertyId());
+                    assessment.setFinancialYear((month >= 4 ? year : year - 1) + "-" + ((month >= 4 ? year + 1 : year) % 100));
+                    assessment.setAssessmentDate(System.currentTimeMillis());
+                    assessment.setSource(Source.MUNICIPAL_RECORDS);
+                    assessment.setChannel(Channel.CFC_COUNTER);
+                    assessment.setStatus(Status.ACTIVE);
+
+                    AssessmentRequest assessementRequest = AssessmentRequest.builder()
+                            .requestInfo(request.getRequestInfo())
+                            .assessment(assessment)
+                            .build();
+
+                    log.info("AssessmentRequest: {}", assessementRequest);
+
+                    Assessment assessmentResponse = assessmentService.createAssessment(assessementRequest);
+
+                    if (assessmentResponse != null) {
+                        log.info("Assessment done successfully :: {}", assessmentResponse);
+                        success = true;
+                        break;
+                    }
+                }
+                // Small wait before retrying (optional, e.g., 2 seconds)
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Retry interrupted", e);
+                }
+            }
+
+            if (!success) {
+                throw new RuntimeException("Create assessment not executed after " + maxRetries + " attempts");
+            }
+        }
     }
 
 }

@@ -323,4 +323,22 @@ public class PropertyRepository {
 		
 	}
 	
+	/** Method to fetch registry IDs from DB */
+	public List<String> fetchRegistyId(String registryId) {
+	    String query = queryBuilder.getPropertyRegistryIdSearch(registryId);
+	    if (query == null) {
+	        return Collections.emptyList();
+	    }
+	    return jdbcTemplate.queryForList(query, String.class);
+	}
+	
+	/** Method to fetch property status from DB */
+	
+	public String getPropertyStatus(String propertyId) {
+	    String query = queryBuilder.getPropertyStatus(propertyId);
+	    if (query == null) {
+	        return null;
+	    }
+	    return jdbcTemplate.queryForObject(query, String.class);
+	}
 }

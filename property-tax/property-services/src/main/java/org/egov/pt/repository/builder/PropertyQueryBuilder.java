@@ -30,7 +30,7 @@ public class PropertyQueryBuilder {
 	private static final String LEFT_JOIN  =  "LEFT OUTER JOIN";
 	
 	private static String PROEPRTY_AUDIT_QUERY = "select property from {schema}.eg_pt_property_audit where propertyid=?";
-
+	
 	private static String PROEPRTY_ID_QUERY = "select propertyid from {schema}.eg_pt_property where id in (select propertyid from {schema}.eg_pt_owner where userid IN {replace} AND status='ACTIVE')";
 
 	private static String REPLACE_STRING = "{replace}";
@@ -58,6 +58,10 @@ public class PropertyQueryBuilder {
 	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime, ratezone, roadfactor, fromyear, toyear ";
 
 	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_pt_property where tenantid = '{}';";
+	
+	private static String PROEPRTY_REGISTRY_ID_QUERY = "select registryid from eg_pt_property where registryid= '{}';";
+	
+	private static String PROEPRTY_STATUS_QUERY = "select status from eg_pt_property where propertyid= '{}';";
 	
 	private static final String QUERY = SELECT 
 			
@@ -423,4 +427,13 @@ public class PropertyQueryBuilder {
     		    .collect(Collectors.joining(","));
     	return deleteUnitQuery+result+ " )";
     }
+    
+    public String getPropertyRegistryIdSearch(String registryID) {
+		return PROEPRTY_REGISTRY_ID_QUERY.replace("{}",registryID);
+    }
+    
+    public String getPropertyStatus(String propertyId) {
+		return PROEPRTY_STATUS_QUERY.replace("{}",propertyId);
+    }
+    
 }
