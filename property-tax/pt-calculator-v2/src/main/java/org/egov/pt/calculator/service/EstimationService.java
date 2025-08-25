@@ -807,8 +807,7 @@ public class EstimationService {
 		BigDecimal penalty = BigDecimal.ZERO;
 		BigDecimal exemption = BigDecimal.ZERO;
 		BigDecimal rebate = BigDecimal.ZERO;
-		BigDecimal ptTax = BigDecimal.ZERO;
-		BigDecimal ALV = BigDecimal.ZERO;
+
 
 		for (TaxHeadEstimate estimate : estimates) {
 
@@ -856,18 +855,35 @@ public class EstimationService {
 		// false in the argument represents that the demand shouldn't be updated from
 		// this call
 		Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(requestInfo, criteria);
-		BigDecimal collectedAmtForOldDemand = demandService.getCarryForwardAndCancelOldDemand(ptTax, criteria,
+		BigDecimal collectedAmtForOldDemand = demandService.getCarryForwardAndCancelOldDemand(totalAmount, criteria,
 				requestInfo, oldDemand, false);
 
-		if (collectedAmtForOldDemand.compareTo(BigDecimal.ZERO) > 0)
+		if (collectedAmtForOldDemand.compareTo(BigDecimal.ZERO) > 0) {
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ADVANCE_CARRYFORWARD)
 					.estimateAmount(collectedAmtForOldDemand).build());
+			
+			if (arrear.compareTo(BigDecimal.ZERO) == 0) {
+			    // Case 1: No arrears, deduct directly from current year tax
+			    currentYearTax = currentYearTax.subtract(collectedAmtForOldDemand);
+			} else {
+			    // Case 2: Arrears exist, adjust arrears first
+			    if (collectedAmtForOldDemand.compareTo(arrear) >= 0) {
+			        // collected amount covers arrear fully, remaining goes to current year tax
+			        BigDecimal remaining = collectedAmtForOldDemand.subtract(arrear);
+			        arrear = BigDecimal.ZERO;
+			        currentYearTax = currentYearTax.subtract(remaining);
+			    } else {
+			        // collected amount is less than arrear, just reduce arrear
+			        arrear = arrear.subtract(collectedAmtForOldDemand);
+			    }
+			}
+		}
 		else if (collectedAmtForOldDemand.compareTo(BigDecimal.ZERO) < 0)
 			throw new CustomException(EG_PT_DEPRECIATING_ASSESSMENT_ERROR,
 					EG_PT_DEPRECIATING_ASSESSMENT_ERROR_MSG_ESTIMATE);
 	
 
-		  return Calculation.builder().totalAmount(finalAmount.subtract(collectedAmtForOldDemand)).taxAmount(finalTaxAmount)
+		  return Calculation.builder().totalAmount(finalAmount).taxAmount(finalTaxAmount.subtract(collectedAmtForOldDemand))
 				.penalty(penalty).exemption(exemption).rebate(rebate).arrear(arrear).currentYearTax(currentYearTax).fromDate(criteria.getFromDate())
 				.toDate(criteria.getToDate()).tenantId(tenantId).serviceNumber(property.getPropertyId())
 				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).propertyFYDetails(propertyFYDetails)
