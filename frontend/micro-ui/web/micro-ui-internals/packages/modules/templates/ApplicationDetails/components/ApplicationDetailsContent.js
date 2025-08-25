@@ -977,63 +977,6 @@ const handlePaymentPartial = async () => {
             <span style={styles.label}>Partial Payment</span>
           </label>
         </div>
-
-        {/* Conditional Payment Fields //OLD CODE */}
-        {/* {estimateData?.Calculation?.[0] && paymentType === "full" && (
-          <div style={styles.grid}>
-
-            <div style={styles.column}>
-              <div style={styles.label}>Arrear</div>
-              <input
-                value={estimateData?.Calculation[0]?.arrear || ""}
-                readOnly
-                style={styles.input2}
-              />
-            </div>
-
-            <div style={styles.column}>
-              <div style={styles.label}>Current Year</div>
-              <input
-                value={estimateData?.Calculation[0]?.currentYearTax || ""}
-                readOnly
-                style={styles.input2}
-              />
-            </div>
-
-            <div style={styles.column}>
-              <div style={styles.label}>Previous Balance</div>
-              <input
-                value={estimateData?.Calculation[0]?.previousBalance || "0"}
-                readOnly
-                style={styles.input2}
-              />
-            </div>
-
-            <div style={styles.column}>
-              <div style={styles.label}>Total Payment Amount</div>
-              <input
-                value={(() => {
-                  const arrear = parseFloat(estimateData?.Calculation[0]?.arrear || 0);
-                  const currentYear = parseFloat(estimateData?.Calculation[0]?.currentYearTax || 0);
-                  const previousBalance = parseFloat(estimateData?.Calculation[0]?.previousBalance || 0);
-                  return (arrear + currentYear + previousBalance).toFixed(2);
-                })()}
-                readOnly
-                style={styles.input2}
-              />
-            </div>
-
-            <div style={styles.column}>
-              <div style={styles.label}>Advance</div>
-              <input
-                value="0"
-                readOnly
-                style={styles.input2}
-              />
-            </div>
-          </div>
-        )} */}
-
         {paymentType === "full" && (
           <div style={styles.grid}>
 
