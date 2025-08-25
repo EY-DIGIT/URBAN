@@ -25,6 +25,7 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
+import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.service.DiffService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.service.WorkflowService;
@@ -69,6 +70,9 @@ public class PropertyValidator {
     
     @Autowired
     private WorkflowService workflowService;
+    
+    @Autowired
+    private PropertyRepository propertyRepository;
 
     /**
      * Validate the masterData and ctizenInfo of the given propertyRequest
@@ -955,37 +959,60 @@ public class PropertyValidator {
 	
 	/**
 	 * Validates the Registry Id
-	 * 
+	 *
 	 * @param request The propertyRequest received for create or update
 	 */
 	private void validateRegistryId(PropertyRequest request, Map<String, String> errorMap) {
 
-		Property property = request.getProperty();
+	    String registryId = request.getProperty().getRegistryId();
+	    String propertyId = request.getProperty().getPropertyId();
 
-		if (!isRegistryIdValid(property.getRegistryId()))
-			errorMap.put("INVALID REGISTRY ID", "Registry Id is not valid : " + property.getRegistryId());
+	    // Skip validation if registryId is optional & not provided
+	    if (registryId == null || registryId.isEmpty()) {
+	        return;
+	    }
 
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
+	    // Validate format
+	    if (!isRegistryIdValid(registryId)) {
+	        errorMap.put("INVALID REGISTRY ID", "Registry Id is not valid : " + registryId);
+	    } else {
+	        // Check DB only if format is valid
+	        List<String> registryIdResponse = propertyRepository.fetchRegistyId(registryId);
+
+	        if (!registryIdResponse.isEmpty()) {
+	            if (registryIdResponse.size() > 1) {
+	                // More than one record -> duplicate
+	                errorMap.put("ALREADY REGISTERED WITH SAME REGISTRY ID",
+	                        "Registry Id Already Available With Other Property applications : " + registryId);
+	            } else {
+	                // Only one record found -> check if same propertyId
+	                String existingPropertyId = registryIdResponse.get(0);
+	                if (!existingPropertyId.equals(propertyId)) {
+	                    errorMap.put("ALREADY REGISTERED WITH SAME REGISTRY ID",
+	                            "Registry Id Already Available With Other Property application : " + registryId);
+	                }
+	            }
+	        }
+	    }
+
+	    if (!errorMap.isEmpty()) {
+	        throw new CustomException(errorMap);
+	    }
 	}
 
-/**
- * Validates if the Registry Id is 19 digit length & alphanumeric 
- * 
- * @param registryId The registryId to be validated
- * @return True if valid registryId else false
- */
-private Boolean isRegistryIdValid(String registryId) {
 
-	if (registryId == null || registryId.isEmpty())
-		return true;
-	else  // Check length & alphanumeric
-	    if (!registryId.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z0-9]{19}$")) return false;
-		
-		//Start First Two Char with  "MP"
-		//if (!registryId.matches("^MP[A-Za-z0-9]{17}$")) return false;
-	else
-		return true;
-}
+	/**
+	 * Validates if the Registry Id is 19 digit length & alphanumeric
+	 * 
+	 * @param registryId The registryId to be validated
+	 * @return True if valid registryId else false
+	 */
+	private Boolean isRegistryIdValid(String registryId) {
+	    if (registryId == null || registryId.isEmpty())
+	        return true; // optional
+
+	    // Must start with "MP" and followed by 17 uppercase alphanumeric characters
+	    return registryId.matches("^MP[A-Z0-9]{17}$");
+	}
 
 }

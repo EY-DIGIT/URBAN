@@ -1,6 +1,7 @@
 package org.egov.pt.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -63,10 +64,6 @@ public class NotificationService {
 	@Autowired
 	BillingService billingService;
 	
-	@Autowired
-	private PropertyService propertyService;
-
-
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
 
 		String msg = null;
@@ -161,7 +158,6 @@ public class NotificationService {
 			break;
 
 		case WF_STATUS_APPROVED:
-			propertyService.callCreateAssessment(propertyRequest);
 			BillResponse billingResponse = billingService.fetchBill(property, propertyRequest.getRequestInfo());
 			log.info("Billing Response :: "+billingResponse);
 			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
@@ -662,5 +658,5 @@ public class NotificationService {
 		notifUtil.sendSMS(smsRequests, property.getTenantId());
 
 	}
-
+	
 }
