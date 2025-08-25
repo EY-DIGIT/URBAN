@@ -195,6 +195,8 @@ const mutationRegistrationDetails = (application, t) => {
 };
 
 const getPTAcknowledgementData = async (application, tenantInfo, t) => {
+  console.log("applicatifsdsfsdsaon", application);
+  console.log("tenantInfosdsds", tenantInfo);
   const filesArray = application?.documents?.map((value) => value?.fileStoreId);
   const res = filesArray?.length>0 && await Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId());
 

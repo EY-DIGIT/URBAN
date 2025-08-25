@@ -490,41 +490,43 @@ const PropertyForm = () => {
                 creationReason: "UPDATE",
                 source: "MUNICIPAL_RECORDS"
             },
-            RequestInfo: {
-                apiId: "Rainmaker",
-                authToken: userInfo1?.authToken,
-                userInfo: {
-                    id: userInfo1?.id,
-                    uuid: userInfo1?.uuid,
-                    userName: userInfo1?.userName,
-                    name: userInfo1?.name,
-                    mobileNumber: userInfo1?.mobileNumber,
-                    emailId: userInfo1?.emailId,
-                    locale: userInfo1?.locale,
-                    type: userInfo1?.type,
-                    roles: userInfo1?.roles,
-                    active: userInfo1?.active !== false,
-                    tenantId: userInfo1?.tenantId,
-                    permanentCity: userInfo1?.permanentCity
-                },
-                msgId: "1749797151521|en_IN",
-                plainAccessRequest: {}
-            }
+            // RequestInfo: {
+            //     apiId: "Rainmaker",
+            //     authToken: userInfo1?.authToken,
+            //     userInfo: {
+            //         id: userInfo1?.id,
+            //         uuid: userInfo1?.uuid,
+            //         userName: userInfo1?.userName,
+            //         name: userInfo1?.name,
+            //         mobileNumber: userInfo1?.mobileNumber,
+            //         emailId: userInfo1?.emailId,
+            //         locale: userInfo1?.locale,
+            //         type: userInfo1?.type,
+            //         roles: userInfo1?.roles,
+            //         active: userInfo1?.active !== false,
+            //         tenantId: userInfo1?.tenantId,
+            //         permanentCity: userInfo1?.permanentCity
+            //     },
+            //     msgId: "1749797151521|en_IN",
+            //     plainAccessRequest: {}
+            // }
         };
 
-        mutationUpdate.mutate(payload, {
-            onSuccess: (data) => {
-                const property = data?.Properties?.[0];
-                if (property) {
-                    setAcknowledgmentNumber(property.acknowldgementNumber);
-                    setShowConfirmPopup(false);
-                    setShowSuccessPopup(true);
-                }
-            },
-            onError: (err) => {
-                alert("Submission failed");
-            },
-        });
+        // mutationUpdate.mutate(payload, {
+        //     onSuccess: (data) => {
+        //         const property = data?.Properties?.[0];
+        //         if (property) {
+        //             setAcknowledgmentNumber(property.acknowldgementNumber);
+        //             setShowConfirmPopup(false);
+        //             setShowSuccessPopup(true);
+        //         }
+        //     },
+        //     onError: (err) => {
+        //         alert("Submission failed");
+        //     },
+        // });
+        history.replace("/digit-ui/employee/pt/response", { Property: payload?.Property ,key: "UPDATE", action: "SUBMIT"});
+        // history.replace("/digit-ui/employee/pt/response", { Property: submitData.Property, key: "UPDATE", action: "SUBMIT" });
     };
 
     return (

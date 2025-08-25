@@ -95,7 +95,7 @@ const styles = {
   successButton: {
     marginTop: "1rem",
     padding: "0.5rem 1.5rem",
-    backgroundColor: "#6A1B9A",
+    backgroundColor: "rgb(107, 19, 63)",
     color: "white",
     border: "none",
     borderRadius: "5px",
