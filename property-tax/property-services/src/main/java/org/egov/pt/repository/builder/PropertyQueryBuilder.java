@@ -59,8 +59,8 @@ public class PropertyQueryBuilder {
 
 	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_pt_property where tenantid = '{}';";
 	
-	private static String PROEPRTY_REGISTRY_ID_QUERY = "select registryid from eg_pt_property where registryid= '{}';";
-	
+	private static String PROEPRTY_REGISTRY_ID_QUERY = "select propertyid from eg_pt_property where registryid= '{}';";
+
 	private static String PROEPRTY_STATUS_QUERY = "select status from eg_pt_property where propertyid= '{}';";
 	
 	private static final String QUERY = SELECT 
@@ -435,5 +435,4 @@ public class PropertyQueryBuilder {
     public String getPropertyStatus(String propertyId) {
 		return PROEPRTY_STATUS_QUERY.replace("{}",propertyId);
     }
-    
 }

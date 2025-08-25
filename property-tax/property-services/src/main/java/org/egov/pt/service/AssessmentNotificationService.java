@@ -296,7 +296,7 @@ public class AssessmentNotificationService {
         if (request.getProperty().getWorkflow() != null
                 && "APPROVE".equals(request.getProperty().getWorkflow().getAction())) {
 
-            int maxRetries = 5;
+            int maxRetries = 15;
             int attempts = 0;
             boolean success = false;
 

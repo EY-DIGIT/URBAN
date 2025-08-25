@@ -337,8 +337,6 @@ public class PropertyService {
 		}
 	}
 	
-	
-	
 	/*
 		Method to update owners mobile number
 	*/
