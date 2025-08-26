@@ -72,7 +72,7 @@ const styles = {
         textDecorationThickness: "0%",
         color: "#6b133f",
     },
-      sectionHeaderDemand: {
+    sectionHeaderDemand: {
         fontFamily: "Poppins",
         fontWeight: "bold",
         fontSize: "22px",
@@ -164,6 +164,56 @@ const styles = {
         fontSize: "12px",
         marginTop: "8px",
     },
+      modalOverlay: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+        padding: "20px",
+        boxSizing: "border-box"
+    },
+    modalContent: {
+        background: "#fff",
+        borderRadius: "8px",
+        padding: "40px",
+        textAlign: "center",
+        width: "500px",
+        maxWidth: "100%",
+        '@media (max-width: 768px)': {
+            padding: "24px",
+            width: "100%",
+            maxWidth: "350px"
+        }
+    },
+    modalButtonContainer: {
+        display: "flex",
+        justifyContent: "center",
+        gap: "20px",
+        '@media (max-width: 768px)': {
+            flexDirection: "column",
+            gap: "12px"
+        }
+    },
+    modalButton: {
+        backgroundColor: "#6b133f",
+        color: "#fff",
+        padding: "8px 20px",
+        borderRadius: "6px",
+        border: "none",
+        cursor: "pointer",
+        fontSize: "14px",
+        '@media (max-width: 768px)': {
+            padding: "12px 20px",
+            fontSize: "13px",
+            width: "100%"
+        }
+    }
 };
 
 const InputField = ({ label, value }) => (
@@ -179,6 +229,7 @@ const InputFieldNew = ({ label, value }) => (
     </div>
 );
 const PropertyForm = () => {
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const history = useHistory();
     let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
 
@@ -192,6 +243,14 @@ const PropertyForm = () => {
     const ownersDetail = applicationData?.owners || [];
     const address = applicationData?.address || {};
 
+    const handleConfirm = () => {
+        const flag = true;
+        const propertyId = applicationData?.propertyId;
+        history.push({
+            pathname: `applicationsearch/application-details/${propertyId}`, // 👈 send via query params
+            state: { propertyId, flag } // 👈 also send via state if needed
+        });
+    };
 
     return (
         <div style={{ position: "relative" }}>
@@ -226,7 +285,7 @@ const PropertyForm = () => {
                         </div>
                         <div style={styles.row}>
                             <InputField label="Email" value={owner?.emailId || "N/A"} />
-                             <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
+                            <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                             <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                         </div>
                     </React.Fragment>
@@ -236,7 +295,7 @@ const PropertyForm = () => {
                 {/* Table 1 - Property Details */}
                 <div style={styles.sectionHeader}>Tax Details</div>
                 <div style={{ overflowX: 'auto', width: '100%' }}>
-                  <table style={styles.table}>
+                    <table style={styles.table}>
                         <thead>
                             <tr>
                                 {["Year", "Usage Type", "User", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
@@ -267,7 +326,7 @@ const PropertyForm = () => {
                 {/* Table 2 - Tax Summary */}
                 <div style={styles.sectionHeader}>Property tax summary</div>
                 <div style={{ overflowX: 'auto', width: '100%' }}>
-                  <table style={styles.table}>
+                    <table style={styles.table}>
                         <thead>
                             <tr>
                                 {["Year", "TPV", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Rebate", "Penalty", "Net Tax"].map((h) => (
@@ -309,11 +368,27 @@ const PropertyForm = () => {
                     <button style={styles.confirmBtn} onClick={() => window.history.back()}>
                         Back
                     </button>
-                    {/* <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button> */}
+                    <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
                 </div>
             </div>
 
-
+   {showConfirmPopup && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modalContent}>
+                        <p style={{ fontSize: "16px", color: "#3E3E3E", marginBottom: "30px" }}>
+                            Are you sure you want to submit this?
+                        </p>
+                        <div style={styles.modalButtonContainer}>
+                            <button style={styles.modalButton} onClick={() => setShowConfirmPopup(false)}>
+                                Back
+                            </button>
+                            <button style={styles.modalButton} onClick={() => handleConfirm()}>
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
 
     );

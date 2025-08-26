@@ -3,9 +3,11 @@ import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 import { useHistory, useLocation } from "react-router-dom";
 
-function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {} ,applicationData}) {
-  console.log("ApplicationDetailsActionBar Props:",  applicationData );
-   const history = useHistory();
+function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {}, applicationData }) {
+  console.log("ApplicationDetailsActionBar Props:", applicationData);
+  const location = useLocation();
+  const { propertyId, flag } = location.state || {};
+  const history = useHistory();
   const { t } = useTranslation();
   let user = Digit.UserService.getUser();
   const menuRef = useRef();
@@ -35,7 +37,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     isMenuBotton = true;
     isSingleButton = false;
   }
-   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+  let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
 
   const tenantId = userInfo1?.tenantId;
   const {
@@ -44,24 +46,24 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     mutate: ptCalculationEstimateMutate,
     error,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
-  
+
   const getCurrentFinancialYear = () => {
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth(); // 0-indexed: Jan = 0, Mar = 2, Apr = 3
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth(); // 0-indexed: Jan = 0, Mar = 2, Apr = 3
 
-  if (currentMonth >= 3) {
-    // April (3) or later — financial year starts this year
-    return `${currentYear}-${String(currentYear + 1).slice(-2)}`;
-  } else {
-    // Jan–Mar — financial year started last year
-    return `${currentYear - 1}-${String(currentYear).slice(-2)}`;
-  }
-};
+    if (currentMonth >= 3) {
+      // April (3) or later — financial year starts this year
+      return `${currentYear}-${String(currentYear + 1).slice(-2)}`;
+    } else {
+      // Jan–Mar — financial year started last year
+      return `${currentYear - 1}-${String(currentYear).slice(-2)}`;
+    }
+  };
 
-const toYear = getCurrentFinancialYear();
+  const toYear = getCurrentFinancialYear();
   const handlePreview = () => {
-  
+
     const payload = {
       Assessment: {
         financialYear: toYear,
@@ -96,9 +98,9 @@ const toYear = getCurrentFinancialYear();
     ptCalculationEstimateMutate(payload, {
       onSuccess: (data) => {
         history.push({
-      pathname: "/digit-ui/employee/pt/PreviewView",
-      state: { data, applicationData}// send full object
-    });
+          pathname: "/digit-ui/employee/pt/PreviewView",
+          state: { data, applicationData }// send full object
+        });
         console.log("Estimate success:", data);
       },
       onError: (error) => {
@@ -106,7 +108,7 @@ const toYear = getCurrentFinancialYear();
       },
     });
   };
- 
+
   return (
     <React.Fragment>
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
@@ -123,7 +125,9 @@ const toYear = getCurrentFinancialYear();
           ) : null}
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }} ref={menuRef}>
             <SubmitBar ref={menuRef} label={t("Preview")} onSubmit={() => handlePreview()} />
-            <SubmitBar ref={menuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            {flag && (
+              <SubmitBar ref={menuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            )}
           </div>
         </ActionBar>
       )}
