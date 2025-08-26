@@ -855,28 +855,43 @@ public class EstimationService {
 		// false in the argument represents that the demand shouldn't be updated from
 		// this call
 		Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(requestInfo, criteria);
-		BigDecimal collectedAmtForOldDemand = demandService.getCarryForwardAndCancelOldDemand(totalAmount, criteria,
+		BigDecimal collectedAmtForOldDemand = demandService.getCarryForwardAndCancelOldDemand(taxAmt, criteria,
 				requestInfo, oldDemand, false);
-
+		BigDecimal previousBalance = BigDecimal.ZERO;
 		if (collectedAmtForOldDemand.compareTo(BigDecimal.ZERO) > 0) {
 			estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_ADVANCE_CARRYFORWARD)
 					.estimateAmount(collectedAmtForOldDemand).build());
 			
-			if (arrear.compareTo(BigDecimal.ZERO) == 0) {
-			    // Case 1: No arrears, deduct directly from current year tax
-			    currentYearTax = currentYearTax.subtract(collectedAmtForOldDemand);
-			} else {
-			    // Case 2: Arrears exist, adjust arrears first
-			    if (collectedAmtForOldDemand.compareTo(arrear) >= 0) {
-			        // collected amount covers arrear fully, remaining goes to current year tax
-			        BigDecimal remaining = collectedAmtForOldDemand.subtract(arrear);
+			BigDecimal remaining = collectedAmtForOldDemand;
+
+			// Step 1: Adjust arrear
+			if (arrear.compareTo(BigDecimal.ZERO) > 0) {
+			    if (remaining.compareTo(arrear) >= 0) {
+			        remaining = remaining.subtract(arrear);
 			        arrear = BigDecimal.ZERO;
-			        currentYearTax = currentYearTax.subtract(remaining);
 			    } else {
-			        // collected amount is less than arrear, just reduce arrear
-			        arrear = arrear.subtract(collectedAmtForOldDemand);
+			        arrear = arrear.subtract(remaining);
+			        remaining = BigDecimal.ZERO;
 			    }
 			}
+
+			// Step 2: Adjust current year tax
+			if (remaining.compareTo(BigDecimal.ZERO) > 0) {
+			    if (remaining.compareTo(currentYearTax) >= 0) {
+			        remaining = remaining.subtract(currentYearTax);
+			        currentYearTax = BigDecimal.ZERO;
+			    } else {
+			        currentYearTax = currentYearTax.subtract(remaining);
+			        remaining = BigDecimal.ZERO;
+			    }
+			}
+
+			// Step 3: Whatever is left is excess
+			if (remaining.compareTo(BigDecimal.ZERO) > 0) {
+				previousBalance = remaining;
+			}
+
+
 		}
 		else if (collectedAmtForOldDemand.compareTo(BigDecimal.ZERO) < 0)
 			throw new CustomException(EG_PT_DEPRECIATING_ASSESSMENT_ERROR,
@@ -884,7 +899,7 @@ public class EstimationService {
 	
 
 		  return Calculation.builder().totalAmount(finalAmount).taxAmount(finalTaxAmount.subtract(collectedAmtForOldDemand))
-				.penalty(penalty).exemption(exemption).rebate(rebate).arrear(arrear).currentYearTax(currentYearTax).fromDate(criteria.getFromDate())
+				.penalty(penalty).exemption(exemption).rebate(rebate).arrear(arrear).currentYearTax(currentYearTax).previousBalance(previousBalance).fromDate(criteria.getFromDate())
 				.toDate(criteria.getToDate()).tenantId(tenantId).serviceNumber(property.getPropertyId())
 				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).propertyFYDetails(propertyFYDetails)
 				.propertyFYTaxSummaries(propertyFYTaxSummary).build();
