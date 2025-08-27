@@ -209,7 +209,12 @@ const ApplicationDetails = (props) => {
             }
             return
           }
-          setShowToast({ key: "success", action: selectedAction });
+          // setShowToast({ key: "success", action: selectedAction });
+                
+                  history.push({
+            pathname: `/digit-ui/employee/pt/success-applications/${applicationNumber}`, // 👈 send via query params
+            state: {data} // 👈 also send via state if needed
+        });
           clearDataDetails && setTimeout(clearDataDetails, 3000);
           setTimeout(closeToast, 5000);
           queryClient.clear();
