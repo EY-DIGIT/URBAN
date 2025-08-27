@@ -47,6 +47,9 @@ export default {
     color: '#282828',
     // width: "200px"
   },
+  checkboxInput: {
+    marginRight: "8px",  // 👈 space between checkbox & label text
+  },
   formSection: {
     display: "flex",
     flexWrap: "wrap",
@@ -55,6 +58,7 @@ export default {
   flex30: {
     flex: "1 1 30%"
   },
+
   flex302: {
     flex: "1 1 0%"
   },
@@ -62,9 +66,10 @@ export default {
     flex: "1 1 45%"
   },
   table: {
-    borderCollapse: "collapse",
-    // width: "80%",
-    // margin: "auto"
+    borderCollapse: "separate",   // important
+    borderSpacing: 0,             // remove gaps
+    borderRadius: "5px",
+    overflow: "hidden", 
   },
   tableHeader: {
     textAlign: "left",
@@ -108,7 +113,8 @@ export default {
     flexWrap: "wrap",
     gap: "1rem",
     marginTop: "1rem",
-    marginBottom: "1rem"
+    marginBottom: "1rem",
+    marginRight: "30px"
   },
   buttonContainer: {
     marginTop: "2rem",
@@ -150,7 +156,7 @@ export default {
   },
   nameInputContainer: {
     display: "flex",
-    gap: "0.5rem",
+    gap: "0px",
     alignItems: "center"
   },
   dropdown30: {
@@ -160,7 +166,7 @@ export default {
     borderRadius: "6px",
     // border: "1px solid #D9D9D9",
     // boxShadow: "0px 4px 4px 0px #00000040",
-    background: "#D2D2D280",
+    background: "#D3D3D3",
     border: "0.5px solid #D2D2D280",
     color: "black"
   },
@@ -171,11 +177,11 @@ export default {
     marginTop: "auto",
 
   },
-  checkboxLabel: { padding: "10px" },
+  checkboxLabel: { padding: "30px" },
   poppinsTextStyle: {
     fontFamily: 'Poppins',
     fontWeight: 500,
-    fontSize: '10px',
+    fontSize: '12px',
     lineHeight: '24px',
     letterSpacing: '0%',
   },
@@ -196,24 +202,35 @@ export default {
     backgroundColor: "#f9f9f9"
   },
   assessmentStyle: {
-    // background: '#6b133f',
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: 'bold',
-    fontSize: '18px',
-    lineHeight: '100%',
-    letterSpacing: '0px',
+    fontFamily: 'Poppins, Roboto, sans-serif',
+    fontWeight: '600',
+    fontSize: '20px',
+    lineHeight: '1.5',
+    letterSpacing: '0.5px',
     textDecorationStyle: 'solid',
     textDecorationColor: '#6b133f',
     textDecorationThickness: '1px',
-    color: '#6B133F',
+    color: '#6b0f2a',
     marginBottom: '20px',
-    // padding: '14px',
-    // width: '52%',
-    // borderBottomRightRadius: '20px',
-    // borderTopRightRadius: '20px',
+    wordSpacing: '2px',
     textAlign: "left",
 
   },
+  factorStyle:{
+    fontFamily: 'Poppins, Roboto, sans-serif',
+    fontWeight: '600',
+    fontSize: '16px',
+    lineHeight: '1.5',
+    letterSpacing: '0.5px',
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#6b133f',
+    textDecorationThickness: '1px',
+    color: '#36454F',
+    marginBottom: '0px',
+    wordSpacing: '2px',
+    textAlign: "left",
+  },
+
   styleMtop: {
     marginTop: "30px"
   },
@@ -234,7 +251,8 @@ export default {
     // background: "#6b133f4D",
     borderRadius: "20px",
     width: "330px",
-    // padding: "16px"
+    // padding: "16px",
+    backgroundColor: "red"
   },
 
   docBox: {
@@ -251,19 +269,17 @@ export default {
     marginBottom: "10px"
   },
   textBox: {
-    // width: "244.23472595214844px",
+    width: "85%",
     height: "35px",
     borderWidth: "1px",
-    borderRadius: "6px",
-    // border: "1px solid #D9D9D9",
-    // boxShadow: "0px 4px 4px 0px #00000040",
-    // background: "#A3BBF347"
-    background: "#D2D2D280",
+    borderTopRightRadius: "6px",
+    borderBottomRightRadius: "6px",
+    background: "#E5E4E2",
     border: "0.5px solid #D2D2D280",
     color: "black"
   },
   widthInput: {
-    width: "100%",
+    width: "90%",
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",

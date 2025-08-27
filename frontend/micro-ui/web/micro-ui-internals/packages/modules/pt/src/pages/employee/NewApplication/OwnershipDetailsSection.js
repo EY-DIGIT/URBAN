@@ -58,7 +58,7 @@ const OwnershipDetailsSection = ({
 
           {/* Name with Title */}
           <div style={styles.flex30}>
-            <div style={styles.poppinsLabel}>
+            <div style={{...styles.poppinsLabel , color: "#555"}}>
               {t("Owner Name")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <div style={styles.nameInputContainer}>
@@ -70,6 +70,7 @@ const OwnershipDetailsSection = ({
                 optionKey="name"
                 style={styles.dropdown30}
                 placeholder={t("Mr")}
+                placeholderStyle={{ color: "#000" }}  
               />
               <TextInput
                 style={styles.textBox}
@@ -117,6 +118,7 @@ const OwnershipDetailsSection = ({
               style={styles.widthInput}
               value={owner.fatherHusbandName}
               onChange={(e) => updateOwner(index, "fatherHusbandName", e.target.value)}
+              placeholder={t("Enter")}
             />
             {formErrors?.fatherHusbandName && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors.fatherHusbandName}</p>
@@ -151,6 +153,7 @@ const OwnershipDetailsSection = ({
               value={owner.email}
               onChange={(e) => updateOwner(index, "email", e.target.value)}
               style={styles.widthInput}
+              placeholder={t("Enter")}
             />
           </div>
           {/* Mobile */}
@@ -162,6 +165,7 @@ const OwnershipDetailsSection = ({
               value={owner.mobile}
               onChange={(e) => updateOwner(index, "mobile", e.target.value)}
               style={styles.widthInput}
+              placeholder={t("Enter")}
             />
             {formErrors?.mobile && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors.mobile}</p>
@@ -174,6 +178,7 @@ const OwnershipDetailsSection = ({
               value={owner.altNumber}
               onChange={(e) => updateOwner(index, "altNumber", e.target.value)}
               style={styles.widthInput}
+              placeholder={t("Enter")}
             />
           </div>
           {/* Aadhaar */}
@@ -183,6 +188,7 @@ const OwnershipDetailsSection = ({
               style={styles.widthInput}
               value={owner.aadhaar}
               onChange={(e) => updateOwner(index, "aadhaar", e.target.value)}
+              placeholder={t("Enter")}
             />
             {formErrors.aadhaar && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors.aadhaar}</p>
@@ -198,6 +204,7 @@ const OwnershipDetailsSection = ({
               onChange={(e) => updateOwner(index, "samagraID", e.target.value)}
               style={styles.widthInput}
               disabled={owner.noSamagra === true}
+              placeholder={t("Enter")}
             />
             <div style={{ marginTop: "4px" }}>
               <label style={{ fontSize: "14px" }}>
