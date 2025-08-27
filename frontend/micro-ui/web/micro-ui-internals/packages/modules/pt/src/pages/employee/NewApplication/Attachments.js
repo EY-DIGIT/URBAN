@@ -223,6 +223,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
           {t(label)} {isRequired && <span style={{ color: "red" }}>*</span>}
         </label>
         <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div>
+        <div style={styles.descText}>Accepts: Aadhaar, Driving License, Pan Card, Voter ID</div>
       </div>
 
       <input
@@ -289,6 +290,7 @@ const styles = {
     gap: "20px",
   },
   fileBox: {
+    width: "90%",
     border: "2px dashed #aaa",
     borderRadius: "8px",
     padding: "16px",

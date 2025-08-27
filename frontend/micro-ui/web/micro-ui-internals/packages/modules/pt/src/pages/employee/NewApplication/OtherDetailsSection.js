@@ -130,40 +130,50 @@ const OtherDetailsSection = ({
             placeholder={t("Select")}
           />
         </div>
-        <div >
+        {/* ✅ Third Dropdown (Newly Added) */}
+        <div style={styles.flex302}>
+          <div style={styles.factorStyle}>{t("Other Factors")}</div>
           <div style={styles.checkboxContainer}>
             <div>
               <label style={styles.poppinsLabels}>
-                {t("Mobile Tower")}{" "}
+            
                 <input
                   type="checkbox"
+                  style={styles.checkboxInput}
                   checked={checkboxes.mobileTower}
                   onChange={() => handleCheckboxChange("mobileTower")}
                 />
+                    {t("Mobile Tower")}{" "}
               </label>
             </div>
             <div>
               <label style={styles.poppinsLabels}>
-                {t("Bond Road")}{" "}
+             
                 <input
                   type="checkbox"
+                  style={styles.checkboxInput}
                   checked={checkboxes.broadRoad}
                   onChange={() => handleCheckboxChange("broadRoad")}
                 />
+                   {t("Bond Road")}{" "}
               </label>
             </div>
             <div>
               <label style={styles.poppinsLabels}>
-                {t("Advertisement")}{" "}
+              
                 <input
                   type="checkbox"
+                  style={styles.checkboxInput}
                   checked={checkboxes.advertisement}
                   onChange={() => handleCheckboxChange("advertisement")}
                 />
+                  {t("Advertisement")}{" "}
               </label>
             </div>
           </div>
         </div>
+        
+        
       </div>
       {/* </div> */}
 
