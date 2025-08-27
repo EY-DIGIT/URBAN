@@ -472,7 +472,7 @@ const DashboardLayout = () => {
       color: "#6B133F",
     },
     contentArea: {
-      padding: isMobile ? "10px" : "20px",
+      padding: isMobile ? "10px" : "",
     },
     contentHeader: {
       display: "flex",

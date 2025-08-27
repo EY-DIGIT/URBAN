@@ -54,6 +54,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     ["/digit-ui/employee/pt/search"]: "PT_COMMON_SEARCH_PROPERTY_SUB_HEADER",
     ["/digit-ui/employee/pt/application-search"]: "ES_COMMON_APPLICATION_SEARCH",
     ["/digit-ui/employee/pt/PreviewDemand"]: "PreviewDemand",
+     ["/digit-ui/employee/pt/PropertyLandingPage"]: "Property Landing Page",
   };
 
   const getBreadCrumb = () => {
@@ -67,6 +68,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
     else if (location.pathname.includes("/digit-ui/employee/pt/PreviewDemand/")) return t("PreviewDemand");
      else if (location.pathname.includes("/digit-ui/employee/pt/success-applications/")) return t("PT_APPLICATION_TITLE");
+      else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLandingPage")) return t("Property Landing Page");
   };
 
   const PTBreadCrumbs = ({ location }) => {
