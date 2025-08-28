@@ -1,188 +1,10 @@
-// import React from "react";
-
-// const AttachmentsSection = ({ t, styles, handleFileChange, formErrors }) => {
-//   const renderSvg = () => (
-//     <svg
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="16"
-//       height="16"
-//       fill="none"
-//       stroke="#1E509E"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//       style={{
-//         position: "absolute",
-//         top: "50%",
-//         right: "10px",
-//         transform: "translateY(-50%)",
-//         pointerEvents: "none",
-//         color: "#1E509E"
-//       }}
-//       viewBox="0 0 24 24"
-//     >
-//       <path d="M21.44 11.05L12.97 19.51a5.25 5.25 0 01-7.42-7.42l8.48-8.48a3.5 3.5 0 014.95 4.95l-8.49 8.48a1.75 1.75 0 01-2.47-2.47l7.78-7.78" />
-//     </svg>
-//   );
-
-//   return (
-//     <div>
-//       <div style={styles.assessmentStyle}>
-//         Attachments ( *Accepted File Type : JPG/PNG/PDF **Maximum File Size 2MB)
-//       </div>
-//       <div className="form-section" style={styles.formSection}>
-
-//         {/* Name with Title */}
-
-//         {/* Photo ID */}
-//         <div style={styles.flex30}>
-//           <div style={styles.poppinsLabel}>
-//             {t("Photo ID")} <span className="mandatory" style={styles.mandatory}>*</span>
-//           </div>
-//           <div style={styles.docBox}>
-//             <input
-//               style={{ ...styles.widthInputSha, paddingLeft: "10px", paddingRight: "10px", fontSize: "13px" }}
-//               type="file"
-//               onChange={(e) => handleFileChange("photoId", e.target.files[0])}
-//             />
-//             {renderSvg()}
-//           </div>
-//           {formErrors?.photoId && (
-//             <p style={{ color: "red", fontSize: "12px" }}>{formErrors.photoId}</p>
-//           )}
-//         </div>
-
-//         {/* Ownership Document */}
-//         <div style={styles.flex30}>
-//           <div style={styles.poppinsLabel}>
-//             {t("Ownership Document")} <span className="mandatory" style={styles.mandatory}>*</span>
-//           </div>
-//           <div style={styles.docBox}>
-//             <input
-//               style={{ ...styles.widthInputSha, paddingLeft: "10px", paddingRight: "10px", fontSize: "13px" }}
-//               type="file"
-//               onChange={(e) => handleFileChange("ownershipDoc", e.target.files[0])}
-//             />
-//             {renderSvg()}
-//           </div>
-//           {formErrors?.ownershipDoc && (
-//             <p style={{ color: "red", fontSize: "12px" }}>{formErrors.ownershipDoc}</p>
-//           )}
-//         </div>
-
-//         {/* Seller's Registry Copy */}
-//         <div style={styles.flex30}>
-//           <div style={styles.poppinsLabel}>{t("Sellers Registry Copy")}</div>
-//           <div style={styles.docBox}>
-//             <input
-//               style={{ ...styles.widthInputSha, paddingLeft: "10px", paddingRight: "10px", fontSize: "13px" }}
-//               type="file"
-//               onChange={(e) => handleFileChange("sellersRegistry", e.target.files[0])}
-//             />
-//             {renderSvg()}
-//           </div>
-//         </div>
-//       </div>
-//       {/* Last Tax Paid Receipt */}
-//       {/* <div> */}
-//       <div style={{ ...styles.flex45, width: "32%", marginTop: "20px" }}>
-//         <div style={styles.poppinsLabel}>{t("Last Tax Paid Receipt By Seller")}</div>
-//         <div style={styles.docBox}>
-//           <input
-//             style={{ ...styles.widthInputSha, paddingLeft: "10px", paddingRight: "10px", fontSize: "13px" }}
-//             type="file"
-//             onChange={(e) => handleFileChange("lastTaxReceipt", e.target.files[0])}
-//           />
-//           {renderSvg()}
-//         </div>
-//         {/* </div> */}
-//       </div>
-//     </div>
-
-//   );
-// };
-
-// export default AttachmentsSection;
-
-
-// import React, { useState } from "react";
-
-// const AttachmentsSection = ({ t, styles, handleFileChange, formErrors }) => {
-//   const [selectedFiles, setSelectedFiles] = useState({});
-
-//   const onFileChange = (key, file) => {
-//     handleFileChange(key, file);
-//     setSelectedFiles((prev) => ({ ...prev, [key]: file?.name || "" }));
-//   };
-
-//   const renderSvg = () => (
-//     <svg
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="16"
-//       height="16"
-//       fill="none"
-//       stroke="#6b133f"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//       style={{ marginLeft: "auto" }}
-//       viewBox="0 0 24 24"
-//     >
-//       <path d="M21.44 11.05L12.97 19.51a5.25 5.25 0 01-7.42-7.42l8.48-8.48a3.5 3.5 0 014.95 4.95l-8.49 8.48a1.75 1.75 0 01-2.47-2.47l7.78-7.78" />
-//     </svg>
-//   );
-
-//   const renderFileInput = (id, label, isRequired = false) => (
-//     <div style={styles.flex30}>
-//       <div style={styles.poppinsLabel}>
-//         {t(label)}{" "}
-//         {isRequired && <span className="mandatory" style={styles.mandatory}>*</span>}
-//       </div>
-//       <div style={styles.docBox}>
-//         <input
-//           id={id}
-//           type="file"
-//           style={{ display: "none" }}
-//           onChange={(e) => onFileChange(id, e.target.files[0])}
-//         />
-//         <label htmlFor={id} style={styles.fileLabel}>
-//           <span style={styles.placeholderText}>
-//             {selectedFiles[id] || "Select a File"}
-//           </span>
-//           <span style={styles.icon}>{renderSvg()}</span>
-//         </label>
-//       </div>
-//       {formErrors?.[id] && (
-//         <p style={{ color: "red", fontSize: "12px" }}>{formErrors[id]}</p>
-//       )}
-//     </div>
-//   );
-
-//   return (
-//     <div>
-//       <div style={styles.assessmentStyle}>
-//         Attachments ( *Accepted File Type: JPG/PNG/PDF **Maximum File Size: 2MB)
-//       </div>
-//       <div className="form-section" style={styles.formSection}>
-//         {renderFileInput("photoId", "Photo ID", true)}
-//         {renderFileInput("ownershipDoc", "Ownership Document", true)}
-//         {/* {renderFileInput("sellersRegistry", "Sellers Registry Copy")} */}
-//       </div>
-//       <div style={{ ...styles.flex45, width: "32%", marginTop: "20px" }}>
-//         {renderFileInput("lastTaxReceipt", "Last Tax Paid Receipt By Seller")}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AttachmentsSection;
-
 
 import React, { useState, useEffect } from "react";
 
-const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors = {} }) => {
-  const [selectedFiles, setSelectedFiles] = useState({});
+const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors = {}, resetKey, documents = {} }) => {
+  const [localErrors, setLocalErrors] = useState({});
   const [isMobile, setIsMobile] = useState(false);
+  const [othersFields, setOthersFields] = useState(["others_1"]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -194,11 +16,9 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const onFileChange = (key, file) => {
+   const onFileChange = (key, file) => {
     handleFileChange(key, file);
-    setSelectedFiles((prev) => ({ ...prev, [key]: file?.name || "" }));
   };
-
   const renderSvg = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -214,35 +34,60 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
       <path d="M21.44 11.05L12.97 19.51a5.25 5.25 0 01-7.42-7.42l8.48-8.48a3.5 3.5 0 014.95 4.95l-8.49 8.48a1.75 1.75 0 01-2.47-2.47l7.78-7.78" />
     </svg>
   );
+  const renderFileInput = (id, label, isRequired = false, showDelete = false) => (
 
-  const renderFileInput = (id, label, isRequired = false) => (
-    <div style={styles.fileBox}>
+    <div key={id} style={styles.fileBox}>
       <div style={styles.iconBox}>{renderSvg()}</div>
       <div style={styles.labelArea}>
         <label style={styles.fileLabel}>
           {t(label)} {isRequired && <span style={{ color: "red" }}>*</span>}
         </label>
         <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div>
+        <div style={styles.descText}>Accepts: Aadhaar, Driving License, Pan Card, Voter ID</div>
       </div>
 
       <input
+        key={`${id}_${resetKey}`}
         id={id}
         type="file"
         style={{ display: "none" }}
+        accept=".jpg,.jpeg,.png,.pdf"
         onChange={(e) => onFileChange(id, e.target.files[0])}
       />
+
       <div style={styles.buttonArea}>
-        <label htmlFor={id} style={styles.selectBtn}>SELECT FILE</label>
-        <div style={styles.selectedFileText}>
-          {selectedFiles[id] || "No file selected"}
-        </div>
+        <label htmlFor={id} style={styles.selectBtn}>
+          {documents[id]?.file?.name || "SELECT FILE"}
+        </label>
       </div>
 
-      {formErrors?.[id] && (
-        <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{formErrors[id]}</p>
+      {showDelete && (
+        <button
+          type="button"
+          onClick={() => handleDeleteField(id)}
+          style={styles.deleteBtn}
+        >
+          ✕
+        </button>
+      )}
+
+
+      {(localErrors?.[id] || formErrors?.[id]) && (
+        <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+          {localErrors?.[id] || formErrors?.[id]}
+        </p>
       )}
     </div>
   );
+
+  const handleAddMore = () => {
+    setOthersFields((prev) => [...prev, `others_${prev.length + 1}`]);
+  };
+
+
+  const handleDeleteField = (fieldId) => {
+    setOthersFields((prev) => prev.filter((id) => id !== fieldId));
+  };
 
   return (
     <div style={styles.wrapper}>
@@ -250,13 +95,27 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
       <p style={styles.subHeader}>
         (*Accepted File Type: JPG/PNG/PDF **Maximum File Size: 2MB)
       </p>
-      <div style={{
-        ...styles.gridContainer,
-        gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)"
-      }}>
+
+      <div
+        style={{
+          ...styles.gridContainer,
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+        }}
+      >
         {renderFileInput("photoId", "Proof of Identity", true)}
         {renderFileInput("ownershipDoc", "Proof of Ownership", true)}
-        {renderFileInput("sellersRegistry", "Others")}
+
+        {/* Render dynamic Others fields */}
+        {othersFields.map((field, index) =>
+          renderFileInput(field, "Others", false, index > 0)
+        )}
+
+        {/* Add More button always comes after Others */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <button type="button" onClick={handleAddMore} style={styles.addMoreBtn}>
+            ADD MORE  +
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -289,6 +148,7 @@ const styles = {
     gap: "20px",
   },
   fileBox: {
+    width: "90%",
     border: "2px dashed #aaa",
     borderRadius: "8px",
     padding: "16px",
@@ -330,7 +190,7 @@ const styles = {
     borderRadius: "4px",
     cursor: "pointer",
     fontSize: "12px",
-    fontWeight: "600",
+    fontWeight: "400",
     textAlign: "center",
   },
   selectedFileText: {
@@ -340,4 +200,25 @@ const styles = {
     textAlign: "right",
     wordBreak: "break-word",
   },
+  addMoreBtn: {
+    backgroundColor: "#fff",
+    color: "#6B133F",
+    border: "1px solid #6B133F",
+    padding: "8px 14px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: "400",
+  },
+  deleteBtn: {
+    backgroundColor: "transparent",
+    border: "none",
+    color: "#aaa",
+    fontSize: "16px",
+    cursor: "pointer",
+    position: "absolute",
+    top: "0px",
+    right: "5px",
+    zIndex: 10,
+  }
 };

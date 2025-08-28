@@ -83,6 +83,7 @@ import EmptyResultInbox from "./components/empty-result";
 import { TableConfig } from "./config/inbox-table-config";
 import NewApplication from "./pages/employee/NewApplication";
 import ApplicationDetails from "./pages/employee/ApplicationDetails";
+import SuccessAppication from "./pages/employee/SuccessAppication";
 import PropertyDetails from "./pages/employee/PropertyDetails";
 import AssessmentDetails from "./pages/employee/AssessmentDetails";
 import EditApplication from "./pages/employee/EditApplication";
@@ -198,6 +199,7 @@ const componentsToRegister = {
   SelectPTUnits,
   PTNewApplication: NewApplication,
   ApplicationDetails: ApplicationDetails,
+  SuccessAppication:SuccessAppication,
   PTPropertyDetails: PropertyDetails,
   PTAssessmentDetails: AssessmentDetails,
   PTEditApplication: EditApplication,

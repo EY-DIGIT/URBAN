@@ -23,6 +23,7 @@ import SelfDeclaration from "./SelfDeclaration";
 
 const NewApplication = () => {
   const location = useLocation();
+  
   const {
     generalDetails,
     addressDetailsSet,
@@ -50,6 +51,7 @@ const NewApplication = () => {
     ownershipDoc: null,
     sellersRegistry: null,
   });
+  const [fileResetKey, setFileResetKey] = useState(0);
 
   const [owners, setOwners] = useState([
     {
@@ -388,69 +390,66 @@ const NewApplication = () => {
       },
     });
   };
-  const handleSubmit = async () => {
-
+  const validateForm = () => {
     const errors = {};
 
-    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-    const maxSizeMB = 2;
+    // 1. Files validation
+    if (!documents.photoId?.fileStoreId) {
+      errors.photoId = "Proof of Identity is required.";
+    }
+    if (!documents.ownershipDoc?.fileStoreId) {
+      errors.ownershipDoc = "Proof of Ownership is required.";
+    }
 
-    const validateFile = (file, key, label) => {
-      if (!file) { errors[key] = `${label} is required.`; }
-      else if (!allowedTypes.includes(file.type)) {
-        errors[key] = `${label} must be JPG, PNG, or PDF.`;
-      } else if (file.size / 1024 / 1024 > maxSizeMB) {
-        errors[key] = `${label} must be under 2MB.`;
-      }
-    };
-
-    validateFile(documents.photoId, "photoId", "Photo ID");
-    validateFile(documents.ownershipDoc, "ownershipDoc", "Ownership document");
-
-    // ---- 3. Ownership ----
+    // 2. Ownership Type & Registry ID
     if (!ownershipType) {
       errors.ownershipType = "Ownership type is required.";
     }
     if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
       errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
     }
-    // ---- 4. Owner (first only) ----
-    const owner = owners[0];
-    if (!owner.name || owner.name.trim() === "") {
-      errors.ownerName = "Owner name is required.";
-    }
-    if (!owner.hindiName || owner.hindiName.trim() === "") {
-      errors.hindiName = "Owner name (हिंदी में) is required.";
-    }
-    if (!owner.fatherHusbandName || owner.fatherHusbandName.trim() === "") {
-      errors.fatherHusbandName = "Owner Relation is required.";
-    }
-    if (!owner.relationship || owner.relationship.trim() === "") {
-      errors.relationship = "Owner Relationship is required.";
-    }
-    if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
-      errors.mobile = "Valid 10-digit mobile number is required.";
-    }
-    if (!owner.aadhaar || !/^\d{12}$/.test(owner.aadhaar)) {
-      errors.aadhaar = "Valid 12-digit Aadhaar is required.";
-    }
-    // if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
-    //   errors.samagraID = "Samagra ID must be digits only.";
-    // }
-    if (!owner.noSamagra) {
-      if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
-        errors.samagraID = "Samagra ID must be digits only.";
+
+    // 3. Owners validation (Iterate over ALL owners)
+    owners.forEach((owner, index) => {
+      // Owner Name
+      if (!owner.name || !/^[a-zA-Z\s]+$/.test(owner.name)) {
+        errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
       }
-    }
-    // ---- 5. Address ----
-    if (!addressDetails.doorNo || addressDetails.doorNo.trim() === "") {
+      // Hindi Name
+      if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
+        errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
+      }
+      // Father/Husband Name
+      if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
+        errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
+      }
+      // Relationship
+      if (!owner.relationship) {
+        errors[`owner-${index}-relationship`] = "Relationship is required.";
+      }
+      // Mobile Number
+      if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
+        errors[`owner-${index}-mobile`] = "Valid 10-digit mobile number is required.";
+      }
+      // Aadhaar
+      if (!owner.aadhaar || !isAadhaarValid(owner.aadhaar)) {
+        errors[`owner-${index}-aadhaar`] = "Valid 12-digit Aadhaar number is required.";
+      }
+      // Samagra ID (only if checkbox is not ticked)
+      if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+        errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      }
+    });
+
+    // 4. Property Address
+    if (!addressDetails.doorNo) {
       errors.doorNo = "Door/House No is required.";
     }
-    if (!addressDetails.address || addressDetails.address.trim() === "") {
+    if (!addressDetails.address) {
       errors.address = "Address is required.";
     }
-    if (!addressDetails.pincode || !/^\d{6}$/.test(addressDetails.pincode)) {
-      errors.pincode = "Valid 6-digit pincode is required.";
+    if (!addressDetails.pincode || !/^452\d{3}$/.test(addressDetails.pincode)) {
+      errors.pincode = "Pincode is required and must be in the format 452XXX.";
     }
     if (!addressDetails.colony) {
       errors.colony = "Colony selection is required.";
@@ -462,17 +461,97 @@ const NewApplication = () => {
       errors.zone = "Zone selection is required.";
     }
 
-    // ---- 6. Assessment ----
+    // 5. Assessment Details
     if (!assessmentDetails.rateZone) {
       errors.rateZone = "Rate zone is required.";
     }
     if (!assessmentDetails.roadFactor) {
       errors.roadFactor = "Road factor is required.";
     }
+
+    // 6. Self-Declaration Checkbox
     if (!checkboxes.selfDeclaration) {
       errors.selfDeclaration = "Please accept the declaration to proceed.";
     }
-    setFormErrors(errors);
+
+    return errors;
+  };
+
+  const handleSubmit = async () => {
+
+    const errors = {};
+
+    const finalErrors = validateForm();
+    setFormErrors(finalErrors);
+
+
+    // // ✅ Use the same helper for multiple fields
+    // validateFile(documents.photoId, "photoId", "Photo ID", errors, allowedTypes, maxSizeMB);
+    // validateFile(documents.ownershipDoc, "ownershipDoc", "Ownership document", errors, allowedTypes, maxSizeMB);
+    // validateFile(documents.sellersRegistry, "sellersRegistry", "Other Document", errors, allowedTypes, maxSizeMB);
+
+    // // ---- 3. Ownership ----
+    // if (!ownershipType) {
+    //   errors.ownershipType = "Ownership type is required.";
+    // }
+    // if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
+    //   errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
+    // }
+    // // ---- 4. Owner (first only) ----
+    // const owner = owners[0];
+    // if (!owner.name || owner.name.trim() === "") {
+    //   errors.ownerName = "Owner name is required.";
+    // }
+    // if (!owner.hindiName || owner.hindiName.trim() === "") {
+    //   errors.hindiName = "Owner name (हिंदी में) is required.";
+    // }
+    // if (!owner.fatherHusbandName || owner.fatherHusbandName.trim() === "") {
+    //   errors.fatherHusbandName = "Owner Relation is required.";
+    // }
+    // if (!owner.relationship || owner.relationship.trim() === "") {
+    //   errors.relationship = "Owner Relationship is required.";
+    // }
+    // if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
+    //   errors.mobile = "Valid 10-digit mobile number is required.";
+    // }
+    // if (!owner.aadhaar || !/^\d{12}$/.test(owner.aadhaar)) {
+    //   errors.aadhaar = "Valid 12-digit Aadhaar is required.";
+    // }
+    // if (!owner.noSamagra) {
+    //   if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
+    //     errors.samagraID = "Samagra ID must be digits only.";
+    //   }
+    // }
+    // // ---- 5. Address ----
+    // if (!addressDetails.doorNo || addressDetails.doorNo.trim() === "") {
+    //   errors.doorNo = "Door/House No is required.";
+    // }
+    // if (!addressDetails.address || addressDetails.address.trim() === "") {
+    //   errors.address = "Address is required.";
+    // }
+    // if (!addressDetails.pincode || !/^\d{6}$/.test(addressDetails.pincode)) {
+    //   errors.pincode = "Valid 6-digit pincode is required.";
+    // }
+    // if (!addressDetails.colony) {
+    //   errors.colony = "Colony selection is required.";
+    // }
+    // if (!addressDetails.ward) {
+    //   errors.ward = "Ward selection is required.";
+    // }
+    // if (!addressDetails.zone) {
+    //   errors.zone = "Zone selection is required.";
+    // }
+    // // ---- 6. Assessment ----
+    // if (!assessmentDetails.rateZone) {
+    //   errors.rateZone = "Rate zone is required.";
+    // }
+    // if (!assessmentDetails.roadFactor) {
+    //   errors.roadFactor = "Road factor is required.";
+    // }
+    // if (!checkboxes.selfDeclaration) {
+    //   errors.selfDeclaration = "Please accept the declaration to proceed.";
+    // }
+    // setFormErrors(errors);
 
     if (Object.keys(errors).length > 0) {
       return;
@@ -671,6 +750,298 @@ const NewApplication = () => {
     });
   };
 
+  // ✅ keep this outside handleSubmit
+  // const validateFile = (file, key, label, errors, allowedTypes, maxSizeMB) => {
+  //   if (!file) {
+  //     errors[key] = `${label} is required.`;
+  //   } else if (!allowedTypes.includes(file.type)) {
+  //     errors[key] = `${label} must be JPG, PNG, or PDF.`;
+  //   } else if (file.size / 1024 / 1024 > maxSizeMB) {
+  //     errors[key] = `${label} must be under ${maxSizeMB}MB.`;
+  //   }
+  // };
+
+  const handleFileChange = async (key, file) => {
+    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+    const maxSizeMB = 2;
+
+    const errors = {};
+    if (!file) {
+      errors[key] = "File is required.";
+    } else if (!allowedTypes.includes(file.type)) {
+      errors[key] = "File must be JPG, PNG, or PDF.";
+    } else if (file.size / 1024 / 1024 > maxSizeMB) {
+      errors[key] = "File must be under 2MB.";
+    }
+
+    // Set errors and trigger a re-render
+    setFormErrors(prev => ({ ...prev, [key]: errors[key] || null }));
+
+    if (errors[key]) {
+      // If validation fails, clear the file and trigger the child's key to reset
+      setDocuments(prev => ({ ...prev, [key]: null }));
+      setFileResetKey(prev => prev + 1);
+      return;
+    }
+
+    // If validation passes, proceed with the async upload
+    try {
+      // You can also add a loading state here
+      
+      const response = await Digit.UploadServices.Filestorage(
+        "PT",
+        file,
+        Digit.ULBService.getStateId()
+      );
+
+      if (response?.data?.files?.length > 0) {
+        const fileStoreId = response.data.files[0].fileStoreId;
+
+        setDocuments((prev) => ({
+          ...prev,
+          [key]: {
+            file,
+            fileStoreId,
+            documentUid: fileStoreId,
+            name: file.name,
+            type: file.type,
+          },
+        }));
+        // On success, clear the error for this field
+        setFormErrors(prev => ({ ...prev, [key]: null }));
+      } else {
+        setFormErrors(prev => ({ ...prev, [key]: "File upload failed." }));
+        setFileResetKey(prev => prev + 1); // Trigger reset on upload failure too
+      }
+    } catch (err) {
+      setFormErrors(prev => ({ ...prev, [key]: "File upload failed." }));
+      setFileResetKey(prev => prev + 1); // Trigger reset on upload failure
+    }
+  };
+
+  const handleOwnerEmailChange = (index, value) => {
+    const newOwners = [...owners];
+    newOwners[index].email = value;
+    setOwners(newOwners);
+  
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-email`;
+  
+    // A robust regex for email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  
+    // Since Email is optional, only validate if a value is present
+    if (value && !emailRegex.test(value)) {
+      errors[fieldKey] = "Please enter a valid email address.";
+    } else {
+      // Clear the error if the input is valid or empty
+      delete errors[fieldKey];
+    }
+  
+    setFormErrors(errors);
+  };
+
+  // Validation for Mobile number:
+  const handleOwnerContactChange = (index, field, value) => {
+    const newOwners = [...owners];
+    newOwners[index][field] = value;
+    setOwners(newOwners);
+  
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-${field}`;
+  
+    // Regex for exactly 10 digits
+    const mobileRegex = /^\d{10}$/;
+  
+    // Mobile Number is mandatory, Alternative Number is not
+    if (field === "mobile") {
+      if (!value) {
+        errors[fieldKey] = "Mobile Number is required.";
+      } else if (!mobileRegex.test(value)) {
+        errors[fieldKey] = "Mobile Number must be 10 digits.";
+      } else {
+        delete errors[fieldKey];
+      }
+    } else if (field === "altNumber") {
+      // For alternative number, only validate if a value is entered
+      if (value && !mobileRegex.test(value)) {
+        errors[fieldKey] = "Alternative Number must be 10 digits.";
+      } else {
+        delete errors[fieldKey];
+      }
+    }
+  
+    setFormErrors(errors);
+  };
+
+  // Validation for Name:
+  const handleOwnerNameChange = (index, field, value) => {
+    const newOwners = [...owners];
+    newOwners[index][field] = value;
+    setOwners(newOwners);
+  
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-${field}`;
+  
+    // Regular expressions for validation
+    const englishNameRegex = /^[a-zA-Z\s]+$/;
+    const hindiNameRegex = /^[\u0900-\u097F\s]+$/;
+  
+    if (!value) {
+      errors[fieldKey] = "This field is required.";
+    } else {
+      // Check which field is being validated
+      if (field === "name" || field === "fatherHusbandName") {
+        if (!englishNameRegex.test(value)) {
+          errors[fieldKey] = "Only alphabetic characters are allowed.";
+        } else {
+          delete errors[fieldKey];
+        }
+      } else if (field === "hindiName") {
+        if (!hindiNameRegex.test(value)) {
+          // You can add logic here if you want to perform other actions,
+          // but no error will be set now.
+        } else {
+          delete errors[fieldKey];
+        }
+      }
+    }
+  
+    setFormErrors(errors);
+  };
+  // Validation for Aadhar:
+  const handleOwnerAadhaarChange = (index, value) => {
+    const newOwners = [...owners];
+    newOwners[index].aadhaar = value;
+    setOwners(newOwners);
+
+    // Perform the new, robust Aadhaar validation here
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-aadhaar`; // Unique key for each owner
+
+    // ✅ USE THE NEW VALIDATION FUNCTION
+    if (!isAadhaarValid(value)) {
+      errors[fieldKey] = "Valid 12-digit Aadhaar number is required.";
+    } else {
+      // Clear the error if the input is valid
+      delete errors[fieldKey];
+    }
+    setFormErrors(errors);
+  };
+  // Helper function to make it easier to call.
+  const isAadhaarValid = (aadhaarNumber) => {
+    // First, check for the correct length (12 digits) and format.
+    if (!/^\d{12}$/.test(aadhaarNumber)) {
+      return false;
+    }
+    // Then, apply the Verhoeff algorithm.
+    return verhoeff.isVerhoeffValid(aadhaarNumber);
+  };
+  // Function to validate a number using Verhoeff's algorithm
+  // This is required for correct Aadhaar validation.
+  const verhoeff = (function (e, g) {
+    var b = [
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
+      [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
+      [3, 4, 0, 1, 2, 8, 9, 5, 6, 7],
+      [4, 0, 1, 2, 3, 9, 5, 6, 7, 8],
+      [5, 9, 8, 7, 6, 0, 4, 3, 2, 1],
+      [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
+      [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
+      [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
+      [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+    ],
+      f = [
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
+        [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
+        [8, 9, 1, 6, 0, 4, 3, 5, 2, 7],
+        [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
+        [4, 2, 8, 6, 5, 7, 3, 9, 0, 1],
+        [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
+        [7, 0, 4, 6, 9, 1, 3, 2, 5, 8],
+      ];
+    function h(a) {
+      for (var c = a.length, d = 0, k = 0; c > k; k++) d = b[d][a[k]];
+      return d;
+    }
+    function c(a) {
+      for (var c = String(a).split("").map(Number), d = h(c), k = 0; 10 > k; k++)
+        if (b[d][k] === 0) return k;
+    }
+    return {
+      isVerhoeffValid: function (a) {
+        for (
+          var c = String(a)
+            .split("")
+            .map(Number)
+            .reverse(),
+          d = 0,
+          k = 0; c.length > k; k++
+        )
+          d = b[d][f[k % 8][c[k]]];
+        return 0 === d;
+      },
+    };
+  })();
+
+  // Validation for PINCODE:
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    let newErrors = { ...formErrors };
+  
+    setAddressDetails(prev => ({ ...prev, [name]: value }));
+  
+    if (name === "pincode") {
+      const pincodeRegex = /^452\d{3}$/;
+  
+      if (!value) {
+        newErrors.pincode = "Pincode is required.";
+      } else if (!pincodeRegex.test(value)) {
+        newErrors.pincode = "Pincode must be 6 digits and start with 452.";
+      } else {
+        delete newErrors.pincode;
+      }
+    }
+  
+    setFormErrors(newErrors);
+  };
+
+  // Validation for Correspondance Address:
+
+  // In NewApplication.js, update this function:
+const handleSameAsPropertyToggle = (e) => {
+  const isChecked = e.target.checked;
+  setIsSameAsPropertyAddress(isChecked);
+
+  if (isChecked) {
+    // ✅ If the checkbox is checked, populate the correspondence address
+    const {
+      doorNo,
+      address,
+      pincode,
+      colony,
+      ward
+    } = addressDetails;
+
+    // Combine all fields into a single, readable address string
+    let fullAddress = "";
+
+    if (doorNo) fullAddress += `${doorNo}, `;
+    if (address) fullAddress += `${address}, `;
+    if (colony?.name) fullAddress += `${colony.name}, `;
+    if (ward?.name) fullAddress += `${ward.name}, `;
+    if (pincode) fullAddress += `${pincode}`;
+
+    setCorrespondenceAddress(fullAddress.trim());
+  } else {
+    // ✅ If the checkbox is unchecked, clear the correspondence address
+    setCorrespondenceAddress("");
+  }
+};
+
+
   const backToNew = () => {
     setShowPreviewButton(false);
     setShowAssesmentPop(false);
@@ -765,41 +1136,7 @@ const NewApplication = () => {
   }, [unitDetails]);
 
 
-  const handleFileChange = async (key, file) => {
 
-    try {
-      setDocuments((prev) => ({
-        ...prev,
-        [key]: null,
-      }));
-
-      const response = await Digit.UploadServices.Filestorage(
-        "PT", // module name
-        file,
-        Digit.ULBService.getStateId()
-      );
-
-      if (response?.data?.files?.length > 0) {
-        const fileStoreId = response.data.files[0].fileStoreId;
-
-        setDocuments((prev) => ({
-          ...prev,
-          [key]: {
-            file,
-            fileStoreId,
-            documentUid: fileStoreId,
-            name: file.name,
-            type: file.type,
-          },
-        }));
-      } else {
-        setError(t("CS_FILE_UPLOAD_ERROR"));
-      }
-    } catch (err) {
-
-      setError(t("CS_FILE_UPLOAD_ERROR"));
-    }
-  };
 
 
   const handleOwnershipTypeChange = (val) => {
@@ -819,10 +1156,7 @@ const NewApplication = () => {
   const handleRestryIdChange = (e) => {
     setRegistryId(e.target.value);
   }
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAddressDetails((prev) => ({ ...prev, [name]: value }));
-  };
+
 
   const handleDropdownChange = (field, selectedOption) => {
     setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));
@@ -831,17 +1165,7 @@ const NewApplication = () => {
     setCorrespondenceAddress(e.target.value);
   };
 
-  const handleSameAsPropertyToggle = () => {
-    setIsSameAsPropertyAddress((prev) => {
-      const newValue = !prev;
-      if (newValue) {
-        setCorrespondenceAddress(addressDetails.address); // copy from property address
-      } else {
-        setCorrespondenceAddress("");
-      }
-      return newValue;
-    });
-  };
+
   const handleAssessmentInputChange = (e) => {
     const { name, value } = e.target;
     setAssessmentDetails((prev) => ({ ...prev, [name]: value }));
@@ -921,7 +1245,7 @@ const NewApplication = () => {
   return (
 
     <React.Fragment>
-      <div style={styles.assessmentStyles}>New Property Application</div>
+      <div style={styles.assessmentStyles}></div>
       {!showSuccessModal && (
         <div >
 
@@ -941,8 +1265,13 @@ const NewApplication = () => {
               isJointStarted={isJointStarted}
               styles={styles}
               formErrors={formErrors}
-            />
+              handleOwnerAadhaarChange={handleOwnerAadhaarChange}
+              handleOwnerNameChange={handleOwnerNameChange}
+              handleOwnerContactChange={handleOwnerContactChange}
+              handleOwnerEmailChange={handleOwnerEmailChange}
+              />
           </div>
+
           <div style={styles.card}>
             <div style={styles.assessmentStyle}>{t("Property Address")}</div>
             <AddressSection
@@ -1007,8 +1336,9 @@ const NewApplication = () => {
             <AttachmentsSection
               t={t}
               handleFileChange={handleFileChange}
-              styles={styles}
               formErrors={formErrors}
+              documents={documents} 
+              resetKey={fileResetKey} 
             />
           </div>
           <div style={styles.card}>

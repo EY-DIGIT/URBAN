@@ -11,11 +11,11 @@ import DownloadPdfButton from "./DownloadPDF";
 
 const styles = {
     container: {
-        padding: "20px",
+        // padding: "20px",
         fontFamily: "Arial, sans-serif",
         fontSize: "14px",
         maxWidth: "1200px",
-        margin: "0 auto",
+        // margin: "0 auto",
         width: "100%",
         boxSizing: "border-box",
         '@media (max-width: 768px)': {
@@ -74,6 +74,7 @@ const styles = {
         width: "100%",
         boxSizing: "border-box",
         maxWidth: "100%",
+        backgroundColor:"#F2F2F2",
         '@media (max-width: 630px)': {
             padding: "8px",
             fontSize: "13px",
@@ -81,11 +82,14 @@ const styles = {
         }
     },
     label: {
-        fontFamily: "Poppins",
+
+        fontFamily: 'Poppins, sans-serif',
         fontWeight: 400,
-        fontSize: "14px",
-        lineHeight: "22px",
-        color: "#282828",
+        fontSize: '14px',
+        lineHeight: '22px',
+        letterSpacing: '0',
+        color: '#282828',
+        width: "200px",
         marginBottom: "4px",
         wordWrap: "break-word",
         '@media (max-width: 768px)': {
@@ -97,6 +101,7 @@ const styles = {
         }
     },
     sectionHeader: {
+    
         fontFamily: "Poppins",
         fontWeight: "bold",
         fontSize: "16px",
@@ -215,7 +220,8 @@ const styles = {
     buttonContainer: {
         display: "flex",
         gap: "12px",
-        marginLeft: "auto",
+        // marginLeft: "auto",
+        justifyContent: "flex-end",
         marginTop: "20px",
         '@media (max-width: 768px)': {
             flexDirection: "column",
@@ -266,32 +272,49 @@ const styles = {
     },
     modalContent: {
         background: "#fff",
-        borderRadius: "8px",
-        padding: "40px",
+        borderRadius: "12px",
+        padding: "32px",
         textAlign: "center",
-        width: "500px",
-        maxWidth: "100%",
+        width: "50%",
+        maxWidth: "60%",         // keeps it small on large screens
+        minWidth: "300px",         // avoids too small shrink
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "40px",               // uniform gap between text & buttons
+        boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+      
+        '@media (max-width: 1024px)': {
+          width: "70%",
+          padding: "28px",
+          gap: "30px",
+        },
         '@media (max-width: 768px)': {
-            padding: "24px",
-            width: "100%",
-            maxWidth: "350px"
+          width: "90%",
+          padding: "20px",
+          gap: "24px",
+        },
+        '@media (max-width: 480px)': {
+          width: "95%",
+          padding: "16px",
+          gap: "20px",
         }
-    },
-    modalButtonContainer: {
+      },
+      
+      modalButtonContainer: {
         display: "flex",
         justifyContent: "center",
-        gap: "20px",
-        '@media (max-width: 768px)': {
-            flexDirection: "column",
-            gap: "12px"
-        }
-    },
-    modalButton: {
-        backgroundColor: "#6b133f",
-        color: "#fff",
-        padding: "8px 20px",
-        borderRadius: "6px",
+        gap: "16px",
+        flexWrap: "wrap",       // buttons wrap on very small screens
+      },
+      modalButton: {
+        padding: "10px 20px",
+        borderRadius: "40px",
         border: "none",
+        background: "#6b133f",
+        color: "#fff",
+        fontSize: "14px",
         cursor: "pointer",
         fontSize: "14px",
         '@media (max-width: 768px)': {
@@ -313,6 +336,12 @@ const InputField = ({ label, value }) => (
     <div style={styles.field}>
         <div style={styles.label}>{label}</div>
         <input style={styles.input} value={value} readOnly />
+    </div>
+);
+
+const InputFieldBlank = () => (
+    <div style={styles.fieldBlank}>
+     
     </div>
 );
 
@@ -561,7 +590,7 @@ const PropertyForm = () => {
          <div id="downloadable-component">
         <div style={{
             position: "relative",
-            marginTop: "20px",
+            // marginTop: "20px",
             width: "100%",
             maxWidth: "100vw",
             overflowX: "hidden",
@@ -586,16 +615,9 @@ const PropertyForm = () => {
             <div style={styles.cardD}>
                 <div style={styles.sectionHeaderDemand}>Demand</div>
                 <div style={styles.row}>
-                    <div style={styles.flex30}>
-                         <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
-                    </div>
-                     
-                    <div style={styles.flex30}>
-
-                    </div>
-                    <div style={styles.flex30}></div>
-                  
-                   
+                    <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
+                    <InputFieldBlank   />
+                    <InputFieldBlank   />
                 </div>
               
 
@@ -618,7 +640,10 @@ const PropertyForm = () => {
                             <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
                         </div>
                         <div style={styles.row}>
-                            <InputField label="Email" value={owner?.emailId || "N/A"} />
+                            <InputField
+                                label="Email"
+                                value={owner?.emailId === "abc@gmail.com" ? "" : owner?.emailId || "N/A"}
+                            />
                             <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                             <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                         </div>
@@ -632,7 +657,7 @@ const PropertyForm = () => {
                     <table style={styles.table}>
                         <thead>
                             <tr>
-                                {["Year", "Usage Type", "User", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
+                                {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
                                     <th key={h} style={styles.th}>{h}</th>
                                 ))}
                             </tr>
@@ -712,8 +737,8 @@ const PropertyForm = () => {
             {showConfirmPopup && (
                 <div style={styles.modalOverlay}>
                     <div style={styles.modalContent}>
-                        <p style={{ fontSize: "16px", color: "#3E3E3E", marginBottom: "30px" }}>
-                            Are you sure you want to submit this form? Once submitted, you will not be able to make any changes.
+                    <p style={{ fontSize: "18px", fontWeight: "bold", color: "#6b133f", marginBottom: "30px" }}> 
+                                                   Are you sure you want to submit this form?
                         </p>
                         <div style={styles.modalButtonContainer}>
                             <button style={styles.modalButton} onClick={() => setShowConfirmPopup(false)}>

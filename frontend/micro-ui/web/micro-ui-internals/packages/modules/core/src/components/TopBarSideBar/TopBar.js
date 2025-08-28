@@ -678,7 +678,7 @@ const TopBar = ({
               )}
 
               {/* User Profile Dropdown */}
-              {loggedIn && (
+              {loggedIn && !CITIZEN && (
                 <div style={{ height: "40px" }}>
                   <Dropdown
                     option={userOptions}

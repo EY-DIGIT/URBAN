@@ -300,23 +300,23 @@ const ActionModal = ({
     setConfig(
       action?.showFinancialYearsModal
         ? configPTAssessProperty({
-            t,
-            action,
-            financialYears,
-            selectedFinancialYear,
-            setSelectedFinancialYear,
-          })
+          t,
+          action,
+          financialYears,
+          selectedFinancialYear,
+          setSelectedFinancialYear,
+        })
         : configPTApproverApplication({
-            t,
-            action,
-            approvers,
-            selectedApprover,
-            setSelectedApprover,
-            selectFile: (e) => setFile(e.target.files[0]),
-            uploadedFile,
-            setUploadedFile,
-            businessService,
-          })
+          t,
+          action,
+          approvers,
+          selectedApprover,
+          setSelectedApprover,
+          selectFile: (e) => setFile(e.target.files[0]),
+          uploadedFile,
+          setUploadedFile,
+          businessService,
+        })
     );
   }, [action, approvers, financialYears, selectedFinancialYear, uploadedFile, t, businessService]);
 
@@ -365,82 +365,87 @@ const ActionModal = ({
   // ==== UI ====
   return action && config.form ? (
     <div className="pop_modal_w">
-    <Modal
-   
-     hideSubmit={true}
-      isDisabled={
-        !action.showFinancialYearsModal
-          ? PTALoading || (action?.docUploadRequired && !uploadedFile)
-          : !selectedFinancialYear
-      }
-      formId="modal-action"
-    >
-       <style>
-    {`
+      <Modal
+
+        hideSubmit={true}
+        isDisabled={
+          !action.showFinancialYearsModal
+            ? PTALoading || (action?.docUploadRequired && !uploadedFile)
+            : !selectedFinancialYear
+        }
+        formId="modal-action"
+      >
+        <style>
+          {`
       .pop_modal_w .popup-module {
       width:60% !important;
         border-radius: 20px !important;
       }
     `}
-  </style>
-      {financialYearsLoading ? (
-        <Loader />
-      ) : (
-        <div style={styles.container}>
-          <h2 style={styles.heading}>Forward to Approver</h2>
+        </style>
+        {financialYearsLoading ? (
+          <Loader />
+        ) : (
+          <div style={styles.container}>
+            <h2 style={styles.heading}>
+              {action?.action
+                ?.toLowerCase()
+                ?.replace(/^\w/, (c) => c.toUpperCase())} Application Form
+            </h2>
 
-          {/* Remarks */}
-          <div style={styles.field}>
-            <label style={styles.label}>
-              Remarks <span style={{ color: "red" }}>*</span>
-            </label>
-            <input
-              type="text"
-              name="comments"
-              placeholder="Enter"
-              value={comments}
-              style={styles.input}
-              onChange={(e) => setComments(e.target.value)}
-            />
-            {error && <div style={styles.error}>{t("Remark is required")}</div>}
+
+            {/* Remarks */}
+            <div style={styles.field}>
+              <label style={styles.label}>
+                Remarks <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="text"
+                name="comments"
+                placeholder="Enter"
+                value={comments}
+                style={styles.input}
+                onChange={(e) => setComments(e.target.value)}
+              />
+              {error && <div style={styles.error}>{t("Remark is required")}</div>}
+            </div>
+
+            {/* File Upload */}
+            <div style={styles.uploadBox}>
+              <div style={styles.uploadText}>
+                <span style={{ fontWeight: "500" }}>Supporting Documents</span>
+                <span style={styles.uploadSubtext}>
+                  JPG, PNG or PDF, file size no more than 2MB
+                </span>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", textAlign: "right" }}>
+                <span>
+                  <label style={styles.uploadBtn}>
+                    SELECT FILE
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                </span>
+                <span>{file?.name}</span>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div style={styles.btnRow}>
+              <button type="button" onClick={closeModal} style={styles.btn}>
+                Back
+              </button>
+              <button onClick={submit} type="submit" form="modal-action" style={styles.btn}>
+                Confirm
+              </button>
+            </div>
           </div>
-
-          {/* File Upload */}
-         <div style={styles.uploadBox}>
-      <div style={styles.uploadText}>
-        <span style={{ fontWeight: "500" }}>Supporting Documents</span>
-        <span style={styles.uploadSubtext}>
-          JPG, PNG or PDF, file size no more than 2MB
-        </span>
-      </div>
-      <div style={{display:"flex",flexDirection:"column",textAlign:"right"}}>
-<span>
-      <label style={styles.uploadBtn}>
-        SELECT FILE
-        <input
-          type="file"
-          accept=".jpg,.jpeg,.png,.pdf"
-          onChange={(e) => setFile(e.target.files[0])}
-          style={{ display: "none" }}
-        />
-      </label>
-      </span>
-      <span>{file?.name}</span>
-      </div>
-    </div>
-
-          {/* Buttons */}
-          <div style={styles.btnRow}>
-            <button type="button" onClick={closeModal} style={styles.btn}>
-              Back
-            </button>
-            <button onClick={submit} type="submit" form="modal-action" style={styles.btn}>
-              Confirm
-            </button>
-          </div>
-        </div>
-      )}
-    </Modal>
+        )}
+      </Modal>
     </div>
   ) : (
     <div></div>
@@ -451,7 +456,7 @@ const ActionModal = ({
 const styles = {
   container: { padding: "20px", fontFamily: "Poppins" },
   heading: {
-     fontFamily: "Poppins",
+    fontFamily: "Poppins",
     fontWeight: 700,
     fontStyle: "normal",  // "Bold" is not valid, weight handles boldness
     fontSize: "24px",
@@ -462,11 +467,13 @@ const styles = {
     color: "#6B133F",
     marginBottom: "70px",
   },
-  field: { marginBottom: "20px",width:"60%", marginLeft:"auto",
-      marginRight:"auto" },
+  field: {
+    marginBottom: "20px", width: "60%", marginLeft: "auto",
+    marginRight: "auto"
+  },
   label: { fontWeight: "500", fontSize: "14px", color: "#000" },
   input: {
-    height:"40px",
+    height: "40px",
     width: "100%",
     padding: "8px",
     marginTop: "8px",
@@ -494,44 +501,44 @@ const styles = {
   //   cursor: "pointer",
   // },
   uploadBox: {
-      border: "2px dashed #ccc",
-      borderRadius: "8px",
-      padding: "16px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      // width: "500px",
-      backgroundColor: "#fff",
-      marginBottom: "70px",
-      width:"60%",
-      marginLeft:"auto",
-      marginRight:"auto"
-    },
-    uploadText: {
-      display: "flex",
-      flexDirection: "column",
-    },
-    uploadSubtext: {
-      fontSize: "12px",
-      color: "#777",
-      marginTop: "4px",
-    },
-    uploadBtn: {
-     border: "2px solid #6B133FB2",
-      borderRadius: "6px",
-      padding: "6px 16px",
-      fontSize: "14px",
-      color: "#6B133FB2",
-      fontWeight: "500",
-      cursor: "pointer",
-      backgroundColor: "transparent",
-    },
+    border: "2px dashed #ccc",
+    borderRadius: "8px",
+    padding: "16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    // width: "500px",
+    backgroundColor: "#fff",
+    marginBottom: "70px",
+    width: "60%",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  uploadText: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  uploadSubtext: {
+    fontSize: "12px",
+    color: "#777",
+    marginTop: "4px",
+  },
+  uploadBtn: {
+    border: "2px solid #6B133FB2",
+    borderRadius: "6px",
+    padding: "6px 16px",
+    fontSize: "14px",
+    color: "#6B133FB2",
+    fontWeight: "500",
+    cursor: "pointer",
+    backgroundColor: "transparent",
+  },
   btnRow: { display: "flex", justifyContent: "center", gap: "20px" },
   btn: {
     background: "#6B133F",
     color: "#fff",
     // padding: "10px 40px",
-    height:"35px",
+    height: "35px",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",

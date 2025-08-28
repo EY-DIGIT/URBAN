@@ -391,11 +391,11 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
   }, [isLoadingO, OccupancyData]);
 
   return (
-    <div style={{ marginTop: "1rem" }}>
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+    <div style={{ marginTop: "1rem", borderRadius: '10px'}}>
+      {/* <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
         <label style={styles.poppinsLabel}>Property Type</label>
-      </div>
-      <div style={{ overflowX: "auto", maxWidth: "100%" }}>
+      </div> */}
+      <div style={{ overflowX: "auto", maxWidth: "100%",  }}>
         <table style={styles.table}>
           <thead>
             <tr>
