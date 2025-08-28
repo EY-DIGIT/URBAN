@@ -611,7 +611,10 @@ const PropertyForm = () => {
                             <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
                         </div>
                         <div style={styles.row}>
-                            <InputField label="Email" value={owner?.emailId || "N/A"} />
+                            <InputField
+                                label="Email"
+                                value={owner?.emailId === "abc@gmail.com" ? "" : owner?.emailId || "N/A"}
+                            />
                             <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                             <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                         </div>
