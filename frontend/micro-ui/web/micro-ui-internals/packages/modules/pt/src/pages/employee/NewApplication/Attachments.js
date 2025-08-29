@@ -104,7 +104,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
       >
         {renderFileInput("photoId", "Proof of Identity", true)}
         {renderFileInput("ownershipDoc", "Proof of Ownership", true)}
-        {renderFileInput("sellersRegistry", "Others", true)}
+        {renderFileInput("sellersRegistry", "Others", false)}
         {/* Render dynamic Others fields */}
         {othersFields.map((field, index) =>
           renderFileInput(field, "Others", false, index > 0)

@@ -416,9 +416,9 @@ const NewApplication = () => {
         errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
       }
       // Hindi Name
-      if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
-        errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
-      }
+      // if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
+      //   errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
+      // }
       // Father/Husband Name
       if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
         errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
@@ -479,83 +479,21 @@ const NewApplication = () => {
 
   const handleSubmit = async () => {
 
-    const errors = {};
+    // const errors = {};
 
     const finalErrors = validateForm();
     setFormErrors(finalErrors);
 
+    console.log("Final errors object:", finalErrors);
 
-    // // ✅ Use the same helper for multiple fields
-    // validateFile(documents.photoId, "photoId", "Photo ID", errors, allowedTypes, maxSizeMB);
-    // validateFile(documents.ownershipDoc, "ownershipDoc", "Ownership document", errors, allowedTypes, maxSizeMB);
-    // validateFile(documents.sellersRegistry, "sellersRegistry", "Other Document", errors, allowedTypes, maxSizeMB);
+    if (Object.keys(finalErrors).length > 0) {
+      console.log("Form has validation errors. Submission stopped.");
+      return; 
+  }
 
-    // // ---- 3. Ownership ----
-    // if (!ownershipType) {
-    //   errors.ownershipType = "Ownership type is required.";
+    // if (Object.keys(errors).length > 0) {
+    //   return;
     // }
-    // if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
-    //   errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
-    // }
-    // // ---- 4. Owner (first only) ----
-    // const owner = owners[0];
-    // if (!owner.name || owner.name.trim() === "") {
-    //   errors.ownerName = "Owner name is required.";
-    // }
-    // if (!owner.hindiName || owner.hindiName.trim() === "") {
-    //   errors.hindiName = "Owner name (हिंदी में) is required.";
-    // }
-    // if (!owner.fatherHusbandName || owner.fatherHusbandName.trim() === "") {
-    //   errors.fatherHusbandName = "Owner Relation is required.";
-    // }
-    // if (!owner.relationship || owner.relationship.trim() === "") {
-    //   errors.relationship = "Owner Relationship is required.";
-    // }
-    // if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
-    //   errors.mobile = "Valid 10-digit mobile number is required.";
-    // }
-    // if (!owner.aadhaar || !/^\d{12}$/.test(owner.aadhaar)) {
-    //   errors.aadhaar = "Valid 12-digit Aadhaar is required.";
-    // }
-    // if (!owner.noSamagra) {
-    //   if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
-    //     errors.samagraID = "Samagra ID must be digits only.";
-    //   }
-    // }
-    // // ---- 5. Address ----
-    // if (!addressDetails.doorNo || addressDetails.doorNo.trim() === "") {
-    //   errors.doorNo = "Door/House No is required.";
-    // }
-    // if (!addressDetails.address || addressDetails.address.trim() === "") {
-    //   errors.address = "Address is required.";
-    // }
-    // if (!addressDetails.pincode || !/^\d{6}$/.test(addressDetails.pincode)) {
-    //   errors.pincode = "Valid 6-digit pincode is required.";
-    // }
-    // if (!addressDetails.colony) {
-    //   errors.colony = "Colony selection is required.";
-    // }
-    // if (!addressDetails.ward) {
-    //   errors.ward = "Ward selection is required.";
-    // }
-    // if (!addressDetails.zone) {
-    //   errors.zone = "Zone selection is required.";
-    // }
-    // // ---- 6. Assessment ----
-    // if (!assessmentDetails.rateZone) {
-    //   errors.rateZone = "Rate zone is required.";
-    // }
-    // if (!assessmentDetails.roadFactor) {
-    //   errors.roadFactor = "Road factor is required.";
-    // }
-    // if (!checkboxes.selfDeclaration) {
-    //   errors.selfDeclaration = "Please accept the declaration to proceed.";
-    // }
-    // setFormErrors(errors);
-
-    if (Object.keys(errors).length > 0) {
-      return;
-    }
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
       return;
@@ -749,17 +687,6 @@ const NewApplication = () => {
       },
     });
   };
-
-  // ✅ keep this outside handleSubmit
-  // const validateFile = (file, key, label, errors, allowedTypes, maxSizeMB) => {
-  //   if (!file) {
-  //     errors[key] = `${label} is required.`;
-  //   } else if (!allowedTypes.includes(file.type)) {
-  //     errors[key] = `${label} must be JPG, PNG, or PDF.`;
-  //   } else if (file.size / 1024 / 1024 > maxSizeMB) {
-  //     errors[key] = `${label} must be under ${maxSizeMB}MB.`;
-  //   }
-  // };
 
   const handleFileChange = async (key, file) => {
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
@@ -1135,10 +1062,6 @@ const handleSameAsPropertyToggle = (e) => {
     setUnit(formattedUnits);
   }, [unitDetails]);
 
-
-
-
-
   const handleOwnershipTypeChange = (val) => {
 
     setOwnershipType(val.code);
@@ -1157,14 +1080,12 @@ const handleSameAsPropertyToggle = (e) => {
     setRegistryId(e.target.value);
   }
 
-
   const handleDropdownChange = (field, selectedOption) => {
     setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));
   };
   const handleCorrespondenceChange = (e) => {
     setCorrespondenceAddress(e.target.value);
   };
-
 
   const handleAssessmentInputChange = (e) => {
     const { name, value } = e.target;
@@ -1243,7 +1164,6 @@ const handleSameAsPropertyToggle = (e) => {
 
 
   return (
-
     <React.Fragment>
       <div style={styles.assessmentStyles}></div>
       {!showSuccessModal && (
