@@ -95,101 +95,172 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     });
   }
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: t("Property ID"),
-        disableSortBy: true,
-        Cell: ({ row }) => {
-          console.log("row", row);
-          return (
-            <div>
-              <span className="link" style={{color: "#141B29"}}>
-                <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
-              </span>
-            </div>
-          );
-        },
-      },
-      {
-        Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
-        disableSortBy: true,
-        Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
-      },
+
+
+  // const columns = useMemo(
+  //   () => [
+  //     {
+  //       Header: t("Property ID"),
+  //       disableSortBy: true,
+  //       Cell: ({ row }) => {
+  //         console.log("row", row);
+  //         return (
+  //           <div>
+  //             <span className="link" style={{color: "#141B29"}}>
+  //               <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+  //             </span>
+  //           </div>
+  //         );
+  //       },
+  //     },
+  //     {
+  //       Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
+  //       disableSortBy: true,
+  //       Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
+  //     },
       
-      // //New Added Mobile Number Column
-      // {
-      //   Header: t("Mobile Number"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
-      // },
-      //   //New Added House Number Column
-      // {
-      //   Header: t("House/Door Number"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
-      // },
-      // //New Added Address
-      // {
-      //   Header: t("Address"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      // },
+  //     // //New Added Mobile Number Column
+  //     // {
+  //     //   Header: t("Mobile Number"),
+  //     //   disableSortBy: true,
+  //     //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
+  //     // },
+  //     //   //New Added House Number Column
+  //     // {
+  //     //   Header: t("House/Door Number"),
+  //     //   disableSortBy: true,
+  //     //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
+  //     // },
+  //     // //New Added Address
+  //     // {
+  //     //   Header: t("Address"),
+  //     //   disableSortBy: true,
+  //     //   Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
+  //     // },
 
-      //   //New Added Ward
-      //   {
-      //     Header: t("Ward"),
-      //     disableSortBy: true,
-      //     Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      //   },
+  //     //   //New Added Ward
+  //     //   {
+  //     //     Header: t("Ward"),
+  //     //     disableSortBy: true,
+  //     //     Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
+  //     //   },
 
-      //     //New Added Zone
-      //     {
-      //       Header: t("Zone"),
-      //       disableSortBy: true,
-      //       Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      //     },
+  //     //     //New Added Zone
+  //         {
+  //           Header: t("Zone"),
+  //           disableSortBy: true,
+  //           Cell: ({ row }) => GetCell(t(row.original.address?.zone) || "NA"),
+  //         },
 
-      // //New Added Payment Receivable
-      // {
-      //   Header: t("//Payment Receivable"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      // },
+  //     // //New Added Payment Receivable
+  //     // {
+  //     //   Header: t("//Payment Receivable"),
+  //     //   disableSortBy: true,
+  //     //   Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
+  //     // },
     
-      {
-        Header: t("ES_INBOX_LOCALITY"),
-        disableSortBy: true,
-        Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      },
-      {
-        Header: t("PT_COMMON_TABLE_COL_STATUS_LABEL"),
-        Cell: ({ row }) => GetCell(t(row?.original?.status || "NA")),
-        disableSortBy: true,
-      },
-      {
-        Header: t("PT_AMOUNT_DUE"),
-        Cell: ({ row }) => GetCell(row?.original?.due?`₹ ${row?.original?.due}`:t("PT_NA")),
-        disableSortBy: true,
-      },
-      {
-        Header: t("ES_SEARCH_ACTION"),
-        disableSortBy: true,
-        Cell: ({ row }) => {
-          return (
-            <div>
-              {row.original?.due > 0 && Digit.Utils.didEmployeeHasRole("PT_CEMP") ? (
-                <span className="link"> 
-                  <a  style={{textDecoration:'none'}} onClick={() => handleCollectTaxClick(row.original)}>{t("ES_PT_COLLECT_TAX")}</a>
-                </span>
-              ) : null}
-            </div>
-          );
-        },
-      },
-    ],
-    []
-  );
+  //     {
+  //       Header: t("ES_INBOX_LOCALITY"),
+  //       disableSortBy: true,
+  //       Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
+  //     },
+  //     {
+  //       Header: t("PT_COMMON_TABLE_COL_STATUS_LABEL"),
+  //       Cell: ({ row }) => GetCell(row.original.address?.doorNo || "NA"),
+  //       disableSortBy: true,
+  //     },
+  //     {
+  //       Header: t("PT_AMOUNT_DUE"),
+  //       Cell: ({ row }) => GetCell(row?.original?.due?`₹ ${row?.original?.due}`:t("PT_NA")),
+  //       disableSortBy: true,
+  //     },
+  //     {
+  //       Header: t("ES_SEARCH_ACTION"),
+  //       disableSortBy: true,
+  //       Cell: ({ row }) => {
+  //         return (
+  //           <div>
+  //             {row.original?.due > 0 && Digit.Utils.didEmployeeHasRole("PT_CEMP") ? (
+  //               <span className="link"> 
+  //                 <a  style={{textDecoration:'none'}} onClick={() => handleCollectTaxClick(row.original)}>{t("ES_PT_COLLECT_TAX")}</a>
+  //               </span>
+  //             ) : null}
+  //           </div>
+  //         );
+  //       },
+  //     },
+  //   ],
+  //   []
+  // );
+  
+
+  const columns = useMemo(() => [
+  {
+    Header: t("Property ID"),
+    accessor: "propertyId",
+    Cell: ({ row }) => GetCell(row.original.propertyId),
+  },
+  {
+    Header: t("Owner Name"),
+    accessor: "ownerName",
+    Cell: ({ row }) => GetCell(row.original.ownerName),
+  },
+  {
+    Header: t("Mobile Number"),
+    accessor: "mobileNumber",
+    Cell: ({ row }) => GetCell(row.original.mobileNumber),
+  },
+   {
+    Header: t("House/Door Number"),
+    accessor: "doorNo",
+    Cell: ({ row }) => GetCell(row.original.doorNo),
+  },
+    {
+    Header: t("Address"),
+    accessor: "city",
+    Cell: ({ row }) => GetCell(row.original.city),
+  },
+ 
+
+  {
+    Header: t("Ward"),
+    accessor: "ward",
+    Cell: ({ row }) => GetCell(row.original.ward),
+  },
+  {
+    Header: t("Zone"),
+    accessor: "zone",
+    Cell: ({ row }) => GetCell(row.original.zone),
+  },
+  // {
+  //   Header: t("Status"),
+  //   accessor: "status",
+  //   Cell: ({ row }) => GetCell(row.original.status),
+  // },
+  {
+    Header: t("Payment Receivable"),
+    accessor: "due",
+    Cell: ({ row }) => GetCell(row.original.due),
+  },
+], [t]);
+
+
+  const tableData = (data?.Properties || []).map((p) => {
+  const primaryOwner = p.owners?.[0] || {};
+  return {
+    propertyId: p.propertyId,
+    ownerName: primaryOwner.name || "NA",
+    mobileNumber: primaryOwner.mobileNumber || "NA",
+    doorNo: p.address?.doorNo || "NA",
+    city: p.address?.city || "NA",
+    ward: p.address?.ward || "NA",
+    zone: p.address?.zone || "NA",
+    status: p.status || "NA",
+    due: data.FormattedData?.[p.propertyId]?.due ?? 0,
+  };
+});
+
+  
   let isMobile = window.Digit.Utils.browser.isMobile();
 
   if (isLoading) {
@@ -202,7 +273,11 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
   }
   const PTEmptyResultInbox = memo(Digit.ComponentRegistryService.getComponent("PTEmptyResultInbox"));
   const getData = (tableData = []) => {
+
+     console.log("DEKHO PEHLA HAI=",dataObj)
     return tableData?.map((dataObj) => {
+
+     
       const obj = {};
       columns.forEach((el) => {
         if (el.Cell) obj[el.Header] = el.Cell({row:{original:dataObj}});
@@ -211,19 +286,62 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     });
   };
 
-  const tableData = Object.values(data?.FormattedData || {}) || [];
+  // const tableData = Object.values(data?.FormattedData || {}) || [];
   if(ptSearchConfig?.ptSearchCount&&payload.locality&&tableData&&tableData.length>ptSearchConfig.ptSearchCount){
     !showToast &&setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
     return null;
   }
   return (
     <React.Fragment>
+
+
+
+   <style>
+        {`
+
+           .tableinside thead {
+  background-color: rgba(107, 19, 63, 0.4) !important;
+  border-radius:4px !important;
+  font-size: 50px;
+  color: white !important; 
+}
+  .tableinside{
+  width:100%;
+  }
+        
+        .tableinside thead tr {
+  background-color: rgba(107, 19, 63, 0.4) !important;
+   border-radius:4px !important;
+  font-size: 50px;
+  color: white !important; 
+}
+          
+.tableinside thead th {
+  background-color: rgba(107, 19, 63, 0.4) !important;
+  //  border-radius:4px !important;
+  font-size: 50px;
+  color: white !important; 
+}
+  .tablecss{
+  border: 1px solid rgb(204, 204, 204);
+    border-radius: 10px;
+    overflow: auto;
+    margin-top: 20px;
+    background: white;
+    margin-bottom:20px;
+  }
+
+
+         
+        `}
+      </style>
+
+
       {data?.Properties?.length === 0 ? (
         <PTEmptyResultInbox data={true}></PTEmptyResultInbox>
       ) : isMobile ? (
-        <DetailsCard data={getData(tableData)} t={t} />
-      ) : (
-        <div style={{ overflowX: 'auto', width: '100%',
+        // <DetailsCard data={getData(tableData)} t={t} />
+          <div style={{ overflowX: 'auto', width: '100%',
               padding: '20px 20px 0 20px', backgroundColor: '#fff'
             }}>
               <div style={{
@@ -234,12 +352,16 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
                 margin: "0 0 20px 0",
               }}>Property List</div> 
 
+
+              <div className="tablecss">
+
          
         <Table
           t={t}
           data={tableData}
           totalRecords={data?.Properties?.length}
           columns={columns}
+          className="tableinside"
           getCellProps={(cellInfo) => {
             return {
               style: {
@@ -253,6 +375,44 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
           manualPagination={false}
           disableSort={true}
         />
+        </div>
+        </div>
+      ) : (
+        <div style={{ overflowX: 'auto', width: '100%',
+              padding: '20px 20px 0 20px', backgroundColor: '#fff'
+            }}>
+              <div style={{
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: 600,
+                fontSize: "20px",
+                color: "#6b133f",
+                margin: "0 0 20px 0",
+              }}>Property List</div> 
+
+
+              <div className="tablecss">
+
+         
+        <Table
+          t={t}
+          data={tableData}
+          totalRecords={data?.Properties?.length}
+          columns={columns}
+          className="tableinside"
+          getCellProps={(cellInfo) => {
+            return {
+              style: {
+                padding: "10px",
+                fontSize: "14px",
+                backgroundColor: "#f9f9f9", 
+                marginTop: '20px'
+              },
+            };
+          }}
+          manualPagination={false}
+          disableSort={true}
+        />
+        </div>
         </div>
       )}
 

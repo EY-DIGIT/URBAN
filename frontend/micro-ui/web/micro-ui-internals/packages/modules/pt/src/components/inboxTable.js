@@ -137,10 +137,10 @@ const PTinboxTable = () => {
         <React.Fragment>
             <div style={{ border: "1px solid #ccc", borderRadius: "10px", overflow: "auto", marginTop: "20px", background: "white" }}>
                 <table style={{ borderCollapse: "collapse", width: "100%" }}>
-                    <thead>
-                        <tr style={{ backgroundColor: "#6b133f" }}>
-                            <th style={headerStyle}>Application No</th>
-                            <th style={headerStyle}>Unique ID</th>
+                    <thead style={backGround23}>
+                        <tr style={backGround23}>
+                            <th style={headerStyle}>Application Number</th>
+                            <th style={headerStyle}>Property ID</th>
                             <th style={headerStyle}>Owner Name</th>
                             <th style={headerStyle}>Application Type</th>
                             <th style={headerStyle}>Status</th>
@@ -248,9 +248,23 @@ const headerStyle = {
     textAlign: "left",
     fontWeight: "600",
     fontSize: "14px",
-    color: "white",
+    color: "rgba(40, 40, 40, 1)" ,
     borderBottom: "1px solid #ddd",
-    background: "#6b133f",
+    // background: "yellow",
+    // backgroundColor:"rgba(107, 19, 63, 0.8)"
+    
+    
+};
+const backGround23={
+    // background:"#6b133f",
+    // opacity:"0.3 ",
+    // color:"white"
+
+      background: "rgba(107, 19, 63, 0.3)",
+
+    // background:"yellow",
+    // opacity:"0.5",
+//    background: "rgba(107, 19, 63, 0.3)"
 };
 
 const cellStyle = {

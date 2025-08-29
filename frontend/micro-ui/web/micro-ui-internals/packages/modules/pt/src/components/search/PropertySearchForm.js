@@ -195,10 +195,10 @@ const SearchPTID = ({
         
         .form-input {
           width: 100%;
-          height: 44px;
+          height: 40px;
           padding: 0 12px;
-          border: 1px solid #d6d5d4;
-          border-radius: 6px;
+          // border: 1px solid #d6d5d4;
+          border-radius: 4px;
           font-size: 14px;
           font-family: 'Poppins', sans-serif;
           transition: all 0.3s ease;
@@ -206,8 +206,8 @@ const SearchPTID = ({
         
         .form-input:focus {
           outline: none;
-          border-color: #6b133f;
-          box-shadow: 0 0 0 3px rgba(107, 19, 63, 0.1);
+          // border-color: #6b133f;
+          // box-shadow: 0 0 0 3px rgba(107, 19, 63, 0.1);
         }
         
         .form-input::placeholder {
@@ -248,7 +248,7 @@ const SearchPTID = ({
           display: flex;
           justify-content: flex-end;
           gap: 16px;
-          padding-top: 10%;
+          padding-top: 8%;
         }
 
           @media (max-width: 1232px) {
@@ -271,10 +271,10 @@ const SearchPTID = ({
         }
         
         .btn-clear {
-          min-width: 140px;
-          height: 44px;
+          min-width: 134px;
+          height: 45px;
           padding: 0 24px;
-          border-radius: 15px;
+          border-radius: 19px;
           color: #fff;
           background: #6b133f;
           font-size: 15px;
@@ -290,10 +290,10 @@ const SearchPTID = ({
         }
         
         .btn-search {
-          min-width: 140px;
-          height: 44px;
+          min-width: 134px;
+          height: 45px;
           padding: 0 24px;
-          border-radius: 15px;
+          border-radius: 19px;
           border: none;
           color: white;
           background: #6b133f;
@@ -302,6 +302,7 @@ const SearchPTID = ({
           font-family: 'Poppins', sans-serif;
           cursor: pointer;
           transition: all 0.3s ease;
+          
         }
         
         .btn-search:hover {
@@ -560,11 +561,9 @@ const SearchPTID = ({
                     setValue("ownerEnglish", e.target.value);
                   }}
                 />
-              </div>         
-            </div>
-
-               {/* Buttons */}
-            <div className="button-container">
+              </div>   
+               <div className="form-field">
+                 <div className="button-container">
               <button
                 type="button"
                 className="btn-clear"
@@ -583,6 +582,29 @@ const SearchPTID = ({
                 Find
               </button>
             </div>
+              </div>       
+            </div>
+
+               {/* Buttons */}
+            {/* <div className="button-container">
+              <button
+                type="button"
+                className="btn-clear"
+                onClick={handleReset}
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                className="btn-search"
+                onClick={() => {
+                  console.log("Search button clicked");
+                  handleSubmit(onFormSubmit)();
+                }}
+              >
+                Find
+              </button>
+            </div> */}
           </div>
           
           {/* Display submitted data */}

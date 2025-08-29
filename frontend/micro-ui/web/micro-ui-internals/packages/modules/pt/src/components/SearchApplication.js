@@ -107,17 +107,17 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 .search-header {
-                    background: #f8f8f8;
-                    padding: 16px 20px;
-                    border-radius: 6px;
-                    margin-bottom: 32px;
-                    border-left: 4px solid #6b133f;
+                    // background: #f8f8f8;
+                    padding: 16px 0px;
+                    // border-radius: 6px;
+                    // margin-bottom: 32px;
+                    // border-left: 4px solid #6b133f;
                 }
                 
                 .search-header h2 {
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
                     font-weight: 600;
-                    font-size: 18px;
+                    font-size: 32px;
                     color: #6b133f;
                     margin: 0;
                 }
@@ -173,20 +173,20 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 /* Input fields with full width */
                 .form-input {
                     width: 100%;
-                    height: 44px;
+                    height: 40px;
                     padding: 0 12px;
-                    border: 1px solid #d6d5d4;
-                    border-radius: 6px;
+                    // border: 0.5px solid #d6d5d4;
+                    border-radius: 4px;
                     font-size: 14px;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
                     transition: all 0.3s ease;
-                    background: white;
+                    background: #F7F7F7;
                 }
                 
                 .form-input:focus {
                     outline: none;
-                    border-color: #6b133f;
-                    box-shadow: 0 0 0 3px rgba(107, 19, 63, 0.1);
+                    // border-color: #6b133f;
+                    // box-shadow: 0 0 0 3px rgba(107, 19, 63, 0.1);
                 }
                 
                 .form-input::placeholder {
@@ -222,13 +222,13 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 /* Select dropdown styling */
                 .form-select {
                     width: 100%;
-                    height: 44px;
+                    height: 40px;
                     padding: 0 12px;
-                    border: 1px solid #d6d5d4;
+                    border: 1px solid #F7F7F7;
                     border-radius: 6px;
                     font-size: 14px;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
-                    background: white;
+                    background: #F7F7F7;
                     cursor: pointer;
                     transition: all 0.3s ease;
                 }
@@ -242,13 +242,13 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 /* Date input styling */
                 input[type="date"] {
                     width: 100%;
-                    height: 44px;
+                    height: 40px;
                     padding: 0 12px;
-                    border: 1px solid #d6d5d4;
-                    border-radius: 6px;
+                    border: 0.5px solid #F7F7F7;
+                    border-radius: 4px;
                     font-size: 14px;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
-                    background: white;
+                    background: #F7F7F7;
                     cursor: pointer;
                 }
                 
@@ -280,13 +280,13 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 .btn-clear {
-                    min-width: 140px;
-                    height: 44px;
+                    min-width: 134.28px;
+                    height: 45px;
                     padding: 0 24px;
-                    border-radius: 6px;
-                    border: 2px solid #FF4C51;
-                    color: #FF4C51;
-                    background: white;
+                    border-radius: 19px;
+                    // border: 2px solid #FF4C51;
+                    color: white;
+                    background: #6B133F;
                     font-size: 15px;
                     font-weight: 500;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
@@ -295,7 +295,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 .btn-clear:hover {
-                    background: #fff5f5;
+                    // background: #fff5f5;
                     transform: translateY(-1px);
                 }
                 
@@ -305,10 +305,11 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 .btn-search {
-                    min-width: 140px;
-                    height: 44px;
+                    min-width: 134.28px;
+                    height: 45px;
                     padding: 0 24px;
-                    border-radius: 6px;
+                    border-radius: 19px;
+                    // opacity:0.5;
                     border: none;
                     color: white;
                     background: #6b133f;
@@ -340,9 +341,9 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 
                 .results-header {
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
-                    font-size: 16px;
+                    font-size: 38px;
                     font-weight: 600;
-                    color: #333;
+                    color: rgba(107, 19, 63, 1);
                     margin-bottom: 20px;
                 }
                 
@@ -367,8 +368,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 thead {
-                    background: #6b133f;
-                    color: white;
+                    background: rgba(107, 19, 63, 0.3);
+                    color: rgba(40, 40, 40, 1);
                 }
                 
                 th {
@@ -383,7 +384,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     padding: 14px 16px;
                     border-bottom: 1px solid #f0f0f0;
                     font-size: 14px;
-                    color: #333;
+                    color: rgba(20, 27, 41, 1);
                 }
                 
                 tbody tr:hover {
@@ -447,19 +448,23 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     background: #fff3cd;
                     color: #856404;
                 }
+
+                 .backGround23 {
+      background: "rgba(107, 19, 63, 0.3)",
+}
             `}</style>
 
             <div className="main-container">
                 <div className="page-content-wrapper">
                     <div className="search-header">
-                        <h2>Search Criteria</h2>
+                        <h2>Search Application</h2>
                     </div>
 
                     <div>
                         <div className="search-grid">
                             {/* Application No */}
                             <div className="form-field">
-                                <label className="form-label">Application No.</label>
+                                <label className="form-label">Application Number</label>
                                 <input
                                     className="form-input"
                                     type="text"
@@ -483,7 +488,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
 
                             {/* Mobile Number */}
                             <div className="form-field">
-                                <label className="form-label">Owner Mobile No.</label>
+                                <label className="form-label"> Mobile Number</label>
                                 <div className="mobile-input-wrapper">
                                     <span className="mobile-prefix">+91</span>
                                     <input
@@ -500,7 +505,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
 
                             {/* Application Status */}
                             <div className="form-field">
-                                <label className="form-label">Application Status</label>
+                                <label className="form-label"> Status</label>
                                 <select
                                     className="form-select"
                                     value={formData.status}
@@ -544,7 +549,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                 onClick={handleReset}
                                 disabled={isSearching}
                             >
-                                CLEAR ALL
+                                Clear 
                             </button>
                             <button
                                 type="button"
@@ -552,7 +557,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                 disabled={isSearching}
                                 onClick={handleSubmit}
                             >
-                                {isSearching ? 'Searching...' : 'Search'}
+                                {isSearching ? 'Searching...' : 'Find'}
                             </button>
                         </div>
                     </div>
@@ -561,16 +566,16 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     {showTable ?  (
                         <div className="results-section">
                             <h3 className="results-header">
-                                Search Results
+                                 Results
                                 {(searchResults || data) && (searchResults || data).length > 0 &&
                                     ` (${(searchResults || data).length} found)`}
                             </h3>
                             <div className="table-container" style={{ overflowX: "auto" }}>
                                 <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Application No</th>
-                                            <th>Unique ID</th>
+                                    <thead className="backGround23">
+                                        <tr >
+                                            <th>Application Number</th>
+                                            <th>Property ID</th>
                                             <th>Owner Name</th>
                                             <th>Application Type</th>
                                             <th>Status</th>

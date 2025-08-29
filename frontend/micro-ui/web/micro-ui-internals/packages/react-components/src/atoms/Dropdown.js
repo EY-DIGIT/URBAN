@@ -207,9 +207,11 @@ const Dropdown = (props) => {
           <div
             id="jk-dropdown-unique"
             className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
-            style={{ ...props.optionCardStyles }}
+            style={{ ...props.optionCardStyles, marginLeft:"-16px" }}
             ref={optionRef}
           >
+            
+
             {filteredOption &&
               filteredOption.map((option, index) => {
                 return (
@@ -239,6 +241,7 @@ const Dropdown = (props) => {
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}
+      
           </div>
         ) : (
           <div

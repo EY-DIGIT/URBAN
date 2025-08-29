@@ -7,6 +7,7 @@ import {
     CheckBox,
 } from "@egovernments/digit-ui-react-components";
 import { useLocation, useHistory } from "react-router-dom";
+import DownloadPdfButton from "./DownloadPDF";
 
 const styles = {
     container: {
@@ -55,26 +56,19 @@ const styles = {
             width: "100%"
         }
     },
+     flex30: {
+    flex: "1 1 30%",
+    display: "flex",
+    flexDirection: "column",
 
-    fieldBlank: {
-        display: "flex",
-        flexDirection: "column",
-        flex: "1",
-        minWidth: "280px",
-        width: "100%",
-        boxSizing: "border-box",
-        '@media (max-width: 768px)': {
-            minWidth: "100%"
-        },
-        '@media (max-width: 630px)': {
-            minWidth: "auto",
-            width: "100%"
-        }
-    },
+    position: "relative",
+    minHeight: "90px",
+
+  },
     input: {
         height: "35px",
-        border: "1px solid #D9D9D9",
-        borderRadius: "6px",
+        border: "0.5px solid #F7F7F7",
+        borderRadius: "4px",
         padding: "6px 10px",
         fontSize: "14px",
         width: "100%",
@@ -154,13 +148,14 @@ const styles = {
     th: {
         border: "1px solid #ccc",
         padding: "8px 4px",
-        backgroundColor: "#6b133f",
+        backgroundColor: "#B9B9B9", 
+        // border:"1px,0px,0px,1px #B9B9B9",
         textAlign: "center",
         fontFamily: "Inter",
         fontWeight: 400,
         fontSize: "12px",
         lineHeight: "130%",
-        color: "white",
+        color: "black",
         whiteSpace: "nowrap",
         '@media (max-width: 768px)': {
             padding: "6px 3px",
@@ -169,6 +164,7 @@ const styles = {
     },
     td: {
         border: "1px solid #ccc",
+        // border:"1px,0px,0px,1px #B9B9B9",
         padding: "8px 4px",
         textAlign: "center",
         fontFamily: "Inter",
@@ -238,11 +234,12 @@ const styles = {
         backgroundColor: "#6b133f",
         color: "#fff",
         border: "none",
-        borderRadius: "6px",
+        borderRadius: "4px",
         cursor: "pointer",
         fontFamily: "Poppins",
         fontWeight: 500,
         fontSize: "14px",
+        height:"35px",
         whiteSpace: "nowrap",
         '@media (max-width: 768px)': {
             padding: "12px 20px",
@@ -271,6 +268,7 @@ const styles = {
         zIndex: 9999,
         padding: "20px",
         boxSizing: "border-box"
+
     },
     modalContent: {
         background: "#fff",
@@ -318,9 +316,19 @@ const styles = {
         color: "#fff",
         fontSize: "14px",
         cursor: "pointer",
-        minWidth: "100px",
-        transition: "background 0.2s ease",
-      }
+        fontSize: "14px",
+        '@media (max-width: 768px)': {
+            padding: "12px 20px",
+            fontSize: "13px",
+            width: "100%"
+        }
+    },
+
+    flexend:{
+        display:"flex",
+        justifyContent:"end",
+
+    }
 };
 
 // Responsive InputField component
@@ -570,7 +578,16 @@ const PropertyForm = () => {
         // history.replace("/digit-ui/employee/pt/response", { Property: submitData.Property, key: "UPDATE", action: "SUBMIT" });
     };
 
+    // const handlePrint = () => window.print();
+    const printPDF=()=>{
+
+        console.log("BCBCB");
+     <DownloadPdfButton targetId="downloadable-component" />
+    }
+
     return (
+
+         <div id="downloadable-component">
         <div style={{
             position: "relative",
             // marginTop: "20px",
@@ -580,9 +597,20 @@ const PropertyForm = () => {
             boxSizing: "border-box",
             ...styles.container
         }}>
-            {/* <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
-                <button style={styles.downloadBtn}>⬇ Download</button>
-            </div> */}
+            <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
+                <button style={styles.downloadBtn} > <DownloadPdfButton targetId="downloadable-component" /></button>
+            </div>
+
+             {/* <div id="downloadable-component">
+        <Card>
+          <h3>Important Info</h3>
+          <p>This is content from the DIGIT UI library.</p>
+        </Card>
+      </div> */}
+ 
+
+
+          
 
             <div style={styles.cardD}>
                 <div style={styles.sectionHeaderDemand}>Demand</div>
@@ -591,6 +619,7 @@ const PropertyForm = () => {
                     <InputFieldBlank   />
                     <InputFieldBlank   />
                 </div>
+              
 
                 {ownersDetail.map((owner, index) => (
                     <React.Fragment key={owner.uuid || index}>
@@ -684,6 +713,7 @@ const PropertyForm = () => {
                             ))}
                             <tr>
                                 <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
+                                 
                                 <td style={styles.td}>
                                     ₹ {taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)}
                                 </td>
@@ -691,12 +721,16 @@ const PropertyForm = () => {
                         </tbody>
                     </table>
                 </div>
-                <div style={styles.bottomText}>
+                <div style={styles.flexend}>
+                      {/* <div style={styles.bottomText}>
                     All values mentioned are in "₹" (Indian Rupees).
-                </div>
+                </div> */}
+               
                 <div style={styles.buttonContainer}>
+                   
                     <button style={styles.confirmBtn} onClick={() => handleGobackEdit(true)}>Back</button>
                     <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
+                </div>
                 </div>
             </div>
 
@@ -755,6 +789,7 @@ const PropertyForm = () => {
                     </div>
                 </div>
             )}
+        </div>
         </div>
     );
 };
