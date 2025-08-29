@@ -16,7 +16,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-   const onFileChange = (key, file) => {
+  const onFileChange = (key, file) => {
     handleFileChange(key, file);
   };
   const renderSvg = () => (
@@ -104,7 +104,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
       >
         {renderFileInput("photoId", "Proof of Identity", true)}
         {renderFileInput("ownershipDoc", "Proof of Ownership", true)}
-
+        {renderFileInput("sellersRegistry", "Others", true)}
         {/* Render dynamic Others fields */}
         {othersFields.map((field, index) =>
           renderFileInput(field, "Others", false, index > 0)

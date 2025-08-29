@@ -238,18 +238,18 @@ const NewApplication = () => {
           documents: [
             {
               documentType: "Photo ID",
-              fileStoreId: documents.photoId?.fileStoreId || "default-filestore-photoid",
-              documentUid: documents.photoId?.documentUid || "default-uid-photoid"
+              fileStoreId: documents.photoId?.fileStoreId,
+              documentUid: documents.photoId?.documentUid
             },
             {
-              documentType: "Sellers Registry Copy ",
-              fileStoreId: documents.sellersRegistry?.fileStoreId || "default-filestore-saledeed",
-              documentUid: documents.sellersRegistry?.documentUid || "default-uid-saledeed"
+              documentType: "others",
+              fileStoreId: documents.sellersRegistry?.fileStoreId,
+              documentUid: documents.sellersRegistry?.documentUid
             },
             {
               documentType: "Ownership Document",
-              fileStoreId: documents.ownershipDoc?.fileStoreId || "default-filestore-ownership",
-              documentUid: documents.ownershipDoc?.documentUid || "default-uid-ownership"
+              fileStoreId: documents.ownershipDoc?.fileStoreId,
+              documentUid: documents.ownershipDoc?.documentUid
             },
 
           ],
@@ -260,18 +260,18 @@ const NewApplication = () => {
         documents: [
           {
             documentType: "Photo ID",
-            fileStoreId: documents.photoId?.fileStoreId || "default-filestore-photoid",
-            documentUid: documents.photoId?.documentUid || "default-uid-photoid"
+            fileStoreId: documents.photoId?.fileStoreId,
+            documentUid: documents.photoId?.documentUid
           },
           {
-            documentType: "Sellers Registry Copy ",
-            fileStoreId: documents.sellersRegistry?.fileStoreId || "default-filestore-saledeed",
-            documentUid: documents.sellersRegistry?.documentUid || "default-uid-saledeed"
+            documentType: "others",
+            fileStoreId: documents.sellersRegistry?.fileStoreId,
+            documentUid: documents.sellersRegistry?.documentUid
           },
           {
             documentType: "Ownership Document",
-            fileStoreId: documents.ownershipDoc?.fileStoreId || "default-filestore-ownership",
-            documentUid: documents.ownershipDoc?.documentUid || "default-uid-ownership"
+            fileStoreId: documents.ownershipDoc?.fileStoreId,
+            documentUid: documents.ownershipDoc?.documentUid
           },
 
         ],
@@ -604,18 +604,18 @@ const NewApplication = () => {
           documents: [
             {
               documentType: "Proof of Identity",
-              fileStoreId: documents.photoId?.fileStoreId || "default-filestore-photoid",
-              documentUid: documents.photoId?.documentUid || "default-uid-photoid"
+              fileStoreId: documents.photoId?.fileStoreId,
+              documentUid: documents.photoId?.documentUid
             },
             {
               documentType: "Others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId || "default-filestore-saledeed",
-              documentUid: documents.sellersRegistry?.documentUid || "default-uid-saledeed"
+              fileStoreId: documents.sellersRegistry?.fileStoreId,
+              documentUid: documents.sellersRegistry?.documentUid
             },
             {
               documentType: "Proof of Ownership",
-              fileStoreId: documents.ownershipDoc?.fileStoreId || "default-filestore-ownership",
-              documentUid: documents.ownershipDoc?.documentUid || "default-uid-ownership"
+              fileStoreId: documents.ownershipDoc?.fileStoreId,
+              documentUid: documents.ownershipDoc?.documentUid
             },
 
           ],
@@ -626,18 +626,18 @@ const NewApplication = () => {
         documents: [
           {
             documentType: "Proof of Identity",
-            fileStoreId: documents.photoId?.fileStoreId || "default-filestore-photoid",
-            documentUid: documents.photoId?.documentUid || "default-uid-photoid"
+            fileStoreId: documents.photoId?.fileStoreId,
+            documentUid: documents.photoId?.documentUid
           },
           {
             documentType: "Others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId || "default-filestore-saledeed",
-            documentUid: documents.sellersRegistry?.documentUid || "default-uid-saledeed"
+            fileStoreId: documents.sellersRegistry?.fileStoreId,
+            documentUid: documents.sellersRegistry?.documentUid
           },
           {
             documentType: "Proof of Ownership",
-            fileStoreId: documents.ownershipDoc?.fileStoreId || "default-filestore-ownership",
-            documentUid: documents.ownershipDoc?.documentUid || "default-uid-ownership"
+            fileStoreId: documents.ownershipDoc?.fileStoreId,
+            documentUid: documents.ownershipDoc?.documentUid
           },
 
         ],
