@@ -76,7 +76,7 @@ const EditUpdateForm = ({ applicationData }) => {
         zone: null,
     });
     const [correspondenceAddress, setCorrespondenceAddress] = useState("");
-    const [isSameAsPropertyAddress, setIsSameAsPropertyAddress] = useState(true);
+    const [isSameAsPropertyAddress, setIsSameAsPropertyAddress] = useState(false);
     const [rateZones, setRateZones] = useState([])
     const [assessmentDetails, setAssessmentDetails] = useState({
         rateZone: null, // Usually fetched
@@ -141,7 +141,7 @@ const EditUpdateForm = ({ applicationData }) => {
         const payload = {
             Assessment: {
                 financialYear: toYear,
-                propertyId: propertyId,
+                propertyId: applicationData?.propertyId,
                 tenantId: tenantId,
                 source: "MUNICIPAL_RECORDS",
                 channel: "CITIZEN",
@@ -204,8 +204,8 @@ const EditUpdateForm = ({ applicationData }) => {
                         longitude: longLat.long,
                     },
                     geoLocation: {
-                        latitude: longLat.lat,
-                        longitude: longLat.long,
+                        latitude: longLat.lat || applicationData?.address?.geoLocation?.latitude,
+                        longitude: longLat.long || applicationData?.address?.geoLocation?.longitude,
                     },
                     zone: addressDetails.zone?.code || "SUN02",
                     street: addressDetails.address || "main",
@@ -369,7 +369,8 @@ const EditUpdateForm = ({ applicationData }) => {
                     setPropertyId(property.propertyId);
                     setStatus(property.status);
                     // setShowSuccessModal(true);
-                    setShowPreviewButton(true);
+                    // setShowPreviewButton(true);
+                    PreviewDemand();
 
                 }
             },
@@ -405,9 +406,9 @@ const EditUpdateForm = ({ applicationData }) => {
                 errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
             }
             // Hindi Name
-            if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
-                errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
-            }
+            // if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
+            //     errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
+            // }
             // Father/Husband Name
             if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
                 errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
@@ -473,8 +474,7 @@ const EditUpdateForm = ({ applicationData }) => {
         const finalErrors = validateForm();
         setFormErrors(finalErrors);
 
-
-        if (Object.keys(errors).length > 0) {
+        if (Object.keys(finalErrors).length > 0) {
             return;
         }
         if (applicationData?.acknowldgementNumber) {
@@ -802,6 +802,24 @@ const EditUpdateForm = ({ applicationData }) => {
         }));
 
         setOwners(formatted);
+        const {
+                doorNo,
+                // address,
+                pincode,
+                locality,
+                ward
+            } = applicationData?.address;
+
+            // Combine all fields into a single, readable address string
+            let fullAddress = "";
+
+            if (doorNo) fullAddress += `${doorNo}, `;
+            // if (address) fullAddress += `${address}, `;
+            if (locality?.name) fullAddress += `${locality.name}, `;
+            if (ward) fullAddress += `${ward}, `;
+            if (pincode) fullAddress += `${pincode}`;
+
+            setCorrespondenceAddress(fullAddress.trim());
     }, [applicationData]);
     useEffect(() => {
         if (applicationData) {
@@ -824,14 +842,14 @@ const EditUpdateForm = ({ applicationData }) => {
 
     useEffect(() => {
         const firstUnit = applicationData?.units?.[0];
-        if (firstUnit?.roadFactor) {
-            setAssessmentDetails((prev) => ({
-                ...prev,
-                roadFactor: firstUnit?.roadFactor || prev.roadFactor,
-                plotArea: applicationData?.landArea || prev.plotArea,
-                oldPropertyId: applicationData?.oldPropertyId || prev.oldPropertyId,
-            }));
-        }
+        // if (firstUnit?.roadFactor) {
+        setAssessmentDetails((prev) => ({
+            ...prev,
+            roadFactor: firstUnit?.roadFactor || prev.roadFactor,
+            plotArea: applicationData?.landArea || prev.plotArea,
+            oldPropertyId: applicationData?.oldPropertyId || prev.oldPropertyId,
+        }));
+        // }
     }, [applicationData]);
 
 
@@ -885,6 +903,11 @@ const EditUpdateForm = ({ applicationData }) => {
             });
         }
         // }
+        setLongLat({
+            lat: applicationData?.address?.geoLocation?.latitude,
+            long: applicationData?.address?.geoLocation?.longitude
+        });
+        setCapturedPhoto(applicationData?.documents.find(d => d.documentType === "Photo Captured")?.fileStoreId || null);
     }, [applicationData]);
 
 
@@ -1047,6 +1070,8 @@ const EditUpdateForm = ({ applicationData }) => {
                             handleSameAsPropertyToggle={handleSameAsPropertyToggle}
                             styles={styles}
                             formErrors={formErrors}
+                            applicationData={applicationData}
+                            setIsSameAsPropertyAddress={setIsSameAsPropertyAddress}
                         />
                     </div>
                     <div style={styles.card}>
@@ -1096,7 +1121,7 @@ const EditUpdateForm = ({ applicationData }) => {
                         />
                     </div>
                     <div style={styles.card}>
-                        <LocationDetails handleLocationUpdate={handleLocationUpdate} handlePhotoCapture={handlePhotoCapture} />
+                        <LocationDetails handleLocationUpdate={handleLocationUpdate} handlePhotoCapture={handlePhotoCapture} applicationData={applicationData} />
                     </div>
                     <div style={styles.card}>
                         <SelfDeclaration
@@ -1133,12 +1158,12 @@ const EditUpdateForm = ({ applicationData }) => {
                             </div>
                         )}
                         <div style={styles.buttonContainer}>
-                            {showPreviewButton && (
+                            {/* {showPreviewButton && (
                                 <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#6b133f" }} />
-                            )}
-                            {!showPreviewButton && (
-                                <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
-                            )}
+                            )} */}
+                            {/* {!showPreviewButton && ( */}
+                            <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
+                            {/* )} */}
                         </div>
                     </div>
 

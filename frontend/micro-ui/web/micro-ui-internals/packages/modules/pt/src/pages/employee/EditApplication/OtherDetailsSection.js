@@ -9,7 +9,7 @@ const OtherDetailsSection = ({
   handleCheckboxChange,
   styles,
   formErrors,
-  setSelectedRateZone
+  setSelectedRateZone,
 }) => {
 console.log("propertyDetails", propertyDetails);
   const stateId = Digit.ULBService.getStateId();
@@ -63,7 +63,10 @@ console.log("propertyDetails", propertyDetails);
       setEssentialTaxOptions(options);
     }
   }, [isLoadingOe, EssentialTax]);
+
   if (isLoading) return <Loader />;
+
+  
   return (
 
     <div>

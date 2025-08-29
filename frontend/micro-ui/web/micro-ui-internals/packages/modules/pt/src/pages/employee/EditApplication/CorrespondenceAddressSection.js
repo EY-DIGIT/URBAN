@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 
 const CorrespondenceAddressSection = ({
   t,
@@ -6,8 +6,13 @@ const CorrespondenceAddressSection = ({
   handleCorrespondenceChange,
   isSameAsPropertyAddress,
   handleSameAsPropertyToggle,
-  styles,formErrors
+  styles,formErrors,
+  applicationData,
+  setIsSameAsPropertyAddress
 }) => {
+    useEffect(() => {
+     setIsSameAsPropertyAddress(true)
+        }, [applicationData]);
   return (
     <div style={{ marginBottom: "20px" }}>
       <div style={styles.assessmentStyle}>{t("Correspondence Address")}</div>

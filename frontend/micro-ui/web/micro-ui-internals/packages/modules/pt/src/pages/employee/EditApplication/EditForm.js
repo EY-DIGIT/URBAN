@@ -1,10 +1,11 @@
-import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
+import { Dropdown, TextInput, Loader } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
 import { newConfig } from "../../../config/Create/config";
 
 const EditForm = ({ applicationData }) => {
+
   const { t } = useTranslation();
   const history = useHistory();
   const { state } = useLocation();
@@ -57,7 +58,7 @@ const EditForm = ({ applicationData }) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
   const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
   const stateId = Digit.ULBService.getStateId();
-
+  const { data: OwnerType = {}, isLoadingOh } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
   const { data: Menu = {}, isLoadingm } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "UsageCategoryMajor") || {};
   const { data: MenuP = {}, isLoadings } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "ConstructionType") || {};
   const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
@@ -68,7 +69,7 @@ const EditForm = ({ applicationData }) => {
   const [constructionTypes, setConstructionTypes] = useState([]);
   const [floorList, setFloorList] = useState([]);
   const [occupancyTypes, setOccupancyTypes] = useState([]);
-
+  const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
   // Year calculations
   const startYear = 1997;
   const currentFY = new Date().getMonth() >= 3 ? new Date().getFullYear() : new Date().getFullYear() - 1;
@@ -167,7 +168,7 @@ const EditForm = ({ applicationData }) => {
       }
 
       setOtherDetails({
-        exemption: "",
+        exemption: applicationData.owners?.[0].ownerType,
         mobileTower: applicationData.additionalDetails?.mobileTower || false,
         bondRoad: applicationData.additionalDetails?.bondRoad || false,
         advertisement: applicationData.additionalDetails?.advertisement || false,
@@ -176,6 +177,19 @@ const EditForm = ({ applicationData }) => {
   }, [applicationData]);
 
   // Fetch boundary data
+  useEffect(() => {
+    if (OwnerType?.length) {
+      const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
+
+      if (filteredItems.length) {
+        const options = filteredItems.map((item) => ({
+          code: item.code,
+          name: t(item.name),
+        }));
+        setOwnerTypeOptions(options);
+      }
+    }
+  }, [isLoadingOh, OwnerType]);
   useEffect(() => {
     (async () => {
       try {
@@ -450,8 +464,8 @@ const EditForm = ({ applicationData }) => {
         id: applicationData?.units?.[index]?.id || null, // Preserve existing unit IDs if updating
         tenantId: applicationData?.tenantId,
         floorNo: parseInt(unit.floorNumber) || 0,
-        unitType: unit.usageType || "RESIDENTIAL",
         usageCategory: unit.usageType || "RESIDENTIAL",
+        usesCategoryMajor: unit.usageType || "RESIDENTIAL",
         occupancyType: unit.usageFactor || "SELFOCCUPIED",
         constructionDetail: {
           builtUpArea: parseFloat(unit.area) || 0,
@@ -459,6 +473,8 @@ const EditForm = ({ applicationData }) => {
           constructionDate: null,
         },
         active: true,
+        rateZone: assessmentDetails?.rateZone || "",
+        roadFactor: assessmentDetails?.roadFactor || "",
         fromYear: unit.fromYear,
         toYear: unit.toYear,
         arv: null,
@@ -1007,7 +1023,7 @@ const EditForm = ({ applicationData }) => {
       <div style={styles.sectionSty}>
         <div style={styles.sectionStyle}>{t("Other Details")}</div>
         <div className="form-grid" style={styles.gridStyle}>
-          <div>
+          {/* <div>
             <label style={styles.labelStyle}>{t("Exemption Applicable")}</label>
             <select
               className="form-select"
@@ -1019,7 +1035,20 @@ const EditForm = ({ applicationData }) => {
               <option value="yes">{t("Yes")}</option>
               <option value="no">{t("No")}</option>
             </select>
+          </div> */}
+          <div>
+            <label style={styles.labelStyle}>{t("Exemption Applicable")}</label>
+            <Dropdown
+              style={{ ...styles.inputStyle, maxWidth: "300px" }}
+              t={t}
+              option={ownerTypeOptions}
+              selected={ownerTypeOptions.find((opt) => opt.code === otherDetails.exemption)}
+              select={(option) => setOtherDetails({ ...otherDetails, exemption: option.code })}
+              optionKey="name"
+              placeholder={t("Select")}
+            />
           </div>
+
         </div>
         <div style={{ marginTop: "20px", display: "flex", gap: "24px", flexWrap: "wrap" }}>
           <label style={styles.checkboxLabel}>
