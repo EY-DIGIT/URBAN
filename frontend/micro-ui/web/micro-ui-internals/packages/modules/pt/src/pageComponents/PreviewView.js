@@ -243,14 +243,21 @@ const PropertyForm = () => {
     const ownersDetail = applicationData?.owners || [];
     const address = applicationData?.address || {};
 
-    const handleConfirm = () => {
-        const flag = true;
-        const propertyId = applicationData?.propertyId;
-        history.push({
-            pathname: `applicationsearch/application-details/${propertyId}`, // 👈 send via query params
-            state: { propertyId, flag } // 👈 also send via state if needed
-        });
-    };
+    // const handleConfirm = () => {
+    //     const flag = true;
+    //     const propertyId = applicationData?.propertyId;
+    //     history.push({
+    //         pathname: `applicationsearch/application-details/${propertyId}`, // 👈 send via query params
+    //         state: { propertyId, flag } // 👈 also send via state if needed
+    //     });
+    // };
+const handleConfirm = () => {
+  const flag = true;
+  const propertyId = applicationData?.propertyId;
+
+  sessionStorage.setItem("flag", JSON.stringify(flag));
+  window.location.href = `/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`;
+};
 
     return (
         <div style={{ position: "relative" }}>
@@ -368,27 +375,9 @@ const PropertyForm = () => {
                     <button style={styles.confirmBtn} onClick={() => window.history.back()}>
                         Back
                     </button>
-                    <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
+                    <button style={styles.confirmBtn} onClick={() => handleConfirm()}>Confirm</button>
                 </div>
             </div>
-
-   {showConfirmPopup && (
-                <div style={styles.modalOverlay}>
-                    <div style={styles.modalContent}>
-                        <p style={{ fontSize: "16px", color: "#3E3E3E", marginBottom: "30px" }}>
-                            Are you sure you want to submit this?
-                        </p>
-                        <div style={styles.modalButtonContainer}>
-                            <button style={styles.modalButton} onClick={() => setShowConfirmPopup(false)}>
-                                Back
-                            </button>
-                            <button style={styles.modalButton} onClick={() => handleConfirm()}>
-                                Confirm
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
 
     );

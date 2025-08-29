@@ -87,6 +87,7 @@ import SuccessAppication from "./pages/employee/SuccessAppication";
 import PropertyDetails from "./pages/employee/PropertyDetails";
 import AssessmentDetails from "./pages/employee/AssessmentDetails";
 import EditApplication from "./pages/employee/EditApplication";
+import EditUpdateIndex from "./pages/employee/EditApplication/EditUpdateIndex";
 import Response from "./pages/Response";
 import TransferOwnership from "./pages/employee/PropertyMutation";
 import DocsRequired from "./pages/employee/PropertyMutation/docsRequired";
@@ -203,6 +204,7 @@ const componentsToRegister = {
   PTPropertyDetails: PropertyDetails,
   PTAssessmentDetails: AssessmentDetails,
   PTEditApplication: EditApplication,
+  EditUpdateIndex:EditUpdateIndex,
   PTResponse: Response,
   PTTransferOwnership: TransferOwnership,
   PTDocsRequired: DocsRequired,

@@ -1019,7 +1019,7 @@ function ApplicationDetailsContentVerifier({
          
            <div >
 
-        <LocationDetails/>
+        <LocationDetails latLong={address?.geoLocation}/>
            </div>
 
          

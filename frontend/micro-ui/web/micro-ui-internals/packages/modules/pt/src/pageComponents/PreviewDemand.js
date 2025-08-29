@@ -56,15 +56,15 @@ const styles = {
             width: "100%"
         }
     },
-     flex30: {
-    flex: "1 1 30%",
-    display: "flex",
-    flexDirection: "column",
+    flex30: {
+        flex: "1 1 30%",
+        display: "flex",
+        flexDirection: "column",
 
-    position: "relative",
-    minHeight: "90px",
+        position: "relative",
+        minHeight: "90px",
 
-  },
+    },
     input: {
         height: "35px",
         border: "0.5px solid #F7F7F7",
@@ -74,7 +74,7 @@ const styles = {
         width: "100%",
         boxSizing: "border-box",
         maxWidth: "100%",
-        backgroundColor:"#F2F2F2",
+        backgroundColor: "#F2F2F2",
         '@media (max-width: 630px)': {
             padding: "8px",
             fontSize: "13px",
@@ -101,7 +101,7 @@ const styles = {
         }
     },
     sectionHeader: {
-    
+
         fontFamily: "Poppins",
         fontWeight: "bold",
         fontSize: "16px",
@@ -148,7 +148,7 @@ const styles = {
     th: {
         border: "1px solid #ccc",
         padding: "8px 4px",
-        backgroundColor: "#B9B9B9", 
+        backgroundColor: "#B9B9B9",
         // border:"1px,0px,0px,1px #B9B9B9",
         textAlign: "center",
         fontFamily: "Inter",
@@ -239,7 +239,7 @@ const styles = {
         fontFamily: "Poppins",
         fontWeight: 500,
         fontSize: "14px",
-        height:"35px",
+        height: "35px",
         whiteSpace: "nowrap",
         '@media (max-width: 768px)': {
             padding: "12px 20px",
@@ -284,31 +284,31 @@ const styles = {
         alignItems: "center",
         gap: "40px",               // uniform gap between text & buttons
         boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
-      
+
         '@media (max-width: 1024px)': {
-          width: "70%",
-          padding: "28px",
-          gap: "30px",
+            width: "70%",
+            padding: "28px",
+            gap: "30px",
         },
         '@media (max-width: 768px)': {
-          width: "90%",
-          padding: "20px",
-          gap: "24px",
+            width: "90%",
+            padding: "20px",
+            gap: "24px",
         },
         '@media (max-width: 480px)': {
-          width: "95%",
-          padding: "16px",
-          gap: "20px",
+            width: "95%",
+            padding: "16px",
+            gap: "20px",
         }
-      },
-      
-      modalButtonContainer: {
+    },
+
+    modalButtonContainer: {
         display: "flex",
         justifyContent: "center",
         gap: "16px",
         flexWrap: "wrap",       // buttons wrap on very small screens
-      },
-      modalButton: {
+    },
+    modalButton: {
         padding: "10px 20px",
         borderRadius: "40px",
         border: "none",
@@ -324,9 +324,9 @@ const styles = {
         }
     },
 
-    flexend:{
-        display:"flex",
-        justifyContent:"end",
+    flexend: {
+        display: "flex",
+        justifyContent: "end",
 
     }
 };
@@ -341,7 +341,7 @@ const InputField = ({ label, value }) => (
 
 const InputFieldBlank = () => (
     <div style={styles.fieldBlank}>
-     
+
     </div>
 );
 
@@ -444,19 +444,20 @@ const PropertyForm = () => {
                         {
                             documentType: "Proof of Identity",
                             fileStoreId: documents.photoId?.fileStoreId,
-                            documentUid: documents.photoId?.documentUid 
+                            documentUid: documents.photoId?.documentUid
                         },
-                        {
-                            documentType: "Others",
-                            fileStoreId: documents.sellersRegistry?.fileStoreId,
-                            documentUid: documents.sellersRegistry?.documentUid
-                        },
+                         documents?.sellersRegistry && {
+            
+              documentType: "others",
+              fileStoreId: documents.sellersRegistry?.fileStoreId,
+              documentUid: documents.sellersRegistry?.documentUid
+            },
                         {
                             documentType: "Proof of Ownership",
                             fileStoreId: documents.ownershipDoc?.fileStoreId,
                             documentUid: documents.ownershipDoc?.documentUid
                         },
-                    ],
+                    ].filter(Boolean),
                 })),
                 documents: [
                     {
@@ -464,17 +465,18 @@ const PropertyForm = () => {
                         fileStoreId: documents.photoId?.fileStoreId,
                         documentUid: documents.photoId?.documentUid
                     },
-                    {
-                        documentType: "Others",
-                        fileStoreId: documents.sellersRegistry?.fileStoreId,
-                        documentUid: documents.sellersRegistry?.documentUid
-                    },
+                      documents?.sellersRegistry && {
+            
+              documentType: "others",
+              fileStoreId: documents.sellersRegistry?.fileStoreId,
+              documentUid: documents.sellersRegistry?.documentUid
+            },
                     {
                         documentType: "Proof of Ownership",
                         fileStoreId: documents.ownershipDoc?.fileStoreId,
                         documentUid: documents.ownershipDoc?.documentUid
                     },
-                ],
+                ].filter(Boolean),
                 units: unit.map(unit => ({
                     usageCategory: unit.usageType,
                     usesCategoryMajor: unit.usageType,
@@ -560,7 +562,6 @@ const PropertyForm = () => {
             //     plainAccessRequest: {}
             // }
         };
-
         // mutationUpdate.mutate(payload, {
         //     onSuccess: (data) => {
         //         const property = data?.Properties?.[0];
@@ -574,222 +575,222 @@ const PropertyForm = () => {
         //         alert("Submission failed");
         //     },
         // });
-        history.replace("/digit-ui/employee/pt/response", { Property: payload?.Property ,key: "UPDATE", action: "SUBMIT"});
+        history.replace("/digit-ui/employee/pt/response", { Property: payload?.Property, key: "UPDATE", action: "SUBMIT" });
         // history.replace("/digit-ui/employee/pt/response", { Property: submitData.Property, key: "UPDATE", action: "SUBMIT" });
     };
 
     // const handlePrint = () => window.print();
-    const printPDF=()=>{
+    const printPDF = () => {
 
         console.log("BCBCB");
-     <DownloadPdfButton targetId="downloadable-component" />
+        <DownloadPdfButton targetId="downloadable-component" />
     }
 
     return (
 
-         <div id="downloadable-component">
-        <div style={{
-            position: "relative",
-            // marginTop: "20px",
-            width: "100%",
-            maxWidth: "100vw",
-            overflowX: "hidden",
-            boxSizing: "border-box",
-            ...styles.container
-        }}>
-            <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
-                <button style={styles.downloadBtn} > <DownloadPdfButton targetId="downloadable-component" /></button>
-            </div>
+        <div id="downloadable-component">
+            <div style={{
+                position: "relative",
+                // marginTop: "20px",
+                width: "100%",
+                maxWidth: "100vw",
+                overflowX: "hidden",
+                boxSizing: "border-box",
+                ...styles.container
+            }}>
+                <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
+                    <button style={styles.downloadBtn} > <DownloadPdfButton targetId="downloadable-component" /></button>
+                </div>
 
-             {/* <div id="downloadable-component">
+                {/* <div id="downloadable-component">
         <Card>
           <h3>Important Info</h3>
           <p>This is content from the DIGIT UI library.</p>
         </Card>
       </div> */}
- 
 
 
-          
 
-            <div style={styles.cardD}>
-                <div style={styles.sectionHeaderDemand}>Demand</div>
-                <div style={styles.row}>
-                    <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
-                    <InputFieldBlank   />
-                    <InputFieldBlank   />
+
+
+                <div style={styles.cardD}>
+                    <div style={styles.sectionHeaderDemand}>Demand</div>
+                    <div style={styles.row}>
+                        <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
+                        <InputFieldBlank />
+                        <InputFieldBlank />
+                    </div>
+
+
+                    {ownersDetail.map((owner, index) => (
+                        <React.Fragment key={owner.uuid || index}>
+                            <div style={styles.sectionHeader}>Owner {index + 1}</div>
+                            <div style={styles.row}>
+                                <InputField label="Name" value={`${owner?.salutation || ""} ${owner?.name || "N/A"}`} />
+                                <InputField label="Father name" value={owner?.fatherOrHusbandName} />
+                                <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
+                            </div>
+                            <div style={styles.row}>
+                                <InputField label="Zone" value={address?.zone || "N/A"} />
+                                <InputField label="Ward" value={address?.ward || "N/A"} />
+                                <InputField label="Colony" value={address?.locality?.name || "N/A"} />
+                            </div>
+                            <div style={styles.row}>
+                                <InputField label="Pin" value={address?.pincode || "N/A"} />
+                                <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
+                                <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
+                            </div>
+                            <div style={styles.row}>
+                                <InputField
+                                    label="Email"
+                                    value={owner?.emailId === "abc@gmail.com" ? "" : owner?.emailId || "N/A"}
+                                />
+                                <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
+                                <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
+                            </div>
+                        </React.Fragment>
+                    ))}
                 </div>
-              
 
-                {ownersDetail.map((owner, index) => (
-                    <React.Fragment key={owner.uuid || index}>
-                        <div style={styles.sectionHeader}>Owner {index + 1}</div>
-                        <div style={styles.row}>
-                            <InputField label="Name" value={`${owner?.salutation || ""} ${owner?.name || "N/A"}`} />
-                            <InputField label="Father name" value={owner?.fatherOrHusbandName} />
-                            <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
-                        </div>
-                        <div style={styles.row}>
-                            <InputField label="Zone" value={address?.zone || "N/A"} />
-                            <InputField label="Ward" value={address?.ward || "N/A"} />
-                            <InputField label="Colony" value={address?.locality?.name || "N/A"} />
-                        </div>
-                        <div style={styles.row}>
-                            <InputField label="Pin" value={address?.pincode || "N/A"} />
-                            <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
-                            <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
-                        </div>
-                        <div style={styles.row}>
-                            <InputField
-                                label="Email"
-                                value={owner?.emailId === "abc@gmail.com" ? "" : owner?.emailId || "N/A"}
-                            />
-                            <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
-                            <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
-                        </div>
-                    </React.Fragment>
-                ))}
-            </div>
-
-            <div style={styles.cardD}>
-                <div style={styles.sectionHeader}>Tax Details</div>
-                <div style={styles.tableContainer}>
-                    <table style={styles.table}>
-                        <thead>
-                            <tr>
-                                {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
-                                    <th key={h} style={styles.th}>{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {propertyFYDetails.map((item) => (
-                                <tr key={item.year}>
-                                    <td style={styles.td}>{item.year}</td>
-                                    <td style={styles.td}>{item.usageType}</td>
-                                    <td style={styles.td}>{item.usageFactor}</td>
-                                    <td style={styles.td}>{item.floorNo}</td>
-                                    <td style={styles.td}>{item.constructionType}</td>
-                                    <td style={styles.td}>{item.area}</td>
-                                    <td style={styles.td}>{item.factor}</td>
-                                    <td style={styles.td}>{item.alv}</td>
-                                    <td style={styles.td}>{item?.discount}</td>
-                                    <td style={styles.td}>{item?.tpv}</td>
+                <div style={styles.cardD}>
+                    <div style={styles.sectionHeader}>Tax Details</div>
+                    <div style={styles.tableContainer}>
+                        <table style={styles.table}>
+                            <thead>
+                                <tr>
+                                    {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
+                                        <th key={h} style={styles.th}>{h}</th>
+                                    ))}
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div style={styles.cardD}>
-                <div style={styles.sectionHeader}>Property tax summary</div>
-                <div style={styles.tableContainer}>
-                    <table style={styles.table}>
-                        <thead>
-                            <tr>
-                                {["Year", "TPV", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Rebate", "Penalty", "Net Tax"].map((h) => (
-                                    <th key={h} style={styles.th}>{h}</th>
+                            </thead>
+                            <tbody>
+                                {propertyFYDetails.map((item) => (
+                                    <tr key={item.year}>
+                                        <td style={styles.td}>{item.year}</td>
+                                        <td style={styles.td}>{item.usageType}</td>
+                                        <td style={styles.td}>{item.usageFactor}</td>
+                                        <td style={styles.td}>{item.floorNo}</td>
+                                        <td style={styles.td}>{item.constructionType}</td>
+                                        <td style={styles.td}>{item.area}</td>
+                                        <td style={styles.td}>{item.factor}</td>
+                                        <td style={styles.td}>{item.alv}</td>
+                                        <td style={styles.td}>{item?.discount}</td>
+                                        <td style={styles.td}>{item?.tpv}</td>
+                                    </tr>
                                 ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {taxSummaries.map((item) => (
-                                <tr key={item.year}>
-                                    <td style={styles.td}>{item.year}</td>
-                                    <td style={styles.td}>{item.tpv}</td>
-                                    <td style={styles.td}>₹ {item.propertyTax}</td>
-                                    <td style={styles.td}>₹ {item.samekit}</td>
-                                    <td style={styles.td}>₹ {item.educationCess}</td>
-                                    <td style={styles.td}>₹ {item.jalKar}</td>
-                                    <td style={styles.td}>₹ {item.jalNikas}</td>
-                                    <td style={styles.td}>₹ {item.urbanTax}</td>
-                                    <td style={styles.td}>₹ {item.sevaKar}</td>
-                                    <td style={styles.td}>₹ {item.totalTax}</td>
-                                    <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
-                                    <td style={styles.td}>₹ {item.penalty}</td>
-                                    <td style={styles.td}>{item.netTax}</td>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
-                                 
-                                <td style={styles.td}>
-                                    ₹ {taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div style={styles.flexend}>
-                      {/* <div style={styles.bottomText}>
+
+                <div style={styles.cardD}>
+                    <div style={styles.sectionHeader}>Property tax summary</div>
+                    <div style={styles.tableContainer}>
+                        <table style={styles.table}>
+                            <thead>
+                                <tr>
+                                    {["Year", "TPV", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Rebate", "Penalty", "Net Tax"].map((h) => (
+                                        <th key={h} style={styles.th}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {taxSummaries.map((item) => (
+                                    <tr key={item.year}>
+                                        <td style={styles.td}>{item.year}</td>
+                                        <td style={styles.td}>{item.tpv}</td>
+                                        <td style={styles.td}>₹ {item.propertyTax}</td>
+                                        <td style={styles.td}>₹ {item.samekit}</td>
+                                        <td style={styles.td}>₹ {item.educationCess}</td>
+                                        <td style={styles.td}>₹ {item.jalKar}</td>
+                                        <td style={styles.td}>₹ {item.jalNikas}</td>
+                                        <td style={styles.td}>₹ {item.urbanTax}</td>
+                                        <td style={styles.td}>₹ {item.sevaKar}</td>
+                                        <td style={styles.td}>₹ {item.totalTax}</td>
+                                        <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
+                                        <td style={styles.td}>₹ {item.penalty}</td>
+                                        <td style={styles.td}>{item.netTax}</td>
+                                    </tr>
+                                ))}
+                                <tr>
+                                    <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
+
+                                    <td style={styles.td}>
+                                        ₹ {taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style={styles.flexend}>
+                        {/* <div style={styles.bottomText}>
                     All values mentioned are in "₹" (Indian Rupees).
                 </div> */}
-               
-                <div style={styles.buttonContainer}>
-                   
-                    <button style={styles.confirmBtn} onClick={() => handleGobackEdit(true)}>Back</button>
-                    <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
-                </div>
-                </div>
-            </div>
 
-            {showConfirmPopup && (
-                <div style={styles.modalOverlay}>
-                    <div style={styles.modalContent}>
-                    <p style={{ fontSize: "18px", fontWeight: "bold", color: "#6b133f", marginBottom: "30px" }}> 
-                                                   Are you sure you want to submit this form?
-                        </p>
-                        <div style={styles.modalButtonContainer}>
-                            <button style={styles.modalButton} onClick={() => setShowConfirmPopup(false)}>
-                                Back
-                            </button>
-                            <button style={styles.modalButton} onClick={() => handleSubmitUpdate()}>
-                                Confirm
-                            </button>
+                        <div style={styles.buttonContainer}>
+
+                            <button style={styles.confirmBtn} onClick={() => handleGobackEdit(true)}>Back</button>
+                            <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
                         </div>
                     </div>
                 </div>
-            )}
 
-            {showSuccessPopup && (
-                <div style={styles.modalOverlay}>
-                    <div style={{
-                        ...styles.modalContent,
-                        width: "350px"
-                    }}>
+                {showConfirmPopup && (
+                    <div style={styles.modalOverlay}>
+                        <div style={styles.modalContent}>
+                            <p style={{ fontSize: "18px", fontWeight: "bold", color: "#6b133f", marginBottom: "30px" }}>
+                                Are you sure you want to submit this form?
+                            </p>
+                            <div style={styles.modalButtonContainer}>
+                                <button style={styles.modalButton} onClick={() => setShowConfirmPopup(false)}>
+                                    Back
+                                </button>
+                                <button style={styles.modalButton} onClick={() => handleSubmitUpdate()}>
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showSuccessPopup && (
+                    <div style={styles.modalOverlay}>
                         <div style={{
-                            width: "60px",
-                            height: "60px",
-                            backgroundColor: "#000",
-                            borderRadius: "50%",
-                            border: "4px solid #00A859",
-                            margin: "0 auto 20px auto",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center"
+                            ...styles.modalContent,
+                            width: "350px"
                         }}>
-                            <span style={{ color: "white", fontSize: "24px" }}>✔</span>
+                            <div style={{
+                                width: "60px",
+                                height: "60px",
+                                backgroundColor: "#000",
+                                borderRadius: "50%",
+                                border: "4px solid #00A859",
+                                margin: "0 auto 20px auto",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                <span style={{ color: "white", fontSize: "24px" }}>✔</span>
+                            </div>
+                            <p style={{ fontWeight: "600", fontSize: "16px", marginBottom: "10px" }}>
+                                Application Submitted Successfully
+                            </p>
+                            <p style={{ color: "#888", fontSize: "14px", marginBottom: "20px" }}>
+                                Application Number<br />
+                                {acknowledgmentNumber || "N/A"}
+                            </p>
+                            <button
+                                style={styles.modalButton}
+                                onClick={() => {
+                                    window.location.href = "/digit-ui/employee";
+                                }}
+                            >
+                                Home
+                            </button>
                         </div>
-                        <p style={{ fontWeight: "600", fontSize: "16px", marginBottom: "10px" }}>
-                            Application Submitted Successfully
-                        </p>
-                        <p style={{ color: "#888", fontSize: "14px", marginBottom: "20px" }}>
-                            Application Number<br />
-                            {acknowledgmentNumber || "N/A"}
-                        </p>
-                        <button
-                            style={styles.modalButton}
-                            onClick={() => {
-                                window.location.href = "/digit-ui/employee";
-                            }}
-                        >
-                            Home
-                        </button>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
         </div>
     );
 };

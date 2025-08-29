@@ -23,7 +23,7 @@ import SelfDeclaration from "./SelfDeclaration";
 
 const NewApplication = () => {
   const location = useLocation();
-  
+
   const {
     generalDetails,
     addressDetailsSet,
@@ -51,6 +51,7 @@ const NewApplication = () => {
     ownershipDoc: null,
     sellersRegistry: null,
   });
+  console.log("documents", documents.sellersRegistry);
   const [fileResetKey, setFileResetKey] = useState(0);
 
   const [owners, setOwners] = useState([
@@ -241,7 +242,8 @@ const NewApplication = () => {
               fileStoreId: documents.photoId?.fileStoreId,
               documentUid: documents.photoId?.documentUid
             },
-            {
+             documents?.sellersRegistry && {
+            
               documentType: "others",
               fileStoreId: documents.sellersRegistry?.fileStoreId,
               documentUid: documents.sellersRegistry?.documentUid
@@ -263,11 +265,12 @@ const NewApplication = () => {
             fileStoreId: documents.photoId?.fileStoreId,
             documentUid: documents.photoId?.documentUid
           },
-          {
-            documentType: "others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId,
-            documentUid: documents.sellersRegistry?.documentUid
-          },
+         documents?.sellersRegistry && {
+            
+              documentType: "others",
+              fileStoreId: documents.sellersRegistry?.fileStoreId,
+              documentUid: documents.sellersRegistry?.documentUid
+            },
           {
             documentType: "Ownership Document",
             fileStoreId: documents.ownershipDoc?.fileStoreId,
@@ -488,8 +491,8 @@ const NewApplication = () => {
 
     if (Object.keys(finalErrors).length > 0) {
       console.log("Form has validation errors. Submission stopped.");
-      return; 
-  }
+      return;
+    }
 
     // if (Object.keys(errors).length > 0) {
     //   return;
@@ -545,7 +548,7 @@ const NewApplication = () => {
               fileStoreId: documents.photoId?.fileStoreId,
               documentUid: documents.photoId?.documentUid
             },
-            {
+           documents?.sellersRegistry && {
               documentType: "Others",
               fileStoreId: documents.sellersRegistry?.fileStoreId,
               documentUid: documents.sellersRegistry?.documentUid
@@ -556,7 +559,7 @@ const NewApplication = () => {
               documentUid: documents.ownershipDoc?.documentUid
             },
 
-          ],
+          ].filter(Boolean),
         })),
 
         institution: null,
@@ -567,7 +570,7 @@ const NewApplication = () => {
             fileStoreId: documents.photoId?.fileStoreId,
             documentUid: documents.photoId?.documentUid
           },
-          {
+        documents?.sellersRegistry && {
             documentType: "Others",
             fileStoreId: documents.sellersRegistry?.fileStoreId,
             documentUid: documents.sellersRegistry?.documentUid
@@ -578,7 +581,7 @@ const NewApplication = () => {
             documentUid: documents.ownershipDoc?.documentUid
           },
 
-        ],
+        ].filter(Boolean),
 
         units: unit.map(unit => (
           {
@@ -714,7 +717,7 @@ const NewApplication = () => {
     // If validation passes, proceed with the async upload
     try {
       // You can also add a loading state here
-      
+
       const response = await Digit.UploadServices.Filestorage(
         "PT",
         file,
@@ -750,13 +753,13 @@ const NewApplication = () => {
     const newOwners = [...owners];
     newOwners[index].email = value;
     setOwners(newOwners);
-  
+
     const errors = { ...formErrors };
     const fieldKey = `owner-${index}-email`;
-  
+
     // A robust regex for email validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  
+
     // Since Email is optional, only validate if a value is present
     if (value && !emailRegex.test(value)) {
       errors[fieldKey] = "Please enter a valid email address.";
@@ -764,7 +767,7 @@ const NewApplication = () => {
       // Clear the error if the input is valid or empty
       delete errors[fieldKey];
     }
-  
+
     setFormErrors(errors);
   };
 
@@ -773,13 +776,13 @@ const NewApplication = () => {
     const newOwners = [...owners];
     newOwners[index][field] = value;
     setOwners(newOwners);
-  
+
     const errors = { ...formErrors };
     const fieldKey = `owner-${index}-${field}`;
-  
+
     // Regex for exactly 10 digits
     const mobileRegex = /^\d{10}$/;
-  
+
     // Mobile Number is mandatory, Alternative Number is not
     if (field === "mobile") {
       if (!value) {
@@ -797,7 +800,7 @@ const NewApplication = () => {
         delete errors[fieldKey];
       }
     }
-  
+
     setFormErrors(errors);
   };
 
@@ -806,14 +809,14 @@ const NewApplication = () => {
     const newOwners = [...owners];
     newOwners[index][field] = value;
     setOwners(newOwners);
-  
+
     const errors = { ...formErrors };
     const fieldKey = `owner-${index}-${field}`;
-  
+
     // Regular expressions for validation
     const englishNameRegex = /^[a-zA-Z\s]+$/;
     const hindiNameRegex = /^[\u0900-\u097F\s]+$/;
-  
+
     if (!value) {
       errors[fieldKey] = "This field is required.";
     } else {
@@ -833,7 +836,7 @@ const NewApplication = () => {
         }
       }
     }
-  
+
     setFormErrors(errors);
   };
   // Validation for Aadhar:
@@ -917,12 +920,12 @@ const NewApplication = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     let newErrors = { ...formErrors };
-  
+
     setAddressDetails(prev => ({ ...prev, [name]: value }));
-  
+
     if (name === "pincode") {
       const pincodeRegex = /^452\d{3}$/;
-  
+
       if (!value) {
         newErrors.pincode = "Pincode is required.";
       } else if (!pincodeRegex.test(value)) {
@@ -931,42 +934,42 @@ const NewApplication = () => {
         delete newErrors.pincode;
       }
     }
-  
+
     setFormErrors(newErrors);
   };
 
   // Validation for Correspondance Address:
 
   // In NewApplication.js, update this function:
-const handleSameAsPropertyToggle = (e) => {
-  const isChecked = e.target.checked;
-  setIsSameAsPropertyAddress(isChecked);
+  const handleSameAsPropertyToggle = (e) => {
+    const isChecked = e.target.checked;
+    setIsSameAsPropertyAddress(isChecked);
 
-  if (isChecked) {
-    // ✅ If the checkbox is checked, populate the correspondence address
-    const {
-      doorNo,
-      address,
-      pincode,
-      colony,
-      ward
-    } = addressDetails;
+    if (isChecked) {
+      // ✅ If the checkbox is checked, populate the correspondence address
+      const {
+        doorNo,
+        address,
+        pincode,
+        colony,
+        ward
+      } = addressDetails;
 
-    // Combine all fields into a single, readable address string
-    let fullAddress = "";
+      // Combine all fields into a single, readable address string
+      let fullAddress = "";
 
-    if (doorNo) fullAddress += `${doorNo}, `;
-    if (address) fullAddress += `${address}, `;
-    if (colony?.name) fullAddress += `${colony.name}, `;
-    if (ward?.name) fullAddress += `${ward.name}, `;
-    if (pincode) fullAddress += `${pincode}`;
+      if (doorNo) fullAddress += `${doorNo}, `;
+      if (address) fullAddress += `${address}, `;
+      if (colony?.name) fullAddress += `${colony.name}, `;
+      if (ward?.name) fullAddress += `${ward.name}, `;
+      if (pincode) fullAddress += `${pincode}`;
 
-    setCorrespondenceAddress(fullAddress.trim());
-  } else {
-    // ✅ If the checkbox is unchecked, clear the correspondence address
-    setCorrespondenceAddress("");
-  }
-};
+      setCorrespondenceAddress(fullAddress.trim());
+    } else {
+      // ✅ If the checkbox is unchecked, clear the correspondence address
+      setCorrespondenceAddress("");
+    }
+  };
 
 
   const backToNew = () => {
@@ -1189,7 +1192,7 @@ const handleSameAsPropertyToggle = (e) => {
               handleOwnerNameChange={handleOwnerNameChange}
               handleOwnerContactChange={handleOwnerContactChange}
               handleOwnerEmailChange={handleOwnerEmailChange}
-              />
+            />
           </div>
 
           <div style={styles.card}>
@@ -1257,8 +1260,8 @@ const handleSameAsPropertyToggle = (e) => {
               t={t}
               handleFileChange={handleFileChange}
               formErrors={formErrors}
-              documents={documents} 
-              resetKey={fileResetKey} 
+              documents={documents}
+              resetKey={fileResetKey}
             />
           </div>
           <div style={styles.card}>

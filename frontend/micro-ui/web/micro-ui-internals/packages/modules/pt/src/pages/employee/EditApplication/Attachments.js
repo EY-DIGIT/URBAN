@@ -16,7 +16,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-   const onFileChange = (key, file) => {
+  const onFileChange = (key, file) => {
     handleFileChange(key, file);
   };
   const renderSvg = () => (
@@ -106,16 +106,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
         {renderFileInput("ownershipDoc", "Proof of Ownership", true)}
         {renderFileInput("sellersRegistry", "Others", false)}
         {/* Render dynamic Others fields */}
-        {/* {othersFields.map((field, index) =>
-          renderFileInput(field, "Others", false, index > 0)
-        )} */}
-
-        {/* Add More button always comes after Others */}
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <button type="button" onClick={handleAddMore} style={styles.addMoreBtn}>
-            ADD MORE  +
-          </button>
-        </div>
+       
       </div>
     </div>
   );

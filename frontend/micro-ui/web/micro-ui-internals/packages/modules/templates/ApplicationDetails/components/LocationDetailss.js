@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import IndexStyle from "./IndexStyle";
 import { Dropdown, TextInput } from "@egovernments/digit-ui-react-components";
 
-const LocationDetails = ({ t = (label) => label, handleFileChange, formErrors = {} }) => {
+const LocationDetails = ({ latLong }) => {
     const [selectedFiles, setSelectedFiles] = useState({});
     const [isMobile, setIsMobile] = useState(false);
     const [coords, setCoords] = useState({ lat: "", lng: "" });
@@ -94,16 +94,16 @@ const LocationDetails = ({ t = (label) => label, handleFileChange, formErrors = 
                     <label style={style2.label}>
                         Latitude<span style={{ color: "red" }}>*</span>
                     </label>
-                    <TextInput style={style2.widthInput} value={coords.lat} readOnly />
+                    <TextInput style={style2.widthInput} value={latLong?.latitude} readOnly />
                 </div>
                 <div style={style2.flex20}>
                     <label style={style2.label}>
                         Longitude<span style={{ color: "red" }}>*</span>
                     </label>
-                    <TextInput style={style2.widthInput} value={coords.lng} readOnly />
+                    <TextInput style={style2.widthInput} value={latLong?.longitude} readOnly />
                 </div>
 
-                <div style={style2.flex50}>
+                {/* <div style={style2.flex50}>
                     {renderFileInput("ownershipDoc", "Property Photographs", true)}
                 </div>
 
@@ -113,12 +113,12 @@ const LocationDetails = ({ t = (label) => label, handleFileChange, formErrors = 
                         type="checkbox"
                     />{" "}
                     Message To Be Confirmed For Bill Collector
-                </label>
-                {formErrors?.selfDeclaration && (
+                </label> */}
+                {/* {formErrors?.selfDeclaration && (
                     <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
                         {formErrors.selfDeclaration}
                     </p>
-                )}
+                )} */}
             </div>
         </div>
     );

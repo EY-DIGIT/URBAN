@@ -1,19 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 import { useHistory, useLocation } from "react-router-dom";
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {}, applicationData }) {
   console.log("ApplicationDetailsActionBar Props:", applicationData);
-  const [flag, setFlag] = useState(false);
-
-  useEffect(() => {
-    const storedFlag = JSON.parse(sessionStorage.getItem("flag"));
-    if (storedFlag) {
-      setFlag(storedFlag);
-      sessionStorage.removeItem("flag"); // clear after reading once
-    }
-  }, []);
+  const location = useLocation();
+  const { propertyId, flag } = location.state || {};
   const history = useHistory();
   const { t } = useTranslation();
   let user = Digit.UserService.getUser();
@@ -115,13 +108,12 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
       },
     });
   };
-  const EditApplication = () => {
+const EditApplication = () => {
     history.push({
-      pathname: `/digit-ui/employee/pt/edit-update-application/${applicationData?.propertyId}`, // <-- apna redirect page
-      state: { applicationData }
-    });
-  }
-
+                    pathname: `/digit-ui/employee/pt/edit-update-application/${applicationData?.propertyId}`, // <-- apna redirect page
+                    state: { applicationData }
+                  });
+}
   return (
     <React.Fragment>
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
@@ -137,16 +129,10 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
             />
           ) : null}
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }} ref={menuRef}>
-            {/* <SubmitBar ref={menuRef} label={t("Edit")} onSubmit={() => EditApplication()} /> */}
-            {actions?.some((act) => act?.action?.toUpperCase() === "FORWARD") && (
-              <SubmitBar label={t("Edit")} onSubmit={() => EditApplication()} />
-            )}
-            {!actions?.some((act) => act?.action?.toUpperCase() === "FORWARD") && (
-              <SubmitBar label={t("Preview")} onSubmit={() => handlePreview()} />
-            )}
-            {flag && (
+            <SubmitBar ref={menuRef} label={t("Edit")} onSubmit={() => EditApplication()} />
+            {/* {flag && ( */}
               <SubmitBar ref={menuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-            )}
+            {/* )} */}
           </div>
         </ActionBar>
       )}

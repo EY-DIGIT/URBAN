@@ -164,6 +164,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const PropertyDetails = Digit?.ComponentRegistryService?.getComponent("PTPropertyDetails");
   const AssessmentDetails = Digit?.ComponentRegistryService?.getComponent("PTAssessmentDetails");
   const EditApplication = Digit?.ComponentRegistryService?.getComponent("PTEditApplication");
+  const EditUpdateIndex = Digit?.ComponentRegistryService?.getComponent("EditUpdateIndex");
   const Response = Digit?.ComponentRegistryService?.getComponent("PTResponse");
   const TransferOwnership = Digit?.ComponentRegistryService?.getComponent("PTTransferOwnership");
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
@@ -212,6 +213,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/assessment-details/:id`} component={() => <AssessmentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/ptsearch/assessment-details/:id`} component={() => <AssessmentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
+          <PrivateRoute path={`${path}/edit-update-application/:id`} component={() => <EditUpdateIndex />} />
           {/**/}
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-mutate/:id`} component={() => <TransferOwnership parentRoute={path} />} />
