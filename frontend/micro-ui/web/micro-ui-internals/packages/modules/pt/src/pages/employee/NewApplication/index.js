@@ -482,21 +482,18 @@ const NewApplication = () => {
 
   const handleSubmit = async () => {
 
-    // const errors = {};
+    console.log("Current documents state:", documents); 
 
     const finalErrors = validateForm();
     setFormErrors(finalErrors);
-
-    console.log("Final errors object:", finalErrors);
 
     if (Object.keys(finalErrors).length > 0) {
       console.log("Form has validation errors. Submission stopped.");
       return;
     }
 
-    // if (Object.keys(errors).length > 0) {
-    //   return;
-    // }
+  const documentsToSubmit = buildDocumentPayload(documents);
+
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
       return;
@@ -542,46 +539,49 @@ const NewApplication = () => {
             addressDetails.address || "23, main, PG_CITYA_REVENUE_SUN20, City A, ",
           relationship: owner.relationship || "FATHER",
           samagraId: owner.samagraID || "Samagra ID",
-          documents: [
-            {
-              documentType: "Proof of Identity",
-              fileStoreId: documents.photoId?.fileStoreId,
-              documentUid: documents.photoId?.documentUid
-            },
-           documents?.sellersRegistry && {
-              documentType: "Others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid
-            },
-            {
-              documentType: "Proof of Ownership",
-              fileStoreId: documents.ownershipDoc?.fileStoreId,
-              documentUid: documents.ownershipDoc?.documentUid
-            },
+          // documents: [
+          //   {
+          //     documentType: "Proof of Identity",
+          //     fileStoreId: documents.photoId?.fileStoreId,
+          //     documentUid: documents.photoId?.documentUid
+          //   },
+          //   {
+          //     documentType: "Others",
+          //     fileStoreId: documents.sellersRegistry?.fileStoreId,
+          //     documentUid: documents.sellersRegistry?.documentUid
+          //   },
+          //   {
+          //     documentType: "Proof of Ownership",
+          //     fileStoreId: documents.ownershipDoc?.fileStoreId,
+          //     documentUid: documents.ownershipDoc?.documentUid
+          //   },
 
-          ].filter(Boolean),
+          // ],
+          documents: documentsToSubmit,
         })),
 
         institution: null,
 
-        documents: [
-          {
-            documentType: "Proof of Identity",
-            fileStoreId: documents.photoId?.fileStoreId,
-            documentUid: documents.photoId?.documentUid
-          },
-        documents?.sellersRegistry && {
-            documentType: "Others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId,
-            documentUid: documents.sellersRegistry?.documentUid
-          },
-          {
-            documentType: "Proof of Ownership",
-            fileStoreId: documents.ownershipDoc?.fileStoreId,
-            documentUid: documents.ownershipDoc?.documentUid
-          },
+        // documents: [
+        //   {
+        //     documentType: "Proof of Identity",
+        //     fileStoreId: documents.photoId?.fileStoreId,
+        //     documentUid: documents.photoId?.documentUid
+        //   },
+        //   {
+        //     documentType: "Others",
+        //     fileStoreId: documents.sellersRegistry?.fileStoreId,
+        //     documentUid: documents.sellersRegistry?.documentUid
+        //   },
+        //   {
+        //     documentType: "Proof of Ownership",
+        //     fileStoreId: documents.ownershipDoc?.fileStoreId,
+        //     documentUid: documents.ownershipDoc?.documentUid
+        //   },
 
-        ].filter(Boolean),
+        // ],
+
+        documents: documentsToSubmit,
 
         units: unit.map(unit => (
           {
@@ -691,6 +691,46 @@ const NewApplication = () => {
     });
   };
 
+// In your NewApplication.js file
+
+const buildDocumentPayload = (documentsState) => {
+  const payloadDocs = [];
+
+  // Add the known, non-dynamic documents first
+  if (documentsState.photoId?.fileStoreId) {
+    payloadDocs.push({
+      documentType: "Proof of Identity",
+      fileStoreId: documentsState.photoId.fileStoreId,
+      documentUid: documentsState.photoId.documentUid,
+    });
+  }
+
+  if (documentsState.ownershipDoc?.fileStoreId) {
+    payloadDocs.push({
+      documentType: "Proof of Ownership",
+      fileStoreId: documentsState.ownershipDoc.fileStoreId,
+      documentUid: documentsState.ownershipDoc.documentUid,
+    });
+  }
+
+  // Iterate through the state to find and add all dynamic "Others" documents
+  Object.keys(documentsState).forEach((key) => {
+    // ✅ CORRECTED LINE: Check for keys that start with "others_"
+    if (key.startsWith("others_") || key === "sellersRegistry") {
+      const doc = documentsState[key];
+      if (doc?.fileStoreId) {
+        payloadDocs.push({
+          documentType: "Others",
+          fileStoreId: doc.fileStoreId,
+          documentUid: doc.documentUid,
+        });
+      }
+    }
+  });
+
+  return payloadDocs;
+};
+
   const handleFileChange = async (key, file) => {
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
     const maxSizeMB = 2;
@@ -771,6 +811,7 @@ const NewApplication = () => {
     setFormErrors(errors);
   };
 
+  
   // Validation for Mobile number:
   const handleOwnerContactChange = (index, field, value) => {
     const newOwners = [...owners];
@@ -1079,9 +1120,38 @@ const NewApplication = () => {
       }
     }
   };
-  const handleRestryIdChange = (e) => {
-    setRegistryId(e.target.value);
+  // const handleRestryIdChange = (e) => {
+  //   setRegistryId(e.target.value);
+  // }
+
+  // In your NewApplication.js file, find your other handlers
+
+const handleRestryIdChange = (value) => {
+  // 1. Update the state for the input value
+  setRegistryId(value);
+
+  // 2. Perform validation and update the formErrors state
+  const errors = { ...formErrors };
+  const fieldKey = "registryId"; // The key for this field in formErrors
+
+  // Check if the field is not empty first (non-mandatory check)
+  if (value) {
+    // Regex to check for "MP" followed by exactly 17 digits
+    const regex = /^MP\d{17}$/;
+
+    if (!regex.test(value)) {
+      errors[fieldKey] = "Must start with 'MP' and be followed by 17 numeric digits.";
+    } else {
+      // Clear the error if the input is valid
+      delete errors[fieldKey];
+    }
+  } else {
+    // Clear the error if the field is empty (valid)
+    delete errors[fieldKey];
   }
+
+  setFormErrors(errors);
+};
 
   const handleDropdownChange = (field, selectedOption) => {
     setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));

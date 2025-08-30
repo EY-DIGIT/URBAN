@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
 import { CardSubHeader, PDFSvg } from "@egovernments/digit-ui-react-components";
 
-function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }) {
+function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, applicationDetails,estimateData }) {
   const { t } = useTranslation();
+  const history = useHistory();
   const [filesArray, setFilesArray] = useState(() => []);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [pdfFiles, setPdfFiles] = useState({});
@@ -33,6 +35,14 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
   const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("/obps") || window.location.href.includes("employee/ws");
   const isStakeholderApplication = window.location.href.includes("stakeholder");
 
+  const handleNavigation = (path, state) => {
+    if (state) {
+      history.push(path, state);
+    } else {
+      console.error("Data is missing, cannot navigate with state.");
+    }
+  };
+
   return (
     <div style={{ marginTop: "19px" }}>
       {!isStakeholderApplication &&
@@ -41,10 +51,10 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
             {document?.title ? (
               <div
                 style={{
-                  display: "flex",             
-                  alignItems: "center",         
-                  gap: "16px",                  
-                  flexWrap: "wrap",             
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  flexWrap: "wrap",
                   marginBottom: "20px",
                 }}
               >
@@ -65,11 +75,53 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
                   }}
                 >
                   {/* {t(document?.title)} */}
-                  Download
+                  Reports
+                </div>
+
+                {/* ✅ REPLACED: New navigation links */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                  }}
+                >
+                  {/* Ledger */}
+                  <button
+                    onClick={() => handleNavigation("/digit-ui/employee/pt/PropertyLedger", { 
+                      proOwnerDetail: applicationDetails?.applicationData,
+                      calculation: estimateData?.Calculation?.[0],
+                    })}
+                    style={{ ...styles.linkButton }}
+                  >
+                    Ledger
+                  </button>
+                  {/* Detail Ledger */}
+                  <button
+                    onClick={() => handleNavigation("/digit-ui/employee/pt/DetailLedgerPage", { 
+                      proOwnerDetail: applicationDetails?.applicationData,
+                      calculation: estimateData?.Calculation?.[0],
+                    })}
+                    style={{ ...styles.linkButton }}
+                  >
+                    Detail Ledger
+                  </button>
+                  {/* Demand */}
+                  <button
+                    onClick={() => handleNavigation("/digit-ui/employee/pt/demand")}
+                    style={{ ...styles.linkButton, display: "flex", alignItems: "center", gap: "8px" }}
+                  >
+                    {/* <img
+                      src="https://www.flaticon.com/free-icons/download"
+                      alt="Download icon"
+                      style={{ width: "20px", height: "20px" }}
+                    /> */}
+                    Demand Note
+                  </button>
                 </div>
 
                 {/* PDF Links */}
-                <div
+                {/* <div
                   style={{
                     display: "flex",
                     flexWrap: "wrap",
@@ -106,7 +158,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
                       <p>{t("BPA_NO_DOCUMENTS_UPLOADED_LABEL")}</p>
                     </div>
                   ) : null}
-                </div>
+                </div> */}
               </div>
             ) : null}
           </React.Fragment>
@@ -182,6 +234,25 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false }
     </div>
   );
 }
+
+const styles = {
+  linkButton: {
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    padding: "6px 12px",
+    border: "1px solid #6b133f",
+    borderRadius: "20px",
+    color: "#6b133f",
+    textDecoration: "none",
+    fontWeight: 400,
+    fontSize: "12px",
+    transition: "0.3s",
+    fontFamily: "Poppins",
+    background: "none",
+    cursor: "pointer",
+  }
+};
 
 export default PropertyDocuments;
 

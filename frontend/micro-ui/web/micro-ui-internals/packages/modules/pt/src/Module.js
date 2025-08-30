@@ -127,6 +127,11 @@ import OwnershipDetailsSection from "./pageComponents/CreateProperty/OwnershipDe
 import PropertyDetailsTableSection from "./pageComponents/CreateProperty/PropertyDetailsTableSection";
 import PTSelectAssessmentYears from "./pageComponents/CreateProperty/PTSelectAssessmentYears";
 import PropertyLandingPage from "./pageComponents/PropertyLandingPage";
+
+import PropertyLedger from "./pageComponents/PropertyLedger";
+import DetailLedgerPage from "./pageComponents/PropertyDetailLedger";
+
+
 const componentsToRegister = {
   AssessmentDetailsSection,
   AddressSection,
@@ -144,6 +149,8 @@ const componentsToRegister = {
   PropertyTax,
   PreviewDemand,
   PropertyLandingPage,
+  PropertyLedger,
+  DetailLedgerPage,
   PreviewView,
   PTSelectPincode,
   PTSelectAddress,
