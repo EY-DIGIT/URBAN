@@ -435,7 +435,7 @@ const PropertyForm = () => {
                     altContactNumber: owner.altNumber || "",
                     isCorrespondenceAddress: correspondenceAddress,
                     mobileNumber: owner.mobile || "9999999999",
-                    emailId: owner.email || "",
+                    emailId: owner.email,
                     ownerType: propertyDetails.exemption.code,
                     permanentAddress: addressDetails.address || "23, main, PG_CITYA_REVENUE_SUN20, City A, ",
                     relationship: owner.relationship || "FATHER",
@@ -643,7 +643,7 @@ const PropertyForm = () => {
                             <div style={styles.row}>
                                 <InputField
                                     label="Email"
-                                    value={owner?.emailId === "abc@gmail.com" ? "" : owner?.emailId || "N/A"}
+                                    value={owner?.emailId || "N/A"}
                                 />
                                 <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                                 <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />

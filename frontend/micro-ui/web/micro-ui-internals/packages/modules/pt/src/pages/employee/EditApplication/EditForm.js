@@ -1340,15 +1340,15 @@ const EditUpdateForm = ({ applicationData }) => {
           aadhaarNumber: owner.aadhaar || "",
           altContactNumber: owner.altNumber || "",
           isCorrespondenceAddress: correspondenceAddress,
-          mobileNumber: owner.mobile || "9999999999",
-          emailId: owner.email || "abc@gmail.com",
+          mobileNumber: owner.mobile,
+          emailId: owner.email,
           ownerType: propertyDetails.exemption.code,
           roles: applicationData?.owners?.[index]?.roles || [],
           permanentAddress:
-            addressDetails.address || "23, main, PG_CITYA_REVENUE_SUN20, City A, ",
+            addressDetails.address,
           type: "CITIZEN",
           relationship: owner.relationship || "FATHER",
-          samagraId: owner.samagraID || "Samagra ID",
+          samagraId: owner.samagraID,
           tenantId: applicationData?.owners?.[index]?.tenantId || userInfo1?.tenantId || "",
           documents: [
             {
@@ -1923,7 +1923,7 @@ const EditUpdateForm = ({ applicationData }) => {
       hindiName: owner.hindiName || "",
       fatherHusbandName: owner.fatherOrHusbandName || "",
       relationship: owner.relationship || "",
-      email: owner.emailId || "abc@gmail.com",
+      email: owner.emailId,
       altNumber: owner.altContactNumber || "",
       mobile: owner.mobileNumber || "",
       samagraID: owner.samagraId || "",
