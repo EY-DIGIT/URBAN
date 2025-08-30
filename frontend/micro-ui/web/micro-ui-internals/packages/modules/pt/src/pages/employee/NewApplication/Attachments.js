@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors = {}, resetKey, documents = {} }) => {
   const [localErrors, setLocalErrors] = useState({});
   const [isMobile, setIsMobile] = useState(false);
-  const [othersFields, setOthersFields] = useState(["others_1"]);
+  // const [othersFields, setOthersFields] = useState(["others_1"]);
+  const [othersFields, setOthersFields] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -106,9 +107,9 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
         {renderFileInput("ownershipDoc", "Proof of Ownership", true)}
         {renderFileInput("sellersRegistry", "Others", false)}
         {/* Render dynamic Others fields */}
-        {/* {othersFields.map((field, index) =>
-          renderFileInput(field, "Others", false, index > 0)
-        )} */}
+        {othersFields.map((field, index) =>
+          renderFileInput(field, "Others", false, true)
+        )}
 
         {/* Add More button always comes after Others */}
         <div style={{ display: "flex", alignItems: "center" }}>

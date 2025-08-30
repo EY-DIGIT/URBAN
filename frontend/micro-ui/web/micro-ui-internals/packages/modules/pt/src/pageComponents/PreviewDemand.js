@@ -60,10 +60,15 @@ const styles = {
         flex: "1 1 30%",
         display: "flex",
         flexDirection: "column",
+    flex30: {
+        flex: "1 1 30%",
+        display: "flex",
+        flexDirection: "column",
 
         position: "relative",
         minHeight: "90px",
 
+    },
     },
     input: {
         height: "35px",
@@ -397,6 +402,9 @@ const PropertyForm = () => {
     };
 
     const handleSubmitUpdate = async () => {
+        console.log("handleSubmitUpdate is being called.");
+        const documentsToSubmit = buildDocumentPayload(documents);
+
         const payload = {
             Property: {
                 updateIMC: true,
@@ -444,20 +452,19 @@ const PropertyForm = () => {
                         {
                             documentType: "Proof of Identity",
                             fileStoreId: documents.photoId?.fileStoreId,
-                            documentUid: documents.photoId?.documentUid
+                            documentUid: documents.photoId?.documentUid 
                         },
-                         documents?.sellersRegistry && {
-            
-              documentType: "others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid
-            },
+                        {
+                            documentType: "Others",
+                            fileStoreId: documents.sellersRegistry?.fileStoreId,
+                            documentUid: documents.sellersRegistry?.documentUid
+                        },
                         {
                             documentType: "Proof of Ownership",
                             fileStoreId: documents.ownershipDoc?.fileStoreId,
                             documentUid: documents.ownershipDoc?.documentUid
                         },
-                    ].filter(Boolean),
+                    ],
                 })),
                 documents: [
                     {
@@ -465,18 +472,17 @@ const PropertyForm = () => {
                         fileStoreId: documents.photoId?.fileStoreId,
                         documentUid: documents.photoId?.documentUid
                     },
-                      documents?.sellersRegistry && {
-            
-              documentType: "others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid
-            },
+                    {
+                        documentType: "Others",
+                        fileStoreId: documents.sellersRegistry?.fileStoreId,
+                        documentUid: documents.sellersRegistry?.documentUid
+                    },
                     {
                         documentType: "Proof of Ownership",
                         fileStoreId: documents.ownershipDoc?.fileStoreId,
                         documentUid: documents.ownershipDoc?.documentUid
                     },
-                ].filter(Boolean),
+                ],
                 units: unit.map(unit => ({
                     usageCategory: unit.usageType,
                     usesCategoryMajor: unit.usageType,
@@ -577,6 +583,44 @@ const PropertyForm = () => {
         // });
         history.replace("/digit-ui/employee/pt/response", { Property: payload?.Property, key: "UPDATE", action: "SUBMIT" });
         // history.replace("/digit-ui/employee/pt/response", { Property: submitData.Property, key: "UPDATE", action: "SUBMIT" });
+    };
+
+    const buildDocumentPayload = (documentsState) => {
+        const payloadDocs = [];
+      
+        // Add the known, non-dynamic documents first
+        if (documentsState.photoId?.fileStoreId) {
+          payloadDocs.push({
+            documentType: "Proof of Identity",
+            fileStoreId: documentsState.photoId.fileStoreId,
+            documentUid: documentsState.photoId.documentUid,
+          });
+        }
+      
+        if (documentsState.ownershipDoc?.fileStoreId) {
+          payloadDocs.push({
+            documentType: "Proof of Ownership",
+            fileStoreId: documentsState.ownershipDoc.fileStoreId,
+            documentUid: documentsState.ownershipDoc.documentUid,
+          });
+        }
+      
+        // Iterate through the state to find and add all dynamic "Others" documents
+        Object.keys(documentsState).forEach((key) => {
+          // ✅ This is the corrected check for keys starting with "others_"
+          if (key.startsWith("others_") || key === "sellersRegistry") {
+            const doc = documentsState[key];
+            if (doc?.fileStoreId) {
+              payloadDocs.push({
+                documentType: "Others",
+                fileStoreId: doc.fileStoreId,
+                documentUid: doc.documentUid,
+              });
+            }
+          }
+        });
+      
+        return payloadDocs;
     };
 
     // const handlePrint = () => window.print();

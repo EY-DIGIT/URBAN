@@ -10,7 +10,7 @@ const OwnershipDetailsSection = ({
   owners,
   setOwners,
   addNewOwner,
-  isJointStarted, styles, formErrors, handleOwnerAadhaarChange ,handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange
+  isJointStarted, styles, formErrors, handleOwnerAadhaarChange, handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange
 }) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
@@ -58,7 +58,7 @@ const OwnershipDetailsSection = ({
 
           {/* Name with Title */}
           <div style={styles.flex30}>
-            <div style={{...styles.poppinsLabel , color: "#555"}}>
+            <div style={{ ...styles.poppinsLabel, color: "#555" }}>
               {t("Owner Name")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <div style={styles.nameInputContainer}>
@@ -70,19 +70,19 @@ const OwnershipDetailsSection = ({
                 optionKey="name"
                 style={styles.dropdown30}
                 placeholder={t("Mr")}
-                placeholderStyle={{ color: "#000" }}  
+                placeholderStyle={{ color: "#000" }}
               />
               <TextInput
                 style={styles.textBox}
                 placeholder={t("Enter")}
                 value={owner.name}
                 onChange={(e) => handleOwnerNameChange(index, "name", e.target.value)}
-                />
+              />
             </div>
             {/* ✅ CHANGE THIS: Use the dynamic key */}
             {formErrors[`owner-${index}-name`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-name`]}</p>
-          )}
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-name`]}</p>
+            )}
           </div>
           {/* Hindi Name */}
           <div style={styles.flex30}>
@@ -104,12 +104,12 @@ const OwnershipDetailsSection = ({
                 placeholder={t("यहाँ लिखें")}
                 value={owner.hindiName}
                 onChange={(e) => handleOwnerNameChange(index, "hindiName", e.target.value)}
-                />
+              />
             </div>
-             {/* ✅ CHANGE THIS: Use the dynamic key */}
-          {formErrors[`owner-${index}-hindiName`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-hindiName`]}</p>
-          )}
+            {/* ✅ CHANGE THIS: Use the dynamic key */}
+            {formErrors[`owner-${index}-hindiName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-hindiName`]}</p>
+            )}
           </div>
           {/* Father/Husband Name */}
           <div style={styles.flex30}>
@@ -122,9 +122,9 @@ const OwnershipDetailsSection = ({
               onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
               placeholder={t("Enter")}
             />
-             {formErrors[`owner-${index}-fatherHusbandName`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
-          )}
+            {formErrors[`owner-${index}-fatherHusbandName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+            )}
           </div>
           {/* Relationship */}
           <div style={styles.flex30}>
@@ -157,9 +157,9 @@ const OwnershipDetailsSection = ({
               style={styles.widthInput}
               placeholder={t("Enter")}
             />
-             {formErrors[`owner-${index}-email`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-email`]}</p>
-          )}
+            {formErrors[`owner-${index}-email`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-email`]}</p>
+            )}
           </div>
           {/* Mobile */}
           <div style={styles.flex30}>
@@ -173,8 +173,8 @@ const OwnershipDetailsSection = ({
               placeholder={t("Enter")}
             />
             {formErrors[`owner-${index}-mobile`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-mobile`]}</p>
-          )}
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-mobile`]}</p>
+            )}
           </div>
 
           {/* Alternative Number */}
@@ -187,26 +187,26 @@ const OwnershipDetailsSection = ({
               placeholder={t("Enter")}
             />
             {formErrors[`owner-${index}-altNumber`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-altNumber`]}</p>
-          )}
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-altNumber`]}</p>
+            )}
           </div>
-           {/* Aadhaar */}
-        <div style={styles.flex30}>
-          <div style={styles.poppinsLabel}>{t("Aadhaar ID")} <span className="mandatory" style={styles.mandatory}>*</span></div>
-          <TextInput
-            style={styles.widthInput}
-            value={owner.aadhaar}
-            // ✅ CHANGE THIS LINE
-            // It should now call the new handler passed from the parent
-            onChange={(e) => handleOwnerAadhaarChange(index, e.target.value)}
-            placeholder={t("Enter")}
-          />
-          {/* ✅ CHANGE THIS LINE */}
-          {/* It should now look for the correct, dynamic error key */}
-          {formErrors[`owner-${index}-aadhaar`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-aadhaar`]}</p>
-          )}
-        </div>
+          {/* Aadhaar */}
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>{t("Aadhaar ID")} <span className="mandatory" style={styles.mandatory}>*</span></div>
+            <TextInput
+              style={styles.widthInput}
+              value={owner.aadhaar}
+              // ✅ CHANGE THIS LINE
+              // It should now call the new handler passed from the parent
+              onChange={(e) => handleOwnerAadhaarChange(index, e.target.value)}
+              placeholder={t("Enter")}
+            />
+            {/* ✅ CHANGE THIS LINE */}
+            {/* It should now look for the correct, dynamic error key */}
+            {formErrors[`owner-${index}-aadhaar`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-aadhaar`]}</p>
+            )}
+          </div>
 
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
@@ -272,7 +272,7 @@ const OwnershipDetailsSection = ({
           </div>
           <TextInput
             value={registryId}
-            onChange={handleRestryIdChange}
+            onChange={(e) => handleRestryIdChange(e.target.value)}
             style={styles.widthInput}
 
           />
@@ -281,7 +281,7 @@ const OwnershipDetailsSection = ({
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>{formErrors.registryId}</p>
           )}
         </div>
-         <div style={styles.flex30}></div>
+        <div style={styles.flex30}></div>
       </div>
       {owners.map((_, index) => renderOwnerForm(index))}
 

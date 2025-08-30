@@ -416,7 +416,12 @@ const ApplicationDetailsContent = ({
           </div>
           {applicationDetails?.applicationDetails?.map((detail, index) => (
             <>
-              {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
+              {detail?.additionalDetails?.documents && 
+              <PropertyDocuments 
+              documents={detail?.additionalDetails?.documents} 
+              applicationDetails={applicationDetails} 
+              estimateData={estimateData} 
+              />}
             </>
           ))}
         </div>
