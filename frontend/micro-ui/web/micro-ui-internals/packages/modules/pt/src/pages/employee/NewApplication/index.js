@@ -152,26 +152,6 @@ const NewApplication = () => {
         source: "MUNICIPAL_RECORDS",
         channel: "CITIZEN",
         assessmentDate: Date.now(),
-      },
-      RequestInfo: {
-        apiId: "Rainmaker",
-        authToken: userInfo1?.authToken || "default-token",
-        userInfo: {
-          id: userInfo1?.id || 1,
-          uuid: userInfo1?.uuid || "default-uuid",
-          userName: userInfo1?.userName || "defaultuser",
-          name: userInfo1?.name || "Default User",
-          mobileNumber: userInfo1?.mobileNumber,
-          emailId: userInfo1?.emailId,
-          locale: userInfo1?.locale || "en_IN",
-          type: userInfo1?.type || "CITIZEN",
-          roles: userInfo1?.roles || [],
-          active: userInfo1?.active !== false,
-          tenantId: userInfo1?.tenantId || "pg.citya",
-          permanentCity: userInfo1?.permanentCity || "pg.citya"
-        },
-        msgId: "1749797151521|en_IN",
-        plainAccessRequest: {}
       }
     };
 
@@ -514,9 +494,9 @@ const NewApplication = () => {
           emailId: owner.email,
           ownerType: propertyDetails.exemption.code,
           permanentAddress:
-            addressDetails.address || "23, main, PG_CITYA_REVENUE_SUN20, City A, ",
-          relationship: owner.relationship || "FATHER",
-          samagraId: owner.samagraID || "Samagra ID",
+            addressDetails.address,
+          relationship: owner.relationship,
+          samagraId: owner.samagraID,
           // documents: [
           //   {
           //     documentType: "Proof of Identity",
