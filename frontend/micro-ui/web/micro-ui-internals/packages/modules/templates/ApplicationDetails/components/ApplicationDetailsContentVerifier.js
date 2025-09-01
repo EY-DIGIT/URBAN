@@ -679,11 +679,11 @@ function ApplicationDetailsContentVerifier({
           <div style={styles.grid}>
             <div style={styles.flex30}>
               <label style={styles.label}>Ownership Type<span style={{ color: "red" }}>*</span></label>
-              <TextInput style={styles.widthInput} value={application?.ownershipCategory} readOnly />
+              <input style={styles.input} value={application?.ownershipCategory} disabled readOnly />
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>POA Registration Number</label>
-              <TextInput style={styles.widthInput} value={application?.registryId} readOnly />
+              <input style={styles.input} value={application?.registryId} disabled readOnly />
             </div>
             <div style={styles.flex30}>
               {/* <label style={styles.label}>POA Registration Number</label> */}
@@ -711,6 +711,7 @@ function ApplicationDetailsContentVerifier({
                     <input
                       style={styles.input}
                       value={owner?.name || ""}
+                      disabled
                       readOnly
                     />
                   </div>
@@ -730,39 +731,40 @@ function ApplicationDetailsContentVerifier({
                     <input
                       style={styles.input}
                       value={owner?.hindiName || ""}
+                      disabled
                       readOnly
                     />
                   </div>
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Father/Husband Name</label>
-                  <TextInput style={styles.widthInput} value={owner.fatherOrHusbandName} readOnly />
+                  <input style={styles.input} value={owner.fatherOrHusbandName} disabled readOnly />
                 </div>
 
 
                 <div style={styles.flex30}>
                   <label style={styles.label}>Relationship</label>
-                  <TextInput style={styles.widthInput} value={owner.relationship} readOnly />
+                  <input style={styles.input} value={owner.relationship} disabled readOnly />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Email ID</label>
-                  <TextInput style={styles.widthInput} value={owner.emailId} readOnly />
+                  <input style={styles.input} value={owner.emailId} disabled readOnly />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Mobile No.<span style={{ color: "red" }}>*</span></label>
-                  <TextInput style={styles.widthInput} value={owner.mobileNumber} readOnly />
+                  <input style={styles.input} value={owner.mobileNumber} disabled readOnly />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Alternative Mobile No</label>
-                  <TextInput style={styles.widthInput} value={owner.altContactNumber || ""} readOnly />
+                  <input style={styles.input} value={owner.altContactNumber || ""} disabled readOnly />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Aadhar No.<span style={{ color: "red" }}>*</span></label>
-                  <TextInput style={styles.widthInput} value={owner.aadhaarNumber || ""} readOnly />
+                  <input style={styles.input} value={owner.aadhaarNumber || ""} disabled readOnly />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Samagra ID <span style={{ color: "red" }}>*</span></label>
-                  <TextInput style={styles.widthInput} value={owner.samagraId} readOnly />
+                  <input style={styles.input} value={owner.samagraId} disabled readOnly />
                 </div>
               </div>
             </React.Fragment>
@@ -775,12 +777,12 @@ function ApplicationDetailsContentVerifier({
         <div >
           {/* <div style={styles.sectionTitle}>Property Address</div> */}
           <div style={styles.grid}>
-            <div style={styles.flex30}><label style={styles.label}>Door/House No.<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.doorNo} readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Address<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.street} readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Pincode<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.pincode || ""} readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Colony<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.locality?.name} readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.ward} readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.zone} readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Door/House No.<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.doorNo} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Address<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.street} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Pincode<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.pincode || ""} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Colony<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.locality?.name} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.zone} disabled readOnly /></div>
           </div>
         </div>
     },
@@ -791,7 +793,8 @@ function ApplicationDetailsContentVerifier({
           <div >
             <div style={styles.flex30} >
               {/* <div style={styles.sectionTitle}>Correspondence Address</div> */}
-              <textarea style={styles.widthInputs} rows={3} value={getFullAddress(address)} readOnly />
+              <textarea style={styles.widthInputs} rows={3} value={owner?.permanentAddress} disabled readOnly />
+
             </div>
             <div style={styles.checkboxLabel}>
               <input type="checkbox" checked readOnly />
@@ -806,10 +809,10 @@ function ApplicationDetailsContentVerifier({
         <div >
           {/* <div style={styles.sectionTitle}>Assessment Details</div> */}
           <div style={styles.grid}>
-            <div style={styles.flex30}><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.roadFactor} readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.roadFactor} disabled readOnly /></div>
             {/* <div><label style={styles.label}>Old Property ID</label><input style={styles.input} value={application?.oldPropertyId || ""} readOnly /></div> */}
-            <div style={styles.flex30}><label style={styles.label}>Plot Area (sq.ft)<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={application?.landArea} readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Plot Area (sq.ft)</label><input style={styles.input} value={application?.landArea} disabled readOnly /></div>
           </div>
         </div>
     },
@@ -927,7 +930,7 @@ function ApplicationDetailsContentVerifier({
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>Essential Tax</label>
-              <input style={styles.input} value={application?.essentialTax} readOnly />
+              <input style={styles.input} value={application?.essentialTax} disabled readOnly />
             </div>
             <div style={styles.flex30}>
               {/* <label style={styles.label}>Essential Tax</label> */}
@@ -937,15 +940,15 @@ function ApplicationDetailsContentVerifier({
           {/* Checkboxes */}
           <div style={{ display: "flex", gap: "20px", marginTop: "12px", marginBottom: "24px" }}>
             <label style={styles.checkboxLabel}>
-              <input type="checkbox" checked={additionalDetailsT?.mobileTower} readOnly />
+              <input type="checkbox" checked={additionalDetailsT?.mobileTower} disabled readOnly />
               <span style={{ marginLeft: "8px" }}>Mobile Tower</span>
             </label>
             <label style={styles.checkboxLabel}>
-              <input type="checkbox" checked={additionalDetailsT?.bondRoad} readOnly />
+              <input type="checkbox" checked={additionalDetailsT?.bondRoad} disabled readOnly />
               <span style={{ marginLeft: "8px" }}>Bond Road</span>
             </label>
             <label style={styles.checkboxLabel}>
-              <input type="checkbox" checked={additionalDetailsT?.advertisement} readOnly />
+              <input type="checkbox" checked={additionalDetailsT?.advertisement} disabled readOnly />
               <span style={{ marginLeft: "8px" }}>Advertisement</span>
             </label>
           </div>

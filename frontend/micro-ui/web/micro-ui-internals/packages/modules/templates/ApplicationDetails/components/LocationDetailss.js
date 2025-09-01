@@ -94,13 +94,13 @@ const LocationDetails = ({ latLong }) => {
                     <label style={style2.label}>
                         Latitude<span style={{ color: "red" }}>*</span>
                     </label>
-                    <TextInput style={style2.widthInput} value={latLong?.latitude} readOnly />
+                    <TextInput style={style2.widthInput} value={latLong?.latitude} disabled readOnly />
                 </div>
                 <div style={style2.flex20}>
                     <label style={style2.label}>
                         Longitude<span style={{ color: "red" }}>*</span>
                     </label>
-                    <TextInput style={style2.widthInput} value={latLong?.longitude} readOnly />
+                    <TextInput style={style2.widthInput} value={latLong?.longitude} disabled readOnly />
                 </div>
 
                 {/* <div style={style2.flex50}>

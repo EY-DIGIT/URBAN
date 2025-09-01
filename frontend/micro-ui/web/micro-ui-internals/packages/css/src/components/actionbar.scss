@@ -36,6 +36,7 @@
 
     div {
       width: calc(100% - 16px);
+      
     }
 
     .menu-wrap {
@@ -45,6 +46,7 @@
       @apply absolute h-auto bg-white text-left mb-xs z-30;
       width: 240px;
       right: 24px;
+      margin-right:124px;
   
       div {
         @apply h-12 pl-sm py-md text-body-l text-text-primary;
