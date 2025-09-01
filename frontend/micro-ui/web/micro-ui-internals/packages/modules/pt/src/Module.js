@@ -130,6 +130,7 @@ import PropertyLandingPage from "./pageComponents/PropertyLandingPage";
 
 import PropertyLedger from "./pageComponents/PropertyLedger";
 import DetailLedgerPage from "./pageComponents/PropertyDetailLedger";
+import DemandNote from "./pageComponents/DemandNote";
 
 
 const componentsToRegister = {
@@ -150,6 +151,7 @@ const componentsToRegister = {
   PreviewDemand,
   PropertyLandingPage,
   PropertyLedger,
+  DemandNote,
   DetailLedgerPage,
   PreviewView,
   PTSelectPincode,

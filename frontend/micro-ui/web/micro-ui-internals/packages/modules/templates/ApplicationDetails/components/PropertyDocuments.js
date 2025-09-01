@@ -108,7 +108,13 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                   </button>
                   {/* Demand */}
                   <button
-                    onClick={() => handleNavigation("/digit-ui/employee/pt/demand")}
+                    // onClick={() => handleNavigation("/digit-ui/employee/pt/DemandNote")}
+
+                       onClick={() => handleNavigation("/digit-ui/employee/pt/DemandNote", { 
+                      proOwnerDetail: applicationDetails?.applicationData,
+                      calculation: estimateData?.Calculation?.[0],
+                    })}
+
                     style={{ ...styles.linkButton, display: "flex", alignItems: "center", gap: "8px" }}
                   >
                     {/* <img
