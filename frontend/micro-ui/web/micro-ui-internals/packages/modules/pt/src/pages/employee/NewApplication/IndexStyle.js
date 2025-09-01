@@ -269,7 +269,7 @@ export default {
     marginBottom: "10px"
   },
   textBox: {
-    width: "85%",
+    // width: "85%",
     height: "35px",
     borderWidth: "1px",
     borderTopRightRadius: "6px",
@@ -279,7 +279,7 @@ export default {
     color: "black"
   },
   widthInput: {
-    width: "90%",
+    // width: "90%",
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",

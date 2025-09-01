@@ -149,7 +149,7 @@ const styles = {
     gap: "20px",
   },
   fileBox: {
-    width: "90%",
+    // width: "90%",
     border: "2px dashed #aaa",
     borderRadius: "8px",
     padding: "16px",
