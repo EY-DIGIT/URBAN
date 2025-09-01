@@ -226,7 +226,7 @@ const AttachmentsSection = ({
 }) => {
   const [fileUrls, setFileUrls] = useState({});
   const [isMobile, setIsMobile] = useState(false);
-  const [othersFields, setOthersFields] = useState(["others_1"]);
+  const [othersFields, setOthersFields] = useState([]);
 
   // Prepare fileStoreIds array to fetch URLs
   useEffect(() => {
@@ -361,8 +361,13 @@ const AttachmentsSection = ({
         {renderFileInput("sellersRegistry", "Others", false)}
 
         {/* Render dynamic others fields */}
-        {othersFields.map((field) =>
+        {/* {othersFields.map((field) =>
           renderFileInput(field, "Others", false, true)
+        )} */}
+        {othersFields.length > 0 && (
+          othersFields.map((field, index) =>
+            renderFileInput(field, "Others", false, true)
+          )
         )}
         <div style={styles.fileBoxff}>
           <button type="button" onClick={handleAddMore} style={styles.addMoreBtn}>
@@ -398,8 +403,8 @@ const styles = {
     display: "grid",
     gap: "20px",
   },
-  fileBoxff:{
-width: "90%",
+  fileBoxff: {
+    width: "90%",
   },
   fileBox: {
     width: "90%",

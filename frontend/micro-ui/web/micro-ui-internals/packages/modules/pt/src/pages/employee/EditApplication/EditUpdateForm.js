@@ -104,7 +104,7 @@ const EditUpdateForm = ({ applicationData }) => {
         broadRoad: false,
         advertisement: false,
         seniorCitizenDiscount: false,
-        selfDeclaration: false,
+        selfDeclaration: true,
     });
     const [formErrors, setFormErrors] = useState({});
     const history = useHistory();
@@ -196,7 +196,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 oldPropertyId: assessmentDetails.oldPropertyId || null,
                 essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
                 address: {
-                    city: "CityA",
+                    city: "indore",
                     locality: {
                         code: addressDetails.colony?.code || "SUN02",
                         name: addressDetails.colony?.name || "map with zone",
@@ -244,8 +244,8 @@ const EditUpdateForm = ({ applicationData }) => {
                         documents?.sellersRegistry && {
 
                             documentType: "others",
-                            fileStoreId: documents.sellersRegistry?.fileStoreId,
-                            documentUid: documents.sellersRegistry?.documentUid
+                            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "others")?.fileStoreId,
+                            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "others")?.documentUid
                         },
                         {
                             documentType: "Proof of Ownership",
@@ -257,6 +257,17 @@ const EditUpdateForm = ({ applicationData }) => {
                             fileStoreId: capturedPhoto || null,
                             documentUid: capturedPhoto || null,
                         },
+                        ...Object.keys(documents)
+                            .filter(key => key.startsWith("others_"))
+                            .map(key => ({
+                                documentType: "Others",  // 👈 these will go separately
+                                fileStoreId:
+                                    documents[key]?.fileStoreId ||
+                                    applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                                documentUid:
+                                    documents[key]?.documentUid ||
+                                    applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+                            })),
                     ].filter(Boolean),
                 })),
 
@@ -271,8 +282,8 @@ const EditUpdateForm = ({ applicationData }) => {
                     documents?.sellersRegistry && {
 
                         documentType: "others",
-                        fileStoreId: documents.sellersRegistry?.fileStoreId,
-                        documentUid: documents.sellersRegistry?.documentUid
+                        fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "others")?.fileStoreId,
+                        documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "others")?.documentUid
                     },
                     {
                         documentType: "Proof of Ownership",
@@ -284,6 +295,17 @@ const EditUpdateForm = ({ applicationData }) => {
                         fileStoreId: capturedPhoto || null,
                         documentUid: capturedPhoto || null,
                     },
+                    ...Object.keys(documents)
+                        .filter(key => key.startsWith("others_"))
+                        .map(key => ({
+                            documentType: "Others",  // 👈 these will go separately
+                            fileStoreId:
+                                documents[key]?.fileStoreId ||
+                                applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                            documentUid:
+                                documents[key]?.documentUid ||
+                                applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+                        })),
                 ].filter(Boolean),
 
                 units: unit.map(unit => (
@@ -458,12 +480,16 @@ const EditUpdateForm = ({ applicationData }) => {
         if (!assessmentDetails.roadFactor) {
             errors.roadFactor = "Road factor is required.";
         }
-
+        if (!assessmentDetails.plotArea) {
+            errors.plotArea = "Plot Area is required.";
+        }
         // 6. Self-Declaration Checkbox
         if (!checkboxes.selfDeclaration) {
             errors.selfDeclaration = "Please accept the declaration to proceed.";
         }
-
+        if (!longLat.lat || !longLat.long) {
+            errors.longLat = "Latitude and Longitude are required.";
+        }
         return errors;
     };
 
@@ -803,23 +829,23 @@ const EditUpdateForm = ({ applicationData }) => {
 
         setOwners(formatted);
         const {
-                doorNo,
-                // address,
-                pincode,
-                locality,
-                ward
-            } = applicationData?.address;
+            doorNo,
+            // address,
+            pincode,
+            locality,
+            ward
+        } = applicationData?.address;
 
-            // Combine all fields into a single, readable address string
-            let fullAddress = "";
+        // Combine all fields into a single, readable address string
+        let fullAddress = "";
 
-            if (doorNo) fullAddress += `${doorNo}, `;
-            // if (address) fullAddress += `${address}, `;
-            if (locality?.name) fullAddress += `${locality.name}, `;
-            if (ward) fullAddress += `${ward}, `;
-            if (pincode) fullAddress += `${pincode}`;
+        if (doorNo) fullAddress += `${doorNo}, `;
+        // if (address) fullAddress += `${address}, `;
+        if (locality?.name) fullAddress += `${locality.name}, `;
+        if (ward) fullAddress += `${ward}, `;
+        if (pincode) fullAddress += `${pincode}`;
 
-            setCorrespondenceAddress(fullAddress.trim());
+        setCorrespondenceAddress(fullAddress.trim());
     }, [applicationData]);
     useEffect(() => {
         if (applicationData) {
@@ -881,7 +907,7 @@ const EditUpdateForm = ({ applicationData }) => {
         const docMap = {
             photoId: applicationData.documents.find(d => d.documentType === "Proof of Identity") || null,
             ownershipDoc: applicationData.documents.find(d => d.documentType === "Proof of Ownership") || null,
-            sellersRegistry: applicationData.documents.find(d => d.documentType === "Others") || null,
+            sellersRegistry: applicationData.documents.find(d => d.documentType === "others") || null,
         };
         console.log(docMap);
         setDocuments(docMap);
@@ -899,7 +925,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 broadRoad: applicationData.additionalDetails.bondRoad || false,   // 👈 mapped
                 advertisement: applicationData.additionalDetails.advertisement || false,
                 seniorCitizenDiscount: applicationData.additionalDetails.seniorCitizenDiscount || false,
-                selfDeclaration: applicationData.additionalDetails.selfDeclaration || false,
+                selfDeclaration: applicationData.additionalDetails.selfDeclaration || true,
             });
         }
         // }
@@ -1028,6 +1054,7 @@ const EditUpdateForm = ({ applicationData }) => {
 
                     {/* Attachments Section */}
                     <div style={styles.card}>
+
                         <div style={styles.assessmentStyle}>{t("Ownership Details")}</div>
 
                         <OwnershipDetailsSection
@@ -1121,7 +1148,7 @@ const EditUpdateForm = ({ applicationData }) => {
                         />
                     </div>
                     <div style={styles.card}>
-                        <LocationDetails handleLocationUpdate={handleLocationUpdate} handlePhotoCapture={handlePhotoCapture} applicationData={applicationData} />
+                        <LocationDetails handleLocationUpdate={handleLocationUpdate} handlePhotoCapture={handlePhotoCapture} applicationData={applicationData} formErrors={formErrors} />
                     </div>
                     <div style={styles.card}>
                         <SelfDeclaration
@@ -1162,6 +1189,8 @@ const EditUpdateForm = ({ applicationData }) => {
                                 <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#6b133f" }} />
                             )} */}
                             {/* {!showPreviewButton && ( */}
+
+                            <SubmitBar label={t("back")} onClick={() => window.history.back()} style={{ background: "#6b133f" }} />
                             <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
                             {/* )} */}
                         </div>

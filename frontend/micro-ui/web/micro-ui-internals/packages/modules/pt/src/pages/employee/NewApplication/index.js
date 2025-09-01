@@ -183,7 +183,7 @@ const NewApplication = () => {
         oldPropertyId: assessmentDetails.oldPropertyId || null,
         essentialTax: propertyDetails.essentialTax?.code,
         address: {
-          city: "CityA",
+          city: "indore",
           locality: {
             code: addressDetails.colony?.code || "SUN02",
             name: addressDetails.colony?.name || "map with zone",
@@ -464,7 +464,7 @@ const NewApplication = () => {
         // oldPropertyId: assessmentDetails.oldPropertyId || null,
         essentialTax: propertyDetails.essentialTax?.code,
         address: {
-          city: "CityA",
+          city: "indore",
           locality: {
             code: addressDetails.colony?.code || "SUN02",
             name: addressDetails.colony?.name || "map with zone",

@@ -418,7 +418,7 @@ const PropertyForm = () => {
                 tenantId: userInfo1?.tenantId,
                 oldPropertyId: assessmentDetails?.oldPropertyId,
                 address: {
-                    city: "CityA",
+                    city: "indore",
                     locality: {
                         code: addressDetails.address?.colony?.code || "SUN02",
                         name: addressDetails.address?.colony?.name || "map with zone"

@@ -56,6 +56,7 @@ const SelfDeclaration = ({
         <input
           style={{ marginRight: "10px" }}
           type="checkbox"
+          disabled
           checked={checkboxes.selfDeclaration}
           onChange={() => handleCheckboxChange("selfDeclaration")}
         />{"    "}

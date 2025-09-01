@@ -348,7 +348,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { TextInput } from "@egovernments/digit-ui-react-components";
 
-const LocationDetails = ({ handleLocationUpdate, handlePhotoCapture, applicationData }) => {
+const LocationDetails = ({ handleLocationUpdate, handlePhotoCapture, applicationData,formErrors }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [streaming, setStreaming] = useState(false);
@@ -550,12 +550,14 @@ const LocationDetails = ({ handleLocationUpdate, handlePhotoCapture, application
             Latitude<span style={{ color: "red" }}>*</span>
           </label>
           <TextInput style={style2.widthInput} value={coords.lat} readOnly />
+          {formErrors.longLat && <span style={{ color: "red" }}>{formErrors.longLat}</span>}
         </div>
         <div style={style2.flex20}>
           <label style={style2.label}>
             Longitude<span style={{ color: "red" }}>*</span>
           </label>
           <TextInput style={style2.widthInput} value={coords.lng} readOnly />
+          {formErrors.longLat && <span style={{ color: "red" }}>{formErrors.longLat}</span>}
         </div>
         {!applicationData?.documents.find(d => d.documentType === "Photo Captured")?.fileStoreId && (
           <div
