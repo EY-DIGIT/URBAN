@@ -222,8 +222,8 @@ const NewApplication = () => {
               fileStoreId: documents.photoId?.fileStoreId,
               documentUid: documents.photoId?.documentUid
             },
-             documents?.sellersRegistry && {
-            
+            documents?.sellersRegistry && {
+
               documentType: "others",
               fileStoreId: documents.sellersRegistry?.fileStoreId,
               documentUid: documents.sellersRegistry?.documentUid
@@ -245,12 +245,12 @@ const NewApplication = () => {
             fileStoreId: documents.photoId?.fileStoreId,
             documentUid: documents.photoId?.documentUid
           },
-         documents?.sellersRegistry && {
-            
-              documentType: "others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid
-            },
+          documents?.sellersRegistry && {
+
+            documentType: "others",
+            fileStoreId: documents.sellersRegistry?.fileStoreId,
+            documentUid: documents.sellersRegistry?.documentUid
+          },
           {
             documentType: "Ownership Document",
             fileStoreId: documents.ownershipDoc?.fileStoreId,
@@ -430,10 +430,10 @@ const NewApplication = () => {
       errors.roadFactor = "Road factor is required.";
     }
 
-     // ✅ Plot Area validation
-  if (!assessmentDetails.plotArea) {
-    errors.plotArea = "Plot Area is required.";
-  } 
+    // ✅ Plot Area validation
+    if (!assessmentDetails.plotArea) {
+      errors.plotArea = "Plot Area is required.";
+    }
 
     // 6. Self-Declaration Checkbox
     if (!checkboxes.selfDeclaration) {
@@ -445,7 +445,7 @@ const NewApplication = () => {
 
   const handleSubmit = async () => {
 
-    console.log("Current documents state:", documents); 
+    console.log("Current documents state:", documents);
 
     const finalErrors = validateForm();
     setFormErrors(finalErrors);
@@ -455,7 +455,7 @@ const NewApplication = () => {
       return;
     }
 
-  const documentsToSubmit = buildDocumentPayload(documents);
+    const documentsToSubmit = buildDocumentPayload(documents);
 
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
@@ -627,52 +627,62 @@ const NewApplication = () => {
           PreviewDemand();
         }
       },
-      onError: (err) => {
+      // onError: (err) => {
 
-        alert(err);
+      //   alert(err);
+      // },
+      onError: (err) => {
+        const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
+
+        const newErrors = {};
+        apiErrors.forEach((apiErr) => {
+          newErrors[apiErr.code] = apiErr.message;
+        });
+
+        setFormErrors(newErrors);
       },
     });
   };
 
-// In your NewApplication.js file
+  // In your NewApplication.js file
 
-const buildDocumentPayload = (documentsState) => {
-  const payloadDocs = [];
+  const buildDocumentPayload = (documentsState) => {
+    const payloadDocs = [];
 
-  // Add the known, non-dynamic documents first
-  if (documentsState.photoId?.fileStoreId) {
-    payloadDocs.push({
-      documentType: "Proof of Identity",
-      fileStoreId: documentsState.photoId.fileStoreId,
-      documentUid: documentsState.photoId.documentUid,
-    });
-  }
-
-  if (documentsState.ownershipDoc?.fileStoreId) {
-    payloadDocs.push({
-      documentType: "Proof of Ownership",
-      fileStoreId: documentsState.ownershipDoc.fileStoreId,
-      documentUid: documentsState.ownershipDoc.documentUid,
-    });
-  }
-
-  // Iterate through the state to find and add all dynamic "Others" documents
-  Object.keys(documentsState).forEach((key) => {
-    // ✅ CORRECTED LINE: Check for keys that start with "others_"
-    if (key.startsWith("others_") || key === "sellersRegistry") {
-      const doc = documentsState[key];
-      if (doc?.fileStoreId) {
-        payloadDocs.push({
-          documentType: "Others",
-          fileStoreId: doc.fileStoreId,
-          documentUid: doc.documentUid,
-        });
-      }
+    // Add the known, non-dynamic documents first
+    if (documentsState.photoId?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "Proof of Identity",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+      });
     }
-  });
 
-  return payloadDocs;
-};
+    if (documentsState.ownershipDoc?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "Proof of Ownership",
+        fileStoreId: documentsState.ownershipDoc.fileStoreId,
+        documentUid: documentsState.ownershipDoc.documentUid,
+      });
+    }
+
+    // Iterate through the state to find and add all dynamic "Others" documents
+    Object.keys(documentsState).forEach((key) => {
+      // ✅ CORRECTED LINE: Check for keys that start with "others_"
+      if (key.startsWith("others_") || key === "sellersRegistry") {
+        const doc = documentsState[key];
+        if (doc?.fileStoreId) {
+          payloadDocs.push({
+            documentType: "Others",
+            fileStoreId: doc.fileStoreId,
+            documentUid: doc.documentUid,
+          });
+        }
+      }
+    });
+
+    return payloadDocs;
+  };
 
   const handleFileChange = async (key, file) => {
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
@@ -754,7 +764,7 @@ const buildDocumentPayload = (documentsState) => {
     setFormErrors(errors);
   };
 
-  
+
   // Validation for Mobile number:
   const handleOwnerContactChange = (index, field, value) => {
     const newOwners = [...owners];
@@ -798,8 +808,8 @@ const buildDocumentPayload = (documentsState) => {
     const fieldKey = `owner-${index}-${field}`;
 
     // Regular expressions for validation
-    const englishNameRegex = /^[a-zA-Z\s]+$/;
-    const hindiNameRegex = /^[\u0900-\u097F\s]+$/;
+    const englishNameRegex = /^[a-zA-Z\s.\-']{2,100}$/;
+    const hindiNameRegex = /^[\u0900-\u097F\s]{2,100}$/;
 
     if (!value) {
       errors[fieldKey] = "This field is required.";
@@ -807,14 +817,14 @@ const buildDocumentPayload = (documentsState) => {
       // Check which field is being validated
       if (field === "name" || field === "fatherHusbandName") {
         if (!englishNameRegex.test(value)) {
-          errors[fieldKey] = "Only alphabetic characters are allowed.";
+          errors[fieldKey] = "Please enter a valid English name.";
         } else {
           delete errors[fieldKey];
         }
       } else if (field === "hindiName") {
+        // ✅ Hindi only
         if (!hindiNameRegex.test(value)) {
-          // You can add logic here if you want to perform other actions,
-          // but no error will be set now.
+          errors[fieldKey] = "Please enter a valid Hindi name.";
         } else {
           delete errors[fieldKey];
         }
@@ -916,6 +926,20 @@ const buildDocumentPayload = (documentsState) => {
         newErrors.pincode = "Pincode must be 6 digits and start with 452.";
       } else {
         delete newErrors.pincode;
+      }
+    }
+
+    // ✅ Address validation
+    if (name === "address") {
+      const addressRegex = /^[A-Za-z0-9\s\-,()\/.]{10,200}$/;
+
+      if (!value) {
+        newErrors.address = "Address is required.";
+      } else if (!addressRegex.test(value)) {
+        newErrors.address =
+          "Please enter a valid address";
+      } else {
+        delete newErrors.address;
       }
     }
 
@@ -1065,30 +1089,30 @@ const buildDocumentPayload = (documentsState) => {
   };
   // In your NewApplication.js file, find your other handlers
 
-const handleRestryIdChange = (value) => {
-  // 1. Update the state for the input value
-  setRegistryId(value);
+  const handleRestryIdChange = (value) => {
+    // 1. Update the state for the input value
+    setRegistryId(value);
 
-  // 2. Perform validation and update the formErrors state
-  const errors = { ...formErrors };
-  const fieldKey = "registryId"; // The key for this field in formErrors
+    // 2. Perform validation and update the formErrors state
+    const errors = { ...formErrors };
+    const fieldKey = "registryId"; // The key for this field in formErrors
 
-  
-  if (value) {
-    const regex = /^MP[A-Z0-9]{17}$/;
 
-    if (!regex.test(value)) {
-      errors[fieldKey] =
-        "Please enter a valid POA Number";
+    if (value) {
+      const regex = /^MP[A-Z0-9]{17}$/;
+
+      if (!regex.test(value)) {
+        errors[fieldKey] =
+          "Please enter a valid POA Number";
+      } else {
+        delete errors[fieldKey];
+      }
     } else {
       delete errors[fieldKey];
     }
-  } else {
-    delete errors[fieldKey]; 
-  }
 
-  setFormErrors(errors);
-};
+    setFormErrors(errors);
+  };
 
   const handleDropdownChange = (field, selectedOption) => {
     setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));
@@ -1108,7 +1132,7 @@ const handleRestryIdChange = (value) => {
       .filter(Boolean) // remove empty/null
       .join(", ");
   };
-  
+
 
   const handleCorrespondenceChange = (e) => {
     setCorrespondenceAddress(e.target.value);
@@ -1118,22 +1142,22 @@ const handleRestryIdChange = (value) => {
     const { name, value } = e.target;
     setAssessmentDetails((prev) => ({ ...prev, [name]: value }));
 
- // Validation
- const errors = { ...formErrors };
+    // Validation
+    const errors = { ...formErrors };
 
- if (name === "plotArea") {
-  const regex = /^[0-9]{1,6}$/; // only 1–6 digit numbers
+    if (name === "plotArea") {
+      const regex = /^[0-9]{1,6}$/; // only 1–6 digit numbers
 
-  if (!value) {
-    errors.plotArea = "Plot Area is required.";
-  } else if (!regex.test(value)) {
-    errors.plotArea = "Please enter a valid Plot Area";
-  } else {
-    delete errors.plotArea;
-  }
-}
+      if (!value) {
+        errors.plotArea = "Plot Area is required.";
+      } else if (!regex.test(value)) {
+        errors.plotArea = "Please enter a valid Plot Area";
+      } else {
+        delete errors.plotArea;
+      }
+    }
 
-  setFormErrors(errors);
+    setFormErrors(errors);
   };
 
   const handleUnitChange = (index, key, value) => {
@@ -1254,7 +1278,7 @@ const handleRestryIdChange = (value) => {
               correspondenceAddress={
                 isSameAsPropertyAddress
                   ? formatFullAddress(addressDetails)
-                  : correspondenceAddress             
+                  : correspondenceAddress
               }
               handleCorrespondenceChange={handleCorrespondenceChange}
               isSameAsPropertyAddress={isSameAsPropertyAddress}
@@ -1342,6 +1366,18 @@ const handleRestryIdChange = (value) => {
 
                 </div>
               </div>
+
+            )}
+
+            {/* ✅ Global error messages from backend */}
+            {Object.keys(formErrors).length > 0 && (
+              <div style={{ marginTop: "16px" }}>
+                {Object.entries(formErrors).map(([key, msg]) => (
+                  <p key={key} style={{ color: "red", fontSize: "12px" }}>
+                    {msg}
+                  </p>
+                ))}
+              </div>
             )}
             <div style={styles.buttonContainer}>
               {/* {showPreviewButton && (
@@ -1352,7 +1388,6 @@ const handleRestryIdChange = (value) => {
               {/* )} */}
             </div>
           </div>
-
         </div>
       )}
 
