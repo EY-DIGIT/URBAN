@@ -623,7 +623,8 @@ const NewApplication = () => {
           setPropertyId(property.propertyId);
           setStatus(property.status);
           // setShowSuccessModal(true);
-          setShowPreviewButton(true);
+          // setShowPreviewButton(true);
+          PreviewDemand();
         }
       },
       onError: (err) => {
@@ -1343,12 +1344,12 @@ const handleRestryIdChange = (value) => {
               </div>
             )}
             <div style={styles.buttonContainer}>
-              {showPreviewButton && (
+              {/* {showPreviewButton && (
                 <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#6b133f" }} />
-              )}
-              {!showPreviewButton && (
+              )} */}
+              {/* {!showPreviewButton && ( */}
                 <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
-              )}
+              {/* )} */}
             </div>
           </div>
 

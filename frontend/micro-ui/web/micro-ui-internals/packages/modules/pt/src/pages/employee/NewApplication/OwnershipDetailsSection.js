@@ -17,13 +17,17 @@ const OwnershipDetailsSection = ({
   const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
 
   const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
+  const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
   const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
-  console.log("Relationship", Relationship)
+  console.log("MenuHindi", MenuHindi)
   const salutationOptions = (Menu || []).map((item) => ({
     code: item.code,
     name: t(item.name), // Use i18nKey for translation
   }));
-
+const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
+    code: item.code,
+    name: t(item.name), // Use i18nKey for translation
+  }));
   const dropdownOptions = (Array.isArray(OwnerShipCategoryOb) ? OwnerShipCategoryOb : []).map(item => ({
     code: item.code,
     name: t(item.name)
@@ -94,8 +98,8 @@ const OwnershipDetailsSection = ({
             <div style={styles.nameInputContainer}>
               <Dropdown
                 t={t}
-                option={salutationOptions}
-                selected={salutationOptions.find(opt => opt.code === owner.hindiTitle)}
+                option={salutationOptionsHindi}
+                selected={salutationOptionsHindi.find(opt => opt.code === owner.hindiTitle)}
                 select={(val) => updateOwner(index, "hindiTitle", val.code)}
                 optionKey="name"
                 style={styles.dropdown30}
@@ -308,7 +312,7 @@ const OwnershipDetailsSection = ({
       </div>
       {owners.map((_, index) => renderOwnerForm(index))}
 
-      {ownershipType === "INDIVIDUAL.MULTIPLEOWNERS" && (
+      {ownershipType === "JOINTOWNER" && (
         <div style={{ textAlign: "right" }}>
           <SubmitBar label={t("Add New Owner")} onSubmit={addNewOwner} />
         </div>

@@ -715,6 +715,22 @@ const getSalutationsTypeList = (tenantId, moduleCode, type) => ({
     ],
   },
 });
+const getSalutationsHindiTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "SalutationsHindi",
+          },
+        ],
+      },
+    ],
+  },
+});
 const getRelationshipTypeList = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -1327,6 +1343,15 @@ const getSalutationsType = (MdmsRes) => {
   });
   //return MdmsRes;
 };
+const getSalutationsHindiType = (MdmsRes) => {
+  return MdmsRes["common-masters"].SalutationsHindi.filter((SalutationsHindi) => SalutationsHindi.active).map((SalutationsHindiDetails) => {
+    return {
+      ...SalutationsHindiDetails,
+      i18nKey: `PT_COMMON_SALUTATIONS_${SalutationsHindiDetails.code}`,
+    };
+  });
+  //return MdmsRes;
+};
 const getRelationshipType = (MdmsRes) => {
   return MdmsRes["common-masters"].Relationship.filter((Relationship) => Relationship.active).map((RelationshipDetails) => {
     return {
@@ -1524,6 +1549,9 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getGenderType(MdmsRes);
     case "Salutations":
       return getSalutationsType(MdmsRes)
+       case "SalutationsHindi":
+      return getSalutationsHindiType(MdmsRes)
+      
     case "Relationship":
       return getRelationshipType(MdmsRes)
     case "TLGendertype":
@@ -1821,6 +1849,10 @@ export const MdmsService = {
   getSalutationsType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getSalutationsTypeList(tenantId, moduleCode, type), moduleCode);
   },
+   getSalutationsHindiType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getSalutationsHindiTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+  
   getRelationshipType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getRelationshipTypeList(tenantId, moduleCode, type), moduleCode);
   },

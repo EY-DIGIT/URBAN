@@ -104,6 +104,7 @@ import usePropertyAssessment from "./pt/usePropertyAssessment";
 import usePtCalculationEstimate from "./pt/usePtCalculationEstimate";
 import useGenderMDMS from "./pt/useGenderMDMS";
 import useSalutationsMDMS from "./pt/useSalutationsMDMS";
+import useSalutationsHindiMDMS from "./pt/useSalutationsHindiMDMS";
 import useRelationshipMDMS from "./pt/useRelationshipMDMS"
 import usePTGenderMDMS from "./pt/usePTGenderMDMS";
 import useMyPropertyPayments from "./pt/useMyPropertyPayments";
@@ -332,6 +333,7 @@ const pt = {
   usePtCalculationEstimate,
   useGenderMDMS,
   useSalutationsMDMS,
+  useSalutationsHindiMDMS,
   useRelationshipMDMS,
   usePTGenderMDMS,
   useMyPropertyPayments,
