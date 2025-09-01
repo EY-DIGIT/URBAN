@@ -793,7 +793,7 @@ function ApplicationDetailsContentVerifier({
           <div >
             <div style={styles.flex30} >
               {/* <div style={styles.sectionTitle}>Correspondence Address</div> */}
-              <textarea style={styles.widthInputs} rows={3} value={owner?.permanentAddress} disabled readOnly />
+              <textarea style={styles.widthInputs} rows={3} value={getFullAddress(address)} disabled readOnly />
 
             </div>
             <div style={styles.checkboxLabel}>
