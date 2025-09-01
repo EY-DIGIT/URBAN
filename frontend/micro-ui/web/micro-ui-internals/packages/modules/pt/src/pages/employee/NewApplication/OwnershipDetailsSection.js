@@ -276,9 +276,8 @@ const OwnershipDetailsSection = ({
             style={styles.widthInput}
 
           />
-
           {formErrors?.registryId && (
-            <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>{formErrors.registryId}</p>
+            <p style={{ color: "red", fontSize: "12px", marginTop: '-18px', marginBottom: '10px' }}>{formErrors.registryId}</p>
           )}
         </div>
         <div style={styles.flex30}></div>

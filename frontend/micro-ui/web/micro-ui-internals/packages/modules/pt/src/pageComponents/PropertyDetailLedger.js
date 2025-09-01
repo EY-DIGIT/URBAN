@@ -24,6 +24,10 @@ const PropertyDetailLedger = () => {
   const ownersDetail = proOwnerDetail?.owners || [];
   const address = proOwnerDetail?.address || {};
 
+  const handleBackClick = () => {
+    history.goBack();
+  };
+
   return (
     <div id="downloadable-component">
       <div style={{
@@ -154,8 +158,8 @@ const PropertyDetailLedger = () => {
 
             <div style={styles.buttonContainer}>
 
-              <button style={styles.confirmBtn} onClick={() => handleGobackEdit(true)}>Back</button>
-              <button style={styles.confirmBtn} onClick={() => setShowConfirmPopup(true)}>Confirm</button>
+            <button style={styles.confirmBtn} onClick={handleBackClick}>Back</button>
+             
             </div>
           </div>
         </div>

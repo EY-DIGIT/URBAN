@@ -66,7 +66,7 @@ const AssessmentDetailsSection = ({
 
       {/* Plot Area */}
       <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>{t("Plot Area")}</div>
+        <div style={styles.poppinsLabel}>{t("Plot Area")}<span className="mandatory" style={styles.mandatory}>*</span></div>
         <TextInput
           style={styles.widthInput}
           name="plotArea"
@@ -75,6 +75,9 @@ const AssessmentDetailsSection = ({
           placeholder={t("Enter")}
           type="number"
         />
+          {formErrors?.plotArea && (
+    <p style={{ color: "red", fontSize: "12px" }}>{formErrors.plotArea}</p>
+  )}
       </div>
 
       <div style={styles.flex30}></div>

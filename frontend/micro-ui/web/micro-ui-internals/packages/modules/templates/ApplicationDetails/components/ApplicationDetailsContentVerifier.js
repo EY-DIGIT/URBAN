@@ -626,6 +626,12 @@ function ApplicationDetailsContentVerifier({
   console.log("application", application)
   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
 
+  const getFullAddress = (address) => {
+    if (!address) return "";
+    const { doorNo, street, locality, ward, zone, pincode } = address;
+    return `${doorNo || ""} ${street || ""} ${locality?.name || ""} ${ward || ""} ${zone || ""} ${pincode || ""}`.trim();
+  };
+
   const tenantId = userInfo1?.tenantId;
 
   const fetchBill = async () => {
@@ -662,21 +668,13 @@ function ApplicationDetailsContentVerifier({
     }
   }, [applicationData?.propertyId, tenantId]);
 
+  const [openIndex, setOpenIndex] = useState(0);
 
-
-
-    const [openIndex, setOpenIndex] = useState(0);
-  
-    const items = [
-     
-      
-       {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Ownership Details</h3></div>,
-        content:
-            <div >
-
-
-
+  const items = [
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Ownership Details</h3></div>,
+      content:
+        <div >
           {/* <div style={styles.sectionTitle}>Ownership Details</div> */}
           <div style={styles.grid}>
             <div style={styles.flex30}>
@@ -692,8 +690,6 @@ function ApplicationDetailsContentVerifier({
               {/* <TextInput style={styles.widthInput} value={application?.registryId} readOnly /> */}
             </div>
           </div>
-
-
           {(application?.owners || []).map((owner, index) => (
             <React.Fragment key={index}>
               {(application?.owners?.length > 1) && (
@@ -772,13 +768,11 @@ function ApplicationDetailsContentVerifier({
             </React.Fragment>
           ))}
         </div>
-        
-      },
-      {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Property Address</h3></div>,
-        content:
-           <div >
-
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Property Address</h3></div>,
+      content:
+        <div >
           {/* <div style={styles.sectionTitle}>Property Address</div> */}
           <div style={styles.grid}>
             <div style={styles.flex30}><label style={styles.label}>Door/House No.<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.doorNo} readOnly /></div>
@@ -789,42 +783,40 @@ function ApplicationDetailsContentVerifier({
             <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><TextInput style={styles.input} value={address?.zone} readOnly /></div>
           </div>
         </div>
-      },
-       {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Correspondence Address</h3></div>,
-        content:
-            <div >
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Correspondence Address</h3></div>,
+      content:
+        <div >
           <div >
             <div style={styles.flex30} >
               {/* <div style={styles.sectionTitle}>Correspondence Address</div> */}
-              <textarea style={styles.widthInputs} rows={3} value={owner?.permanentAddress} readOnly />
-
+              <textarea style={styles.widthInputs} rows={3} value={getFullAddress(address)} readOnly />
             </div>
             <div style={styles.checkboxLabel}>
               <input type="checkbox" checked readOnly />
               <span style={{ marginLeft: "8px" }}>Same As Property Address</span>
             </div>
           </div>
-
         </div>
-      },
-       {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Assessment Details</h3></div>,
-        content:
-           <div >
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Assessment Details</h3></div>,
+      content:
+        <div >
           {/* <div style={styles.sectionTitle}>Assessment Details</div> */}
           <div style={styles.grid}>
             <div style={styles.flex30}><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.roadFactor} readOnly /></div>
             {/* <div><label style={styles.label}>Old Property ID</label><input style={styles.input} value={application?.oldPropertyId || ""} readOnly /></div> */}
-            <div style={styles.flex30}><label style={styles.label}>Plot Area (sq.ft)</label><input style={styles.input} value={application?.landArea} readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Plot Area (sq.ft)<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={application?.landArea} readOnly /></div>
           </div>
         </div>
-      },
-       {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Property Details</h3></div>,
-        content:
-           <div >
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Property Details</h3></div>,
+      content:
+        <div >
           {/* <div style={styles.sectionTitle}>Property Details</div> */}
           <div >
             <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
@@ -854,10 +846,8 @@ function ApplicationDetailsContentVerifier({
                           style={{ border: "none", background: "none", width: "100%" }}
                         >
                           <option value={unit?.usageCategory || ""}>{unit?.usageCategory || ""}</option>
-
                         </select>
                       </td>
-
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                         <select
                           value={unit?.occupancyType || ""}
@@ -865,22 +855,17 @@ function ApplicationDetailsContentVerifier({
                           style={{ border: "none", background: "none", width: "100%" }}
                         >
                           <option value={unit?.occupancyType || ""}>{unit?.occupancyType || ""}</option>
-
                         </select>
                       </td>
-
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                         <select
                           value={unit?.floorNo?.toString() || ""}
                           disabled
                           style={{ border: "none", background: "none", width: "100%" }}
                         >
-
                           <option value={unit?.floorNo?.toString() || ""}>{unit?.floorNo?.toString() || ""}</option>
-
                         </select>
                       </td>
-
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                         <select
                           value={unit?.constructionDetail?.constructionType || ""}
@@ -888,11 +873,9 @@ function ApplicationDetailsContentVerifier({
                           style={{ border: "none", background: "none", width: "100%" }}
                         >
                           <option value={unit?.constructionDetail?.constructionType || ""}>{unit?.constructionDetail?.constructionType || ""}</option>
-
                           {/* Add more options if needed */}
                         </select>
                       </td>
-
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                         <input
                           style={{ border: "none", background: "none" }}
@@ -905,51 +888,42 @@ function ApplicationDetailsContentVerifier({
                           disabled
                           style={{ border: "none", background: "none", width: "100%" }}
                           value={unit.fromYear || ""}
-
                         >
                           <option value={unit?.fromYear}>{unit?.fromYear}</option>
                         </select>
                       </td>
-
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                         <select
                           disabled
                           style={{ border: "none", background: "none", width: "100%" }}
                           value={unit.toYear || ""}
-
                         >
                           <option value={unit?.toYear}>{unit?.toYear}</option>
                         </select>
                       </td>
                     </tr>
                   ))}
-
                 </tbody>
-
               </table>
             </div>
           </div>
         </div>
-      },
-       {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Other Details</h3></div>,
-        content:
-            <div >
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Other Details</h3></div>,
+      content:
+        <div >
           {/* Section Header */}
           <div>
             {/* <div style={styles.sectionTitle}>Other Details</div> */}
           </div>
           <div style={styles.grid}>
-
             <div style={styles.flex30} >
               {/* Exemption Dropdown */}
               <label style={styles.label}>Exemption Applicable.</label>
-
               <select style={styles.input} value={owner?.ownerType} disabled>
                 <option>{owner?.ownerType}</option>
               </select>
-
-
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>Essential Tax</label>
@@ -975,7 +949,6 @@ function ApplicationDetailsContentVerifier({
               <span style={{ marginLeft: "8px" }}>Advertisement</span>
             </label>
           </div>
-
           {/* Self Declaration Section */}
           {/* <div style={{ ...styles.label, marginBottom: "8px" }}>Self Declaration</div>
           <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
@@ -985,24 +958,21 @@ function ApplicationDetailsContentVerifier({
             </p>
           </div> */}
         </div>
-      },
-      
-      {
-        title:   <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Attachments</h3></div>,
-        content:
-          //  <div style={styles.card}>
-          <AttachmentsSection
-            t={t}
-            documents={documents}
-          />
-        // </div>
-      },
-      {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Self Declaration</h3></div>,
-        content:
-            <div >
-          
-
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Attachments</h3></div>,
+      content:
+        //  <div style={styles.card}>
+        <AttachmentsSection
+          t={t}
+          documents={documents}
+        />
+      // </div>
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Self Declaration</h3></div>,
+      content:
+        <div >
           {/* Self Declaration Section */}
           <div style={{ ...styles.label, marginBottom: "8px" }}>Self Declaration</div>
           <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
@@ -1012,32 +982,27 @@ function ApplicationDetailsContentVerifier({
             </p>
           </div>
         </div>
-      },
-      {
-        title: <div ><h3 style={{color:"#6B133F", fontWeight: "700"}}>Location Details</h3></div>,
-        content:
-         
-           <div >
-
-        <LocationDetails latLong={address?.geoLocation}/>
-           </div>
-
-         
-       
-      },
-       {
-        title: <div ><CardSectionHeader style={{ color:"#6B133F" }}>
-                  {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-                </CardSectionHeader></div>,
-        content:
-           <div style={styles.card}>
-        {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
-          <React.Fragment>
-            {/* <BreakLine /> */}
-            {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
-            {!workflowDetails?.isLoading && !isDataLoading && (
-              <Fragment>
-                {/* <CardSectionHeader style={{ ...styles.sectionTitle, marginBottom: "16px", marginTop: "32px" }}>
+    },
+    {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Location Details</h3></div>,
+      content:
+        <div >
+          <LocationDetails latLong={address?.geoLocation} />
+        </div>
+    },
+    {
+      title: <div ><CardSectionHeader style={{ color: "#6B133F" }}>
+        {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+      </CardSectionHeader></div>,
+      content:
+        <div style={styles.card}>
+          {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
+            <React.Fragment>
+              {/* <BreakLine /> */}
+              {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
+              {!workflowDetails?.isLoading && !isDataLoading && (
+                <Fragment>
+                  {/* <CardSectionHeader style={{ ...styles.sectionTitle, marginBottom: "16px", marginTop: "32px" }}>
                   {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
                 </CardSectionHeader> */}
                   {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
@@ -1083,10 +1048,7 @@ function ApplicationDetailsContentVerifier({
           )}
         </div>
     }
-
   ];
-
-
 
   const onToggle = (idx) => {
     setOpenIndex((prev) => (prev === idx ? null : idx));
@@ -1099,7 +1061,6 @@ function ApplicationDetailsContentVerifier({
       onToggle(idx);
     }
   };
-
 
   return (
     <div >
@@ -1500,7 +1461,7 @@ function ApplicationDetailsContentVerifier({
 }
 
 const styles = {
-    poppinsLabels: {
+  poppinsLabels: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: 400,
     fontSize: '16px',
@@ -1509,7 +1470,7 @@ const styles = {
     color: '#282828',
     // width: "200px"
   },
-    textBox: {
+  textBox: {
     // width: "244.23472595214844px",
     height: "35px",
     borderWidth: "0px",
@@ -1521,7 +1482,7 @@ const styles = {
     border: "0.5px solid #D2D2D280",
     color: "black"
   },
-    dropdown30: {
+  dropdown30: {
     width: "30%",
     height: "35px",
     borderWidth: "0px",
@@ -1613,7 +1574,7 @@ const styles = {
   //   background: "#7575754D",
   //   // padding: "6px"
   // },
-    widthInput: {
+  widthInput: {
     width: "100%",
     height: "35px",
     borderWidth: "0px",
@@ -1621,7 +1582,7 @@ const styles = {
     // border: "1px solid #D9D9D9",
     // boxShadow: "0px 4px 4px 0px #00000040",
     // background: "#A3BBF347",
-       background: "#D2D2D280",
+    background: "#D2D2D280",
     border: "0.5px solid #D2D2D280",
     color: "black"
     // padding: "6px"
@@ -1687,16 +1648,16 @@ const styles = {
     // background: "#7575754D",
     // padding: "10px",
     // marginLeft: "1px",
-    
 
-      width: "100%",
+
+    width: "100%",
     height: "35px",
     borderWidth: "0px",
     borderRadius: "6px",
     // border: "1px solid #D9D9D9",
     // boxShadow: "0px 4px 4px 0px #00000040",
     // background: "#A3BBF347",
-       background: "#D2D2D280",
+    background: "#D2D2D280",
     // border: "0.5px solid #D2D2D280",
     color: "black",
     padding: "6px"
