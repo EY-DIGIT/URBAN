@@ -5,6 +5,7 @@ import PropertyInvalidMobileNumber from "../../pages/citizen/MyProperties/Proper
 
 const GetCell = (value) => <span className="cell-text">{value}</span>;
 
+
 const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConfig }) => {
   const history = useHistory();
   
@@ -22,6 +23,8 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     filters: searchQuery,
     configs: { enabled: Object.keys(payload).length > 0 ? true : false, retry: false, retryOnMount: false, staleTime: Infinity },
   });
+
+  console.log("dataa=",data)
 
   const mutation = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
 
@@ -99,7 +102,23 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
 
   const columns = useMemo(
     () => [
-      {
+      // {
+      //   Header: t("Property ID"),
+      //   disableSortBy: true,
+      //   Cell: ({ row }) => {
+      //     console.log("row", row);
+      //     return (
+      //       <div>
+      //         <span className="link" style={{color: "#141B29"}}>
+      //           <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+      //         </span>
+      //       </div>
+      //     );
+      //   },
+      // },
+
+
+    {
         Header: t("Property ID"),
         disableSortBy: true,
         Cell: ({ row }) => {
@@ -107,73 +126,80 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
           return (
             <div>
               <span className="link" style={{color: "#141B29"}}>
-                <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original["propertyId"]}`}>{row.original["propertyId"]}</Link>
+                <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original.propertyId}`}>{row.original.propertyId}</Link>
               </span>
             </div>
           );
         },
       },
-      {
+
+      // {
+      //   Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
+      //   disableSortBy: true,
+      //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
+      // },
+
+       {
         Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
         disableSortBy: true,
-        Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
+        Cell: ({ row }) => GetCell(t(row.original.ownerName) || ""),
       },
-      
+      // property Id,Owner Name, Mobile Number ,House/Door Number , Address , Ward , Zone , Payment Receivable
       // //New Added Mobile Number Column
-      // {
-      //   Header: t("Mobile Number"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
-      // },
+      {
+        Header: t("Mobile Number"),
+        disableSortBy: true,
+        Cell: ({ row }) => GetCell(t(row.original.mobileNumber) || ""),
+      },
       //   //New Added House Number Column
-      // {
-      //   Header: t("House/Door Number"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(`${row.original.owners.map((ob) => ob.name).join(",")}` || ""),
-      // },
+      {
+        Header: t("House/Door Number"),
+        disableSortBy: true,
+        Cell: ({ row }) => GetCell(t(row.original.doorNo) || ""),
+      },
       // //New Added Address
-      // {
-      //   Header: t("Address"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      // },
+      {
+        Header: t("Address"),
+        disableSortBy: true,
+        Cell: ({ row }) => GetCell(t(row.original.city) || ""),
+      },
 
       //   //New Added Ward
-      //   {
-      //     Header: t("Ward"),
-      //     disableSortBy: true,
-      //     Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      //   },
+        {
+          Header: t("Ward"),
+          disableSortBy: true,
+          Cell: ({ row }) => GetCell(t(row.original.ward) || ""),
+        },
 
       //     //New Added Zone
-          // {
-          //   Header: t("Zone"),
-          //   disableSortBy: true,
-          //   Cell: ({ row }) => GetCell(t(row.original.address?.zone) || "NA"),
-          // },
+          {
+            Header: t("Zone"),
+            disableSortBy: true,
+            Cell: ({ row }) => GetCell(t(row.original.zone) || "NA"),
+          },
 
       // //New Added Payment Receivable
-      // {
-      //   Header: t("//Payment Receivable"),
-      //   disableSortBy: true,
-      //   Cell: ({ row }) => GetCell(t(row.original.locality) || ""),
-      // },
+      {
+        Header: t("Payment Receivable"),
+        disableSortBy: true,
+        Cell: ({ row }) => GetCell(t(row.original.due) || ""),
+      },
     
-      {
-        Header: t("ES_INBOX_LOCALITY"),
-        disableSortBy: true,
-        Cell: ({ row }) => GetCell(t(row.original?.locality) || ""),
-      },
-      {
-        Header: t("PT_COMMON_TABLE_COL_STATUS_LABEL"),
-        Cell: ({ row }) => GetCell(row.original.address?.doorNo || "NA"),
-        disableSortBy: true,
-      },
-      {
-        Header: t("PT_AMOUNT_DUE"),
-        Cell: ({ row }) => GetCell(row?.original?.due?`₹ ${row?.original?.due}`:t("PT_NA")),
-        disableSortBy: true,
-      },
+      // {
+      //   Header: t("ES_INBOX_LOCALITY"),
+      //   disableSortBy: true,
+      //   Cell: ({ row }) => GetCell(t(row.original?.locality) || ""),
+      // },
+      // {
+      //   Header: t("PT_COMMON_TABLE_COL_STATUS_LABEL"),
+      //   Cell: ({ row }) => GetCell(row.original?.status || "NA"),
+      //   disableSortBy: true,
+      // },
+      // {
+      //   Header: t("PT_AMOUNT_DUE"),
+      //   Cell: ({ row }) => GetCell(row?.original?.due?`₹ ${row?.original?.due}`:t("PT_NA")),
+      //   disableSortBy: true,
+      // },
       {
         Header: t("ES_SEARCH_ACTION"),
         disableSortBy: true,
@@ -245,20 +271,20 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
 // ], [t]);
 
 
-//   const tableData = (data?.Properties || []).map((item) => {
-//   const primaryOwner = item?.owners?.[0] || {};
-//   return {
-//     propertyId: item?.propertyId,
-//     ownerName: primaryOwner.name || "NA",
-//     mobileNumber: primaryOwner.mobileNumber || "NA",
-//     doorNo: item?.address?.doorNo || "NA",
-//     city: item?.address?.city || "NA",
-//     ward: item?.address?.ward || "NA",
-//     zone: item?.address?.zone || "NA",
-//     status: item?.status || "NA",
-//     due: data.FormattedData?.[item?.propertyId]?.due ?? 0,
-//   };
-// });
+  const tableData = (data?.Properties || []).map((item) => {
+  const primaryOwner = item?.owners?.[0] || {};
+  return {
+    propertyId: item?.propertyId,
+    ownerName: primaryOwner.name || "NA",
+    mobileNumber: primaryOwner.mobileNumber || "NA",
+    doorNo: item?.address?.doorNo || "NA",
+    city: item?.address?.city || "NA",
+    ward: item?.address?.ward || "NA",
+    zone: item?.address?.zone || "NA",
+    status: item?.status || "NA",
+    due: data.FormattedData?.[item?.propertyId]?.due || "NA",
+  };
+});
 
   
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -272,21 +298,23 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     return null;
   }
   const PTEmptyResultInbox = memo(Digit.ComponentRegistryService.getComponent("PTEmptyResultInbox"));
-  const getData = (tableData = []) => {
+  // const getData = (tableData = []) => {
 
-     console.log("DEKHO PEHLA HAI=",dataObj)
-    return tableData?.map((dataObj) => {
+  //    console.log("DEKHO PEHLA HAI=",dataObj)
+  //   return tableData?.map((dataObj) => {
 
      
-      const obj = {};
-      columns.forEach((el) => {
-        if (el.Cell) obj[el.Header] = el.Cell({row:{original:dataObj}});
-      });
-      return obj;
-    });
-  };
+  //     const obj = {};
+  //     columns.forEach((el) => {
+  //       if (el.Cell) obj[el.Header] = el.Cell({row:{original:dataObj}});
+  //     });
+      
+  //     return obj;
+  //   });
+  // };
 
-  const tableData = Object.values(data?.FormattedData || {}) || [];
+  // const tableData = Object.values(data?.FormattedData || {}) || [];
+    console.log("DEKHO PEHLA HAI=",tableData);
   if(ptSearchConfig?.ptSearchCount&&payload.locality&&tableData&&tableData.length>ptSearchConfig.ptSearchCount){
     !showToast &&setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
     return null;
