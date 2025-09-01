@@ -140,14 +140,14 @@ const NewApplication = () => {
     error,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
-  const handleEstimate = () => {
+  const handleEstimate = (newPropertyId, propertyData) => {
     const toYear =
       Array.isArray(unit) && unit.length > 0 ? unit[0].toYear : null;
 
     const payload = {
       Assessment: {
         financialYear: toYear,
-        propertyId: propertyId,
+        propertyId: newPropertyId,
         tenantId: tenantId,
         source: "MUNICIPAL_RECORDS",
         channel: "CITIZEN",
@@ -159,7 +159,7 @@ const NewApplication = () => {
       onSuccess: (data) => {
         history.push({
           pathname: "/digit-ui/employee/pt/PreviewDemand",
-          state: { data, proOwnerDetail, documents, propertyDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress }// send full object
+          state: { data, proOwnerDetail:propertyData, documents, propertyDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress }
         });
 
       },
@@ -624,7 +624,7 @@ const NewApplication = () => {
           setStatus(property.status);
           // setShowSuccessModal(true);
           // setShowPreviewButton(true);
-          PreviewDemand();
+          PreviewDemand(property.propertyId, property);
         }
       },
       // onError: (err) => {
@@ -984,9 +984,9 @@ const NewApplication = () => {
     setShowPreviewButton(false);
     setShowAssesmentPop(false);
   }
-  const PreviewDemand = () => {
+  const PreviewDemand = (newPropertyId, propertyData) => {
     // setShowAssesmentPop(true);
-    handleEstimate();
+    handleEstimate(newPropertyId, propertyData);
   };
 
   useEffect(() => {
