@@ -430,6 +430,11 @@ const NewApplication = () => {
       errors.roadFactor = "Road factor is required.";
     }
 
+     // ✅ Plot Area validation
+  if (!assessmentDetails.plotArea) {
+    errors.plotArea = "Plot Area is required.";
+  } 
+
     // 6. Self-Declaration Checkbox
     if (!checkboxes.selfDeclaration) {
       errors.selfDeclaration = "Please accept the declaration to proceed.";
@@ -1057,10 +1062,6 @@ const buildDocumentPayload = (documentsState) => {
       }
     }
   };
-  // const handleRestryIdChange = (e) => {
-  //   setRegistryId(e.target.value);
-  // }
-
   // In your NewApplication.js file, find your other handlers
 
 const handleRestryIdChange = (value) => {
@@ -1071,20 +1072,18 @@ const handleRestryIdChange = (value) => {
   const errors = { ...formErrors };
   const fieldKey = "registryId"; // The key for this field in formErrors
 
-  // Check if the field is not empty first (non-mandatory check)
+  
   if (value) {
-    // Regex to check for "MP" followed by exactly 17 digits
-    const regex = /^MP\d{17}$/;
+    const regex = /^MP[A-Z0-9]{17}$/;
 
     if (!regex.test(value)) {
-      errors[fieldKey] = "Must start with 'MP' and be followed by 17 numeric digits.";
+      errors[fieldKey] =
+        "Please enter a valid POA Number";
     } else {
-      // Clear the error if the input is valid
       delete errors[fieldKey];
     }
   } else {
-    // Clear the error if the field is empty (valid)
-    delete errors[fieldKey];
+    delete errors[fieldKey]; 
   }
 
   setFormErrors(errors);
@@ -1093,6 +1092,23 @@ const handleRestryIdChange = (value) => {
   const handleDropdownChange = (field, selectedOption) => {
     setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));
   };
+
+  const formatFullAddress = (addressDetails) => {
+    if (!addressDetails) return "";
+    const { doorNo, address, pincode, zone, ward, colony } = addressDetails;
+    return [
+      doorNo,
+      address,
+      colony?.name,
+      ward?.name,
+      zone?.name,
+      pincode,
+    ]
+      .filter(Boolean) // remove empty/null
+      .join(", ");
+  };
+  
+
   const handleCorrespondenceChange = (e) => {
     setCorrespondenceAddress(e.target.value);
   };
@@ -1100,6 +1116,23 @@ const handleRestryIdChange = (value) => {
   const handleAssessmentInputChange = (e) => {
     const { name, value } = e.target;
     setAssessmentDetails((prev) => ({ ...prev, [name]: value }));
+
+ // Validation
+ const errors = { ...formErrors };
+
+ if (name === "plotArea") {
+  const regex = /^[0-9]{1,6}$/; // only 1–6 digit numbers
+
+  if (!value) {
+    errors.plotArea = "Plot Area is required.";
+  } else if (!regex.test(value)) {
+    errors.plotArea = "Please enter a valid Plot Area";
+  } else {
+    delete errors.plotArea;
+  }
+}
+
+  setFormErrors(errors);
   };
 
   const handleUnitChange = (index, key, value) => {
@@ -1217,7 +1250,11 @@ const handleRestryIdChange = (value) => {
           <div style={styles.card}>
             <CorrespondenceAddressSection
               t={t}
-              correspondenceAddress={correspondenceAddress}
+              correspondenceAddress={
+                isSameAsPropertyAddress
+                  ? formatFullAddress(addressDetails)
+                  : correspondenceAddress             
+              }
               handleCorrespondenceChange={handleCorrespondenceChange}
               isSameAsPropertyAddress={isSameAsPropertyAddress}
               handleSameAsPropertyToggle={handleSameAsPropertyToggle}

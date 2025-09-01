@@ -56,6 +56,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     ["/digit-ui/employee/pt/PreviewDemand"]: "PreviewDemand",
      ["/digit-ui/employee/pt/PropertyLandingPage"]: "Property Landing Page",
      ["/digit-ui/employee/pt/PropertyLedger"]: "Property Ledger Page",
+      ["/digit-ui/employee/pt/DemandNote"]: " Demand Note Page",
      ["/digit-ui/employee/pt/DetailLedgerPage"]: "Detail Ledger Page",
       ["/digit-ui/employee/pt/application-details/"]: "PT_APPLICATION_TITLE",
   };
@@ -74,7 +75,8 @@ const EmployeeApp = ({ path, url, userType }) => {
      else if (location.pathname.includes("/digit-ui/employee/pt/success-applications/")) return t("PT_APPLICATION_TITLE");
       else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLandingPage")) return t("Property Landing Page");
       else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLedger")) return t("Property Ledger Page");
-      else if (location.pathname.includes("/digit-ui/employee/pt/DetailLedgerPage")) return t("Detail Ledger Page");
+      else if (location.pathname.includes("/digit-ui/employee/pt/DemandNote")) return t("Demand Note Page");
+
       
   };
 
@@ -164,6 +166,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const PreviewView = Digit?.ComponentRegistryService?.getComponent("PreviewView");
   const PropertyLandingPage = Digit?.ComponentRegistryService?.getComponent("PropertyLandingPage");
   const PropertyLedger = Digit?.ComponentRegistryService?.getComponent("PropertyLedger");
+  const DemandNote = Digit?.ComponentRegistryService?.getComponent("DemandNote");
   const DetailLedgerPage = Digit?.ComponentRegistryService?.getComponent("DetailLedgerPage");
   
 
@@ -210,6 +213,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/PreviewView`} component={PreviewView} />
           <PrivateRoute path={`${path}/PropertyLandingPage`} component={PropertyLandingPage} />
           <PrivateRoute path={`${path}/PropertyLedger`} component={PropertyLedger} />
+          <PrivateRoute path={`${path}/DemandNote`} component={DemandNote} />
           <PrivateRoute path={`${path}/DetailLedgerPage`} component={DetailLedgerPage} />
           
 
