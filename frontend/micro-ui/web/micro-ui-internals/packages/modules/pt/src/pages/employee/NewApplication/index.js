@@ -628,7 +628,7 @@ const NewApplication = () => {
       },
       onError: (err) => {
 
-        alert(t("Submission failed"));
+        alert(err);
       },
     });
   };

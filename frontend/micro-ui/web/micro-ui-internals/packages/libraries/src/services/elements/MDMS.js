@@ -715,7 +715,22 @@ const getSalutationsTypeList = (tenantId, moduleCode, type) => ({
     ],
   },
 });
-
+const getRelationshipTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "Relationship",
+          },
+        ],
+      },
+    ],
+  },
+});
 const getMeterStatusTypeList = (tenantId) => ({
   moduleDetails: [
     {
@@ -1312,6 +1327,15 @@ const getSalutationsType = (MdmsRes) => {
   });
   //return MdmsRes;
 };
+const getRelationshipType = (MdmsRes) => {
+  return MdmsRes["common-masters"].Relationship.filter((Relationship) => Relationship.active).map((RelationshipDetails) => {
+    return {
+      ...RelationshipDetails,
+      i18nKey: `PT_COMMON_RELATIONSHIP_${RelationshipDetails.code}`,
+    };
+  });
+  //return MdmsRes;
+};
 
 const TLGenderType = (MdmsRes) => {
   MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((genders) => {
@@ -1500,6 +1524,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getGenderType(MdmsRes);
     case "Salutations":
       return getSalutationsType(MdmsRes)
+    case "Relationship":
+      return getRelationshipType(MdmsRes)
     case "TLGendertype":
       return TLGenderType(MdmsRes);
     case "PTGenderType":
@@ -1689,7 +1715,7 @@ export const MdmsService = {
   getPropertyOwnerType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyOwnerTypeCriteria(tenantId, moduleCode, type), moduleCode);
   },
-  getPropertyEssentialTax:(tenantId, moduleCode, type) => {
+  getPropertyEssentialTax: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyEssentialTaxCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getPropertySubOwnerShipCategory: (tenantId, moduleCode, type) => {
@@ -1698,7 +1724,7 @@ export const MdmsService = {
   getPropertyAssessmentYear: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyAssessmentYearCriteria(tenantId, moduleCode, type), moduleCode);
   },
-  getPropertyRoadFactor:(tenantId, moduleCode, type) => {
+  getPropertyRoadFactor: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyRoadFactorCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getDocumentRequiredScreen: (tenantId, moduleCode) => {
@@ -1792,8 +1818,11 @@ export const MdmsService = {
   getGenderType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
   },
-   getSalutationsType: (tenantId, moduleCode, type) => {
+  getSalutationsType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getSalutationsTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+  getRelationshipType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getRelationshipTypeList(tenantId, moduleCode, type), moduleCode);
   },
 
   TLGenderType: (tenantId, moduleCode, type) => {

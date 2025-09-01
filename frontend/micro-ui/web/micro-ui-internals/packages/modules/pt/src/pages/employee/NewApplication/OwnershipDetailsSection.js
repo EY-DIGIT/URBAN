@@ -17,6 +17,8 @@ const OwnershipDetailsSection = ({
   const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
 
   const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
+  const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
+  console.log("Relationship", Relationship)
   const salutationOptions = (Menu || []).map((item) => ({
     code: item.code,
     name: t(item.name), // Use i18nKey for translation
@@ -131,7 +133,7 @@ const OwnershipDetailsSection = ({
             <div style={styles.poppinsLabel}>
               {t("Relationship")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
-            <Dropdown
+            {/* <Dropdown
               t={t}
               option={[
                 { code: "FATHER", name: t("Father") },
@@ -143,7 +145,29 @@ const OwnershipDetailsSection = ({
               optionKey="name"
               placeholder={t("Select")}
               style={styles.widthInput}
+            /> */}
+            <Dropdown
+              t={t}
+              option={(Relationship || []).map(rel => ({
+                code: rel.code,
+                name: rel.name, // use i18nKey if available, fallback to name
+              }))}
+              selected={
+                owner.relationship
+                  ? {
+                    code: owner.relationship,
+                    name:
+                      (Relationship || []).find(rel => rel.code === owner.relationship)?.name ||
+                      owner.relationship,
+                  }
+                  : null
+              }
+              select={(val) => updateOwner(index, "relationship", val.code)}
+              optionKey="name"
+              placeholder={t("Select")}
+              style={styles.widthInput}
             />
+
             {formErrors?.relationship && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors.relationship}</p>
             )}
