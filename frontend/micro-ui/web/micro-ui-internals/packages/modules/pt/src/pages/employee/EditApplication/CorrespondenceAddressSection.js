@@ -22,7 +22,8 @@ const CorrespondenceAddressSection = ({
           placeholder={t("Enter")}
           value={correspondenceAddress}
           onChange={handleCorrespondenceChange}
-          disabled={isSameAsPropertyAddress}
+          disabled
+
         />
         <div style={styles.checkboxMargin}>
           <label style={styles.checkboxLabel}>

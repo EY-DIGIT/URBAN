@@ -71,8 +71,10 @@ const OwnershipDetailsSection = ({
                 style={styles.dropdown30}
                 placeholder={t("Mr")}
                 placeholderStyle={{ color: "#000" }}  
+                disable={true}
               />
               <TextInput
+              disabled
                 style={styles.textBox}
                 placeholder={t("Enter")}
                 value={owner.name}
@@ -98,11 +100,13 @@ const OwnershipDetailsSection = ({
                 optionKey="name"
                 style={styles.dropdown30}
                 placeholder={t("Mr")}
+                 disable={true}
               />
               <TextInput
                 style={styles.textBox}
                 placeholder={t("यहाँ लिखें")}
                 value={owner.hindiName}
+                disabled
                 onChange={(e) => handleOwnerNameChange(index, "hindiName", e.target.value)}
                 />
             </div>
@@ -117,6 +121,7 @@ const OwnershipDetailsSection = ({
               {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <TextInput
+            disabled
               style={styles.widthInput}
               value={owner.fatherHusbandName}
               onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
@@ -138,6 +143,7 @@ const OwnershipDetailsSection = ({
                 { code: "HUSBAND", name: t("Husband") },
                 { code: "GUARDIAN", name: t("Guardian") }
               ]}
+               disable={true}
               selected={{ name: owner.relationship }}
               select={(val) => updateOwner(index, "relationship", val.name)}
               optionKey="name"
@@ -156,6 +162,7 @@ const OwnershipDetailsSection = ({
               onChange={(e) => handleOwnerEmailChange(index, e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
+              disabled
             />
              {formErrors[`owner-${index}-email`] && (
             <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-email`]}</p>
@@ -168,6 +175,8 @@ const OwnershipDetailsSection = ({
             </div>
             <TextInput
               value={owner.mobile}
+              disabled
+
               onChange={(e) => handleOwnerContactChange(index, "mobile", e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
@@ -181,6 +190,7 @@ const OwnershipDetailsSection = ({
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>{t("Alternative Number")}</div>
             <TextInput
+            disabled
               value={owner.altNumber}
               onChange={(e) => handleOwnerContactChange(index, "altNumber", e.target.value)}
               style={styles.widthInput}
@@ -196,6 +206,7 @@ const OwnershipDetailsSection = ({
           <TextInput
             style={styles.widthInput}
             value={owner.aadhaar}
+            disabled
             // ✅ CHANGE THIS LINE
             // It should now call the new handler passed from the parent
             onChange={(e) => handleOwnerAadhaarChange(index, e.target.value)}
@@ -216,7 +227,8 @@ const OwnershipDetailsSection = ({
               value={owner.samagraID}
               onChange={(e) => updateOwner(index, "samagraID", e.target.value)}
               style={styles.widthInput}
-              disabled={owner.noSamagra === true}
+              
+              disabled
               placeholder={t("Enter")}
             />
             <div style={{ marginTop: "4px" }}>
@@ -259,6 +271,7 @@ const OwnershipDetailsSection = ({
             select={handleOwnershipTypeChange}
             optionKey="name"
             placeholder={t("Select")}
+             disable={true}
           />
           {formErrors?.ownershipType && (
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>

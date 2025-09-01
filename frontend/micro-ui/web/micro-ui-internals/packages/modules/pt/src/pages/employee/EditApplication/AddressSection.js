@@ -443,6 +443,7 @@ const AddressSection = ({
           value={addressDetails.doorNo}
           onChange={handleInputChange}
           placeholder={t("Enter")}
+           disable={true}
         />
         {formErrors?.doorNo && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.doorNo}</p>}
       </div>
@@ -458,6 +459,7 @@ const AddressSection = ({
           value={addressDetails.address}
           onChange={handleInputChange}
           placeholder={t("Enter")}
+           disable={true}
         />
         {formErrors?.address && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.address}</p>}
       </div>
@@ -473,6 +475,7 @@ const AddressSection = ({
           value={addressDetails.pincode}
           onChange={handleInputChange}
           placeholder={t("Enter")}
+           disable={true}
         />
         {formErrors?.pincode && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.pincode}</p>}
       </div>

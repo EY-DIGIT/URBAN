@@ -243,9 +243,9 @@ const EditUpdateForm = ({ applicationData }) => {
                         },
                         documents?.sellersRegistry && {
 
-                            documentType: "others",
-                            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "others")?.fileStoreId,
-                            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "others")?.documentUid
+                            documentType: "Others",
+                            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
                         },
                         {
                             documentType: "Proof of Ownership",
@@ -281,9 +281,9 @@ const EditUpdateForm = ({ applicationData }) => {
                     },
                     documents?.sellersRegistry && {
 
-                        documentType: "others",
-                        fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "others")?.fileStoreId,
-                        documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "others")?.documentUid
+                        documentType: "Others",
+                        fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                        documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
                     },
                     {
                         documentType: "Proof of Ownership",
@@ -907,7 +907,7 @@ const EditUpdateForm = ({ applicationData }) => {
         const docMap = {
             photoId: applicationData.documents.find(d => d.documentType === "Proof of Identity") || null,
             ownershipDoc: applicationData.documents.find(d => d.documentType === "Proof of Ownership") || null,
-            sellersRegistry: applicationData.documents.find(d => d.documentType === "others") || null,
+            sellersRegistry: applicationData.documents.find(d => d.documentType === "Others") || null,
         };
         console.log(docMap);
         setDocuments(docMap);

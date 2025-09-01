@@ -549,14 +549,14 @@ const LocationDetails = ({ handleLocationUpdate, handlePhotoCapture, application
           <label style={style2.label}>
             Latitude<span style={{ color: "red" }}>*</span>
           </label>
-          <TextInput style={style2.widthInput} value={coords.lat} readOnly />
+          <TextInput  disable={true} style={style2.widthInput} value={coords.lat} readOnly />
           {formErrors.longLat && <span style={{ color: "red" }}>{formErrors.longLat}</span>}
         </div>
         <div style={style2.flex20}>
           <label style={style2.label}>
             Longitude<span style={{ color: "red" }}>*</span>
           </label>
-          <TextInput style={style2.widthInput} value={coords.lng} readOnly />
+          <TextInput  disable={true} style={style2.widthInput} value={coords.lng} readOnly />
           {formErrors.longLat && <span style={{ color: "red" }}>{formErrors.longLat}</span>}
         </div>
         {!applicationData?.documents.find(d => d.documentType === "Photo Captured")?.fileStoreId && (
