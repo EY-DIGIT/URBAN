@@ -60,15 +60,15 @@ const styles = {
         flex: "1 1 30%",
         display: "flex",
         flexDirection: "column",
-    flex30: {
-        flex: "1 1 30%",
-        display: "flex",
-        flexDirection: "column",
+        flex30: {
+            flex: "1 1 30%",
+            display: "flex",
+            flexDirection: "column",
 
-        position: "relative",
-        minHeight: "90px",
+            position: "relative",
+            minHeight: "90px",
 
-    },
+        },
     },
     input: {
         height: "35px",
@@ -351,7 +351,9 @@ const InputFieldBlank = () => (
 );
 
 const PropertyForm = () => {
+    const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
     const history = useHistory();
+
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [acknowledgmentNumber, setAcknowledgmentNumber] = useState("");
@@ -402,9 +404,6 @@ const PropertyForm = () => {
     };
 
     const handleSubmitUpdate = async () => {
-        console.log("handleSubmitUpdate is being called.");
-        const documentsToSubmit = buildDocumentPayload(documents);
-
         const payload = {
             Property: {
                 updateIMC: true,
@@ -452,7 +451,7 @@ const PropertyForm = () => {
                         {
                             documentType: "Proof of Identity",
                             fileStoreId: documents.photoId?.fileStoreId,
-                            documentUid: documents.photoId?.documentUid 
+                            documentUid: documents.photoId?.documentUid
                         },
                         {
                             documentType: "Others",
@@ -581,45 +580,53 @@ const PropertyForm = () => {
         //         alert("Submission failed");
         //     },
         // });
-        history.replace("/digit-ui/employee/pt/response", { Property: payload?.Property, key: "UPDATE", action: "SUBMIT" });
+        history.replace("/digit-ui/employee/pt/response",
+            {
+                Property: payload?.Property,
+                key: "UPDATE",
+                action: "SUBMIT"
+            }
+        );
         // history.replace("/digit-ui/employee/pt/response", { Property: submitData.Property, key: "UPDATE", action: "SUBMIT" });
     };
-
+    if (isLoading) {
+        return <Loader />;
+    }
     const buildDocumentPayload = (documentsState) => {
         const payloadDocs = [];
-      
+
         // Add the known, non-dynamic documents first
         if (documentsState.photoId?.fileStoreId) {
-          payloadDocs.push({
-            documentType: "Proof of Identity",
-            fileStoreId: documentsState.photoId.fileStoreId,
-            documentUid: documentsState.photoId.documentUid,
-          });
+            payloadDocs.push({
+                documentType: "Proof of Identity",
+                fileStoreId: documentsState.photoId.fileStoreId,
+                documentUid: documentsState.photoId.documentUid,
+            });
         }
-      
+
         if (documentsState.ownershipDoc?.fileStoreId) {
-          payloadDocs.push({
-            documentType: "Proof of Ownership",
-            fileStoreId: documentsState.ownershipDoc.fileStoreId,
-            documentUid: documentsState.ownershipDoc.documentUid,
-          });
+            payloadDocs.push({
+                documentType: "Proof of Ownership",
+                fileStoreId: documentsState.ownershipDoc.fileStoreId,
+                documentUid: documentsState.ownershipDoc.documentUid,
+            });
         }
-      
+
         // Iterate through the state to find and add all dynamic "Others" documents
         Object.keys(documentsState).forEach((key) => {
-          // ✅ This is the corrected check for keys starting with "others_"
-          if (key.startsWith("others_") || key === "sellersRegistry") {
-            const doc = documentsState[key];
-            if (doc?.fileStoreId) {
-              payloadDocs.push({
-                documentType: "Others",
-                fileStoreId: doc.fileStoreId,
-                documentUid: doc.documentUid,
-              });
+            // ✅ This is the corrected check for keys starting with "others_"
+            if (key.startsWith("others_") || key === "sellersRegistry") {
+                const doc = documentsState[key];
+                if (doc?.fileStoreId) {
+                    payloadDocs.push({
+                        documentType: "Others",
+                        fileStoreId: doc.fileStoreId,
+                        documentUid: doc.documentUid,
+                    });
+                }
             }
-          }
         });
-      
+
         return payloadDocs;
     };
 
@@ -661,8 +668,8 @@ const PropertyForm = () => {
                     <div style={styles.sectionHeaderDemand}>Demand</div>
                     <div style={styles.row}>
                         <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
-                        <InputFieldBlank />
-                        <InputFieldBlank />
+                        <div style={styles.field}></div>
+                        <div style={styles.field}></div>
                     </div>
 
 

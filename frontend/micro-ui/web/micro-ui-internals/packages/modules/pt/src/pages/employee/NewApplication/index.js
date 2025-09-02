@@ -341,7 +341,8 @@ const NewApplication = () => {
           setPropertyId(property.propertyId);
           setStatus(property.status);
           // setShowSuccessModal(true);
-          setShowPreviewButton(true);
+          // setShowPreviewButton(true);
+          PreviewDemand(property.propertyId, property);
 
         }
       },
