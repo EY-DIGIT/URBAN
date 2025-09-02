@@ -113,6 +113,7 @@ const NewApplication = () => {
     selfDeclaration: false,
   });
   const [formErrors, setFormErrors] = useState({});
+  const [serverErrors, setServerErrors] = useState({});
   const history = useHistory();
 
   const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
@@ -376,10 +377,13 @@ const NewApplication = () => {
       if (!owner.name || !/^[a-zA-Z\s]+$/.test(owner.name)) {
         errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
       }
-      // Hindi Name
-      // if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
-      //   errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
+      // // Owner Name (Hindi)
+      // if (!owner.hindiName) {
+      //   errors[`owner-${index}-hindiName`] = "यह फ़ील्ड अनिवार्य है।";
+      // } else if (!hindiNameRegex.test(owner.hindiName)) {
+      //   errors[`owner-${index}-hindiName`] = "कृपया मान्य हिंदी नाम दर्ज करें।";
       // }
+
       // Father/Husband Name
       if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
         errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
@@ -424,7 +428,7 @@ const NewApplication = () => {
 
     // 5. Assessment Details
     if (!assessmentDetails.rateZone) {
-      errors.rateZone = "Rate zone is required.";
+      errors.rateZone = ""; //Rate zone is required.
     }
     if (!assessmentDetails.roadFactor) {
       errors.roadFactor = "Road factor is required.";
@@ -444,19 +448,15 @@ const NewApplication = () => {
   };
 
   const handleSubmit = async () => {
-
-    console.log("Current documents state:", documents);
-
-    const finalErrors = validateForm();
+  const finalErrors = validateForm();
     setFormErrors(finalErrors);
+    // setServerErrors({});
 
     if (Object.keys(finalErrors).length > 0) {
       console.log("Form has validation errors. Submission stopped.");
       return;
     }
-
     const documentsToSubmit = buildDocumentPayload(documents);
-
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
       return;
@@ -617,7 +617,6 @@ const NewApplication = () => {
       onSuccess: (data) => {
         const property = data?.Properties?.[0];
         if (property) {
-
           setProOwnerDetail(property);
           setAcknowledgmentNumber(property.acknowldgementNumber);
           setPropertyId(property.propertyId);
@@ -627,19 +626,14 @@ const NewApplication = () => {
           PreviewDemand(property.propertyId, property);
         }
       },
-      // onError: (err) => {
 
-      //   alert(err);
-      // },
       onError: (err) => {
         const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
-
         const newErrors = {};
         apiErrors.forEach((apiErr) => {
           newErrors[apiErr.code] = apiErr.message;
         });
-
-        setFormErrors(newErrors);
+        setServerErrors(newErrors);
       },
     });
   };
@@ -742,116 +736,6 @@ const NewApplication = () => {
     }
   };
 
-  const handleOwnerEmailChange = (index, value) => {
-    const newOwners = [...owners];
-    newOwners[index].email = value;
-    setOwners(newOwners);
-
-    const errors = { ...formErrors };
-    const fieldKey = `owner-${index}-email`;
-
-    // A robust regex for email validation
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-
-    // Since Email is optional, only validate if a value is present
-    if (value && !emailRegex.test(value)) {
-      errors[fieldKey] = "Please enter a valid email address.";
-    } else {
-      // Clear the error if the input is valid or empty
-      delete errors[fieldKey];
-    }
-
-    setFormErrors(errors);
-  };
-
-
-  // Validation for Mobile number:
-  const handleOwnerContactChange = (index, field, value) => {
-    const newOwners = [...owners];
-    newOwners[index][field] = value;
-    setOwners(newOwners);
-
-    const errors = { ...formErrors };
-    const fieldKey = `owner-${index}-${field}`;
-
-    // Regex for exactly 10 digits
-    const mobileRegex = /^\d{10}$/;
-
-    // Mobile Number is mandatory, Alternative Number is not
-    if (field === "mobile") {
-      if (!value) {
-        errors[fieldKey] = "Mobile Number is required.";
-      } else if (!mobileRegex.test(value)) {
-        errors[fieldKey] = "Mobile Number must be 10 digits.";
-      } else {
-        delete errors[fieldKey];
-      }
-    } else if (field === "altNumber") {
-      // For alternative number, only validate if a value is entered
-      if (value && !mobileRegex.test(value)) {
-        errors[fieldKey] = "Alternative Number must be 10 digits.";
-      } else {
-        delete errors[fieldKey];
-      }
-    }
-
-    setFormErrors(errors);
-  };
-
-  // Validation for Name:
-  const handleOwnerNameChange = (index, field, value) => {
-    const newOwners = [...owners];
-    newOwners[index][field] = value;
-    setOwners(newOwners);
-
-    const errors = { ...formErrors };
-    const fieldKey = `owner-${index}-${field}`;
-
-    // Regular expressions for validation
-    const englishNameRegex = /^[a-zA-Z\s.\-']{2,100}$/;
-    const hindiNameRegex = /^[\u0900-\u097F\s]{2,100}$/;
-
-    if (!value) {
-      errors[fieldKey] = "This field is required.";
-    } else {
-      // Check which field is being validated
-      if (field === "name" || field === "fatherHusbandName") {
-        if (!englishNameRegex.test(value)) {
-          errors[fieldKey] = "Please enter a valid English name.";
-        } else {
-          delete errors[fieldKey];
-        }
-      } else if (field === "hindiName") {
-        // ✅ Hindi only
-        if (!hindiNameRegex.test(value)) {
-          errors[fieldKey] = "Please enter a valid Hindi name.";
-        } else {
-          delete errors[fieldKey];
-        }
-      }
-    }
-
-    setFormErrors(errors);
-  };
-  // Validation for Aadhar:
-  const handleOwnerAadhaarChange = (index, value) => {
-    const newOwners = [...owners];
-    newOwners[index].aadhaar = value;
-    setOwners(newOwners);
-
-    // Perform the new, robust Aadhaar validation here
-    const errors = { ...formErrors };
-    const fieldKey = `owner-${index}-aadhaar`; // Unique key for each owner
-
-    // ✅ USE THE NEW VALIDATION FUNCTION
-    if (!isAadhaarValid(value)) {
-      errors[fieldKey] = "Valid 12-digit Aadhaar number is required.";
-    } else {
-      // Clear the error if the input is valid
-      delete errors[fieldKey];
-    }
-    setFormErrors(errors);
-  };
   // Helper function to make it easier to call.
   const isAadhaarValid = (aadhaarNumber) => {
     // First, check for the correct length (12 digits) and format.
@@ -911,40 +795,85 @@ const NewApplication = () => {
   })();
 
   // Validation for PINCODE:
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let newErrors = { ...formErrors };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   let newErrors = { ...formErrors };
 
-    setAddressDetails(prev => ({ ...prev, [name]: value }));
+  //   setAddressDetails(prev => ({ ...prev, [name]: value }));
 
-    if (name === "pincode") {
-      const pincodeRegex = /^452\d{3}$/;
+  //   if (name === "pincode") {
+  //     const pincodeRegex = /^452\d{3}$/;
 
-      if (!value) {
-        newErrors.pincode = "Pincode is required.";
-      } else if (!pincodeRegex.test(value)) {
-        newErrors.pincode = "Pincode must be 6 digits and start with 452.";
-      } else {
-        delete newErrors.pincode;
-      }
+  //     if (!value) {
+  //       newErrors.pincode = "Pincode is required.";
+  //     } else if (!pincodeRegex.test(value)) {
+  //       newErrors.pincode = "Pincode must be 6 digits and start with 452.";
+  //     } else {
+  //       delete newErrors.pincode;
+  //     }
+  //   }
+
+  //   // ✅ Address validation
+  //   if (name === "address") {
+  //     const addressRegex = /^[A-Za-z0-9\s\-,()\/.]{10,200}$/;
+
+  //     if (!value) {
+  //       newErrors.address = "Address is required.";
+  //     } else if (!addressRegex.test(value)) {
+  //       newErrors.address =
+  //         "Please enter a valid address";
+  //     } else {
+  //       delete newErrors.address;
+  //     }
+  //   }
+
+  //   setFormErrors(newErrors);
+  // };
+
+     // Validation for PINCODE:
+     const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      let newErrors = { ...formErrors };
+  
+      setAddressDetails(prev => ({ ...prev, [name]: value }));
+  
+       // Field-level validation
+    switch (name) {
+      case "pincode":
+        if (!value) {
+          newErrors.pincode = "Pincode is required.";
+        } else if (!/^452\d{3}$/.test(value)) {
+          newErrors.pincode = "Pincode must be 6 digits and start with 452.";
+        } else {
+          delete newErrors.pincode;
+        }
+        break;
+  
+      case "address":
+        if (!value) {
+          newErrors.address = "Address is required.";
+        } else if (!/^[A-Za-z0-9\s\-,()\/.]{10,200}$/.test(value)) {
+          newErrors.address = "Please enter a valid address";
+        } else {
+          delete newErrors.address;
+        }
+        break;
+  
+      case "doorNo":
+        if (!value) {
+          newErrors.doorNo = "Door/House No is required.";
+        } else {
+          delete newErrors.doorNo;
+        }
+        break;
+  
+      default:
+        break;
     }
-
-    // ✅ Address validation
-    if (name === "address") {
-      const addressRegex = /^[A-Za-z0-9\s\-,()\/.]{10,200}$/;
-
-      if (!value) {
-        newErrors.address = "Address is required.";
-      } else if (!addressRegex.test(value)) {
-        newErrors.address =
-          "Please enter a valid address";
-      } else {
-        delete newErrors.address;
-      }
-    }
-
-    setFormErrors(newErrors);
-  };
+  
+  
+      setFormErrors(newErrors);
+    };
 
   // Validation for Correspondance Address:
 
@@ -1114,9 +1043,165 @@ const NewApplication = () => {
     setFormErrors(errors);
   };
 
-  const handleDropdownChange = (field, selectedOption) => {
-    setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));
+  const handleOwnerEmailChange = (index, value) => {
+    const newOwners = [...owners];
+    newOwners[index].email = value;
+    setOwners(newOwners);
+
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-email`;
+
+    // A robust regex for email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+    // Since Email is optional, only validate if a value is present
+    if (value && !emailRegex.test(value)) {
+      errors[fieldKey] = "Please enter a valid email address.";
+    } else {
+      // Clear the error if the input is valid or empty
+      delete errors[fieldKey];
+    }
+
+    setFormErrors(errors);
   };
+
+  // Validation for Mobile number:
+  const handleOwnerContactChange = (index, field, value) => {
+    const newOwners = [...owners];
+    newOwners[index][field] = value;
+    setOwners(newOwners);
+
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-${field}`;
+
+    // Regex for exactly 10 digits
+    const mobileRegex = /^\d{10}$/;
+
+    // Mobile Number is mandatory, Alternative Number is not
+    if (field === "mobile") {
+      if (!value) {
+        errors[fieldKey] = "Mobile Number is required.";
+      } else if (!mobileRegex.test(value)) {
+        errors[fieldKey] = "Mobile Number must be 10 digits.";
+      } else {
+        delete errors[fieldKey];
+      }
+    } else if (field === "altNumber") {
+      // For alternative number, only validate if a value is entered
+      if (value && !mobileRegex.test(value)) {
+        errors[fieldKey] = "Alternative Number must be 10 digits.";
+      } else {
+        delete errors[fieldKey];
+      }
+    }
+
+    setFormErrors(errors);
+  };
+
+  // Validation for Name:
+  const handleOwnerNameChange = (index, field, value) => {
+    const newOwners = [...owners];
+    newOwners[index][field] = value;
+    setOwners(newOwners);
+
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-${field}`;
+
+    // Regular expressions for validation
+    const englishNameRegex = /^[a-zA-Z\s.\-']{2,100}$/;
+    const hindiNameRegex = /^[\u0900-\u097F\s]{2,100}$/;
+
+    if (!value) {
+      errors[fieldKey] = "This field is required.";
+    } else {
+      // Check which field is being validated
+      if (field === "name" || field === "fatherHusbandName") {
+        if (!englishNameRegex.test(value)) {
+          errors[fieldKey] = "Please enter a valid English name.";
+        } else {
+          delete errors[fieldKey];
+        }
+      } else if (field === "hindiName") {
+        // ✅ Hindi only
+        if (!hindiNameRegex.test(value)) {
+          errors[fieldKey] = "Please enter a valid Hindi name.";
+        } else {
+          delete errors[fieldKey];
+        }
+      }
+    }
+
+    setFormErrors(errors);
+  };
+  // Validation for Aadhar:
+  const handleOwnerAadhaarChange = (index, value) => {
+    const newOwners = [...owners];
+    newOwners[index].aadhaar = value;
+    setOwners(newOwners);
+
+    // Perform the new, robust Aadhaar validation here
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-aadhaar`; // Unique key for each owner
+
+    // ✅ USE THE NEW VALIDATION FUNCTION
+    if (!isAadhaarValid(value)) {
+      errors[fieldKey] = "Valid 12-digit Aadhaar number is required.";
+    } else {
+      // Clear the error if the input is valid
+      delete errors[fieldKey];
+    }
+    setFormErrors(errors);
+  };
+
+  // const handleDropdownChange = (field, selectedOption) => {
+  //   setAddressDetails((prev) => ({ ...prev, [field]: selectedOption }));
+  // };
+
+  const capitalize = (s) => s?.charAt(0)?.toUpperCase() + s?.slice(1) || "";
+
+const handleDropdownChange = (field, selectedOption) => {
+  console.log("handleDropdownChange", field, selectedOption);
+
+  // 1) update addressDetails in one atomic update and reset dependents
+  setAddressDetails((prev) => {
+    const next = { ...prev, [field]: selectedOption };
+
+    if (field === "zone") {
+      next.ward = null;
+      next.colony = null;
+      next.rateZone = null;
+    } else if (field === "ward") {
+      next.colony = null;
+      next.rateZone = null;
+    } else if (field === "colony") {
+      next.rateZone = null;
+    }
+    return next;
+  });
+
+  // 2) update formErrors live (remove error for the field when selected,
+  //    also remove errors for dependents when parent resets)
+  setFormErrors((prev) => {
+    const copy = { ...prev };
+
+    if (selectedOption) delete copy[field];
+    else copy[field] = `${capitalize(field)} is required.`;
+
+    // If you changed zone/ward/colony, clear dependent errors (don't set them)
+    if (field === "zone") {
+      delete copy.ward;
+      delete copy.colony;
+      delete copy.rateZone;
+    } else if (field === "ward") {
+      delete copy.colony;
+      delete copy.rateZone;
+    } else if (field === "colony") {
+      delete copy.rateZone;
+    }
+
+    return copy;
+  });
+};
 
   const formatFullAddress = (addressDetails) => {
     if (!addressDetails) return "";
@@ -1270,6 +1355,7 @@ const NewApplication = () => {
               updateRateZone={updateRateZone}
               styles={styles}
               formErrors={formErrors}
+              setFormErrors={setFormErrors}  
             />
           </div>
           <div style={styles.card}>
@@ -1369,14 +1455,33 @@ const NewApplication = () => {
 
             )}
 
-            {/* ✅ Global error messages from backend */}
-            {Object.keys(formErrors).length > 0 && (
-              <div style={{ marginTop: "16px" }}>
-                {Object.entries(formErrors).map(([key, msg]) => (
-                  <p key={key} style={{ color: "red", fontSize: "12px" }}>
-                    {msg}
-                  </p>
-                ))}
+             {/* ✅ Global error messages from backend */}
+             {Object.keys(serverErrors).length > 0 && (
+              <div
+                style={{
+                  marginTop: "16px",
+                  padding: "14px 18px",
+                  borderLeft: "4px solid #dc3545",
+                  borderRadius: "8px",
+                  background: "rgba(107, 19, 63, 0.12)",
+                  color: "#611a15",
+                  fontSize: "14px",
+                  fontFamily: "Poppins, sans-serif",
+                  boxShadow: "0 4px 8px rgba(220, 53, 69, 0.2)",
+                  animation: "fadeIn 0.4s ease-in-out",
+                }}
+              >
+                <strong style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "18px", marginRight: "8px" }}>  ⚠️</span>
+                  Submission Failed
+                </strong>
+                <ul style={{ margin: 0, paddingLeft: "18px" }}>
+                  {Object.entries(serverErrors).map(([key, msg]) => (
+                    <li key={key} style={{ marginBottom: "4px" }}>
+                      {msg}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
             <div style={styles.buttonContainer}>
@@ -1407,6 +1512,5 @@ const NewApplication = () => {
 };
 
 export default NewApplication;
-
 
 
