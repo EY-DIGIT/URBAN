@@ -346,7 +346,7 @@ const InputField = ({ label, value }) => (
 );
 
 const InputFieldBlank = () => (
-    <div style={styles.fieldBlank}>
+    <div style={styles.field}>
 
     </div>
 );
