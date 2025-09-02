@@ -343,6 +343,12 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
   font-size: 50px;
   color: white !important; 
 }
+   .tableinside tbody tr td {
+  background-color: white !important;
+  color:rgba(20, 27, 41, 1);
+
+ 
+}
           
 .tableinside thead th {
   background-color: rgba(107, 19, 63, 0.4) !important;

@@ -144,6 +144,7 @@ const PTinboxTable = () => {
                             <th style={headerStyle}>Owner Name</th>
                             <th style={headerStyle}>Application Type</th>
                             <th style={headerStyle}>Status</th>
+                            <th style={headerStyle}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,18 +166,26 @@ const PTinboxTable = () => {
                                     <tr key={index} style={{ backgroundColor: "#fff", borderTop: "1px solid #eee" }}>
                                         <td style={cellStyle}>{applicationNo}</td>
                                         <td style={cellStyle}>
-                                            <a
+                                            {/* <a
                                                 href={`/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`}
                                                 style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                             >
                                                 {propertyId}
-                                            </a>
+                                            </a> */}
                                         </td>
                                         <td style={cellStyle}>{ownerNames}</td>
                                         <td style={cellStyle}>{t(applicationType)}</td>
                                         <td style={cellStyle}>  <span className={`status-badge status-${(status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                             {t(status && `WF_PT_${status}`) || status || "NA"}
                                         </span></td>
+                                         <td style={cellStyle}>
+                                            <a
+                                                href={`/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`}
+                                                style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                            >
+                                                <img src="https://devtfstatep7f19.blob.core.windows.net/imc-dev-assets/Icon%201.svg" alt="Property" style={{ width: "20px",height:"30px" }} />
+                                            </a>
+                                        </td>
                                     </tr>
                                 );
                             })
@@ -260,7 +269,7 @@ const backGround23={
     // opacity:"0.3 ",
     // color:"white"
 
-      background: "rgba(107, 19, 63, 0.3)",
+    //   background: "rgba(107, 19, 63, 0.3)",
 
     // background:"yellow",
     // opacity:"0.5",

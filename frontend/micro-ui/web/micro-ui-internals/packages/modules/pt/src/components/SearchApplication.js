@@ -341,7 +341,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 
                 .results-header {
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
-                    font-size: 38px;
+                    font-size: 32px;
                     font-weight: 600;
                     color: rgba(107, 19, 63, 1);
                     margin-bottom: 20px;
@@ -368,7 +368,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 thead {
-                    background: rgba(107, 19, 63, 0.3);
+                    background: rgba(107, 19, 63, 0.4);
                     color: rgba(40, 40, 40, 1);
                 }
                 
@@ -473,6 +473,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                     placeholder="Enter application number"
                                 />
                             </div>
+                  
 
                             {/* Property ID */}
                             <div className="form-field">
@@ -579,6 +580,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                             <th>Owner Name</th>
                                             <th>Application Type</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -601,7 +603,9 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                                 {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
                                                         </td>
-                                                        <td>{result.propertyId || result.uniqueId}</td>
+                                                        <td>
+                                                            {/* {result.propertyId || result.uniqueId} */}
+                                                            </td>
                                                         <td>
                                                             {result.owners ?
                                                                 result.owners.map(o => o.name).join(", ") :
@@ -611,6 +615,14 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>
                                                             <span className={`status-badge status-${(result.status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                                                 {result.status}
+                                                            </span>
+                                                        </td>
+                                                       <td>
+                                                            <span className="link">
+                                                                <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${result.propertyId}`}>
+                                                                   <img src="https://devtfstatep7f19.blob.core.windows.net/imc-dev-assets/Icon%201.svg" alt="Property" style={{ width: "20px",height:"30px" }} />
+                                                                </Link>
+                                                                {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -635,7 +647,9 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                                 {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
                                                         </td>
-                                                        <td>{item.propertyId || item.uniqueId}</td>
+                                                        <td>
+                                                            {/* {item.propertyId || item.uniqueId} */}
+                                                            </td>
                                                         <td>
                                                             {item.owners ?
                                                                 item.owners.map(o => o.name).join(", ") :
@@ -645,6 +659,14 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>
                                                             <span className={`status-badge status-${(item.status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                                                 {t(item.status && `WF_PT_${item.status}`) || item.status || "NA"}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span className="link">
+                                                                <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${item.propertyId}`}>
+                                                                     <img src="https://devtfstatep7f19.blob.core.windows.net/imc-dev-assets/Icon%201.svg" alt="Property" style={{ width: "20px",height:"30px" }} />
+                                                                </Link>
+                                                                {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
                                                         </td>
                                                     </tr>
