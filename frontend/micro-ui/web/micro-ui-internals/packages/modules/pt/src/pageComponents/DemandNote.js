@@ -59,7 +59,7 @@ const styles = {
         lineHeight: "22px",
         letterSpacing: "0%",
         color: "#282828",
-        width: "100px"
+        width: "200px"
     },
     sectionHeader: {
         fontFamily: "Poppins",
@@ -106,7 +106,8 @@ const styles = {
     th: {
         border: "1px solid #ccc",
         padding: "8px 4px",
-        backgroundColor: "#B9B9B9",
+        // backgroundColor: "#B9B9B9",
+         backgroundColor:"rgba(107, 19, 63, 0.2)",
         // border:"1px,0px,0px,1px #B9B9B9",
         textAlign: "center",
         fontFamily: "Inter",
@@ -307,8 +308,9 @@ const DemandNote = () => {
                     {ownersDetail.map((owner, index) => (
                         <React.Fragment key={owner.uuid || index}>
                             <div style={styles.sectionHeader}>Owner {index + 1}</div>
-                            <div style={styles.row}>
-                                <InputField label="Name" value={`${owner?.salutation || ""} ${owner?.name || "N/A"}`} />
+                            <div style={{marginTop:"14px"}}></div>
+                            <div style={styles.row} >
+                                <InputField label="Owner Name" value={` ${owner?.name || "N/A"}`} />
 
                                 <InputField label="Father/Husband Name" value={owner?.fatherOrHusbandName} />
 
@@ -320,7 +322,7 @@ const DemandNote = () => {
                                 <InputField label="Colony" value={address?.locality?.name || "N/A"} />
                             </div>
                             <div style={styles.row}>
-                                <InputField label="Pin" value={address?.pincode || "N/A"} />
+                                <InputField label="Pincode" value={address?.pincode || "N/A"} />
                                 <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
                                 <InputField label="Aadhaar ID" value={owner?.aadhaarNumber || "N/A"} />
                             </div>
@@ -367,7 +369,7 @@ const DemandNote = () => {
                 </div>
                 <div style={styles.cardD}>
                     {/* Table 2 - Tax Summary */}
-                    <div style={styles.sectionHeader}>Property tax summary</div>
+                    <div style={styles.sectionHeader}>Property Tax Summary</div>
                     <div style={{ overflowX: 'auto', width: '100%', marginTop: '12px' }}>
                         <div style={styles.tableContainer}>
                             <table style={styles.table}>

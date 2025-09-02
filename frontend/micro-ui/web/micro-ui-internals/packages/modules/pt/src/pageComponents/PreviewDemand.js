@@ -153,7 +153,8 @@ const styles = {
     th: {
         border: "1px solid #ccc",
         padding: "8px 4px",
-        backgroundColor: "#B9B9B9",
+        // backgroundColor: "#B9B9B9",
+         backgroundColor:"rgba(107, 19, 63, 0.2)",
         // border:"1px,0px,0px,1px #B9B9B9",
         textAlign: "center",
         fontFamily: "Inter",
@@ -345,7 +346,7 @@ const InputField = ({ label, value }) => (
 );
 
 const InputFieldBlank = () => (
-    <div style={styles.fieldBlank}>
+    <div style={styles.field}>
 
     </div>
 );
@@ -676,9 +677,10 @@ const PropertyForm = () => {
                     {ownersDetail.map((owner, index) => (
                         <React.Fragment key={owner.uuid || index}>
                             <div style={styles.sectionHeader}>Owner {index + 1}</div>
+                            <div style={{marginTop:"14px"}}></div>
                             <div style={styles.row}>
-                                <InputField label="Name" value={`${owner?.salutation || ""} ${owner?.name || "N/A"}`} />
-                                <InputField label="Father name" value={owner?.fatherOrHusbandName} />
+                                <InputField label="Owner Name" value={` ${owner?.name || "N/A"}`} />
+                                <InputField label="Father/Husband Name" value={owner?.fatherOrHusbandName} />
                                 <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
                             </div>
                             <div style={styles.row}>
@@ -687,13 +689,13 @@ const PropertyForm = () => {
                                 <InputField label="Colony" value={address?.locality?.name || "N/A"} />
                             </div>
                             <div style={styles.row}>
-                                <InputField label="Pin" value={address?.pincode || "N/A"} />
-                                <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
-                                <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
+                                <InputField label="Pincode" value={address?.pincode || "N/A"} />
+                                <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
+                                <InputField label="Aadhaar ID" value={owner?.aadhaarNumber || "N/A"} />
                             </div>
                             <div style={styles.row}>
                                 <InputField
-                                    label="Email"
+                                    label="Email ID"
                                     value={owner?.emailId || "N/A"}
                                 />
                                 <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
@@ -735,7 +737,7 @@ const PropertyForm = () => {
                 </div>
 
                 <div style={styles.cardD}>
-                    <div style={styles.sectionHeader}>Property tax summary</div>
+                    <div style={styles.sectionHeader}>Property Tax Summary</div>
                     <div style={styles.tableContainer}>
                         <table style={styles.table}>
                             <thead>

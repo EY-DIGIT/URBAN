@@ -7,6 +7,7 @@ import {
     CheckBox,
 } from "@egovernments/digit-ui-react-components";
 import { useLocation, useHistory } from "react-router-dom";
+import DownloadPdfButton from "./DownloadPDF";
 const styles = {
     container: {
         padding: "20px",
@@ -58,7 +59,7 @@ const styles = {
         lineHeight: "22px",
         letterSpacing: "0%",
         color: "#282828",
-        width: "100px"
+        width: "200px"
     },
     sectionHeader: {
         fontFamily: "Poppins",
@@ -93,14 +94,16 @@ const styles = {
     th: {
         border: "1px solid #ccc",
         padding: "8px",
-        backgroundColor: "#6b133f",
+        // backgroundColor: "#6b133f",
+        backgroundColor:"rgba(107, 19, 63, 0.2)",
         textAlign: "center",
         fontFamily: "Inter",
         fontWeight: 400,
         fontSize: "12px",
         lineHeight: "130%",
         letterSpacing: "0%",
-        color: "white",
+        // color: "white",
+        color:"#6b133f",
     },
     td: {
         border: "1px solid #ccc",
@@ -260,8 +263,9 @@ const handleConfirm = () => {
 };
 
     return (
+        <div id="downloadable-component">
         <div style={{ position: "relative" }}>
-            <button style={styles.downloadBtn}>⬇ Download</button>
+            <button style={styles.downloadBtn}><DownloadPdfButton targetId="downloadable-component" /></button>
             <div style={styles.cardD}>
                 <div style={styles.sectionHeaderDemand}>Demand</div>
 
@@ -273,10 +277,11 @@ const handleConfirm = () => {
                 {ownersDetail.map((owner, index) => (
                     <React.Fragment key={owner.uuid || index}>
                         <div style={styles.sectionHeader}>Owner {index + 1}</div>
+                        <div style={{marginTop:"14px"}}></div>
                         <div style={styles.row}>
-                            <InputField label="Name" value={`${owner?.salutation || ""} ${owner?.name || "N/A"}`} />
+                            <InputField label="Owner Name" value={` ${owner?.name || "N/A"}`} />
 
-                            <InputField label="Father name" value={owner?.fatherOrHusbandName} />
+                            <InputField label="Father/Husband Name" value={owner?.fatherOrHusbandName} />
 
                             <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
                         </div>
@@ -286,12 +291,12 @@ const handleConfirm = () => {
                             <InputField label="Colony" value={address?.locality?.name || "N/A"} />
                         </div>
                         <div style={styles.row}>
-                            <InputField label="Pin" value={address?.pincode || "N/A"} />
-                            <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
-                            <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
+                            <InputField label="Pincode" value={address?.pincode || "N/A"} />
+                            <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
+                            <InputField label="Aadhaar ID" value={owner?.aadhaarNumber || "N/A"} />
                         </div>
                         <div style={styles.row}>
-                            <InputField label="Email" value={owner?.emailId || "N/A"} />
+                            <InputField label="Email ID" value={owner?.emailId || "N/A"} />
                             <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                             <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                         </div>
@@ -305,7 +310,7 @@ const handleConfirm = () => {
                     <table style={styles.table}>
                         <thead>
                             <tr>
-                                {["Year", "Usage Type", "User", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
+                                {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
                                     <th key={h} style={styles.th}>{h}</th>
                                 ))}
                             </tr>
@@ -331,7 +336,7 @@ const handleConfirm = () => {
             </div>
             <div style={styles.cardD}>
                 {/* Table 2 - Tax Summary */}
-                <div style={styles.sectionHeader}>Property tax summary</div>
+                <div style={styles.sectionHeader}>Property Tax Summary</div>
                 <div style={{ overflowX: 'auto', width: '100%' }}>
                     <table style={styles.table}>
                         <thead>
@@ -379,7 +384,7 @@ const handleConfirm = () => {
                 </div>
             </div>
         </div>
-
+</div>
     );
 };
 

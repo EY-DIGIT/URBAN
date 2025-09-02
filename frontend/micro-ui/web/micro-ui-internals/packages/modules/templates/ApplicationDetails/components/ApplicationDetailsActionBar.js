@@ -124,8 +124,28 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
 
   return (
     <React.Fragment>
+
+
+
+      <style>
+        {`
+
+  
+
+@media (min-width: 780px) {
+  .forwardbutton .menu-wrap {
+    margin-right: 124px;
+  }
+}
+
+
+         
+        `}
+      </style>
+
+
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
-        <ActionBar style={{ ...ActionBarStyle, position: "relative", boxShadow: "none" }}>
+        <ActionBar style={{ ...ActionBarStyle, position: "relative", boxShadow: "none" }} className="forwardbutton" >
           {displayMenu && (workflowDetails?.data?.actionState?.nextActions || workflowDetails?.data?.nextActions) ? (
             <Menu
               localeKeyPrefix={forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}
