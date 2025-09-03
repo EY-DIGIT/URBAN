@@ -342,8 +342,7 @@ const NewApplication = () => {
           setPropertyId(property.propertyId);
           setStatus(property.status);
           // setShowSuccessModal(true);
-          // setShowPreviewButton(true);
-          PreviewDemand(property.propertyId, property);
+          setShowPreviewButton(true);
 
         }
       },
@@ -355,6 +354,9 @@ const NewApplication = () => {
   };
   const validateForm = () => {
     const errors = {};
+
+    // ✅ Define regex here (so it exists inside this function)
+    const hindiNameRegex = /^[\u0900-\u097F\s]{2,100}$/;
 
     // 1. Files validation
     if (!documents.photoId?.fileStoreId) {
@@ -379,11 +381,11 @@ const NewApplication = () => {
         errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
       }
       // // Owner Name (Hindi)
-      // if (!owner.hindiName) {
-      //   errors[`owner-${index}-hindiName`] = "यह फ़ील्ड अनिवार्य है।";
-      // } else if (!hindiNameRegex.test(owner.hindiName)) {
-      //   errors[`owner-${index}-hindiName`] = "कृपया मान्य हिंदी नाम दर्ज करें।";
-      // }
+      if (!owner.hindiName) {
+        errors[`owner-${index}-hindiName`] = "यह फ़ील्ड अनिवार्य है।";
+      } else if (!hindiNameRegex.test(owner.hindiName)) {
+        errors[`owner-${index}-hindiName`] = "कृपया मान्य हिंदी नाम दर्ज करें।";
+      }
 
       // Father/Husband Name
       if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
@@ -444,7 +446,6 @@ const NewApplication = () => {
     if (!checkboxes.selfDeclaration) {
       errors.selfDeclaration = "Please accept the declaration to proceed.";
     }
-
     return errors;
   };
 
@@ -454,9 +455,10 @@ const NewApplication = () => {
     // setServerErrors({});
 
     if (Object.keys(finalErrors).length > 0) {
-      console.log("Form has validation errors. Submission stopped.");
+      console.log("❌ Form has validation errors → API not called");
       return;
     }
+    
     const documentsToSubmit = buildDocumentPayload(documents);
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
@@ -1007,6 +1009,13 @@ const NewApplication = () => {
 
     setOwnershipType(val.code);
 
+      // 🟢 Clear error live when user selects value
+  setFormErrors((prev) => {
+    const newErrors = { ...prev };
+    delete newErrors.ownershipType;
+    return newErrors;
+  });
+
     // ❗ Only reset if required. Don't reset if owners already exist.
     if (val.code === "INDIVIDUAL.SINGLEOWNER") {
       setOwners((prev) => [prev[0]]); // keep first only
@@ -1269,6 +1278,8 @@ const handleDropdownChange = (field, selectedOption) => {
 
   const handleRoadFactorChange = (selected) => {
     setAssessmentDetails((prev) => ({ ...prev, roadFactor: selected }));
+    // ✅ clear error instantly when user selects something
+    setFormErrors((prev) => ({ ...prev, roadFactor: "" }));
   };
   const updateRateZone = (value) => {
     setRateZones(value);

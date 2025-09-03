@@ -1190,7 +1190,7 @@ const EditUpdateForm = ({ applicationData }) => {
                             )} */}
                             {/* {!showPreviewButton && ( */}
 
-                            <SubmitBar label={t("back")} onClick={() => window.history.back()} style={{ background: "#6b133f" }} />
+                            {/* <SubmitBar label={t("back")} onClick={() => window.history.back()} style={{ background: "#6b133f" }} /> */}
                             <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
                             {/* )} */}
                         </div>
