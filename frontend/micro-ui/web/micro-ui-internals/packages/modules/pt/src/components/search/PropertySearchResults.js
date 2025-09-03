@@ -208,9 +208,35 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
             <div>
               {row.original?.due > 0 && Digit.Utils.didEmployeeHasRole("PT_CEMP") ? (
                 <span className="link"> 
-                  <a  style={{textDecoration:'none'}} onClick={() => handleCollectTaxClick(row.original)}>{t("ES_PT_COLLECT_TAX")}</a>
+                  <a  style={{textDecoration:'none'}} onClick={() => handleCollectTaxClick(row.original)}>
+                    {/* {t("ES_PT_COLLECT_TAX")} */}
+                    <button
+                type="button"
+                className="btn-view"
+               
+              >
+                View
+              </button>
+                    </a>
                 </span>
-              ) : null}
+              ) :
+              
+              <div>
+              <span >
+                <Link to={`/digit-ui/employee/pt/ptsearch/property-details/${row.original.propertyId}`}><button
+                type="button"
+                className="btn-view"
+               
+              >
+
+                View
+              </button></Link>
+              </span>
+            </div>
+              
+              
+              
+              }
             </div>
           );
         },
@@ -326,6 +352,21 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
 
    <style>
         {`
+         .btn-view {
+          min-width: 90px;
+          height: 27px;
+          padding: 0 24px;
+          border-radius: 12px;
+          border: none;
+          color: white;
+          background: #6b133f;
+          font-size: 12px;
+          font-weight: 500;
+          font-family: 'Poppins', sans-serif;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+        }
 
            .tableinside thead {
   background-color: rgba(107, 19, 63, 0.4) !important;

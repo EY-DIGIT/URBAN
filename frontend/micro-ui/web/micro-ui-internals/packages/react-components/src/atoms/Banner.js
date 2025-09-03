@@ -98,7 +98,7 @@ const styles = {
     backgroundColor: "rgb(107, 19, 63)",
     color: "white",
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "20px",
     cursor: "pointer",
   },
   errorModal: {
@@ -151,6 +151,11 @@ const Successful = (props) => {
         <span style={{ color: "white", fontSize: "1.5rem" }}>✔</span>
       </div>
 
+
+      <h3 style={{ marginTop: "2rem",color:"#000000",fontWeight:"800" }}>
+        Application Forwarded
+      </h3>
+
       <h2 style={{ marginTop: "1rem",color:"#000000" }}>
         {props.props.message || t("Application Submitted Successfully")}
       </h2>
@@ -171,6 +176,8 @@ const Successful = (props) => {
           <p>{props.props.applicationNumberOne}</p>
         </>
       ) : null}
+
+      <div style={{marginTop:"2rem"}}></div>
 
       <button onClick={() => history.push("/digit-ui/employee")} style={styles.successButton}>
         {t("Home")}

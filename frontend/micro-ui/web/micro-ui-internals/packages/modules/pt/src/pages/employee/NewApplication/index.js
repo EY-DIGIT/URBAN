@@ -431,7 +431,7 @@ const NewApplication = () => {
 
     // 5. Assessment Details
     if (!assessmentDetails.rateZone) {
-      errors.rateZone = ""; //Rate zone is required.
+      errors.rateZone = " "; //Rate zone is required.
     }
     if (!assessmentDetails.roadFactor) {
       errors.roadFactor = "Road factor is required.";

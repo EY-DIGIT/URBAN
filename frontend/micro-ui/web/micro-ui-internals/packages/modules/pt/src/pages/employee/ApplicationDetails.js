@@ -217,7 +217,7 @@ const ApplicationDetails = () => {
           alignItems:"center",
           borderRadius:"20px"
         }}>{t("PT_APPLICATION_TITLE")}</div>
-        {dowloadOptions && dowloadOptions.length > 0 && (
+        {/* {dowloadOptions && dowloadOptions.length > 0 && (
           <MultiLink
             className="multilinkWrapper employee-mulitlink-main-div"
             onHeadClick={() => setShowOptions(!showOptions)}
@@ -227,7 +227,7 @@ const ApplicationDetails = () => {
             optionsClassName={"employee-options-btn-className"}
           // ref={menuRef}
           />
-        )}
+        )} */}
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={appDetailsToShow}

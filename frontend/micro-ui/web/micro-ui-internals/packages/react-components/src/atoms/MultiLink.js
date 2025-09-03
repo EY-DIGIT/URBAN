@@ -21,15 +21,27 @@ const MultiLink = forwardRef(({ className, onHeadClick, displayOptions = false, 
       ))}
     </div>
   })
+  const ackCss={
+    background:"Yellow",
+  }
 
   return (
-    <div className={className} ref={ref} style={reportStyles}>
+
+    
+
+    <div className={className} ref={ref} style={{...reportStyles,border:"1px solid",borderRadius:"12px",height:"43px",borderColor:"rgba(107, 19, 63, 1)"}}>
       <div className={`multilink-labelWrap ${downloadBtnClassName}`} onClick={onHeadClick} style={style}>
+
+        
         {icon ? icon : <PrimaryDownlaodIcon />}
-        <LinkButton label={label || t("CS_COMMON_DOWNLOAD")} className="multilink-link-button" style={{color:"#6B133F"}}/>
+        <LinkButton label={label || t("CS_COMMON_DOWNLOAD")+" "+ "Acknowledgment"} className="multilink-link-button" style={{color:"#6B133F"}}/>
+       
       </div>
       {displayOptions ? <MenuWrapper ref={ref} /> : null}
     </div>
+
+
+
   );
 });
 

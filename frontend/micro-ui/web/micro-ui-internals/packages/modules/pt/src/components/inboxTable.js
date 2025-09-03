@@ -259,21 +259,15 @@ const headerStyle = {
     fontSize: "14px",
     color: "rgba(40, 40, 40, 1)" ,
     borderBottom: "1px solid #ddd",
+    background: "rgba(107, 19, 63, 0.3)",
     // background: "yellow",
     // backgroundColor:"rgba(107, 19, 63, 0.8)"
     
     
 };
 const backGround23={
-    // background:"#6b133f",
-    // opacity:"0.3 ",
-    // color:"white"
-
-    //   background: "rgba(107, 19, 63, 0.3)",
-
-    // background:"yellow",
-    // opacity:"0.5",
-//    background: "rgba(107, 19, 63, 0.3)"
+    //  background: rgba(107, 19, 63, 0.3),
+    //  color:black,
 };
 
 const cellStyle = {

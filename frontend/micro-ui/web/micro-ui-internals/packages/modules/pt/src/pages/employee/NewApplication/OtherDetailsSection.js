@@ -64,6 +64,10 @@ const OtherDetailsSection = ({
     }
   }, [isLoadingOe, EssentialTax]);
   if (isLoading) return <Loader />;
+console.log("essentialTaxOptions====",essentialTaxOptions);
+console.log("ownerTypeOptions====",ownerTypeOptions);
+
+
   return (
 
     <div>

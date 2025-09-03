@@ -253,9 +253,11 @@ const SuccessApplications = () => {
                         Application{" "}
                         {data?.Properties?.[0]?.processInstance?.action
                             ?.toLowerCase()
-                            ?.replace(/^\w/, (c) => c.toUpperCase())}{" "}
-                        Successfully
+                            ?.replace(/^\w/, (c) => c.toUpperCase())}ed{" "}
+                        {/* Successfully */}
                     </h2>
+
+                     <div style={{marginTop:"1rem"}}></div>
                     <p style={{
                         // fontFamily: "Inter",
                         fontWeight: 400,        // Regular
@@ -266,10 +268,15 @@ const SuccessApplications = () => {
                         textAlign: "center",
                         color: "#717182"
                     }}>
-                        {t("Application Number")}
+                        {/* {t("Application Number")} */}
+                        Application Has Been Forwarded Successfully
                         <br />
                         {appDetailsToShow?.applicationData?.acknowldgementNumber && <strong> {appDetailsToShow?.applicationData?.acknowldgementNumber}</strong>}
                     </p>
+
+                    <div style={{marginTop:"2rem"}}></div>
+
+
                     <button onClick={() => window.location.href = "/digit-ui/employee"} style={styles.successButton}>
                         {t("Home")}
                     </button>
@@ -293,9 +300,26 @@ const SuccessApplications = () => {
                         textAlign: "center",
                         color: "#000000"
                     }}>
-                        Property ID Generated Successfully {" "}
+                        {/* Property ID Generated Successfully {" "} */}
+                        Application Approved
 
                     </h2>
+                    <div style={{marginTop:"1rem"}}></div>
+
+ <p style={{
+                        // fontFamily: "Inter",
+                        fontWeight: 400,        // Regular
+                        fontStyle: "normal",    // "Regular" = normal
+                        fontSize: "16px",
+                        lineHeight: "24px",
+                        letterSpacing: "0px",
+                        textAlign: "center",
+                        color: "#717182"
+                    }}>
+Property ID Generated Successfully
+
+                    </p>
+
                     <p style={{
                         // fontFamily: "Inter",
                         fontWeight: 400,        // Regular
@@ -310,6 +334,8 @@ const SuccessApplications = () => {
                         <br />
                         {propertyId && <strong> {propertyId}</strong>}
                     </p>
+ <div style={{marginTop:"2rem"}}></div>
+
                     <button onClick={() => window.location.href = "/digit-ui/employee"} style={styles.successButton}>
                         {t("Home")}
                     </button>
@@ -353,7 +379,7 @@ const styles = {
         backgroundColor: "#6b133f",
         color: "white",
         border: "none",
-        borderRadius: "5px",
+        borderRadius: "20px",
         cursor: "pointer"
     },
 }
