@@ -49,7 +49,9 @@ const SearchComplaint = ({ onSearch, type, onClose, searchParams }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmitInput)} style={{ marginLeft: "24px" }}>
+    <form onSubmit={handleSubmit(onSubmitInput)} 
+    // style={{ marginLeft: "24px" }}
+    >
       <React.Fragment>
         <div className="search-container" style={{ width: "auto" }}>
           <div className="search-complaint-container">

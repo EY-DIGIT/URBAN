@@ -341,6 +341,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                   )}
                   <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}*`}</CardLabel>
                   <Dropdown
+                  style={{border:"1px solid"}}
                     t={t}
                     optionKey="i18nKey"
                     isMandatory={config.isMandatory}
@@ -350,6 +351,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                   />
                   <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}*`}</CardLabel>
                     <Dropdown
+                    style={{border:"1px solid"}}
                       t={t}
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}

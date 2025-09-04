@@ -126,15 +126,19 @@ const DesktopInbox = ({
 
   return (
     <div className="inbox-container">
-      <div className="filters-container">
+      {/* <div className="filters-container">
         <ComplaintsLink />
         <div>
           <Filter complaints={data} onFilterChange={onFilterChange} type="desktop" searchParams={searchParams} />
         </div>
-      </div>
+      </div> */}
       <div style={{ flex: 1 }}>
         <SearchComplaint onSearch={onSearch} type="desktop" />
-        <div style={{ marginTop: "24px", marginTop: "24px", marginLeft: "24px", flex: 1 }}>{result}</div>
+        <div 
+        style={{ marginTop: "24px", marginTop: "24px",
+          //  marginLeft: "24px",
+            flex: 1 }}
+        >{result}</div>
       </div>
     </div>
   );

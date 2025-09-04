@@ -270,6 +270,7 @@ function checkRangeForUomValue(e, fromUom, toUom){
                             rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
+                                style={{border:"1px solid"}}
                                     className="form-field"
                                     selected={props.value}
                                     disable={false}
@@ -317,6 +318,7 @@ function checkRangeForUomValue(e, fromUom, toUom){
                             rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
+                                style={{border:"1px solid"}}
                                     className="form-field"
                                     selected={getValues("tradeType")}
                                     disable={false}
@@ -361,6 +363,7 @@ function checkRangeForUomValue(e, fromUom, toUom){
                             rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
+                                style={{border:"1px solid"}}
                                     className="form-field"
                                     selected={getValues("tradeSubType")}
                                     disable={false}

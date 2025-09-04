@@ -348,6 +348,19 @@ export const ComplaintDetails = (props) => {
   }
 
   if (workflowDetails.isError) return <React.Fragment>{workflowDetails.error}</React.Fragment>;
+const formatDate = (timestamp) => {
+  if (!timestamp) return "";
+  try {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  } catch (e) {
+    return "";
+  }
+};
 
   const getTimelineCaptions = (checkpoint, index, arr) => {
     const {wfComment: comment, thumbnailsToShow} = checkpoint;
@@ -367,12 +380,14 @@ export const ComplaintDetails = (props) => {
     if (checkpoint.status === "PENDINGFORASSIGNMENT" && complaintDetails?.audit) {
       if(isFirstPendingForAssignment){
         const caption = {
-          date: Digit.DateUtils.convertTimestampToDateFormat(complaintDetails.audit.details.createdTime),
+          // date: Digit.DateUtils.convertTimestampToDateFormat(complaintDetails.audit.details.createdTime),
+          date: Digit.DateUtils.formatDate(complaintDetails.audit.details.createdTime),
         };
         return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
       } else {
         const caption = {
-          date: Digit.DateUtils.convertTimestampToDateFormat(complaintDetails.audit.details.createdTime),
+          // date: Digit.DateUtils.convertTimestampToDateFormat(complaintDetails.audit.details.createdTime),
+           date: Digit.DateUtils.formatDate(complaintDetails.audit.details.createdTime),
         };
         return <>
           {checkpoint?.wfComment ? <div>{checkpoint?.wfComment?.map( e => 

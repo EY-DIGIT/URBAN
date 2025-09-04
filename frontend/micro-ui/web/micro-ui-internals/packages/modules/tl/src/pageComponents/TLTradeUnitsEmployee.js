@@ -336,6 +336,7 @@ function checkBillingSlab(value){
                                         props.onBlur(e);
                                       }}
                                     t={t}
+                                    style={{border:"1px solid"}}
                                 />
                             )}
                         />
@@ -350,6 +351,7 @@ function checkBillingSlab(value){
                             rules={{ required: t("REQUIRED_FIELD") }}
                             render={(props) => (
                                 <Dropdown
+                                style={{border:"1px solid"}}
                                     className="form-field"
                                     selected={getValues("tradeType")}
                                     disable={false}
@@ -394,6 +396,7 @@ function checkBillingSlab(value){
                             rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/*/^(0)*[1-9][0-9]{0,5}$/.test(val)*/ checkBillingSlab(val || unit?.tradeSubType)?true:t("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB")) } }}
                             render={(props) => (
                                 <Dropdown
+                                style={{border:"1px solid"}}
                                     className="form-field"
                                     selected={getValues("tradeSubType")}
                                     disable={false}
