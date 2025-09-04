@@ -244,58 +244,6 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     ],
     []
   );
-  
-
-//   const columns = useMemo(() => [
-//   {
-//     Header: t("Property ID"),
-//     accessor: "propertyId",
-//     Cell: ({ row }) => GetCell(row.original.propertyId),
-//   },
-//   {
-//     Header: t("Owner Name"),
-//     accessor: "ownerName",
-//     Cell: ({ row }) => GetCell(row.original.ownerName),
-//   },
-//   {
-//     Header: t("Mobile Number"),
-//     accessor: "mobileNumber",
-//     Cell: ({ row }) => GetCell(row.original.mobileNumber),
-//   },
-//    {
-//     Header: t("House/Door Number"),
-//     accessor: "doorNo",
-//     Cell: ({ row }) => GetCell(row.original.doorNo),
-//   },
-//     {
-//     Header: t("Address"),
-//     accessor: "city",
-//     Cell: ({ row }) => GetCell(row.original.city),
-//   },
- 
-
-//   {
-//     Header: t("Ward"),
-//     accessor: "ward",
-//     Cell: ({ row }) => GetCell(row.original.ward),
-//   },
-//   {
-//     Header: t("Zone"),
-//     accessor: "zone",
-//     Cell: ({ row }) => GetCell(row.original.zone),
-//   },
-//   // {
-//   //   Header: t("Status"),
-//   //   accessor: "status",
-//   //   Cell: ({ row }) => GetCell(row.original.status),
-//   // },
-//   {
-//     Header: t("Payment Receivable"),
-//     accessor: "due",
-//     Cell: ({ row }) => GetCell(row.original.due),
-//   },
-// ], [t]);
-
 
   const tableData = (data?.Properties || []).map((item) => {
   const primaryOwner = item?.owners?.[0] || {};
@@ -304,7 +252,9 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     ownerName: primaryOwner.name || "NA",
     mobileNumber: primaryOwner.mobileNumber || "NA",
     doorNo: item?.address?.doorNo || "NA",
-    city: item?.address?.city || "NA",
+    city: item?.address
+    ? `${item.address.street || ""}${item.address.street && item.address.pincode ? ", " : ""}${item.address.pincode || ""}`
+    : "NA",
     ward: item?.address?.ward || "NA",
     zone: item?.address?.zone || "NA",
     status: item?.status || "NA",
@@ -324,22 +274,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     return null;
   }
   const PTEmptyResultInbox = memo(Digit.ComponentRegistryService.getComponent("PTEmptyResultInbox"));
-  // const getData = (tableData = []) => {
 
-  //    console.log("DEKHO PEHLA HAI=",dataObj)
-  //   return tableData?.map((dataObj) => {
-
-     
-  //     const obj = {};
-  //     columns.forEach((el) => {
-  //       if (el.Cell) obj[el.Header] = el.Cell({row:{original:dataObj}});
-  //     });
-      
-  //     return obj;
-  //   });
-  // };
-
-  // const tableData = Object.values(data?.FormattedData || {}) || [];
     console.log("DEKHO PEHLA HAI=",tableData);
   if(ptSearchConfig?.ptSearchCount&&payload.locality&&tableData&&tableData.length>ptSearchConfig.ptSearchCount){
     !showToast &&setShowToast({ error: true, label: "PT_MODIFY_SEARCH_CRITERIA" });
