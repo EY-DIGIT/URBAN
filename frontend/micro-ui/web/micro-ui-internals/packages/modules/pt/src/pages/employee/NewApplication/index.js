@@ -142,6 +142,9 @@ const NewApplication = () => {
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
   const handleEstimate = (newPropertyId, propertyData) => {
+console.log("CHECKKKKKKK==========")
+
+
     const toYear =
       Array.isArray(unit) && unit.length > 0 ? unit[0].toYear : null;
 
@@ -170,6 +173,7 @@ const NewApplication = () => {
     });
   };
   const handleSubmitUpdate = async () => {
+    const documentsToSubmit = buildDocumentPayload(documents);
 
     const payload = {
       Property: {
@@ -217,48 +221,50 @@ const NewApplication = () => {
             addressDetails.address,
           relationship: owner.relationship,
           samagraId: owner.samagraID,
-          documents: [
-            {
-              documentType: "Photo ID",
-              fileStoreId: documents.photoId?.fileStoreId,
-              documentUid: documents.photoId?.documentUid
-            },
-            documents?.sellersRegistry && {
+          // documents: [
+          //   {
+          //     documentType: "Photo ID",
+          //     fileStoreId: documents.photoId?.fileStoreId,
+          //     documentUid: documents.photoId?.documentUid
+          //   },
+          //   documents?.sellersRegistry && {
 
-              documentType: "others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid
-            },
-            {
-              documentType: "Ownership Document",
-              fileStoreId: documents.ownershipDoc?.fileStoreId,
-              documentUid: documents.ownershipDoc?.documentUid
-            },
+          //     documentType: "others",
+          //     fileStoreId: documents.sellersRegistry?.fileStoreId,
+          //     documentUid: documents.sellersRegistry?.documentUid
+          //   },
+          //   {
+          //     documentType: "Ownership Document",
+          //     fileStoreId: documents.ownershipDoc?.fileStoreId,
+          //     documentUid: documents.ownershipDoc?.documentUid
+          //   },
 
-          ],
+          // ],
+          documents:documentsToSubmit,
         })),
 
         institution: null,
+        documents:documentsToSubmit,
 
-        documents: [
-          {
-            documentType: "Photo ID",
-            fileStoreId: documents.photoId?.fileStoreId,
-            documentUid: documents.photoId?.documentUid
-          },
-          documents?.sellersRegistry && {
+        // documents: [
+        //   {
+        //     documentType: "Photo ID",
+        //     fileStoreId: documents.photoId?.fileStoreId,
+        //     documentUid: documents.photoId?.documentUid
+        //   },
+        //   documents?.sellersRegistry && {
 
-            documentType: "others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId,
-            documentUid: documents.sellersRegistry?.documentUid
-          },
-          {
-            documentType: "Ownership Document",
-            fileStoreId: documents.ownershipDoc?.fileStoreId,
-            documentUid: documents.ownershipDoc?.documentUid
-          },
+        //     documentType: "others",
+        //     fileStoreId: documents.sellersRegistry?.fileStoreId,
+        //     documentUid: documents.sellersRegistry?.documentUid
+        //   },
+        //   {
+        //     documentType: "Ownership Document",
+        //     fileStoreId: documents.ownershipDoc?.fileStoreId,
+        //     documentUid: documents.ownershipDoc?.documentUid
+        //   },
 
-        ],
+        // ],
 
         units: unit.map(unit => (
           {
@@ -343,6 +349,7 @@ const NewApplication = () => {
           setStatus(property.status);
           // setShowSuccessModal(true);
           setShowPreviewButton(true);
+          PreviewDemand(property.propertyId, property);
 
         }
       },

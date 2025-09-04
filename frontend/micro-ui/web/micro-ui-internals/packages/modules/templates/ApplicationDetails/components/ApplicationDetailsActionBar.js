@@ -151,9 +151,11 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     border-radius:4px;
     width:100%;
     color:white;
-    // height:30px;
+    height:40px;
     font-size:16px;
     text-align:center;
+    font-weight:600;
+    padding:10px;
 
   }
 
