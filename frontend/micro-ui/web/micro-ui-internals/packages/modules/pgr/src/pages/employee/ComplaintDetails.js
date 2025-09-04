@@ -381,13 +381,13 @@ const formatDate = (timestamp) => {
       if(isFirstPendingForAssignment){
         const caption = {
           // date: Digit.DateUtils.convertTimestampToDateFormat(complaintDetails.audit.details.createdTime),
-          date: Digit.DateUtils.formatDate(complaintDetails.audit.details.createdTime),
+          date: formatDate(complaintDetails.audit.details.createdTime),
         };
         return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
       } else {
         const caption = {
           // date: Digit.DateUtils.convertTimestampToDateFormat(complaintDetails.audit.details.createdTime),
-           date: Digit.DateUtils.formatDate(complaintDetails.audit.details.createdTime),
+           date: formatDate(complaintDetails.audit.details.createdTime),
         };
         return <>
           {checkpoint?.wfComment ? <div>{checkpoint?.wfComment?.map( e => 
