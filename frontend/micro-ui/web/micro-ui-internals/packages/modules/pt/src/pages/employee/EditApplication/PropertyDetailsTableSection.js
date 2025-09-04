@@ -466,7 +466,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                   </select>
                 </td>
 
-                <td style={styles.tableCell}>
+                 <td style={styles.tableCell}>
                   <select
                     style={{
                       ...styles.select, appearance: "auto",

@@ -31,9 +31,9 @@ const AssessmentDetailsSection = ({
           onChange={handleAssessmentInputChange}
           disabled
         />
-        {formErrors?.rateZone && (
+        {/* {formErrors?.rateZone && (
           <p style={{ color: "red", fontSize: "12px" }}>{formErrors.rateZone}</p>
-        )}
+        )} */}
       </div>
 
       {/* Road Factor */}

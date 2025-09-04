@@ -1043,8 +1043,21 @@ const EditUpdateForm = ({ applicationData }) => {
 
     };
 
-
-
+    const formatFullAddress = (addressDetails) => {
+        if (!addressDetails) return "";
+        const { doorNo, address, pincode, zone, ward, colony } = addressDetails;
+        return [
+          doorNo,
+          address,
+          colony?.name,
+          ward?.name,
+          zone?.name,
+          pincode,
+        ]
+          .filter(Boolean) // remove empty/null
+          .join(", ");
+      };
+    
     return (
 
         <React.Fragment>
@@ -1091,7 +1104,11 @@ const EditUpdateForm = ({ applicationData }) => {
                     <div style={styles.card}>
                         <CorrespondenceAddressSection
                             t={t}
-                            correspondenceAddress={correspondenceAddress}
+                            correspondenceAddress={
+                                isSameAsPropertyAddress
+                                  ? formatFullAddress(addressDetails)
+                                  : correspondenceAddress
+                              }
                             handleCorrespondenceChange={handleCorrespondenceChange}
                             isSameAsPropertyAddress={isSameAsPropertyAddress}
                             handleSameAsPropertyToggle={handleSameAsPropertyToggle}
