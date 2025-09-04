@@ -368,7 +368,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
                 
                 thead {
-                    background: rgba(107, 19, 63, 0.4);
+                    // background: rgba(107, 19, 63, 0.3);
                     color: rgba(40, 40, 40, 1);
                 }
                 
@@ -378,6 +378,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     font-weight: 500;
                     font-size: 14px;
                     white-space: nowrap;
+                    background: rgba(107, 19, 63, 0.4);
                 }
                 
                 td {
@@ -450,7 +451,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                 }
 
                  .backGround23 {
-      background: "rgba(107, 19, 63, 0.3)",
+     background: rgba(107, 19, 63, 0.3);
+     color:black;
 }
             `}</style>
 
@@ -573,14 +575,14 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                             </h3>
                             <div className="table-container" style={{ overflowX: "auto" }}>
                                 <table>
-                                    <thead className="backGround23">
+                                    <thead >
                                         <tr >
-                                            <th>Application Number</th>
-                                            <th>Property ID</th>
-                                            <th>Owner Name</th>
-                                            <th>Application Type</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th className="backGround23">Application Number</th>
+                                            <th className="backGround23">Property ID</th>
+                                            <th className="backGround23">Owner Name</th>
+                                            <th className="backGround23">Application Type</th>
+                                            <th className="backGround23">Status</th>
+                                            <th className="backGround23">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>

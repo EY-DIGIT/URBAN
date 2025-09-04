@@ -32,6 +32,9 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     return userRoles?.some((role) => e.roles?.includes(role)) || !e.roles;
   });
 
+
+  console.log("ABCBD=",actions);
+
   const closeMenu = () => {
     setDisplayMenu(false);
   }
@@ -135,9 +138,31 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
 @media (min-width: 780px) {
   .forwardbutton .menu-wrap {
     margin-right: 124px;
+    background:none;
+    margin-bottom:10px;
+    
   }
 }
 
+.forwardbutton .menu-wrap div {
+   
+    background:rgba(107, 19, 63, 0.7);
+    margin-bottom:10px;
+    border-radius:4px;
+    width:100%;
+    color:white;
+    height:40px;
+    font-size:16px;
+    text-align:center;
+    font-weight:600;
+    padding:10px;
+
+  }
+
+  
+.forwardbutton .menu-wrap div:hover {
+  background: rgba(107, 19, 63, 0.6);
+        }
 
          
         `}

@@ -16,6 +16,7 @@ const AssessmentDetailsSection = ({
     name: item.name, // Show year like "2024-25"
   }));
 
+
   console.log("RoadFactors", assessmentDetails);
   return (
     <div style={styles.formSection}>
@@ -30,9 +31,9 @@ const AssessmentDetailsSection = ({
           onChange={handleAssessmentInputChange}
           disabled
         />
-        {formErrors?.rateZone && (
+        {/* {formErrors?.rateZone && (
           <p style={{ color: "red", fontSize: "12px" }}>{formErrors.rateZone}</p>
-        )}
+        )} */}
       </div>
 
       {/* Road Factor */}

@@ -113,10 +113,34 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
 
         {/* Add More button always comes after Others */}
         <div style={{ display: "flex", alignItems: "center" }}>
-          <button type="button" onClick={handleAddMore} style={styles.addMoreBtn}>
-            ADD MORE  +
+          <button
+            type="button"
+            onClick={handleAddMore}
+            style={{
+              ...styles.addMoreBtn,
+              opacity:
+                documents?.sellersRegistry?.file &&
+                  othersFields.length < 3 &&
+                  othersFields.every((field) => documents?.[field]?.file)
+                  ? 1
+                  : 0.5,
+              cursor:
+                documents?.sellersRegistry?.file &&
+                  othersFields.length < 3 &&
+                  othersFields.every((field) => documents?.[field]?.file)
+                  ? "pointer"
+                  : "not-allowed",
+            }}
+            disabled={
+              !documents?.sellersRegistry?.file ||
+              othersFields.length >= 3 ||
+              !othersFields.every((field) => documents?.[field]?.file)
+            }
+          >
+            ADD MORE +
           </button>
         </div>
+
       </div>
     </div>
   );

@@ -824,7 +824,7 @@ const PropertyForm = () => {
                                 justifyContent: "center"
                             }}>
                                 <span style={{ color: "white", fontSize: "24px" }}>✔</span>
-                            </div>
+                            </div>                           
                             <p style={{ fontWeight: "600", fontSize: "16px", marginBottom: "10px" }}>
                                 Application Submitted Successfully
                             </p>

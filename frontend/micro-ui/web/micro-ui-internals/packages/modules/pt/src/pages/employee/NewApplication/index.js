@@ -142,6 +142,9 @@ const NewApplication = () => {
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
   const handleEstimate = (newPropertyId, propertyData) => {
+console.log("CHECKKKKKKK==========")
+
+
     const toYear =
       Array.isArray(unit) && unit.length > 0 ? unit[0].toYear : null;
 
@@ -170,6 +173,7 @@ const NewApplication = () => {
     });
   };
   const handleSubmitUpdate = async () => {
+    const documentsToSubmit = buildDocumentPayload(documents);
 
     const payload = {
       Property: {
@@ -217,48 +221,50 @@ const NewApplication = () => {
             addressDetails.address,
           relationship: owner.relationship,
           samagraId: owner.samagraID,
-          documents: [
-            {
-              documentType: "Photo ID",
-              fileStoreId: documents.photoId?.fileStoreId,
-              documentUid: documents.photoId?.documentUid
-            },
-            documents?.sellersRegistry && {
+          // documents: [
+          //   {
+          //     documentType: "Photo ID",
+          //     fileStoreId: documents.photoId?.fileStoreId,
+          //     documentUid: documents.photoId?.documentUid
+          //   },
+          //   documents?.sellersRegistry && {
 
-              documentType: "others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid
-            },
-            {
-              documentType: "Ownership Document",
-              fileStoreId: documents.ownershipDoc?.fileStoreId,
-              documentUid: documents.ownershipDoc?.documentUid
-            },
+          //     documentType: "others",
+          //     fileStoreId: documents.sellersRegistry?.fileStoreId,
+          //     documentUid: documents.sellersRegistry?.documentUid
+          //   },
+          //   {
+          //     documentType: "Ownership Document",
+          //     fileStoreId: documents.ownershipDoc?.fileStoreId,
+          //     documentUid: documents.ownershipDoc?.documentUid
+          //   },
 
-          ],
+          // ],
+          documents:documentsToSubmit,
         })),
 
         institution: null,
+        documents:documentsToSubmit,
 
-        documents: [
-          {
-            documentType: "Photo ID",
-            fileStoreId: documents.photoId?.fileStoreId,
-            documentUid: documents.photoId?.documentUid
-          },
-          documents?.sellersRegistry && {
+        // documents: [
+        //   {
+        //     documentType: "Photo ID",
+        //     fileStoreId: documents.photoId?.fileStoreId,
+        //     documentUid: documents.photoId?.documentUid
+        //   },
+        //   documents?.sellersRegistry && {
 
-            documentType: "others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId,
-            documentUid: documents.sellersRegistry?.documentUid
-          },
-          {
-            documentType: "Ownership Document",
-            fileStoreId: documents.ownershipDoc?.fileStoreId,
-            documentUid: documents.ownershipDoc?.documentUid
-          },
+        //     documentType: "others",
+        //     fileStoreId: documents.sellersRegistry?.fileStoreId,
+        //     documentUid: documents.sellersRegistry?.documentUid
+        //   },
+        //   {
+        //     documentType: "Ownership Document",
+        //     fileStoreId: documents.ownershipDoc?.fileStoreId,
+        //     documentUid: documents.ownershipDoc?.documentUid
+        //   },
 
-        ],
+        // ],
 
         units: unit.map(unit => (
           {
@@ -342,7 +348,7 @@ const NewApplication = () => {
           setPropertyId(property.propertyId);
           setStatus(property.status);
           // setShowSuccessModal(true);
-          // setShowPreviewButton(true);
+          setShowPreviewButton(true);
           PreviewDemand(property.propertyId, property);
 
         }
@@ -355,6 +361,9 @@ const NewApplication = () => {
   };
   const validateForm = () => {
     const errors = {};
+
+    // ✅ Define regex here (so it exists inside this function)
+    const hindiNameRegex = /^[\u0900-\u097F\s]{2,100}$/;
 
     // 1. Files validation
     if (!documents.photoId?.fileStoreId) {
@@ -379,11 +388,11 @@ const NewApplication = () => {
         errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
       }
       // // Owner Name (Hindi)
-      // if (!owner.hindiName) {
-      //   errors[`owner-${index}-hindiName`] = "यह फ़ील्ड अनिवार्य है।";
-      // } else if (!hindiNameRegex.test(owner.hindiName)) {
-      //   errors[`owner-${index}-hindiName`] = "कृपया मान्य हिंदी नाम दर्ज करें।";
-      // }
+      if (!owner.hindiName) {
+        errors[`owner-${index}-hindiName`] = "यह फ़ील्ड अनिवार्य है।";
+      } else if (!hindiNameRegex.test(owner.hindiName)) {
+        errors[`owner-${index}-hindiName`] = "कृपया मान्य हिंदी नाम दर्ज करें।";
+      }
 
       // Father/Husband Name
       if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
@@ -429,7 +438,7 @@ const NewApplication = () => {
 
     // 5. Assessment Details
     if (!assessmentDetails.rateZone) {
-      errors.rateZone = ""; //Rate zone is required.
+      errors.rateZone = " "; //Rate zone is required.
     }
     if (!assessmentDetails.roadFactor) {
       errors.roadFactor = "Road factor is required.";
@@ -444,7 +453,6 @@ const NewApplication = () => {
     if (!checkboxes.selfDeclaration) {
       errors.selfDeclaration = "Please accept the declaration to proceed.";
     }
-
     return errors;
   };
 
@@ -454,9 +462,10 @@ const NewApplication = () => {
     // setServerErrors({});
 
     if (Object.keys(finalErrors).length > 0) {
-      console.log("Form has validation errors. Submission stopped.");
+      console.log("❌ Form has validation errors → API not called");
       return;
     }
+    
     const documentsToSubmit = buildDocumentPayload(documents);
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
@@ -1007,6 +1016,13 @@ const NewApplication = () => {
 
     setOwnershipType(val.code);
 
+      // 🟢 Clear error live when user selects value
+  setFormErrors((prev) => {
+    const newErrors = { ...prev };
+    delete newErrors.ownershipType;
+    return newErrors;
+  });
+
     // ❗ Only reset if required. Don't reset if owners already exist.
     if (val.code === "INDIVIDUAL.SINGLEOWNER") {
       setOwners((prev) => [prev[0]]); // keep first only
@@ -1269,6 +1285,8 @@ const handleDropdownChange = (field, selectedOption) => {
 
   const handleRoadFactorChange = (selected) => {
     setAssessmentDetails((prev) => ({ ...prev, roadFactor: selected }));
+    // ✅ clear error instantly when user selects something
+    setFormErrors((prev) => ({ ...prev, roadFactor: "" }));
   };
   const updateRateZone = (value) => {
     setRateZones(value);

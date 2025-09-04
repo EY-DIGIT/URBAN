@@ -2172,6 +2172,21 @@ const EditUpdateForm = ({ applicationData }) => {
 
   };
 
+  const formatFullAddress = (addressDetails) => {
+    if (!addressDetails) return "";
+    const { doorNo, address, pincode, zone, ward, colony } = addressDetails;
+    return [
+      doorNo,
+      address,
+      colony?.name,
+      ward?.name,
+      zone?.name,
+      pincode,
+    ]
+      .filter(Boolean) // remove empty/null
+      .join(", ");
+  };
+
 
 
   return (
@@ -2219,7 +2234,11 @@ const EditUpdateForm = ({ applicationData }) => {
           <div style={styles.card}>
             <CorrespondenceAddressSection
               t={t}
-              correspondenceAddress={correspondenceAddress}
+              correspondenceAddress={
+                isSameAsPropertyAddress
+                  ? formatFullAddress(addressDetails)
+                  : correspondenceAddress
+              }
               handleCorrespondenceChange={handleCorrespondenceChange}
               isSameAsPropertyAddress={isSameAsPropertyAddress}
               handleSameAsPropertyToggle={handleSameAsPropertyToggle}
@@ -2317,7 +2336,7 @@ const EditUpdateForm = ({ applicationData }) => {
                                 <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#6b133f" }} />
                             )} */}
               {/* {!showPreviewButton && ( */}
-              <SubmitBar label={t("back")} onClick={() => window.history.back()} style={{ background: "#6b133f" }} />
+              {/* <SubmitBar label={t("back")} onClick={() => window.history.back()} style={{ background: "#6b133f" }} /> */}
               <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
               {/* )} */}
             </div>

@@ -47,7 +47,7 @@ const OtherDetailsSection = ({
       if (filteredItems.length) {
         const options = filteredItems.map((item) => ({
           code: item.code,
-          name: t(item.name),
+          name: item.name,
         }));
         setOwnerTypeOptions(options);
       }
@@ -64,6 +64,11 @@ const OtherDetailsSection = ({
     }
   }, [isLoadingOe, EssentialTax]);
   if (isLoading) return <Loader />;
+console.log("essentialTaxOptions====",essentialTaxOptions);
+console.log("ownerTypeOptions====",ownerTypeOptions);
+console.log("MDMS EssentialTax Raw =====", EssentialTax);
+
+
   return (
 
     <div>
@@ -106,12 +111,15 @@ const OtherDetailsSection = ({
           <div style={styles.poppinsLabel}>{t("Exemption Applicable")}</div>
           <Dropdown
             style={styles.widthInput}
-            t={t}
-            option={ownerTypeOptions}
+            t={(val) => val}   // ✅ override translation, show raw value
+            option={ownerTypeOptions.map((opt) => ({
+              ...opt,
+              i18nKey: opt.name,   // ✅ full label text
+            }))}
             selected={propertyDetails.ownerType}
             select={(option) => handlePropertyDetailsChange("exemption", option)}
-            optionKey="name"
-            placeholder={t("Select")}
+            optionKey="i18nKey"   // ✅ tell dropdown to use i18nKey
+            placeholder="Select"
           />
         </div>
         <div style={styles.flex302}>

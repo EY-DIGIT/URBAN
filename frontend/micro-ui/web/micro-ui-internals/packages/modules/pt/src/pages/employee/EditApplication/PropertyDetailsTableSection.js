@@ -399,14 +399,30 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
         <table style={styles.table}>
           <thead>
             <tr>
-              <th style={styles.tableHeader}>{t("Usage Type")}</th>
-              <th style={styles.tableHeader}>{t("Usage Factor")}</th>
-              <th style={styles.tableHeader}>{t("Floor No")}</th>
-              <th style={styles.tableHeader}>{t("Type of Construction")}</th>
-              <th style={styles.tableHeader}>{t("Area (Sq feet)")}</th>
-              <th style={styles.tableHeader}>{t("From Year")}</th>
-              <th style={styles.tableHeader}>{t("To Year")}</th>
-              <th style={styles.tableHeader}>{t("Action")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("Usage Type")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("Usage Factor")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("Floor No")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("Type of Construction")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("Area (Sq feet)")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("From Year")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("To Year")}</th>
+              <th style={{
+                ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
+              }}>{t("Action")}</th>
             </tr>
           </thead>
           <tbody>
@@ -450,7 +466,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                   </select>
                 </td>
 
-                <td style={styles.tableCell}>
+                 <td style={styles.tableCell}>
                   <select
                     style={{
                       ...styles.select, appearance: "auto",
@@ -545,8 +561,13 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                 <td style={styles.tableCell}>
                   <button
                     type="button"
-                    style={styles.addMoreLink}
-                    onClick={() => removeUnit(index)}
+                    style={{
+                      ...styles.addMoreLink,
+                      opacity: index === 0 ? 0.5 : 1,   // visual indication
+                      cursor: index === 0 ? "not-allowed" : "pointer",
+                    }}
+                    onClick={() => index > 0 && removeUnit(index)} // prevent call on 0
+                    disabled={index === 0} // disable button for first row
                   >
                     {t("Remove")}
                   </button>

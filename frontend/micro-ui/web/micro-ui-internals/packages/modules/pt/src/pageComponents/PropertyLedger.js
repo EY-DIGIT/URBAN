@@ -17,12 +17,16 @@ const PropertyLedger = () => {
   const tenantId = userInfo1?.tenantId;
   const mutationUpdate = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
 
-  const { data, proOwnerDetail,calculation } = location.state || {};
+  const { data, proOwnerDetail, calculation } = location.state || {};
   const propertyFYDetails = calculation?.propertyFYDetails || [];
 
   const taxSummaries = calculation?.propertyFYTaxSummaries || [];
   const ownersDetail = proOwnerDetail?.owners || [];
   const address = proOwnerDetail?.address || {};
+
+  console.log("📥 Raw Calculation Data:", calculation);
+  console.log("📥 PropertyFYDetails (before render):", propertyFYDetails);
+  console.log("📥 TaxSummaries (before render):", taxSummaries);
 
   const handleBackClick = () => {
     history.goBack();
@@ -45,9 +49,9 @@ const PropertyLedger = () => {
         <div style={styles.cardD}>
           <div style={styles.sectionHeaderDemand}>Ledger Report</div>
           <div style={styles.row}>
+            {/* <InputField label="Property id" value={calculation?.serviceNumber || "N/A"} />
+                           <InputField label="Old Property id" value="567889" /> */}
             <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
-            <InputFieldBlank />
-            <InputFieldBlank />
           </div>
 
 
@@ -86,7 +90,7 @@ const PropertyLedger = () => {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
+                  {["Usage Type", "Usage Factor", "Floor No.", "Construction Type", "Area", "Rate"].map((h) => (
                     <th key={h} style={styles.th}>{h}</th>
                   ))}
                 </tr>
@@ -94,16 +98,12 @@ const PropertyLedger = () => {
               <tbody>
                 {propertyFYDetails.map((item) => (
                   <tr key={item.year}>
-                    <td style={styles.td}>{item.year}</td>
                     <td style={styles.td}>{item.usageType}</td>
                     <td style={styles.td}>{item.usageFactor}</td>
                     <td style={styles.td}>{item.floorNo}</td>
                     <td style={styles.td}>{item.constructionType}</td>
                     <td style={styles.td}>{item.area}</td>
                     <td style={styles.td}>{item.factor}</td>
-                    <td style={styles.td}>{item.alv}</td>
-                    <td style={styles.td}>{item?.discount}</td>
-                    <td style={styles.td}>{item?.tpv}</td>
                   </tr>
                 ))}
               </tbody>
@@ -117,7 +117,7 @@ const PropertyLedger = () => {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  {["Year", "TPV", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Rebate", "Penalty", "Net Tax"].map((h) => (
+                  {["Year", "Demand", "Collection /Paid", "Cumulative Balalnce"].map((h) => (
                     <th key={h} style={styles.th}>{h}</th>
                   ))}
                 </tr>
@@ -126,27 +126,18 @@ const PropertyLedger = () => {
                 {taxSummaries.map((item) => (
                   <tr key={item.year}>
                     <td style={styles.td}>{item.year}</td>
-                    <td style={styles.td}>{item.tpv}</td>
-                    <td style={styles.td}>₹ {item.propertyTax}</td>
-                    <td style={styles.td}>₹ {item.samekit}</td>
-                    <td style={styles.td}>₹ {item.educationCess}</td>
-                    <td style={styles.td}>₹ {item.jalKar}</td>
-                    <td style={styles.td}>₹ {item.jalNikas}</td>
-                    <td style={styles.td}>₹ {item.urbanTax}</td>
-                    <td style={styles.td}>₹ {item.sevaKar}</td>
-                    <td style={styles.td}>₹ {item.totalTax}</td>
-                    <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
-                    <td style={styles.td}>₹ {item.penalty}</td>
-                    <td style={styles.td}>{item.netTax}</td>
+                    <td style={styles.td}>{item.netTax || 0}</td>
+                    <td style={styles.td}>₹ {item.Collection || 0}</td>
+                    <td style={styles.td}>₹ {calculation?.cumulativeBalance || 0}</td>
                   </tr>
                 ))}
-                <tr>
+                {/* <tr>
                   <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
 
                   <td style={styles.td}>
                     ₹ {taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)}
                   </td>
-                </tr>
+                </tr> */}
               </tbody>
             </table>
           </div>
@@ -169,126 +160,80 @@ const PropertyLedger = () => {
 
 const styles = {
   container: {
-    // padding: "20px",
+    padding: "20px",
     fontFamily: "Arial, sans-serif",
     fontSize: "14px",
-    maxWidth: "1200px",
-    // margin: "0 auto",
-    width: "100%",
-    boxSizing: "border-box",
-    '@media (max-width: 768px)': {
-      padding: "10px"
-    },
-    '@media (max-width: 630px)': {
-      padding: "8px"
-    }
   },
   row: {
     display: "flex",
     flexWrap: "wrap",
     marginBottom: "16px",
-    gap: "16px",
-    width: "100%",
-    boxSizing: "border-box",
-    '@media (max-width: 768px)': {
-      flexDirection: "column",
-      gap: "12px"
-    },
-    '@media (max-width: 630px)': {
-      gap: "8px",
-      marginBottom: "12px"
-    }
+    justifyContent: "space-between",
+    width: "100%"
+  },
+  rowOwnerName: {
+    // display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    marginBottom: "16px",
+    // justifyContent: "space-between",
+    width: "100%"
   },
   field: {
-    display: "flex",
-    flexDirection: "column",
-    flex: "1",
-    minWidth: "280px",
-    width: "100%",
-    boxSizing: "border-box",
-    '@media (max-width: 768px)': {
-      minWidth: "100%"
-    },
-    '@media (max-width: 630px)': {
-      minWidth: "auto",
-      width: "100%"
-    }
-  },
-  flex30: {
-    flex: "1 1 30%",
-    display: "flex",
-    flexDirection: "column",
-    flex30: {
-      flex: "1 1 30%",
-      display: "flex",
-      flexDirection: "column",
+    display: "block",
+    // flexDirection: "column",
+    alignItems: "center",
 
-      position: "relative",
-      minHeight: "90px",
-
-    },
   },
   input: {
     height: "35px",
-    border: "0.5px solid #F7F7F7",
-    borderRadius: "4px",
+    border: "1px solid #D9D9D9",
+    borderRadius: "6px",
     padding: "6px 10px",
     fontSize: "14px",
-    width: "100%",
-    boxSizing: "border-box",
-    maxWidth: "100%",
-    backgroundColor: "#F2F2F2",
-    '@media (max-width: 630px)': {
-      padding: "8px",
-      fontSize: "13px",
-      height: "40px"
-    }
+    width: "300px"
+
+  },
+  inputs: {
+    height: "35px",
+    border: "1px solid #D9D9D9",
+    borderRadius: "6px",
+    padding: "6px 10px",
+    fontSize: "14px",
+    width: "300px",
   },
   label: {
-
-    fontFamily: 'Poppins, sans-serif',
+    fontFamily: "Poppins",
     fontWeight: 400,
-    fontSize: '14px',
-    lineHeight: '22px',
-    letterSpacing: '0',
-    color: '#282828',
-    width: "200px",
-    marginBottom: "4px",
-    wordWrap: "break-word",
-    '@media (max-width: 768px)': {
-      fontSize: "13px"
-    },
-    '@media (max-width: 630px)': {
-      fontSize: "12px",
-      lineHeight: "18px"
-    }
+    fontSize: "14px",
+    lineHeight: "22px",
+    letterSpacing: "0%",
+    color: "#282828",
+    width: "200px"
   },
   sectionHeader: {
-
     fontFamily: "Poppins",
     fontWeight: "bold",
     fontSize: "16px",
     lineHeight: "100%",
+    letterSpacing: "0%",
+    // textDecoration: "underline",
+    textDecorationStyle: "solid",
+    textDecorationOffset: "0%",
+    textDecorationThickness: "0%",
     color: "#6b133f",
-    marginBottom: "16px",
-    marginTop: "20px",
-    '@media (max-width: 768px)': {
-      fontSize: "15px",
-      marginTop: "16px",
-      marginBottom: "12px"
-    }
   },
   sectionHeaderDemand: {
     fontFamily: "Poppins",
     fontWeight: "bold",
     fontSize: "22px",
     lineHeight: "100%",
+    letterSpacing: "0%",
+    // textDecoration: "underline",
+    textDecorationStyle: "solid",
+    textDecorationOffset: "0%",
+    textDecorationThickness: "0%",
     color: "#6b133f",
-    marginBottom: "20px",
-    '@media (max-width: 768px)': {
-      fontSize: "18px",
-      marginBottom: "16px"
-    }
   },
   tableContainer: {
     width: "100%",
@@ -311,7 +256,8 @@ const styles = {
   th: {
     border: "1px solid #ccc",
     padding: "8px 4px",
-    backgroundColor: "#B9B9B9",
+    // backgroundColor: "#B9B9B9",
+    backgroundColor: "rgba(107, 19, 63, 0.2)",
     // border:"1px,0px,0px,1px #B9B9B9",
     textAlign: "center",
     fontFamily: "Inter",
@@ -342,25 +288,33 @@ const styles = {
     }
   },
   downloadBtn: {
+    float: "right",
+    marginBottom: "10px",
     padding: "6px 12px",
     background: "white",
     border: "1px solid #6b133f",
     borderRadius: "12px",
     cursor: "pointer",
+    // width: "202px",
     fontFamily: "Poppins",
     fontWeight: 400,
     fontSize: "12px",
+    lineHeight: "100%",
+    letterSpacing: "3%",
+    textAlign: "center",
     color: "#6b133f",
-    boxSizing: "border-box",
-    '@media (max-width: 768px)': {
-      width: "100%",
-      fontSize: "11px"
-    },
-    '@media (max-width: 630px)': {
-      padding: "8px 12px",
-      fontSize: "10px"
-    }
+    position: "absolute",
+    right: "0px",
+    top: "-42px",
   },
+  // cardD: {
+  //     backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
+  //     boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
+  //     padding: "16px",
+  //     // border: "1px solid #000000",
+  //     marginBottom: "22px",
+  //     borderRadius: "12px",
+  // },
   cardD: {
     backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
     boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
@@ -380,43 +334,28 @@ const styles = {
       borderRadius: "8px"
     }
   },
-  buttonContainer: {
-    display: "flex",
-    gap: "12px",
-    // marginLeft: "auto",
-    justifyContent: "flex-end",
-    marginTop: "20px",
-    '@media (max-width: 768px)': {
-      flexDirection: "column",
-      marginLeft: "0",
-      gap: "8px"
-    }
-  },
   confirmBtn: {
     padding: "10px 30px",
     backgroundColor: "#6b133f",
     color: "#fff",
     border: "none",
-    borderRadius: "4px",
+    borderRadius: "6px",
     cursor: "pointer",
+    // float: "right",
+    marginTop: "20px",
     fontFamily: "Poppins",
     fontWeight: 500,
     fontSize: "14px",
-    height: "35px",
-    whiteSpace: "nowrap",
-    '@media (max-width: 768px)': {
-      padding: "12px 20px",
-      fontSize: "13px",
-      width: "100%"
-    }
+    lineHeight: "100%",
+    letterSpacing: "3%",
+    color: "#FFFFFF",
+    display: "flex",
+    marginLeft: "auto"
   },
   bottomText: {
     color: "red",
     fontSize: "12px",
     marginTop: "8px",
-    '@media (max-width: 768px)': {
-      fontSize: "11px"
-    }
   },
   modalOverlay: {
     position: "fixed",
@@ -431,53 +370,35 @@ const styles = {
     zIndex: 9999,
     padding: "20px",
     boxSizing: "border-box"
-
   },
   modalContent: {
     background: "#fff",
-    borderRadius: "12px",
-    padding: "32px",
+    borderRadius: "8px",
+    padding: "40px",
     textAlign: "center",
-    width: "50%",
-    maxWidth: "60%",         // keeps it small on large screens
-    minWidth: "300px",         // avoids too small shrink
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "40px",               // uniform gap between text & buttons
-    boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
-
-    '@media (max-width: 1024px)': {
-      width: "70%",
-      padding: "28px",
-      gap: "30px",
-    },
+    width: "500px",
+    maxWidth: "100%",
     '@media (max-width: 768px)': {
-      width: "90%",
-      padding: "20px",
-      gap: "24px",
-    },
-    '@media (max-width: 480px)': {
-      width: "95%",
-      padding: "16px",
-      gap: "20px",
+      padding: "24px",
+      width: "100%",
+      maxWidth: "350px"
     }
   },
-
   modalButtonContainer: {
     display: "flex",
     justifyContent: "center",
-    gap: "16px",
-    flexWrap: "wrap",       // buttons wrap on very small screens
+    gap: "20px",
+    '@media (max-width: 768px)': {
+      flexDirection: "column",
+      gap: "12px"
+    }
   },
   modalButton: {
-    padding: "10px 20px",
-    borderRadius: "40px",
-    border: "none",
-    background: "#6b133f",
+    backgroundColor: "#6b133f",
     color: "#fff",
-    fontSize: "14px",
+    padding: "8px 20px",
+    borderRadius: "6px",
+    border: "none",
     cursor: "pointer",
     fontSize: "14px",
     '@media (max-width: 768px)': {
@@ -485,12 +406,6 @@ const styles = {
       fontSize: "13px",
       width: "100%"
     }
-  },
-
-  flexend: {
-    display: "flex",
-    justifyContent: "end",
-
   }
 };
 

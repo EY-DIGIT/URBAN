@@ -298,7 +298,7 @@ const DemandNote = () => {
             <button style={styles.downloadBtn}> <DownloadPdfButton targetId="downloadable-component" /> </button>
             <div id="downloadable-component">
                 <div style={styles.cardD}>
-                    <div style={styles.sectionHeaderDemand}>Demand</div>
+                    <div style={styles.sectionHeaderDemand}>Demand Note</div>
 
                     <div style={styles.row}>
                         {/* <InputField label="Property id" value={calculation?.serviceNumber || "N/A"} />
