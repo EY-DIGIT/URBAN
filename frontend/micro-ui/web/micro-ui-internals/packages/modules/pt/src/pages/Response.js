@@ -261,9 +261,40 @@ const Response = (props) => {
   return (
     <div>
       <div style={{ width: "100%", textAlign: "right" }}>
+
+        <div style={{width:"70%"}}>
+
+        </div>
+         <div style={{width:"30%",display:"inline-block"}}>
+       
         {(mutation.isSuccess || !!successData) && !mutation.isError && (
-          <SubmitBar style={{ overflow: "hidden", marginTop: "0px", backgroundColor: "#6B133F" }} label={t("PT_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />
+
+          <div style={{display:"flex",backgroundColor:"white",border:"1px solid",borderColor:"rgba(107, 19, 63, 1)",borderRadius:"12px",height:"33px",width:"251px",paddingRight:"10px",paddingTop:"5px",cursor:"pointer"}}  onClick={handleDownloadPdf}>
+
+
+ <div style={{display:"inline-block",paddingLeft:"8px"}}>
+                <svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="#6b133f">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+              </div>
+
+              <div style={{display:"inline-block"}}>
+
+<h3 style={{color:"rgba(107, 19, 63, 1)"}}>
+   {/* <span style={{display:"inline-block"}}>
+                <svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="#6b133f">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                </svg>
+              </span> */}
+              
+              
+              <b>Download Acknowledgment</b></h3>
+              </div>
+          </div>
+          // <SubmitBar style={{ overflow: "hidden", marginTop: "0px", backgroundColor: "#6B133F" }} label={t("PT_DOWNLOAD_ACK_FORM")}  onSubmit={handleDownloadPdf} />
+         
         )}
+        </div>
       </div>
       {/* <Card> */}
       <BannerPicker

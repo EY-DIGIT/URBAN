@@ -29,7 +29,7 @@ const MultiLink = forwardRef(({ className, onHeadClick, displayOptions = false, 
 
     
 
-    <div className={className} ref={ref} style={{...reportStyles,border:"1px solid",borderRadius:"12px",height:"43px",borderColor:"rgba(107, 19, 63, 1)"}}>
+    <div className={className} ref={ref} style={{...reportStyles,border:"1px solid",borderRadius:"12px",height:"43px",borderColor:"rgba(107, 19, 63, 1)",backgroundColor:"white",paddingBottom:"6px"}}>
       <div className={`multilink-labelWrap ${downloadBtnClassName}`} onClick={onHeadClick} style={style}>
 
         

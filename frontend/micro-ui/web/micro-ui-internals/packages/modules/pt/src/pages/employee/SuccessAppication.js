@@ -269,7 +269,9 @@ const SuccessApplications = () => {
                         color: "#717182"
                     }}>
                         {/* {t("Application Number")} */}
-                        Application Has Been Forwarded Successfully
+                        Application Has Been  {data?.Properties?.[0]?.processInstance?.action
+                            ?.toLowerCase()
+                            ?.replace(/^\w/, (c) => c.toUpperCase())}ed{" "} Successfully
                         <br />
                         {appDetailsToShow?.applicationData?.acknowldgementNumber && <strong> {appDetailsToShow?.applicationData?.acknowldgementNumber}</strong>}
                     </p>
