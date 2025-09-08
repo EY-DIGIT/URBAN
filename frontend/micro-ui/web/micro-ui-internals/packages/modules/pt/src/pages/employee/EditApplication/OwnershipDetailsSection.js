@@ -10,11 +10,12 @@ const OwnershipDetailsSection = ({
   owners,
   setOwners,
   addNewOwner,
-  isJointStarted, styles, formErrors, handleOwnerAadhaarChange ,handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange
+  isJointStarted, styles, formErrors, handleOwnerAadhaarChange ,handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange,propertyCategoryInput,propertyCategoryInputChange
 }) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
   const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
+   const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
 
   const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
   const salutationOptions = (Menu || []).map((item) => ({
@@ -26,6 +27,12 @@ const OwnershipDetailsSection = ({
     code: item.code,
     name: t(item.name)
   }));
+
+  const propertyCategoryOptions=(PropertyCategory || []).map((item)=>({
+
+    code:item.code,
+    name:t(item.name),
+  }))
 
   // const updateOwner = (index, field, value) => {
   //   const updated = [...owners];
@@ -115,22 +122,7 @@ const OwnershipDetailsSection = ({
             <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-hindiName`]}</p>
           )}
           </div>
-          {/* Father/Husband Name */}
-          <div style={styles.flex30}>
-            <div style={styles.poppinsLabel}>
-              {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
-            </div>
-            <TextInput
-            disabled
-              style={styles.widthInput}
-              value={owner.fatherHusbandName}
-              onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
-              placeholder={t("Enter")}
-            />
-             {formErrors[`owner-${index}-fatherHusbandName`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
-          )}
-          </div>
+    
           {/* Relationship */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
@@ -153,6 +145,23 @@ const OwnershipDetailsSection = ({
             {formErrors?.relationship && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors.relationship}</p>
             )}
+          </div>
+
+           {/* Father/Husband Name */}
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>
+              {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
+            </div>
+            <TextInput
+            disabled
+              style={styles.widthInput}
+              value={owner.fatherHusbandName}
+              onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
+              placeholder={t("Enter")}
+            />
+             {formErrors[`owner-${index}-fatherHusbandName`] && (
+            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+          )}
           </div>
           {/* Email */}
           <div style={styles.flex30}>
@@ -252,11 +261,35 @@ const OwnershipDetailsSection = ({
     );
   };
 
+  console.log("propertyCategoryInputpropertyCategoryInput=",propertyCategoryInput)
+
   return (
     <div>
       <div className="form-section" style={styles.formSection}>
 
         {/* Name with Title */}
+
+         <div style={styles.flex30}>
+                  <div style={styles.poppinsLabel}>
+                    {t("Property Category")} <span className="mandatory" style={styles.mandatory}>*</span>
+                  </div>
+                  <Dropdown
+                    style={styles.widthInput}
+                    t={t}
+                    option={propertyCategoryOptions}
+                    
+                    selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
+                    select={propertyCategoryInputChange}
+                    optionKey="name"
+                    placeholder={t("Select")}
+                     disable={true}
+                  />
+                  {formErrors?.propertyCategoryInput && (
+                    <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+                      {formErrors.propertyCategoryInput}
+                    </p>
+                  )}
+                </div>
 
         <div style={styles.flex30}>
           <div style={styles.poppinsLabel}>

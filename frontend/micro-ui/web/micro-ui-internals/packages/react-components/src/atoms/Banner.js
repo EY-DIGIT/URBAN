@@ -153,10 +153,10 @@ const Successful = (props) => {
 
 
       <h3 style={{ marginTop: "2rem",color:"#000000",fontWeight:"800" }}>
-        Application Forwarded
+        {/* Application Forwarded */}
       </h3>
 
-      <h2 style={{ marginTop: "1rem",color:"#000000" }}>
+      <h2 style={{ marginTop: "1rem",color:"#000000",fontWeight:"800" }}>
         {props.props.message || t("Application Submitted Successfully")}
       </h2>
 

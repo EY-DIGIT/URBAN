@@ -106,6 +106,8 @@ import useGenderMDMS from "./pt/useGenderMDMS";
 import useSalutationsMDMS from "./pt/useSalutationsMDMS";
 import useSalutationsHindiMDMS from "./pt/useSalutationsHindiMDMS";
 import useRelationshipMDMS from "./pt/useRelationshipMDMS"
+import usePropertyCategoryMDMS from "./pt/usePropertyCategoryMDMS";
+
 import usePTGenderMDMS from "./pt/usePTGenderMDMS";
 import useMyPropertyPayments from "./pt/useMyPropertyPayments";
 import useGenericViewProperty from "./pt/useGenericViewProperty";
@@ -335,6 +337,7 @@ const pt = {
   useSalutationsMDMS,
   useSalutationsHindiMDMS,
   useRelationshipMDMS,
+  usePropertyCategoryMDMS,
   usePTGenderMDMS,
   useMyPropertyPayments,
   useGenericViewProperty,

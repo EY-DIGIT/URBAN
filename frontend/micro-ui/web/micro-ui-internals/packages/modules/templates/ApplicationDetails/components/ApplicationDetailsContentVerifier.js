@@ -250,6 +250,10 @@ function ApplicationDetailsContentVerifier({
         <div >
           {/* <div style={styles.sectionTitle}>Ownership Details</div> */}
           <div style={styles.grid}>
+             <div style={styles.flex30}>
+              <label style={styles.label}>Property Category<span style={{ color: "red" }}>*</span></label>
+              <input style={styles.input} value={application?.propertyCategory} disabled readOnly />
+            </div>
             <div style={styles.flex30}>
               <label style={styles.label}>Ownership Type<span style={{ color: "red" }}>*</span></label>
               <input style={styles.input} value={application?.ownershipCategory} disabled readOnly />
@@ -258,10 +262,10 @@ function ApplicationDetailsContentVerifier({
               <label style={styles.label}>POA Registration Number</label>
               <input style={styles.input} value={application?.registryId} disabled readOnly />
             </div>
-            <div style={styles.flex30}>
+            {/* <div style={styles.flex30}> */}
               {/* <label style={styles.label}>POA Registration Number</label> */}
               {/* <TextInput style={styles.widthInput} value={application?.registryId} readOnly /> */}
-            </div>
+            {/* </div> */}
           </div>
           {(application?.owners || []).map((owner, index) => (
             <React.Fragment key={index}>
@@ -309,16 +313,17 @@ function ApplicationDetailsContentVerifier({
                     />
                   </div>
                 </div>
+                 <div style={styles.flex30}>
+                  <label style={styles.label}>Relationship</label>
+                  <input style={styles.input} value={owner.relationship} disabled readOnly />
+                </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Father/Husband Name</label>
                   <input style={styles.input} value={owner.fatherOrHusbandName} disabled readOnly />
                 </div>
 
 
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Relationship</label>
-                  <input style={styles.input} value={owner.relationship} disabled readOnly />
-                </div>
+               
                 <div style={styles.flex30}>
                   <label style={styles.label}>Email ID</label>
                   <input style={styles.input} value={owner.emailId} disabled readOnly />

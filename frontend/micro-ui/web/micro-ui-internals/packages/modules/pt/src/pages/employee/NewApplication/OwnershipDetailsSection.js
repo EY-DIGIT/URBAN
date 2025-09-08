@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown, TextInput, SubmitBar } from "@egovernments/digit-ui-react-components";
 
 const OwnershipDetailsSection = ({
@@ -10,8 +10,16 @@ const OwnershipDetailsSection = ({
   owners,
   setOwners,
   addNewOwner,
-  isJointStarted, styles, formErrors, handleOwnerAadhaarChange, handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange
+  isJointStarted, styles, formErrors, handleOwnerAadhaarChange, handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange,propertyCategoryInput,propertyCategoryInputChange
 }) => {
+
+
+  // const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
+  //   console.log("URL==",stateInfo);
+  //   console.log("uiHome==",uiHomePage);
+
+
+
   const stateId = Digit.ULBService.getStateId();
   const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
   const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
@@ -19,7 +27,10 @@ const OwnershipDetailsSection = ({
   const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
   const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
   const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
-  console.log("MenuHindi", MenuHindi)
+  const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
+  console.log("uiHome==",Relationship);
+
+  console.log("MenuHindi", formErrors)
   const salutationOptions = (Menu || []).map((item) => ({
     code: item.code,
     name: t(item.name), // Use i18nKey for translation
@@ -33,6 +44,14 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
     name: t(item.name)
   }));
 
+  const[showFather,setShowFather]=useState("");
+  console.log("DROPDOWNOPTION==",formErrors)
+  const propertyCategoryOptions=(PropertyCategory || []).map((item)=>({
+
+    code:item.code,
+    name:t(item.name),
+  }))
+
   // const updateOwner = (index, field, value) => {
   //   const updated = [...owners];
   //   updated[index][field] = value;
@@ -40,8 +59,14 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
   // };
 
   const updateOwner = (index, field, value) => {
+    console.log("RELLLLL=",value)
     const updated = [...owners];
     updated[index][field] = value;
+
+    if (field === "relationship") {
+      setShowFather(value);
+
+    }
 
     // Optional logic: clear samagraID if checkbox ticked
     if (field === "noSamagra" && value === true) {
@@ -117,22 +142,8 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-hindiName`]}</p>
             )}
           </div>
-          {/* Father/Husband Name */}
-          <div style={styles.flex30}>
-            <div style={styles.poppinsLabel}>
-              {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
-            </div>
-            <TextInput
-              style={styles.widthInput}
-              value={owner.fatherHusbandName}
-              onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
-              placeholder={t("Enter")}
-            />
-            {formErrors[`owner-${index}-fatherHusbandName`] && (
-              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
-            )}
-          </div>
-          {/* Relationship */}
+
+             {/* Relationship */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
               {t("Relationship")} <span className="mandatory" style={styles.mandatory}>*</span>
@@ -176,6 +187,32 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors.relationship}</p>
             )}
           </div>
+
+          {/* Father/Husband Name */}
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>
+              {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
+            </div>
+            <TextInput
+              style={styles.widthInput}
+              value={owner.fatherHusbandName}
+              onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
+              placeholder={t("Enter")}
+              disabled={showFather==="Not applicable"?true:false}
+            />
+  {showFather==="Not applicable"?
+         "":  <div>  {formErrors[`owner-${index}-fatherHusbandName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+            )}</div>}
+
+            {/* {formErrors[`owner-${index}-fatherHusbandName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+            )} */}
+
+        
+
+          </div>
+         
           {/* Email */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>{t("Email ID")}</div>
@@ -273,6 +310,26 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
       <div className="form-section" style={styles.formSection}>
 
         {/* Name with Title */}
+        <div style={styles.flex30}>
+          <div style={styles.poppinsLabel}>
+            {t("Property Category")} <span className="mandatory" style={styles.mandatory}>*</span>
+          </div>
+          <Dropdown
+            style={styles.widthInput}
+            t={t}
+            option={propertyCategoryOptions}
+            
+            selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
+            select={propertyCategoryInputChange}
+            optionKey="name"
+            placeholder={t("Select")}
+          />
+          {formErrors?.propertyCategoryInput && (
+            <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+              {formErrors.propertyCategoryInput}
+            </p>
+          )}
+        </div>
 
         <div style={styles.flex30}>
           <div style={styles.poppinsLabel}>
@@ -308,7 +365,7 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
             <p style={{ color: "red", fontSize: "12px", marginTop: '-18px', marginBottom: '10px' }}>{formErrors.registryId}</p>
           )}
         </div>
-        <div style={styles.flex30}></div>
+       
       </div>
       {owners.map((_, index) => renderOwnerForm(index))}
 

@@ -71,6 +71,8 @@ const NewApplication = () => {
     }
   ]);
   const [ownershipType, setOwnershipType] = useState(null);
+   const [propertyCategoryInput, setPropertyCategoryInput] = useState(null);
+   
   const [registryId, setRegistryId] = useState("");
   const [selectedRateZone, setSelectedRateZone] = useState("");
   const [addressDetails, setAddressDetails] = useState({
@@ -142,7 +144,7 @@ const NewApplication = () => {
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
   const handleEstimate = (newPropertyId, propertyData) => {
-console.log("CHECKKKKKKK==========")
+  console.log("CHECKKKKKKK=", propertyDocuments);
 
 
     const toYear =
@@ -202,6 +204,7 @@ console.log("CHECKKKKKKK==========")
         },
 
         ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+        propertyCategory:propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
           salutation: owner.title || "mr",
@@ -377,6 +380,9 @@ console.log("CHECKKKKKKK==========")
     if (!ownershipType) {
       errors.ownershipType = "Ownership type is required.";
     }
+     if (!propertyCategoryInput) {
+      errors.propertyCategoryInput = "Property Category is required.";
+    }
     if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
       errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
     }
@@ -395,9 +401,13 @@ console.log("CHECKKKKKKK==========")
       }
 
       // Father/Husband Name
+      if(owner.relationship!== "Not applicable"){
       if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
         errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
       }
+    }
+
+      console.log("owner.relationship==",owner.relationship);
       // Relationship
       if (!owner.relationship) {
         errors[`owner-${index}-relationship`] = "Relationship is required.";
@@ -493,6 +503,7 @@ console.log("CHECKKKKKKK==========")
         },
 
         ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+        propertyCategory:propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
           salutation: owner.title || "mr",
@@ -931,8 +942,27 @@ console.log("CHECKKKKKKK==========")
   useEffect(() => {
     if (!generalDetails) return;
     setOwnershipType(generalDetails.ownershipCategory || null);
+    setPropertyCategoryInput(generalDetails.propertyCategoryInput || null);
     setRegistryId(generalDetails.registryId || null);
   }, [generalDetails]);
+
+  console.log("generalDetails=",generalDetails);
+  console.log("generalDetails=",propertyDocuments);
+
+  useEffect(() => {
+  if (!propertyDocuments || propertyDocuments.length === 0) return;
+
+  const docMap = {
+    photoId: propertyDocuments.find(d => d.documentType === "Proof of Identity") || null,
+    ownershipDoc: propertyDocuments.find(d => d.documentType === "Proof of Ownership") || null,
+    sellersRegistry: propertyDocuments.find(d => d.documentType === "Others") || null,
+  };
+
+  console.log("docMap=", docMap);
+  setDocuments(docMap);
+
+}, [propertyDocuments]);
+
 
   useEffect(() => {
     if (!ownerDetails || ownerDetails.length === 0) return;
@@ -1011,6 +1041,28 @@ console.log("CHECKKKKKKK==========")
 
     setUnit(formattedUnits);
   }, [unitDetails]);
+
+const propertyCategoryInputChange = (val) => {
+
+    setPropertyCategoryInput(val.code);
+
+      // 🟢 Clear error live when user selects value
+  setFormErrors((prev) => {
+    const newErrors = { ...prev };
+    delete newErrors.propertyCategoryInput;
+    return newErrors;
+  });
+
+    // ❗ Only reset if required. Don't reset if owners already exist.
+    // if (val.code === "INDIVIDUAL.SINGLEOWNER") {
+    //   setOwners((prev) => [prev[0]]); // keep first only
+    // } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
+    //   // Do nothing if owners already prefilled
+    //   if (owners.length === 0) {
+    //     setOwners([{}]); // fallback if empty
+    //   }
+    // }
+  };
 
   const handleOwnershipTypeChange = (val) => {
 
@@ -1361,6 +1413,8 @@ const handleDropdownChange = (field, selectedOption) => {
               handleOwnerNameChange={handleOwnerNameChange}
               handleOwnerContactChange={handleOwnerContactChange}
               handleOwnerEmailChange={handleOwnerEmailChange}
+              propertyCategoryInput={propertyCategoryInput}
+              propertyCategoryInputChange={propertyCategoryInputChange}
             />
           </div>
 

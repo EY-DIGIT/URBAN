@@ -747,6 +747,23 @@ const getRelationshipTypeList = (tenantId, moduleCode, type) => ({
     ],
   },
 });
+const getPropertyCategoryTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PropertyCategory",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getMeterStatusTypeList = (tenantId) => ({
   moduleDetails: [
     {
@@ -1361,6 +1378,15 @@ const getRelationshipType = (MdmsRes) => {
   });
   //return MdmsRes;
 };
+const getPropertyCategoryType = (MdmsRes) => {
+  return MdmsRes["common-masters"].PropertyCategory.filter((PropertyCategory) => PropertyCategory.active).map((PropertyCategoryDetails) => {
+    return {
+      ...PropertyCategoryDetails,
+      i18nKey: `PT_COMMON_RELATIONSHIP_${PropertyCategoryDetails.code}`,
+    };
+  });
+  //return MdmsRes;
+};
 
 const TLGenderType = (MdmsRes) => {
   MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((genders) => {
@@ -1551,7 +1577,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getSalutationsType(MdmsRes)
        case "SalutationsHindi":
       return getSalutationsHindiType(MdmsRes)
-      
+      case "PropertyCategory":
+        return getPropertyCategoryType(MdmsRes)
     case "Relationship":
       return getRelationshipType(MdmsRes)
     case "TLGendertype":
@@ -1852,7 +1879,10 @@ export const MdmsService = {
    getSalutationsHindiType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getSalutationsHindiTypeList(tenantId, moduleCode, type), moduleCode);
   },
-  
+   getPropertyCategoryType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPropertyCategoryTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+
   getRelationshipType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getRelationshipTypeList(tenantId, moduleCode, type), moduleCode);
   },

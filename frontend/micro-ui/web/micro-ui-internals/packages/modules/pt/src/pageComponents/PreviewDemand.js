@@ -392,6 +392,7 @@ const PropertyForm = () => {
                     acknowldgementNumber: proOwnerDetail.acknowldgementNumber,
                     accountId: proOwnerDetail.accountId,
                     status: proOwnerDetail.status,
+                    propertyCategoryInput:proOwnerDetail.propertyCategory,
                 },
                 addressDetailsSet: proOwnerDetail.address,
                 ownerDetails: proOwnerDetail.owners,

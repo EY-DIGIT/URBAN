@@ -65,6 +65,7 @@ const EditUpdateForm = ({ applicationData }) => {
         }
     ]);
     const [ownershipType, setOwnershipType] = useState(null);
+    const [propertyCategoryInput, setPropertyCategoryInput] = useState(null);
     const [registryId, setRegistryId] = useState("");
     const [selectedRateZone, setSelectedRateZone] = useState("");
     const [addressDetails, setAddressDetails] = useState({
@@ -216,6 +217,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 },
 
                 ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+                propertyCategory:propertyCategoryInput,
 
                 owners: owners.map((owner, index) => ({
                     salutation: owner.title || "mr",
@@ -417,6 +419,9 @@ const EditUpdateForm = ({ applicationData }) => {
         if (!ownershipType) {
             errors.ownershipType = "Ownership type is required.";
         }
+        if (!propertyCategoryInput) {
+      errors.propertyCategoryInput = "Property Category is required.";
+    }
         if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
             errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
         }
@@ -806,6 +811,7 @@ const EditUpdateForm = ({ applicationData }) => {
     useEffect(() => {
         if (!applicationData) return;
         setOwnershipType(applicationData.ownershipCategory || null);
+        setPropertyCategoryInput(applicationData.propertyCategory || null);
         setRegistryId(applicationData.registryId || null);
     }, [applicationData]);
 
@@ -939,6 +945,27 @@ const EditUpdateForm = ({ applicationData }) => {
 
 
 
+    const propertyCategoryInputChange = (val) => {
+
+    setPropertyCategoryInput(val.code);
+
+      // 🟢 Clear error live when user selects value
+  setFormErrors((prev) => {
+    const newErrors = { ...prev };
+    delete newErrors.propertyCategoryInput;
+    return newErrors;
+  });
+
+    // ❗ Only reset if required. Don't reset if owners already exist.
+    // if (val.code === "INDIVIDUAL.SINGLEOWNER") {
+    //   setOwners((prev) => [prev[0]]); // keep first only
+    // } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
+    //   // Do nothing if owners already prefilled
+    //   if (owners.length === 0) {
+    //     setOwners([{}]); // fallback if empty
+    //   }
+    // }
+  };
 
     const handleOwnershipTypeChange = (val) => {
 
@@ -1086,6 +1113,8 @@ const EditUpdateForm = ({ applicationData }) => {
                             handleOwnerNameChange={handleOwnerNameChange}
                             handleOwnerContactChange={handleOwnerContactChange}
                             handleOwnerEmailChange={handleOwnerEmailChange}
+                            propertyCategoryInput={propertyCategoryInput}
+                            propertyCategoryInputChange={propertyCategoryInputChange}
                         />
                     </div>
 
