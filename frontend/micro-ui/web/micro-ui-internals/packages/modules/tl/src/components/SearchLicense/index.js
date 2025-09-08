@@ -115,7 +115,9 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
                 ))
             }
         </Card>
-        : data !== "" && <Table
+        : data !== "" && 
+       <div style={{ width: "100%", overflowX: "auto" }}>
+        <Table
             t={t}
             data={data} 
             totalRecords={count}
@@ -137,7 +139,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             onSort={onSort}
             disableSort={false}
             sortParams={[{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}]}
-        />}
+        /></div>}
         </React.Fragment>
 }
 

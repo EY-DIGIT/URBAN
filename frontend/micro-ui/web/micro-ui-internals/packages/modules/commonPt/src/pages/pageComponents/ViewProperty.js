@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { useLocation, Link } from "react-router-dom";
-import ApplicationDetails from "../../../../templates/ApplicationDetails";
+import ApplicationDetails from "../../../../templates/ApplicationDetails/tlIndex";
 
 /**
  * Page which renders a

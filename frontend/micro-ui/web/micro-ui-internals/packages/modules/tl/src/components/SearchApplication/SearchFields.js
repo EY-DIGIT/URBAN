@@ -42,7 +42,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage }) =
             control={control}
             name="applicationType"
             render={(props) => (
-              <Dropdown selected={props.value} select={props.onChange} onBlur={props.onBlur} option={applicationTypes} optionKey="i18nKey" t={t} />
+              <Dropdown style={{border:"1px solid"}} selected={props.value} select={props.onChange} onBlur={props.onBlur} option={applicationTypes} optionKey="i18nKey" t={t} />
             )}
           />
         </SearchField>
@@ -68,7 +68,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage }) =
             control={control}
             name="status"
             render={(props) => (
-              <Dropdown selected={props.value} select={props.onChange} onBlur={props.onBlur} option={applicationStatuses} optionKey="i18nKey" t={t} />
+              <Dropdown style={{border:"1px solid"}}  selected={props.value} select={props.onChange} onBlur={props.onBlur} option={applicationStatuses} optionKey="i18nKey" t={t} />
             )}
           />
         </SearchField>

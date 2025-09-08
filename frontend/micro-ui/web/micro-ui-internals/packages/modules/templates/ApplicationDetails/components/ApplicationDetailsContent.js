@@ -7,7 +7,7 @@ import {
 import { values } from "lodash";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import PropertyDocuments from "./PropertyDocuments";
+import PropertyDocuments from "./PropertyDocumentCashdesk";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 import TLCaption from "./TLCaption";
 import { CollectPayment } from "@egovernments/digit-ui-module-common/src/payments/employee/payment-collect";
