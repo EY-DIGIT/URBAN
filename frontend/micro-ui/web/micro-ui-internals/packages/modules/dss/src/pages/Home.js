@@ -39,7 +39,7 @@ const getInitialRange = () => {
   return { startDate, endDate, title, interval, denomination, tenantId };
 };
 const colors = [
-  { dark: "rgba(12, 157, 149, 0.85)", light: "rgba(11, 222, 133, 0.14)", defaultColor: "rgba(244, 119, 56, 1)" },
+  { dark: "rgba(12, 157, 149, 0.85)", light: "rgba(11, 222, 133, 0.14)", defaultColor: "#6B133F" },
   { dark: "rgba(251, 192, 45, 0.85)", light: "rgba(255, 202, 69, 0.24)" },
   { dark: "rgba(75, 31, 165, 0.85)", light: "rgba(138, 83, 255, 0.24)" },
   { dark: "rgba(4, 139, 208, 0.85)", light: "rgba(4, 139, 208, 0.24)" },
@@ -481,7 +481,7 @@ const Home = ({ stateCode }) => {
                             style={{
                               float: "right",
                               textAlign: "right",
-                              color: "#F47738",
+                              color: "#6B133F",
                               fontSize: 16,
                               fontWeight: "bold",
                               display: "flex",

@@ -262,7 +262,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
               <span
                 id={data?.linkId}
                 onClick={(e) => onLinkClick(e)}
-                style={{ color: "#F47738", cursor: "pointer" }}
+                style={{ color: "#6B133F", cursor: "pointer" }}
               >
                 {t(`${data?.link}_`)}
               </span>

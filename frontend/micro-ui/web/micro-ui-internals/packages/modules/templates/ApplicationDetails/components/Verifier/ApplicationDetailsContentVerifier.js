@@ -240,7 +240,7 @@ function ApplicationDetailsContentVerifier({
                           window.location.href.includes("tl") || window.location.href.includes("ws") ? (
                             <div style={{ width: "200%" }}>
                               <Link to={value?.to}>
-                                <span className="link" style={{ color: "#F47738" }}>
+                                <span className="link" style={{ color: "#6B133F" }}>
                                   {t(value?.title)}
                                 </span>
                               </Link>
@@ -254,7 +254,7 @@ function ApplicationDetailsContentVerifier({
                         text={
                           <div>
                             <Link to={value?.to}>
-                              <span className="link" style={{ color: "#F47738" }}>
+                              <span className="link" style={{ color: "#6B133F" }}>
                                 {value?.value}
                               </span>
                             </Link>
@@ -359,7 +359,7 @@ function ApplicationDetailsContentVerifier({
           {detail?.additionalDetails?.redirectUrl && (
             <div style={{ fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px" }}>
               <Link to={detail?.additionalDetails?.redirectUrl?.url}>
-                <span className="link" style={{ color: "#F47738" }}>
+                <span className="link" style={{ color: "#6B133F" }}>
                   {detail?.additionalDetails?.redirectUrl?.title}
                 </span>
               </Link>
