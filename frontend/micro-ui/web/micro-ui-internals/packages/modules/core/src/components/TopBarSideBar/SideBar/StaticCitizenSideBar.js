@@ -243,7 +243,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
 
   return (
     <React.Fragment>
-      <div style={{marginTop:"-15px"}}>
+      <div style={{marginTop:"-15px",width:"240px"}}>
         {/* <div style={{ width: "100%", borderBottom: "1px solid #6F3AFA", }}>
           <img
             src={stateInfo?.logoUrl}
