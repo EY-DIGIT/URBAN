@@ -124,7 +124,7 @@ const OBPSResponse = (props) => {
                       />
                       <Link to={`/digit-ui/employee`} >
                         {/* <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} /> */}
-                        <span style={{ color: "#f47738", margin: "0px 10px" }}>{t("CORE_COMMON_GO_TO_HOME")}</span>
+                        <span style={{ color: "#6B133F", margin: "0px 10px" }}>{t("CORE_COMMON_GO_TO_HOME")}</span>
                       </Link>
                     </div> : <SubmitBar
                       label={t("CORE_COMMON_GO_TO_HOME")}

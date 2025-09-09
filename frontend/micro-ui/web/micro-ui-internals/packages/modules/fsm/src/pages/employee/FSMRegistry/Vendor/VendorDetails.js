@@ -324,10 +324,10 @@ const VendorDetails = (props) => {
                               </h2>
                               <div style={{ display: "flex" }}>
                                 <span onClick={() => onEdit(data, detail.type, data.id)}>
-                                  <EditIcon style={{ cursor: "pointer", marginRight: "20px" }} className="edit" fill="#f47738" />
+                                  <EditIcon style={{ cursor: "pointer", marginRight: "20px" }} className="edit" fill="#6B133F" />
                                 </span>
                                 <span onClick={() => onDelete(data, detail.type, data.id)}>
-                                  <DeleteIcon style={{ cursor: "pointer" }} className="delete" fill="#f47738" />
+                                  <DeleteIcon style={{ cursor: "pointer" }} className="delete" fill="#6B133F" />
                                 </span>
                               </div>
                             </div>
@@ -347,7 +347,7 @@ const VendorDetails = (props) => {
                       })}
                       {detail.type && (
                         <div
-                          style={{ color: "#f47738", cursor: "pointer", marginLeft: "16px" }}
+                          style={{ color: "#6B133F", cursor: "pointer", marginLeft: "16px" }}
                           onClick={() => onActionSelect(detail.type === "ES_FSM_REGISTRY_DETAILS_TYPE_DRIVER" ? "ADD_DRIVER" : "ADD_VEHICLE")}
                         >
                           {t(`${detail.type}_ADD`)}

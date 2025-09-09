@@ -72,8 +72,8 @@ const styles = {
   },
   border: {
     backgroundColor: "transparent",
-    color: "#f47738", // Red color
-    border: "1px solid #f47738",
+    color: "#6B133F", // Red color
+    border: "1px solid #6B133F",
     borderRadius: "5px",
     padding: "0.5rem 1.5rem",
     cursor: "pointer",
