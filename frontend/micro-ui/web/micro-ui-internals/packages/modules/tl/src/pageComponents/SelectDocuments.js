@@ -86,7 +86,7 @@ function SelectDocument({
       ? { ...filteredDocument, active: filteredDocument?.status === "ACTIVE", code: filteredDocument?.documentType }
       : doc?.dropdownData?.length === 1
         ? doc?.dropdownData[0]
-        : { }
+        : {}
   );
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
@@ -173,7 +173,7 @@ function SelectDocument({
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            
+
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -224,6 +224,7 @@ function SelectDocument({
         <LabelFieldPair>
           <CardLabel className="card-label-smaller">{t(doc?.code)}</CardLabel>
           <Dropdown
+            style={{ border: "1px solid" }}
             className="form-field"
             selected={selectedDocument}
             disable={dropDownData?.length === 0 || enabledActions?.[action].disableDropdown}

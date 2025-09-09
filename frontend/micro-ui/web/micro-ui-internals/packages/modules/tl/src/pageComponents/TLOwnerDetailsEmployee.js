@@ -74,15 +74,29 @@ const OwnerForm = (_props) => {
     else return "MULTIOWNER";
   }, [formData?.ownershipCategory]);
 
-  const ownerTypesMenu = useMemo(
-    () =>
-      mdmsData?.PropertyTax?.OwnerType?.map?.((e) => ({
-        i18nKey: `${e.code.replaceAll("PROPERTY", "COMMON_MASTERS").replaceAll(".", "_")}`,
-        code: e.code,
-        name:e.name
-      })) || [],
-    [mdmsData]
-  );
+  // const ownerTypesMenu = useMemo(
+  //   () =>
+  //     mdmsData?.PropertyTax?.OwnerType?.map?.((e) => ({
+  //       i18nKey: `${e.code.replaceAll("PROPERTY", "COMMON_MASTERS").replaceAll(".", "_")}`,
+  //       code: e.code,
+  //       name:e.name
+  //     })) || [],
+  //   [mdmsData]
+  // );
+const ownerTypesMenu = useMemo(
+  () =>
+    mdmsData?.PropertyTax?.OwnerType?.map?.((e) => {
+      const code = e?.code || "";
+      return {
+        i18nKey: code
+          ? code.replaceAll("PROPERTY", "COMMON_MASTERS").replaceAll(".", "_")
+          : "",
+        code,
+        name: e?.name || "",
+      };
+    }) || [],
+  [mdmsData]
+);
 
   const genderFilterTypeMenu = genderTypeData && genderTypeData["common-masters"]?.GenderType?.filter((e) => e.active);
 
@@ -228,6 +242,7 @@ const OwnerForm = (_props) => {
                       defaultValue={window.location.href.includes("tl/edit-application-details") || window.location.href.includes("tl/renew-application-details/") ? owner?.subOwnerShipCategory:""}
                       render={(props)=>(
                         <Dropdown
+                          style={{ border: "1px solid" }}
                           t={t}
                           option={institutionOwnershipTypeOptions}
                           errorStyle={localFormState.touched.subOwnerShipCategory && errors?.subOwnerShipCategory?.message ? true : false}
@@ -505,6 +520,7 @@ const OwnerForm = (_props) => {
                     rules={{ required: "RelationShip Required" }}
                     render={(props) => (
                       <Dropdown
+                        style={{ border: "1px solid" }}
                         className="form-field"
                         selected={props.value}
                         errorStyle={localFormState.touched.relationship && errors?.relationship?.message ? true : false}
@@ -535,6 +551,7 @@ const OwnerForm = (_props) => {
                     rules={{ required: t("REQUIRED_FIELD") }}
                     render={(props) => (
                       <Dropdown
+                        style={{ border: "1px solid" }}
                         className="form-field"
                         selected={props.value}
                         disable={isSameAsPropertyOwner}
@@ -590,6 +607,7 @@ const OwnerForm = (_props) => {
                     // rules={}
                     render={(props) => (
                       <Dropdown
+                        style={{ border: "1px solid" }}
                         className="form-field"
                         selected={props.value}
                         errorStyle={localFormState.touched.ownerType && errors?.ownerType?.message ? true : false}

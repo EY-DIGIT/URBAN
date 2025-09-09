@@ -165,6 +165,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
             rules={{ required: t("REQUIRED_FIELD") }}
             render={(props) => (
               <Dropdown
+                style={{ border: "1px solid" }}
                 className="form-field"
                 selected={props.value}
                 disable={true}
@@ -187,6 +188,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
             rules={{ required: t("REQUIRED_FIELD") }}
             render={(props) => (
               <Dropdown
+                style={{ border: "1px solid" }}
                 className="form-field"
                 selected={
                   checkingLocationForRenew 

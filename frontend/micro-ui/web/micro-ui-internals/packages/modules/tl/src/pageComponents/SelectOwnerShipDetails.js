@@ -121,6 +121,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
             {`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} * `}
           </CardLabel>
           <Dropdown
+            style={{ border: "1px solid" }}
             className="form-field"
             selected={ownershipCategory?.code ? ownershipCategory:{}}
             errorStyle={formState.touched?.[config.key] && formState.errors[config.key]?.message ? true : false}

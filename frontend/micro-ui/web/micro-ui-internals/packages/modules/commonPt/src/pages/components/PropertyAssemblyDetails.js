@@ -133,6 +133,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
             key={config?.key}
             render={(props) => (
               <Dropdown
+               style={{border:"1px solid"}}
                 selected={getPropertyTypeMenu(proptype)?.length === 1 ? getPropertyTypeMenu(proptype)[0] : assemblyDetails?.BuildingType}
                 disable={getPropertyTypeMenu(proptype)?.length === 1}
                 option={getPropertyTypeMenu(proptype)}
@@ -230,6 +231,7 @@ const PropertyAssemblyDetails = ({ t, config, onSelect, userType, formData, form
             key={config?.key}
             render={(props) => (
               <Dropdown
+               style={{border:"1px solid"}}
                 selected={props?.value}
                 disable={usageCategoryMajorMenu(usagecat)?.length === 1}
                 option={usageCategoryMajorMenu(usagecat)}

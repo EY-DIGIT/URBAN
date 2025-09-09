@@ -301,6 +301,7 @@ const AccessoriersForm = (_props) => {
                             // rules={{ required: "NAME_REQUIRED", validate: { pattern: (val) => (/^\w+( +\w+)*$/.test(val) ? true : t("INVALID_NAME")) } }}
                             render={(props) => (
                                 <Dropdown
+                                  style={{ border: "1px solid" }}
                                     className="form-field"
                                     selected={props.value}
                                     select={(e) => {
