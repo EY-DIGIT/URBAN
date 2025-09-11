@@ -188,6 +188,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
           }}
           render={({ value, onChange, onBlur }) => (
             <Dropdown
+             style={{border:"1px solid"}}
               className="form-field"
               selected={value}
               option={dropdownData}
@@ -280,6 +281,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                         }}
                         render={({ value, onChange, onBlur }) => (
                           <Dropdown
+                           style={{border:"1px solid"}}
                             selected={institutionTypeMenu?.length === 1 ? Menu1[0] : value}
                             disable={institutionTypeMenu?.length === 1 || editScreen}
                             option={institutionTypeMenu ? institutionTypeMenu.sort((a, b) => a.name.localeCompare(b.name)) : []}
@@ -665,6 +667,7 @@ const PropertyOwnerDetails = ({ t, config, onSelect, userType, formData, formSta
                         }}
                         render={({ value, onChange, onBlur }) => (
                           <Dropdown
+                           style={{border:"1px solid"}}
                             selected={Menu1?.length === 1 ? Menu1[0] : value}
                             disable={Menu1?.length === 1 || editScreen}
                             option={Menu1 ? Menu1.sort((a, b) => a.name.localeCompare(b.name)) : []}

@@ -112,7 +112,7 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
             {accessoriesList?.map((accessor, index) => (
                 <AccessoriersForm key={accessor.key} index={index} accessor={accessor} {...commonProps} />
             ))}
-            <LinkButton label={`${t("TL_NEW_TRADE_DETAILS_NEW_ACCESSORIES")}`} onClick={addAccessories} style={{ color: "#F47738", width: "fit-content" }} />
+            <LinkButton label={`${t("TL_NEW_TRADE_DETAILS_NEW_ACCESSORIES")}`} onClick={addAccessories} style={{ color: "#6B133F", width: "fit-content" }} />
 
         </React.Fragment>
     );
@@ -301,6 +301,7 @@ const AccessoriersForm = (_props) => {
                             // rules={{ required: "NAME_REQUIRED", validate: { pattern: (val) => (/^\w+( +\w+)*$/.test(val) ? true : t("INVALID_NAME")) } }}
                             render={(props) => (
                                 <Dropdown
+                                  style={{ border: "1px solid" }}
                                     className="form-field"
                                     selected={props.value}
                                     select={(e) => {

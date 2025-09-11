@@ -133,6 +133,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
       ) : isMobile ? (
         <DetailsCard data={getData(tableData)} t={t} />
       ) : (
+         <div style={{ width: "100%", overflowX: "auto" }}>
         <Table
           t={t}
           data={tableData}
@@ -149,6 +150,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
           manualPagination={false}
           disableSort={true}
         />
+        </div>
       )}
     </React.Fragment>
   );

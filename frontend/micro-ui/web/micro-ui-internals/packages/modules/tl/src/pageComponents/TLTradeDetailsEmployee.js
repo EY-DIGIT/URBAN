@@ -307,6 +307,7 @@ const OwnerForm1 = (_props) => {
               control={control}
               render={(props) => (
                 <Dropdown
+                style={{border:"1px solid"}}
                   className="form-field"
                   selected={props.value}
                   errorStyle={(localFormState.touched.financialYear && errors?.financialYear?.message) ? true : false}
@@ -330,6 +331,7 @@ const OwnerForm1 = (_props) => {
               control={control}
               render={(props) => (
                 <Dropdown
+                style={{border:"1px solid"}}
                   className="form-field"
                   selected={licenseTypeValue} //{licenseTypeList[1]}
                   disable={true}
@@ -381,6 +383,7 @@ const OwnerForm1 = (_props) => {
               control={control}
               render={(props) => (
                 <Dropdown
+                style={{border:"1px solid"}}
                   className="form-field"
                   selected={props.value}
                   disable={isRenewal}
@@ -418,6 +421,7 @@ const OwnerForm1 = (_props) => {
               control={control}
               render={(props) => (
                 <Dropdown
+                style={{border:"1px solid"}}
                   className="form-field"
                   selected={getValues("structureSubType")}
                   disable={false}

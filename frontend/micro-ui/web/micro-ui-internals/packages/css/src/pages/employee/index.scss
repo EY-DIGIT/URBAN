@@ -53,7 +53,7 @@
       margin-top: 12px;
 
       .user-img-txt {
-        background: #f47738;
+        background: #6B133F;
         padding: 10px 15px;
         border-radius: 50%;
         color: white;
@@ -146,11 +146,11 @@
       padding: 20px;
       font-size: 14px;
       &.active {
-        color: #f47738 !important;
+        color: #6B133F !important;
 
-        border-right: 4px solid #f47738;
+        border-right: 4px solid #6B133F;
         svg {
-          fill: #f47738 !important;
+          fill: #6B133F !important;
         }
       }
       .employee-search-input {
@@ -176,12 +176,12 @@
       }
 
       &:hover {
-        color: #f47738 !important;
+        color: #6B133F !important;
         background-color: #486480;
 
         cursor: pointer;
         svg {
-          fill: #f47738 !important;
+          fill: #6B133F !important;
         }
       }
       .search-icon-wrapper {
@@ -223,11 +223,11 @@
         }
       }
       &.active {
-        color: #f47738 !important;
+        color: #6B133F !important;
 
-        border-right: 4px solid #f47738;
+        border-right: 4px solid #6B133F;
         svg {
-          fill: #f47738 !important;
+          fill: #6B133F !important;
         }
       }
     }

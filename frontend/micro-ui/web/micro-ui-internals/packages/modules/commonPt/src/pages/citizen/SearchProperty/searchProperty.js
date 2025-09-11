@@ -135,6 +135,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             customProps: { t, isMandatory: true, option: [...allCities], optionKey: "i18nKey" },
             component: (props, customProps) => (
               <Dropdown
+              style={{border:"1px solid"}}
                 {...customProps}
                 selected={props.value}
                 select={(d) => {
@@ -250,6 +251,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
             customProps: { t, isMandatory: true, option: [...allCities], optionKey: "i18nKey" },
             component: (props, customProps) => (
               <Dropdown
+               style={{border:"1px solid"}}
                 {...customProps}
                 selected={props.value}
                 select={(d) => {

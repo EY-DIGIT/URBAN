@@ -441,6 +441,17 @@ const ReNewApplication = (props) => {
       return head;
     }
   }
+const processedConfigs = configs?.map((config) => {
+  return {
+    ...config,
+    body: config.body.filter((a) => {
+      return !a.hideInEmployee;
+    }),
+    head: checkHead(config.head),
+  };
+});
+
+console.log("processedConfigs", processedConfigs);
 
   return (
     <div>

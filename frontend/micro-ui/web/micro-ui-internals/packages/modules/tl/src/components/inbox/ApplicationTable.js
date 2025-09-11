@@ -17,6 +17,7 @@ const ApplicationTable = ({
   totalRecords,
 }) => {
   return (
+    <div style={{ width: "100%", overflowX: "auto" }}>
     <Table
       t={t}
       data={data}
@@ -32,6 +33,7 @@ const ApplicationTable = ({
       sortParams={sortParams}
       totalRecords={totalRecords}
     />
+    </div>
   );
 };
 

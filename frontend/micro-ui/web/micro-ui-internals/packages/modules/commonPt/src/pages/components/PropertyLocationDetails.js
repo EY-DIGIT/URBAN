@@ -79,6 +79,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, form
           }}
           render={({value, onBlur, onChange}) => (
             <Dropdown
+             style={{border:"1px solid"}}
               className="form-field"
               selected={value}
               disable={userType === "employee"}

@@ -11,7 +11,8 @@
     "micro-ui-internals/packages/modules/pt",
     "micro-ui-internals/packages/modules/core",
     "micro-ui-internals/packages/modules/common",
-    "micro-ui-internals/packages/modules/pgr"
+    "micro-ui-internals/packages/modules/pgr",
+    "micro-ui-internals/packages/modules/tl"
   ],
   "engines": {
     "node": ">=14"

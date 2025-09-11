@@ -118,7 +118,7 @@ const InspectionReport = ({ config, onSelect, userType, formData, setError, form
                     <InspectionReportForm key={unit.key} index={index} unit={unit} {...commonProps} />
                 ))}
             </React.Fragment>
-            <LinkButton label={t("BPA_ADD_FIELD_INSPECTION")} onClick={addNewFieldReport} style={{ color: "#F47738", width: "fit-content" }} />
+            <LinkButton label={t("BPA_ADD_FIELD_INSPECTION")} onClick={addNewFieldReport} style={{ color: "#6B133F", width: "fit-content" }} />
         </div>
     );
 };

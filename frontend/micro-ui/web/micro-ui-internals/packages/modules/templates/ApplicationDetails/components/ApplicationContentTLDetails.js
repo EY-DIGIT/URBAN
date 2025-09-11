@@ -33,7 +33,7 @@ import DocumentsPreview from "./DocumentsPreview";
 import InfoDetails from "./InfoDetails";
 import ViewBreakup from"./ViewBreakup";
 
-function ApplicationDetailsContentVerifier({
+function ApplicationDetailsContent({
   applicationDetails,
   workflowDetails,
   isDataLoading,
@@ -177,7 +177,6 @@ function ApplicationDetailsContentVerifier({
         return ""
     }
   }
-  console.log("applicationDetails",applicationDetails)
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
       {/* For UM-4418 changes */}
@@ -367,7 +366,7 @@ function ApplicationDetailsContentVerifier({
           )}
           {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
           {detail?.additionalDetails?.estimationDetails && <ViewBreakup wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
-
+          
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
@@ -398,7 +397,7 @@ function ApplicationDetailsContentVerifier({
                         else
                         timelineStatusPostfix = index == 0 ? "" : `_DONE`;
                       }
-
+                      
                       return (
                         <React.Fragment key={index}>
                           <CheckPoint
@@ -425,213 +424,4 @@ function ApplicationDetailsContentVerifier({
   );
 }
 
-export default ApplicationDetailsContentVerifier;
-
-
-
-// import React from "react";
-
-// const styles = {
-//   container: {
-//     fontFamily: "Arial, sans-serif",
-//     padding: "20px",
-//     backgroundColor: "#fff",
-//     border: "1px solid #ccc",
-//     borderRadius: "6px",
-//     width: "100%",
-//     maxWidth: "1024px",
-//     margin: "20px auto",
-//     boxSizing: "border-box",
-//   },
-//   sectionTitle: {
-//     fontWeight: "bold",
-//     color: "#3e8abf",
-//     marginTop: "20px",
-//     marginBottom: "10px",
-//     display: "block",
-//   },
-//   label: {
-//     display: "block",
-//     margin: "6px 0 2px",
-//     fontWeight: "500",
-//   },
-//   input: {
-//     width: "100%",
-//     padding: "6px",
-//     marginBottom: "10px",
-//     borderRadius: "4px",
-//     border: "1px solid #aaa",
-//     boxSizing: "border-box",
-//   },
-//   grid: {
-//     display: "grid",
-//     gridTemplateColumns: "1fr 1fr",
-//     gap: "16px",
-//   },
-//   row: {
-//     display: "flex",
-//     gap: "10px",
-//     flexWrap: "wrap",
-//   },
-//   checkboxLabel: {
-//     display: "flex",
-//     alignItems: "center",
-//     marginTop: "10px",
-//   },
-//   timelineBox: {
-//     background: "#f7f7f7",
-//     padding: "10px",
-//     borderRadius: "6px",
-//     border: "1px solid #ccc",
-//     marginTop: "20px",
-//   },
-//   buttonsRow: {
-//     display: "flex",
-//     justifyContent: "space-between",
-//     marginTop: "20px",
-//   },
-//   button: {
-//     padding: "8px 16px",
-//     backgroundColor: "#3e8abf",
-//     color: "#fff",
-//     border: "none",
-//     borderRadius: "4px",
-//     cursor: "pointer",
-//   },
-//   disabledButton: {
-//     backgroundColor: "#ccc",
-//     cursor: "not-allowed",
-//   },
-// };
-
-// const PropertyTaxForm = () => {
-//   return (
-//     <div style={styles.container}>
-//       <label style={styles.sectionTitle}>Select Property ULB/ Year of Assessment</label>
-//       <label style={styles.label}>Select Assessment Year</label>
-//       <select style={styles.input}>
-//         <option>PreFilled</option>
-//       </select>
-
-//       <label style={styles.sectionTitle}>Attachments</label>
-//       <div style={styles.grid}>
-//         {["Photo ID", "Ownership", "Seller Registry", "Govt. Tax", "LGBT Proof"].map((label) => (
-//           <div key={label}>
-//             <label style={styles.label}>{label}</label>
-//             <input type="file" style={styles.input} />
-//           </div>
-//         ))}
-//       </div>
-
-//       <label style={styles.sectionTitle}>Ownership Details</label>
-//       <div style={styles.grid}>
-//         <div>
-//           <label style={styles.label}>Provide Ownership Details</label>
-//           <select style={styles.input}><option>Single</option></select>
-//         </div>
-//       </div>
-
-//       <div style={styles.grid}>
-//         <div>
-//           <label style={styles.label}>Owner Name</label>
-//           <input style={styles.input} />
-//         </div>
-//         <div>
-//           <label style={styles.label}>Owner Name (हिंदी)</label>
-//           <input style={styles.input} />
-//         </div>
-//         <div>
-//           <label style={styles.label}>Father/Husband Name</label>
-//           <input style={styles.input} />
-//         </div>
-//         <div>
-//           <label style={styles.label}>Mobile No.</label>
-//           <input style={styles.input} />
-//         </div>
-//         <div>
-//           <label style={styles.label}>Aadhar No.</label>
-//           <input style={styles.input} />
-//         </div>
-//         <div>
-//           <label style={styles.label}>Relationship</label>
-//           <select style={styles.input}><option>PreFilled</option></select>
-//         </div>
-//       </div>
-
-//       <label style={styles.sectionTitle}>Property Address</label>
-//       <div style={styles.grid}>
-//         {["Door/House No.", "Address", "Pincode", "Colony", "Ward", "Zone"].map((label) => (
-//           <div key={label}>
-//             <label style={styles.label}>{label}</label>
-//             <input style={styles.input} />
-//           </div>
-//         ))}
-//       </div>
-
-//       <label style={styles.sectionTitle}>Correspondence Address</label>
-//       <textarea style={styles.input} rows={3}></textarea>
-//       <div style={styles.checkboxLabel}>
-//         <input type="checkbox" />
-//         <span style={{ marginLeft: "8px" }}>Same as property address</span>
-//       </div>
-
-//       <label style={styles.sectionTitle}>Assessment Details</label>
-//       <div style={styles.grid}>
-//         {["Rate Zone", "Board Name", "Old Property ID", "Plot Area (sq.ft)"].map((label) => (
-//           <div key={label}>
-//             <label style={styles.label}>{label}</label>
-//             <input style={styles.input} />
-//           </div>
-//         ))}
-//       </div>
-
-//       <label style={styles.sectionTitle}>Property Details</label>
-//       <div style={styles.grid}>
-//         {["Property Type", "Usage Type", "Usage Factor", "Floor Number", "Type of Construction", "Area (Sq. ft)"].map(
-//           (label) => (
-//             <div key={label}>
-//               <label style={styles.label}>{label}</label>
-//               <select style={styles.input}><option>PreFilled</option></select>
-//             </div>
-//           )
-//         )}
-//       </div>
-//       <a href="#" style={{ color: "#3e8abf", marginTop: "10px", display: "inline-block" }}>Add more</a>
-
-//       <label style={styles.sectionTitle}>Other Details</label>
-//       <label style={styles.label}>Concession Applicable</label>
-//       <select style={styles.input}><option>PreFilled</option></select>
-//       <div style={styles.checkboxLabel}>
-//         <input type="checkbox" /> <span style={{ marginLeft: "8px" }}>Mobile Tower</span>
-//       </div>
-//       <div style={styles.checkboxLabel}>
-//         <input type="checkbox" /> <span style={{ marginLeft: "8px" }}>Advertisement</span>
-//       </div>
-
-//       <label style={styles.sectionTitle}>Self Declaration</label>
-//       <p style={{ fontSize: "14px", lineHeight: "1.5", color: "#333" }}>
-//         I hereby declare that the above details are true...
-//       </p>
-
-//       <div style={styles.timelineBox}>
-//         <strong>Timeline:</strong>
-//         <ul>
-//           <li>Field Verified on 23/03/2025</li>
-//           <li>Documents Verified on 24/03/2025</li>
-//           <li>Application Created on 21/03/2025</li>
-//         </ul>
-//       </div>
-
-//       <div style={styles.buttonsRow}>
-//         <button style={styles.button}>Previous</button>
-//         <div>
-//           <button style={{ ...styles.button, ...styles.disabledButton }}>Forward</button>
-//           <button style={{ ...styles.button, ...styles.disabledButton, marginLeft: "10px" }}>Send Back</button>
-//           <button style={{ ...styles.button, ...styles.disabledButton, marginLeft: "10px" }}>Take Action</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default PropertyTaxForm;
+export default ApplicationDetailsContent;

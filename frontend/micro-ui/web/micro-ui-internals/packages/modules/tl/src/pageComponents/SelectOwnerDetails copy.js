@@ -257,6 +257,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
               />
               <CardLabel>{`${t("TL_INSTITUTION_TYPE_LABEL")}*`}</CardLabel>
               <Dropdown
+                style={{ border: "1px solid" }}
                 t={t}
                 option={institutionOwnershipTypeOptions}
                 selected={institutionType}
