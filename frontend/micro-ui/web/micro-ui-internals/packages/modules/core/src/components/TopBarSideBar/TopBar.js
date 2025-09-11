@@ -376,7 +376,7 @@ const TopBar = ({
   const history = useHistory();
   const location = useLocation();
   const loggedIn = userDetails?.access_token ? true : false;
-
+console.log("STATE INFO=",stateInfo)
   // Fetch profile picture
   useEffect(() => {
     const fetchProfile = async () => {
@@ -522,7 +522,7 @@ const TopBar = ({
           }}
         >
           <img
-            src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/MP%20Emblem%201%201.svg"
+            src={stateInfo?.uiImageAssets?.madhyaPradeshStateEmblemLogo}
             alt="MP Logo"
             style={{ height: "40px", width: "auto" }}
           />

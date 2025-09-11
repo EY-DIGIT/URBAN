@@ -154,7 +154,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     height:40px;
     font-size:16px;
     text-align:center;
-    font-weight:600;
+    font-weight:500;
     padding:10px;
 
   }
@@ -184,10 +184,10 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }} ref={menuRef}>
             {/* <SubmitBar ref={menuRef} label={t("Edit")} onSubmit={() => EditApplication()} /> */}
             {actions?.some((act) => act?.action?.toUpperCase() === "FORWARD") && (
-              <SubmitBar label={t("Edit")} onSubmit={() => EditApplication()} />
+              <SubmitBar label={t("EDIT")} onSubmit={() => EditApplication()} />
             )}
             {!actions?.some((act) => act?.action?.toUpperCase() === "FORWARD") && (
-              <SubmitBar label={t("Preview")} onSubmit={() => handlePreview()} />
+              <SubmitBar label={t("PREVIEW")} onSubmit={() => handlePreview()} />
             )}
             {flag && (
               <SubmitBar ref={menuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />

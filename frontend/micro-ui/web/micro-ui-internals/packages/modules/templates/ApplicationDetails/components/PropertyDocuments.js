@@ -43,6 +43,11 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
     }
   };
 
+  
+const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
+console.log("ABCDEFG=",stateInfo);
+
+
   return (
     <div style={{ marginTop: "19px" }}>
       {!isStakeholderApplication &&
@@ -93,9 +98,11 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                       calculation: estimateData?.Calculation?.[0],
                     })}
                     style={{ ...styles.linkButton }}
-                  ><svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" fill="#6b133f">
+                  >
+                    {/* <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" fill="#6b133f">
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                </svg>
+                </svg> */}
+                <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px" }} />
                     Ledger
                   </button>
                   {/* Detail Ledger */}
@@ -107,9 +114,11 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                     style={{ ...styles.linkButton }}
                   >
 
-                    <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" fill="#6b133f">
+                      <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px" }} />
+
+                    {/* <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" fill="#6b133f">
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                </svg>
+                </svg> */}
                     Detail Ledger
                   </button>
                   {/* Demand */}
@@ -129,9 +138,10 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                       style={{ width: "20px", height: "20px" }}
                     /> */}
 
-                    <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" fill="#6b133f">
+                    {/* <svg xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 24 24" fill="#6b133f">
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                </svg>
+                </svg> */}
+                  <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px" }} />
                     Demand Note
                   </button>
                 </div>

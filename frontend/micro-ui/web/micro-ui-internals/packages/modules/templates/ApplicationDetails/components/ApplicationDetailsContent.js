@@ -33,6 +33,7 @@ const ApplicationDetailsContent = ({
   const [estimateData, setEstimateData] = useState("");
   const [remarks, setRemarks] = useState("");
   const [showAmount, setShowAmount] = useState(0);
+   const stateId = Digit.ULBService.getStateId();
 
   const [chequeDetails, setChequeDetails] = useState({
     issueDate: "",
@@ -338,6 +339,47 @@ const ApplicationDetailsContent = ({
   if (assessmentLoading) {
     return <Loader />;
   }
+
+      const { data: RoadFactors, isLoading:{} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
+  const RoadFactorList = (RoadFactors?.PropertyTax?.RoadFactor || []).map((item) => ({
+    code: item.code,
+    name: item.name, // Show year like "2024-25"
+  }));
+
+    const [boundaryData, setBoundaryData] = useState(null);
+    const [zones, setZones] = useState([]);
+    const [wards, setWards] = useState([]);
+    const [colonies, setColonies] = useState([]);
+    const [rateZones, setRateZones] = useState([]);
+          useEffect(() => {
+      (async () => {
+        try {
+          const tenantId = Digit.ULBService.getCurrentTenantId();
+          const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+  
+          console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+  
+          const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+          if (cityBoundary?.children?.length > 0) {
+            setBoundaryData(cityBoundary);
+  
+            const zoneOptions = cityBoundary.children.map((zone) => ({
+              code: zone.code,
+              name: zone.name || zone.code,
+            }));
+            setZones(zoneOptions);
+          } else {
+            console.warn("❌ No boundary children found.");
+          }
+        } catch (error) {
+          console.error("❌ Error fetching boundary data:", error);
+        }
+      })();
+    }, []);
+  
+    console.log("Zones No=",zones)
+
+
   return (
     <div>
       <div style={styles.section}>
@@ -390,7 +432,7 @@ const ApplicationDetailsContent = ({
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Zone</div>
-            <input type="text" readOnly value={applicationData?.address?.zone || "N/A"} style={styles.input} />
+            <input type="text" readOnly  value={zones.find((f) => f.code === applicationData?.address?.zone)?.name || "N/A" } style={styles.input} />
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Colony</div>
@@ -403,7 +445,7 @@ const ApplicationDetailsContent = ({
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Road Factor</div>
-            <input type="text" readOnly value={applicationData?.units?.[0]?.roadFactor} style={styles.input} />
+            <input type="text" readOnly   value={RoadFactorList.find((f) => f.code === applicationData?.units?.[0]?.roadFactor)?.name || "N/A" } style={styles.input} />
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Address</div>

@@ -258,7 +258,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast,ptSearchConf
     ward: item?.address?.ward || "NA",
     zone: item?.address?.zone || "NA",
     status: item?.status || "NA",
-    due: data.FormattedData?.[item?.propertyId]?.due || "NA",
+    due: data.FormattedData?.[item?.propertyId]?.due || "0",
   };
 });
 

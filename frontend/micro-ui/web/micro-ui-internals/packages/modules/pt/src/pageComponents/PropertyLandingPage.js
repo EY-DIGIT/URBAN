@@ -337,6 +337,9 @@ import React, { useState, useEffect } from "react";
 const DashboardLayout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024 && window.innerWidth > 768);
+  const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
+  console.log("STATEINFO=",stateInfo);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -622,10 +625,10 @@ const DashboardLayout = () => {
             {/* Status Cards */}
             <div style={styles.statusCards}>
               {[
-                { label: "Approved", value: 100, icon: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Group%20188.svg", style: styles.approved },
-                { label: "Pending", value: 50, icon: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Icon_Order.svg", style: styles.pending },
-                { label: "Rejected", value: 20, icon: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315419.svg", style: styles.rejected },
-                { label: "Send Back", value: 30, icon: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Icon_Order%20(1).svg", style: styles.sendback },
+                { label: "Approved", value: 100, icon:  stateInfo?.uiImageAssets?.property, style: styles.approved },
+                { label: "Pending", value: 50, icon:  stateInfo?.uiImageAssets?.water, style: styles.pending },
+                { label: "Rejected", value: 20, icon:  stateInfo?.uiImageAssets?.deleteReceipt, style: styles.rejected },
+                { label: "Send Back", value: 30, icon: stateInfo?.uiImageAssets?.rental, style: styles.sendback },
               ].map((card) => (
                 <div style={styles.card} key={card.label}>
                   <div>
@@ -643,32 +646,33 @@ const DashboardLayout = () => {
           <div style={styles.actionCards}>
   {[
     {
-      image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315418.svg",
+      image: stateInfo?.uiImageAssets?.propertyRegister
+,
       text: "New Property Application",
       link: "/digit-ui/employee/pt/new-application",
     },
     {
-      image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315417.svg",
+      image: stateInfo?.uiImageAssets?.cashDesk,
       text: "Cash Desk",
       link: "/digit-ui/employee/pt/search",
     },
     {
-      image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315417%20(1).svg",
+      image: stateInfo?.uiImageAssets?.trackApplication,
       text: "Track Application",
       link: "/digit-ui/employee/pt/application-search",
     },
     {
-      image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315419.svg",
+      image: stateInfo?.uiImageAssets?.deleteReceipt,
       text: "Duplicate Receipt",
       link: "/digit-ui/employee/pt/inbox",
     },
     {
-      image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315419.svg",
+      image: stateInfo?.uiImageAssets?.deleteReceipt,
       text: "Delete Receipt",
       link: "/digit-ui/employee/pt/inbox",
     },
     {
-      image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315419.svg",
+      image: stateInfo?.uiImageAssets?.deleteReceipt,
       text: "No dues apply",
       link: "/digit-ui/employee/pt/inbox",
     },

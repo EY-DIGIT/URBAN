@@ -69,7 +69,8 @@ export const StoreService = {
         statelogo: stateInfo.statelogo,
         logoUrlWhite: stateInfo.logoUrlWhite,
         bannerUrl: stateInfo.bannerUrl,
-        BAPURL: stateInfo.BAPURL
+        BAPURL: stateInfo.BAPURL,
+        uiImageAssets:stateInfo.uiImageAssets,
       },
       localizationModules: stateInfo.localizationModules,
       modules: MdmsRes?.tenant?.citymodule

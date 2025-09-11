@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
 import PTinboxTable from "./inboxTable";
 const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit, data, count, setShowToast }) => {
+
+    const { data: storeData } = Digit.Hooks.useStore.getInitData();
+    const { stateInfo } = storeData || {};
+    console.log("state LLOO=",stateInfo)
+
+
     const [formData, setFormData] = useState({
         applicationNo: '',
         propertyId: '',
@@ -622,7 +628,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                        <td>
                                                             <span className="link">
                                                                 <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${result.propertyId}`}>
-                                                                   <img src="https://devtfstatep7f19.blob.core.windows.net/imc-dev-assets/Icon%201.svg" alt="Property" style={{ width: "20px",height:"30px" }} />
+                                                                   <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px",height:"30px" }} />
                                                                 </Link>
                                                                 {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
@@ -666,7 +672,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>
                                                             <span className="link">
                                                                 <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${item.propertyId}`}>
-                                                                     <img src="https://devtfstatep7f19.blob.core.windows.net/imc-dev-assets/Icon%201.svg" alt="Property" style={{ width: "20px",height:"30px" }} />
+                                                                     <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px",height:"30px" }} />
                                                                 </Link>
                                                                 {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>

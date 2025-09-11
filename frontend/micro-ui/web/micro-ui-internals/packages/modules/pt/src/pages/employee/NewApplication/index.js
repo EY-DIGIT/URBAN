@@ -101,6 +101,7 @@ const NewApplication = () => {
     fromYear: "",
     toYear: ""
   }]);
+  console.log("HHHHHHUNITTTT==",unit);
   const [propertyDetails, setPropertyDetails] = useState({
     propertyType: "",
     roomsArea: "",
@@ -212,7 +213,7 @@ const NewApplication = () => {
           name: owner.name || `Owner ${index + 1}`,
           salutationHindi: owner.hindiTitle,
           hindiName: owner.hindiName || "",
-          fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
+          fatherOrHusbandName: owner.fatherHusbandName || "",
           gender: "MALE",
           aadhaarNumber: owner.aadhaar || "",
           altContactNumber: owner.altNumber || "",
@@ -511,7 +512,7 @@ const NewApplication = () => {
           name: owner.name || `Owner ${index + 1}`,
           salutationHindi: owner.hindiTitle,
           hindiName: owner.hindiName || "",
-          fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
+          fatherOrHusbandName: owner.fatherHusbandName || "",
           gender: "MALE",
           aadhaarNumber: owner.aadhaar || "",
           altContactNumber: owner.altNumber || "",
@@ -1019,10 +1020,14 @@ const NewApplication = () => {
   useEffect(() => {
     if (!unitDetails || unitDetails.length === 0) return;
 
-    const formattedUnits = unitDetails.map((unit) => ({
+    const formattedUnits = unitDetails.map((unit) => (
+      
+      
+      {
       usageType: unit && unit.usageCategory ? unit.usageCategory : "",
       usageFactor: unit && unit.occupancyType ? unit.occupancyType : "", // Fill if needed
       floorNo: unit && unit.floorNo ? unit.floorNo.toString() : "",
+      
       constructionType:
         unit &&
           unit.constructionDetail &&
@@ -1037,7 +1042,11 @@ const NewApplication = () => {
           : "",
       fromYear: unit && unit.fromYear ? unit.fromYear : "",
       toYear: unit && unit.toYear ? unit.toYear : "",
-    }));
+
+      
+    }
+  
+  ));
 
     setUnit(formattedUnits);
   }, [unitDetails]);
@@ -1316,6 +1325,8 @@ const handleDropdownChange = (field, selectedOption) => {
 
   const handleUnitChange = (index, key, value) => {
     const updatedUnits = [...unit];
+
+    console.log("Floor and Unit==",key , "=", value )
     updatedUnits[index][key] = value;
     setUnit(updatedUnits);
   };

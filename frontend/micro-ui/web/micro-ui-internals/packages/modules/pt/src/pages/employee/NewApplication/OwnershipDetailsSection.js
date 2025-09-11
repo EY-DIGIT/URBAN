@@ -28,7 +28,7 @@ const OwnershipDetailsSection = ({
   const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
   const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
   const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
-  console.log("uiHome==",Relationship);
+  console.log("uiHome==",PropertyCategory);
 
   console.log("MenuHindi", formErrors)
   const salutationOptions = (Menu || []).map((item) => ({

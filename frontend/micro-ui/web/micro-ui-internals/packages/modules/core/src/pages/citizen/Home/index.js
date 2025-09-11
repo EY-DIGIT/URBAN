@@ -159,7 +159,7 @@ const Home = () => {
           >
             {[
               
-              { url: `${stateInfo.BAPURL}dashboard?type=1&accessToken=${accessToken}&refreshToken=${refreshToken}&module=marriage`, icon: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Icon_Order%20(1).svg", label: "Marriage Certificate", count: 30, className: "sendback", color: "#2196f3" },
+              { url: `${stateInfo.BAPURL}dashboard?type=1&accessToken=${accessToken}&refreshToken=${refreshToken}&module=marriage`, icon: stateInfo?.uiImageAssets?.rental, label: "Marriage Certificate", count: 30, className: "sendback", color: "#2196f3" },
             ].map((card, index) => (
               <a href={card.url} key={index} style={{ textDecoration: "none" }}>
                 <div
@@ -228,22 +228,22 @@ const Home = () => {
               {[
                 {
                   label: "Property Register",
-                  image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315418.svg",
+                  image: stateInfo?.uiImageAssets?.propertyRegister,
                   url: "/digit-ui/citizen/pt/property/new-application",
                 },
                 {
                   label: "Pay",
-                  image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315417.svg",
+                  image: stateInfo?.uiImageAssets?.cashDesk,
                   url: "/digit-ui/citizen/pt/property/citizen-search",
                 },
                 {
                   label: "My Application",
-                  image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315417%20(1).svg",
+                  image: stateInfo?.uiImageAssets?.trackApplication,
                   url: "/digit-ui/citizen/pt/property/my-applications",
                 },
                 {
                   label: "Daily Collection Report",
-                  image: "https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/Frame%201321315419.svg",
+                  image: stateInfo?.uiImageAssets?.deleteReceipt,
                   url: "",
                 },
               ].map((action, index) => (
