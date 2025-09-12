@@ -131,7 +131,7 @@ const OtherDetailsSection = ({
       </div>
 
       {/* Self Declaration */}
-      <div style={styles.poppinsLabel}>{t("Self Declaration")}</div>
+      {/* <div style={styles.poppinsLabel}>{t("Self Declaration")}</div>
       <label style={styles.poppinsTextStyle}>
         <input
           style={{ marginRight: "10px" }}
@@ -147,7 +147,7 @@ const OtherDetailsSection = ({
         <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
           {formErrors.selfDeclaration}
         </p>
-      )}
+      )} */}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, Link } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import Popup from "../PaymentPopUp/PaymentPopUp"
 
 const SearchProperty = ({ onSelect }) => {
   const { t } = useTranslation();
@@ -12,6 +13,22 @@ const SearchProperty = ({ onSelect }) => {
   const [errorShown, setErrorShown] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const isMobile = window.Digit.Utils.browser.isMobile();
+  const [showPopup, setShowPopup] = useState(true);
+  const [payFor, setPayFor] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5); // You can make this configurable
+  const [totalPages, setTotalPages] = useState(0);
+
+  const userInfo = Digit.UserService.getUser();
+
+  console.log("userInfo", userInfo);
+
+  if(payFor == 'own') {
+    formValue.mobileNumber = userInfo?.info?.mobileNumber;
+  }
 
   const { data: propertyData, isLoading: propertyDataLoading, error } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: tenantId,
@@ -28,12 +45,22 @@ const SearchProperty = ({ onSelect }) => {
     },
   });
 
-    // ✅ Update layout on resize
-    useEffect(() => {
-      const handleResize = () => setIsMobile(window.innerWidth <= 600);
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+  // Update search results and reset pagination
+  useEffect(() => {
+    console.log("propertyData", propertyData);
+    if (propertyData?.Properties) {
+      setSearchResults(propertyData.Properties);
+      setCurrentPage(1); // Reset to first page on new search
+      setTotalPages(Math.ceil(propertyData.Properties.length / itemsPerPage));
+    }
+  }, [propertyData, itemsPerPage]);
+
+  // ✅ Update layout on resize
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 600);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (
@@ -63,15 +90,84 @@ const SearchProperty = ({ onSelect }) => {
       return;
     }
 
-    const filters = {};
-    if (propertyIds) filters.propertyIds = propertyIds;
-    if (mobileNumber) filters.mobileNumber = mobileNumber;
+    // For same-page results, you might not need to push to history
+    // If you still want to navigate to results page, keep this:
+    // const filters = {};
+    // if (propertyIds) filters.propertyIds = propertyIds;
+    // if (mobileNumber) filters.mobileNumber = mobileNumber;
+    // history.push(
+    //   `/digit-ui/citizen/pt/property/search-results?${Object.keys(filters)
+    //     .map((key) => `${key}=${filters[key]}`)
+    //     .join("&")}&city=${tenantId}`
+    // );
+  };
 
-    history.push(
-      `/digit-ui/citizen/pt/property/search-results?${Object.keys(filters)
-        .map((key) => `${key}=${filters[key]}`)
-        .join("&")}&city=${tenantId}`
-    );
+  const handleClear = () => {
+    setFormValue({});
+    setSearchResults([]);
+    setCurrentPage(1);
+    setTotalPages(0);
+  };
+
+  const handlePopupClose = (option) => {
+    setShowPopup(false);
+    setPayFor(option);
+  };
+
+  const proceedToPay = (property) => {
+    // history.push(`/digit-ui/citizen/payment/my-bills/PT/${property.propertyId}`, { tenantId });
+    history.push(`/digit-ui/citizen/pt/property/previewPayment/${property.propertyId}`, { tenantId });
+  };
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Pagination handlers
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Generate page numbers for display
+  const getPageNumbers = () => {
+    const delta = 2; // Number of pages to show on each side of current page
+    const range = [];
+    const rangeWithDots = [];
+
+    for (
+      let i = Math.max(1, currentPage - delta);
+      i <= Math.min(totalPages, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+
+    if (range[0] > 1) {
+      rangeWithDots.push(1);
+      if (range[0] > 2) rangeWithDots.push('...');
+    }
+
+    rangeWithDots.push(...range);
+
+    if (range[range.length - 1] < totalPages) {
+      if (range[range.length - 1] < totalPages - 1) rangeWithDots.push('...');
+      rangeWithDots.push(totalPages);
+    }
+
+    return rangeWithDots;
   };
 
   return (
@@ -82,12 +178,11 @@ const SearchProperty = ({ onSelect }) => {
         marginLeft: "10px",
         marginRight: "10px",
         backgroundColor: "white",
-        maxWidth: "960px",
         padding: "10px",
       }}
     >
       <div style={containerStyle}>
-        <h4 style={headingStyle}>{t("Search Criteria")}</h4>
+        <h4 style={headingStyle}>{t("Search Property")}</h4>
         <div style={rowStyle}>
           <div style={inputGroupWrapper}>
             <div>
@@ -109,9 +204,9 @@ const SearchProperty = ({ onSelect }) => {
               />
             </div>
 
-            <div style={orStyle}>OR</div>
+            {/* <div style={orStyle}>OR</div> */}
 
-            <div>
+            {/* <div>
               <label style={labelStyle}>
                 {t("Mobile Number")} <span style={{ color: "red" }}>*</span>
               </label>
@@ -128,14 +223,118 @@ const SearchProperty = ({ onSelect }) => {
                   }))
                 }
               />
-            </div>
+            </div> */}
           </div>
 
-          <button onClick={onPropertySearch} style={buttonStyle}>
-            {t("Search")}
-          </button>
+          <div style={buttonGroupStyle}>
+            <button onClick={handleClear} style={clearButtonStyle}>
+              {t("Clear")}
+            </button>
+            <button onClick={onPropertySearch} style={findButtonStyle}>
+              {t("Find")}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Results Table */}
+      {searchResults.length > 0 && (
+        <div style={paymentSectionStyle}>
+          <h3 style={paymentHeadingStyle}>{t("Payment")}</h3>
+          
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={thStyle}>{t("Property ID")}</th>
+                <th style={thStyle}>{t("Owner Name")}</th>
+                <th style={thStyle}>{t("Mobile Number")}</th>
+                <th style={thStyle}>{t("Payment Amount")}</th>
+                <th style={{ ...thStyle, textAlign: "center" }}>{t("Action")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.map((property) => {
+                const owner = property.owners?.[0] || {};
+                return (
+                  <tr key={property.propertyId}>
+                    <td style={tdStyle}>{property.propertyId}</td>
+                    <td style={tdStyle}>{owner.name || "-"}</td>
+                    <td style={tdStyle}>{owner.mobileNumber || "-"}</td>
+                    <td style={tdStyle}>
+                      ₹ {(property.totalDue || 0).toLocaleString("en-IN")}
+                    </td>
+                    <td style={{ ...tdStyle, textAlign: "center" }}>
+                      <button
+                        style={payButtonStyle}
+                        onClick={() => proceedToPay(property)}
+                      >
+                        {t("Pay")}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div style={paginationContainer}>
+              <div style={paginationInfo}>
+                Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, searchResults.length)} of {searchResults.length} results
+              </div>
+              
+              <div style={paginationControls}>
+                <button
+                  onClick={handlePrevious}
+                  disabled={currentPage === 1}
+                  style={{
+                    ...paginationButton,
+                    ...(currentPage === 1 ? disabledButtonStyle : {})
+                  }}
+                >
+                  Previous
+                </button>
+
+                {getPageNumbers().map((number, index) => (
+                  number === '...' ? (
+                    <span key={`dots-${index}`} style={paginationDots}>...</span>
+                  ) : (
+                    <button
+                      key={number}
+                      onClick={() => handlePageChange(number)}
+                      style={{
+                        ...paginationButton,
+                        ...(currentPage === number ? activePageButton : {})
+                      }}
+                    >
+                      {number}
+                    </button>
+                  )
+                ))}
+
+                <button
+                  onClick={handleNext}
+                  disabled={currentPage === totalPages}
+                  style={{
+                    ...paginationButton,
+                    ...(currentPage === totalPages ? disabledButtonStyle : {})
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* No Results Message */}
+      {propertyDataLoading === false && searchResults.length === 0 && (formValue.propertyIds || formValue.mobileNumber) && (
+        <div style={noResultsStyle}>
+          {t("CS_PT_NO_PROPERTIES_FOUND")}
+        </div>
+      )}
 
       {showToast && (
         <Toast
@@ -149,6 +348,10 @@ const SearchProperty = ({ onSelect }) => {
           }}
         />
       )}
+      <Popup
+        show={showPopup}
+        onClose={(option) => handlePopupClose(option)}
+      />
     </div>
   );
 };
@@ -163,59 +366,49 @@ const containerStyle = {
   borderRadius: "10px",
   padding: "20px 30px",
   maxWidth: "1000px",
-  margin: "20px auto",
   fontFamily: "sans-serif",
 };
 
 const headingStyle = {
-  marginBottom: "20px",
-  fontFamily: "Barlow",
+  margin: "0 0 24px 0",
+  fontFamily: "Barlow, sans-serif",
   fontWeight: 600,
-  fontStyle: "normal", // "SemiBold" is not a valid value for font-style; use fontWeight
   fontSize: "20px",
-  lineHeight: "23px",
-  letterSpacing: "0px",
-  // textAlign: "center",
-  color:"#000000"
+  color: "#6B133F",
 };
 
 const rowStyle = {
   display: "flex",
   alignItems: "flex-end",
-  justifyContent: "space-between",
-  gap: "10px",
+  gap: "50px",
   flexWrap: "wrap",
 };
 
 const inputGroupWrapper = {
   display: "flex",
   alignItems: "center",
-  gap: "20px",
-  flexWrap: "wrap", 
+  gap: "10px",
+  flexWrap: "wrap",
 };
 
 const labelStyle = {
   display: "block",
-  marginBottom: "5px",
-  fontFamily: "Noto Sans",
+  marginBottom: "8px",
+  fontFamily: "Noto Sans, sans-serif",
   fontWeight: 400,
-  fontStyle: "normal", // "Regular" is not a valid fontStyle; use "normal"
-  fontSize: "16px",
-  lineHeight: "100%", // or "1" for equivalent
-  letterSpacing: "0%",
-  color: "#000000"
-
+  fontSize: "14px",
+  color: "#505050",
 };
 
 const inputStyle = {
+  width: "300px",
   padding: "10px 14px",
-  borderRadius: "8px",
-  border: "1px solid #e1dbe5",
-  boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
-  backgroundColor: "#f4e9f0",
+  borderRadius: "4px",
+  border: "1px solid #D6D5D4",
+  backgroundColor: "#F7F7F7",
+  fontSize: "14px",
   outline: "none",
-  width: "240px",
-  maxWidth: "100%",
+  transition: "all 0.2s",
 };
 
 const orStyle = {
@@ -223,270 +416,140 @@ const orStyle = {
   color: "#555",
 };
 
-const buttonStyle = {
-  backgroundColor: "#6B133F",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  padding: "10px 30px",
-  fontWeight: "bold",
-  cursor: "pointer",
-  marginTop: "10px", 
-  width: "fit-content",
+const buttonGroupStyle = {
+  display: "flex",
+  gap: "12px",
+  marginTop: "20px",
 };
 
-// ✅ Inject responsive overrides via CSS
-const responsiveStyle = `
-  @media (max-width: 600px) {
-    .search-container {
-      padding: 16px;
-    }
-    .search-row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .search-inputs {
-      flex-direction: column;
-      gap: 12px;
-      width: 100%;
-    }
-    .search-inputs input {
-      width: 100% !important;
-    }
-    .search-btn {
-      width: 100%;
-      text-align: center;
-    }
-  }
-`;
+const baseButtonStyle = {
+  padding: "8px 32px",
+  borderRadius: "4px",
+  fontSize: "14px",
+  fontWeight: 500,
+  cursor: "pointer",
+  transition: "all 0.2s",
+  border: "none",
+  minWidth: "80px",
+};
 
+const clearButtonStyle = {
+  ...baseButtonStyle,
+  backgroundColor: "#6B133F",
+  color: "#fff",
+};
 
+const findButtonStyle = {
+  ...baseButtonStyle,
+  backgroundColor: "#D4B5C7",
+  color: "#fff",
+};
 
+const paymentSectionStyle = {
+  marginTop: "32px",
+  padding: "0 20px"
+};
 
+const paymentHeadingStyle = {
+  margin: "0 0 16px 0",
+  fontFamily: "Barlow, sans-serif",
+  fontWeight: 600,
+  fontSize: "18px",
+  color: "#000",
+};
 
+const tableStyle = {
+  width: "100%",
+  borderCollapse: "collapse",
+  backgroundColor: "#fff",
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  borderRadius: "8px",
+  overflow: "hidden",
+};
 
+const thStyle = {
+  backgroundColor: "#E8D4DE",
+  padding: "12px 16px",
+  textAlign: "left",
+  fontWeight: 500,
+  fontSize: "14px",
+  color: "#505050",
+  borderBottom: "1px solid #E0E0E0",
+};
 
+const tdStyle = {
+  padding: "12px 16px",
+  fontSize: "14px",
+  color: "#333",
+  borderBottom: "1px solid #F0F0F0",
+};
 
+const payButtonStyle = {
+  backgroundColor: "#fff",
+  border: "1px solid #6B133F",
+  color: "#6B133F",
+  padding: "6px 24px",
+  borderRadius: "20px",
+  cursor: "pointer",
+  fontSize: "14px",
+  fontWeight: 500,
+  transition: "all 0.2s",
+};
 
+const noResultsStyle = {
+  padding: "32px",
+  textAlign: "center",
+  backgroundColor: "#fff",
+  borderRadius: "8px",
+  color: "#666",
+};
 
+// Pagination styles
+const paginationContainer = {
+  marginTop: "20px",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  flexWrap: "wrap",
+  gap: "16px"
+};
 
+const paginationInfo = {
+  color: "#666",
+  fontSize: "14px",
+};
 
-// import React, { useEffect, useState } from "react";
-// import { useTranslation } from "react-i18next";
-// import { useHistory, Link } from "react-router-dom";
-// import { Toast } from "@egovernments/digit-ui-react-components";
+const paginationControls = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+};
 
-// const SearchProperty = ({ onSelect }) => {
-//   const { t } = useTranslation();
-//   const history = useHistory();
+const paginationButton = {
+  padding: "6px 12px",
+  border: "1px solid #D6D5D4",
+  backgroundColor: "#fff",
+  color: "#333",
+  borderRadius: "4px",
+  cursor: "pointer",
+  fontSize: "14px",
+  transition: "all 0.2s",
+  minWidth: "32px",
+};
 
-//   const [formValue, setFormValue] = useState({});
-//   const [showToast, setShowToast] = useState(null);
-//   const [errorShown, setErrorShown] = useState(false);
-//   const tenantId = Digit.ULBService.getCurrentTenantId();
-//   const isMobile = window.Digit.Utils.browser.isMobile();
+const activePageButton = {
+  backgroundColor: "#6B133F",
+  color: "#fff",
+  borderColor: "#6B133F",
+};
 
-//   const { data: propertyData, isLoading: propertyDataLoading, error } = Digit.Hooks.pt.usePropertySearchWithDue({
-//     tenantId: tenantId,
-//     filters: {
-//       ...(formValue.propertyIds ? { propertyIds: formValue.propertyIds } : {}),
-//       ...(formValue.mobileNumber ? { mobileNumber: formValue.mobileNumber } : {}),
-//     },
-//     auth: true,
-//     configs: {
-//       enabled: !!formValue.propertyIds || !!formValue.mobileNumber,
-//       retry: false,
-//       retryOnMount: false,
-//       staleTime: Infinity,
-//     },
-//   });
+const disabledButtonStyle = {
+  opacity: 0.5,
+  cursor: "not-allowed",
+  backgroundColor: "#f5f5f5",
+};
 
-//   useEffect(() => {
-//     if (
-//       propertyData?.Properties?.length > 50 && // Arbitrary max result, adjust if needed
-//       !errorShown
-//     ) {
-//       setShowToast({ error: true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
-//       setErrorShown(true);
-//     }
-//   }, [propertyData]);
-
-//   const onPropertySearch = () => {
-//     const { propertyIds, mobileNumber } = formValue;
-
-//     if (!propertyIds && !mobileNumber) {
-//       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-//       return;
-//     }
-
-//     if (mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber)) {
-//       setShowToast({ warning: true, label: "ERR_PT_INVALID_MOBILE" });
-//       return;
-//     }
-
-//     if (propertyIds && !/^[A-Za-z0-9-/]+$/.test(propertyIds)) {
-//       setShowToast({ warning: true, label: "ERR_PT_INVALID_PID" });
-//       return;
-//     }
-
-//     const filters = {};
-//     if (propertyIds) filters.propertyIds = propertyIds;
-//     if (mobileNumber) filters.mobileNumber = mobileNumber;
-
-//     history.push(
-//       `/digit-ui/citizen/pt/property/search-results?${Object.keys(filters)
-//         .map((key) => `${key}=${filters[key]}`)
-//         .join("&")}&city=${tenantId}`
-//     );
-//   };
-
-//   return (
-//     <div style={{ marginTop: "16px", marginBottom: "16px", backgroundColor: "white", maxWidth: "960px" }}>
-//       <div style={containerStyle}>
-//         <h4 style={headingStyle}>{t("Search Criteria")}</h4>
-//         <div style={rowStyle}>
-//           <div style={inputGroupWrapper}>
-//             <div>
-//               <label style={labelStyle}>
-//                 {t("Property ID")} <span style={{ color: "red" }}>*</span>
-//               </label>
-//               <input
-//                 type="text"
-//                 placeholder={t("Enter Property ID")}
-//                 style={inputStyle}
-//                 value={formValue?.propertyIds || ""}
-//                 onChange={(e) =>
-//                   setFormValue((prev) => ({
-//                     ...prev,
-//                     propertyIds: e.target.value,
-//                     mobileNumber: "",
-//                   }))
-//                 }
-//               />
-//             </div>
-
-//             <div style={orStyle}>OR</div>
-
-//             <div>
-//               <label style={labelStyle}>
-//                 {t("Mobile Number")} <span style={{ color: "red" }}>*</span>
-//               </label>
-//               <input
-//                 type="text"
-//                 placeholder={t("Mobile Number")}
-//                 value={formValue?.mobileNumber || ""}
-//                 onChange={(e) =>
-//                   setFormValue((prev) => ({
-//                     ...prev,
-//                     mobileNumber: e.target.value,
-//                     propertyIds: "",
-//                   }))
-//                 }
-//                 style={inputStyle}
-//               />
-//             </div>
-//           </div>
-
-//           <button onClick={onPropertySearch} style={buttonStyle}>
-//             {t("Search")}
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* <span className="link" style={{ display: "flex", justifyContent: isMobile ? "center" : "left", paddingBottom: "16px", paddingLeft: "24px", marginTop: "-24px" }}>
-//         <Link to={"/digit-ui/citizen/pt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
-//       </span> */}
-
-//       {showToast && (
-//         <Toast
-//           error={showToast.error}
-//           isDleteBtn={true}
-//           warning={showToast.warning}
-//           label={t(showToast.label)}
-//           onClose={() => {
-//             setShowToast(null);
-//             setErrorShown(false);
-//           }}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default SearchProperty;
-
-// // -------------------------------------------
-// // STYLES
-// // -------------------------------------------
-// const containerStyle = {
-//   background: "#FFFFFF",
-//   borderRadius: "10px",
-//   padding: "20px 30px",
-//   maxWidth: "1000px",
-//   margin: "20px auto",
-//   fontFamily: "sans-serif",
-// };
-
-// const headingStyle = {
-//   marginBottom: "20px",
-//   fontFamily: "Barlow",
-//   fontWeight: 600,
-//   fontStyle: "normal", // "SemiBold" is not a valid value for font-style; use fontWeight
-//   fontSize: "20px",
-//   lineHeight: "23px",
-//   letterSpacing: "0px",
-//   // textAlign: "center",
-//   color:"#000000"
-// };
-
-// const rowStyle = {
-//   display: "flex",
-//   alignItems: "flex-end",
-//   justifyContent: "space-between",
-//   gap: "10px",
-//   flexWrap: "wrap",
-// };
-
-// const inputGroupWrapper = {
-//   display: "flex",
-//   alignItems: "center",
-//   gap: "20px",
-// };
-
-// const labelStyle = {
-//   display: "block",
-//   marginBottom: "5px",
-//   fontFamily: "Noto Sans",
-//   fontWeight: 400,
-//   fontStyle: "normal", // "Regular" is not a valid fontStyle; use "normal"
-//   fontSize: "16px",
-//   lineHeight: "100%", // or "1" for equivalent
-//   letterSpacing: "0%",
-//   color: "#000000"
-
-// };
-
-// const inputStyle = {
-//   padding: "10px 14px",
-//   borderRadius: "8px",
-//   border: "1px solid #e1dbe5",
-//   boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
-//   backgroundColor: "#f4e9f0",
-//   outline: "none",
-//   width: "240px",
-// };
-
-// const orStyle = {
-//   fontWeight: "bold",
-//   color: "#555",
-// };
-
-// const buttonStyle = {
-//   backgroundColor: "#6B133F",
-//   color: "#fff",
-//   border: "none",
-//   borderRadius: "8px",
-//   padding: "10px 30px",
-//   fontWeight: "bold",
-//   cursor: "pointer",
-// };
+const paginationDots = {
+  padding: "0 8px",
+  color: "#666",
+};

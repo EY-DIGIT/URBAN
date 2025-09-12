@@ -32,16 +32,16 @@ export const MyProperties = () => {
 
   return (
     <React.Fragment>
-      <Header>{`${t("PT_MY_PROPERTIES_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
+      {/* <Header>{`${t("PT_MY_PROPERTIES_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header> */}
       <div>
-        {applicationsList?.length > 0 &&
+        {/* {applicationsList?.length > 0 &&
           applicationsList.map((application, index) => (
             <div key={index}>
               <MyProperty application={application} />
             </div>
           ))}
-        {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>}
-
+        {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>} */}
+        <MyProperty applications={applicationsList} />
         {applicationsList?.length !== 0 && (
           <div>
             <p style={{ marginLeft: "16px", marginTop: "16px" }}>

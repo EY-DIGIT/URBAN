@@ -288,6 +288,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
   const propertyId = state?.propertyId;
 
+  console.log("consumerCode", paymentRules, businessService, consumerCode);
+
   if (wrkflow === "WNS" && consumerCode.includes("?")) consumerCode = consumerCode.substring(0, consumerCode.indexOf("?"));
 
   const { data, isLoading } = state?.bill

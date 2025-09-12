@@ -117,6 +117,9 @@ const CreateProperty = () => {
 
   const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
 
+  const userData = Digit.UserService.getUser();
+  const isCitizen = userData?.info?.type === "CITIZEN" ? true : false;
+
   const token = localStorage.getItem("token");
   const stateId = Digit.ULBService.getStateId();
   const { data: AssessmentYearsList, isLoadings } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "AssessmentYear");
@@ -139,6 +142,7 @@ const CreateProperty = () => {
     mutate: ptCalculationEstimateMutate,
     error,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const handleEstimate = () => {
     // const errors = {};
@@ -391,7 +395,7 @@ const CreateProperty = () => {
     });
   };
   const handleSubmit = async () => {
-      const tenantIdDefine = Digit.ULBService.getCurrentTenantId();
+    const tenantIdDefine = Digit.ULBService.getCurrentTenantId();
     const errors = {};
 
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
@@ -409,63 +413,65 @@ const CreateProperty = () => {
     validateFile(documents.photoId, "photoId", "Photo ID");
     validateFile(documents.ownershipDoc, "ownershipDoc", "Ownership document");
 
-    // ---- 3. Ownership ----
-    if (!ownershipType) {
-      errors.ownershipType = "Ownership type is required.";
-    }
-
-    // ---- 4. Owner (first only) ----
-    const owner = owners[0];
-    if (!owner.name || owner.name.trim() === "") {
-      errors.ownerName = "Owner name is required.";
-    }
-    if (!owner.hindiName || owner.hindiName.trim() === "") {
-      errors.hindiName = "Owner name (हिंदी में) is required.";
-    }
-    if (!owner.fatherHusbandName || owner.fatherHusbandName.trim() === "") {
-      errors.fatherHusbandName = "Owner Relation is required.";
-    }
-    if (!owner.relationship || owner.relationship.trim() === "") {
-      errors.relationship = "Owner Relationship is required.";
-    }
-    if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
-      errors.mobile = "Valid 10-digit mobile number is required.";
-    }
-    if (!owner.aadhaar || !/^\d{12}$/.test(owner.aadhaar)) {
-      errors.aadhaar = "Valid 12-digit Aadhaar is required.";
-    }
-    // if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
-    //   errors.samagraID = "Samagra ID must be digits only.";
-    // }
-    if (!owner.noSamagra) {
-      if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
-        errors.samagraID = "Samagra ID must be digits only.";
+    // if (!isCitizen) {
+      // ---- 3. Ownership ----
+      if (!ownershipType) {
+        errors.ownershipType = "Ownership type is required.";
       }
-    }
-    // ---- 5. Address ----
-    if (!addressDetails.doorNo || addressDetails.doorNo.trim() === "") {
-      errors.doorNo = "Door/House No is required.";
-    }
-    if (!addressDetails.address || addressDetails.address.trim() === "") {
-      errors.address = "Address is required.";
-    }
-    if (!addressDetails.pincode || !/^\d{6}$/.test(addressDetails.pincode)) {
-      errors.pincode = "Valid 6-digit pincode is required.";
-    }
-    if (!addressDetails.colony) {
-      errors.colony = "Colony selection is required.";
-    }
-    if (!addressDetails.ward) {
-      errors.ward = "Ward selection is required.";
-    }
-    if (!addressDetails.zone) {
-      errors.zone = "Zone selection is required.";
-    }
 
-    // ---- 6. Assessment ----
-    if (!assessmentDetails.rateZone) {
-      errors.rateZone = "Rate zone is required.";
-    }
+      // ---- 4. Owner (first only) ----
+      const owner = owners[0];
+      if (!owner.name || owner.name.trim() === "") {
+        errors.ownerName = "Owner name is required.";
+      }
+      if (!owner.hindiName || owner.hindiName.trim() === "") {
+        errors.hindiName = "Owner name (हिंदी में) is required.";
+      }
+      if (!owner.fatherHusbandName || owner.fatherHusbandName.trim() === "") {
+        errors.fatherHusbandName = "Owner Relation is required.";
+      }
+      if (!owner.relationship || owner.relationship.trim() === "") {
+        errors.relationship = "Owner Relationship is required.";
+      }
+      if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
+        errors.mobile = "Valid 10-digit mobile number is required.";
+      }
+      if (!owner.aadhaar || !/^\d{12}$/.test(owner.aadhaar)) {
+        errors.aadhaar = "Valid 12-digit Aadhaar is required.";
+      }
+      // if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
+      //   errors.samagraID = "Samagra ID must be digits only.";
+      // }
+      if (!owner.noSamagra) {
+        if (!owner.samagraID || !/^\d+$/.test(owner.samagraID)) {
+          errors.samagraID = "Samagra ID must be digits only.";
+        }
+      }
+      // ---- 5. Address ----
+      if (!addressDetails.doorNo || addressDetails.doorNo.trim() === "") {
+        errors.doorNo = "Door/House No is required.";
+      }
+      if (!addressDetails.address || addressDetails.address.trim() === "") {
+        errors.address = "Address is required.";
+      }
+      if (!addressDetails.pincode || !/^\d{6}$/.test(addressDetails.pincode)) {
+        errors.pincode = "Valid 6-digit pincode is required.";
+      }
+      if (!addressDetails.colony) {
+        errors.colony = "Colony selection is required.";
+      }
+      if (!addressDetails.ward) {
+        errors.ward = "Ward selection is required.";
+      }
+      if (!addressDetails.zone) {
+        errors.zone = "Zone selection is required.";
+      }
+
+      // ---- 6. Assessment ----
+      if (!assessmentDetails.rateZone) {
+        errors.rateZone = "Rate zone is required.";
+      }
+    // }
 
     // made diabled for now========================IMPORTANT
     // if (!assessmentDetails.roadFactor) { 
@@ -479,6 +485,12 @@ const CreateProperty = () => {
     if (Object.keys(errors).length > 0) {
       return;
     }
+
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmSubmit = async () => {
+    setShowConfirmationModal(false);
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
       return;
@@ -898,17 +910,6 @@ const CreateProperty = () => {
       <div style={styles.assessmentStyles}>New Property Application</div>
       {!showSuccessModal && (
         <div >
-
-          {/* Attachments Section */}
-          <div style={styles.card}>
-            <AttachmentsSection
-              t={t}
-              handleFileChange={handleFileChange}
-              styles={styles}
-              formErrors={formErrors}
-            />
-          </div>
-
           <div style={styles.card}>
             <div style={styles.assessmentStyle}>{t("Ownership Details")}</div>
             <OwnershipDetailsSection
@@ -949,7 +950,7 @@ const CreateProperty = () => {
           </div>
 
           <div style={{ ...styles.card, pointerEvents: "none", opacity: 0.5 }}>
-          <div style={styles.assessmentStyle}>{t("Assessment Details")}</div>
+            <div style={styles.assessmentStyle}>{t("Assessment Details")}</div>
             <AssessmentDetailsSection
               t={t}
               assessmentDetails={assessmentDetails}
@@ -961,7 +962,7 @@ const CreateProperty = () => {
           </div>
 
           <div style={{ ...styles.card, pointerEvents: "none", opacity: 0.5 }}>
-          <div style={styles.assessmentStyle}>{t("Property Details")}</div>
+            <div style={styles.assessmentStyle}>{t("Property Details")}</div>
             <PropertyDetailsTableSection
               t={t}
               unit={unit}
@@ -971,7 +972,10 @@ const CreateProperty = () => {
               formErrors={formErrors}
             />
           </div>
-          <div style={styles.card}>
+          <div style={{
+            ...styles.card,
+            ...(!isCitizen ? {} : { pointerEvents: "none", opacity: 0.5 })
+          }}>
             <OtherDetailsSection
               t={t}
               propertyDetails={propertyDetails}
@@ -981,6 +985,37 @@ const CreateProperty = () => {
               styles={styles}
               formErrors={formErrors}
             />
+          </div>
+
+          {/* Attachments Section */}
+          <div style={styles.card}>
+            <AttachmentsSection
+              t={t}
+              handleFileChange={handleFileChange}
+              styles={styles}
+              formErrors={formErrors}
+            />
+          </div>
+
+          {/* Self Declaration */}
+          <div style={styles.card}>
+            <div style={styles.poppinsLabel}>{t("Self Declaration")}</div>
+            <label style={styles.poppinsTextStyle}>
+              <input
+                style={{ marginRight: "10px" }}
+                type="checkbox"
+                checked={checkboxes.selfDeclaration}
+                onChange={() => handleCheckboxChange("selfDeclaration")}
+              />{"    "}
+              {t(
+                " मैं यह सत्यापित करता / करती हूं कि उपरोक्त विवरणी मे दी गयी जानकारी सत्य है। मैने / हमने जिस भवन/ भूमि के संबंध मे विवरणी प्रस्तुत की है उसका मैं स्वामी/अधिभोगी हूं इसमे कोई भी तथ्य छू पाये अथवा गलत नहीं है। नोट - मध्यप्रदेश नगर पालिका (वार्षिक भाड़ा मूल्य का अवधारणा) नियम 1997 के नियम 10 (1) अंतर्गत प्रत्येक भवन स्वामी को स्व निर्धारण विवरणी (Self Assessment Form) के साथ संलग्नक (Attachment) scan कर सब्मिट करें । स्व निर्धारण विवरणी मौके पर सत्यापन के अध्याधीन रहेगी, जाँच मे अंतर पाये जाने पर या अन्य कारण से आवश्यक पाये जाने पर वार्षिक भाड़ा मूल्य का पुर्निर्धारण किया जाएगा व 0 प्रतिशत से अधिक अंतर पाये जाने पर सम्पतिकर के पुर्निर्धारण के अंतर की राशि की पाँच गुना शास्ति ,अधिरोपित की जा सकेगी।"
+              )}
+            </label>
+            {formErrors?.selfDeclaration && (
+              <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+                {formErrors.selfDeclaration}
+              </p>
+            )}
 
             {showAssessmentPop && (
               <div style={styles.modalOverlay}>
@@ -1010,9 +1045,16 @@ const CreateProperty = () => {
               </div>
             )}
             <div style={styles.buttonContainer}>
-             
-                <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
-            
+
+              <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
+              {showConfirmationModal && (
+                <ConfirmationModal
+                  t={t}
+                  onBack={() => setShowConfirmationModal(false)}
+                  onConfirm={handleConfirmSubmit}
+                  styles={styles}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -1034,3 +1076,53 @@ const CreateProperty = () => {
 };
 
 export default CreateProperty;
+
+
+const ConfirmationModal = ({ t, onBack, onConfirm, styles }) => {
+  return (
+    <div style={styles.modalOverlay}>
+      <div style={{
+        ...styles.modalContent,
+        maxWidth: '400px',
+        padding: '40px',
+        textAlign: 'center',
+        borderRadius: '8px'
+      }}>
+        <div style={{
+          fontSize: '18px',
+          fontWeight: '600',
+          color: '#333',
+          marginBottom: '30px',
+          lineHeight: '1.5'
+        }}>
+          {t("Are you sure you want to submit this form?")}
+        </div>
+
+        <div style={{
+          display: "flex",
+          gap: "20px",
+          justifyContent: 'center'
+        }}>
+          <SubmitBar
+            label={t("Back")}
+            onSubmit={onBack}
+            style={{
+              background: "#6b133f",
+              minWidth: '100px',
+              backgroudRadius: '8px',
+            }}
+          />
+          <SubmitBar
+            label={t("Confirm")}
+            onSubmit={onConfirm}
+            style={{
+              background: "#6b133f",
+              minWidth: '100px',
+              backgroudRadius: '8px',
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};

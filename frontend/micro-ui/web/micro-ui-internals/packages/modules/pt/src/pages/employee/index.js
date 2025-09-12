@@ -54,7 +54,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     ["/digit-ui/employee/pt/search"]: "PT_COMMON_SEARCH_PROPERTY_SUB_HEADER",
     ["/digit-ui/employee/pt/application-search"]: "ES_COMMON_APPLICATION_SEARCH",
     ["/digit-ui/employee/pt/PreviewDemand"]: "PreviewDemand",
-     ["/digit-ui/employee/pt/PropertyLandingPage"]: "Property Landing Page",
+     ["/digit-ui/employee/pt/PropertyLandingPage"]: "New Property Application",
      ["/digit-ui/employee/pt/PropertyLedger"]: "Property Ledger Page",
       ["/digit-ui/employee/pt/DemandNote"]: " Demand Note Page",
      ["/digit-ui/employee/pt/DetailLedgerPage"]: "Detail Ledger Page",

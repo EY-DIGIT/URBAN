@@ -56,11 +56,14 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   // const auth = !!isMutation;    /*  to enable open search set false  */
   const auth =true;
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  console.log("tenantId", tenantId);
   const searchArgs = city ? { tenantId: city, filters, auth } : { filters, auth };
   const result = Digit.Hooks.pt.usePropertySearch(searchArgs);
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
   let fetchBillParams = mobileNumber ? { mobileNumber, consumerCode } : { consumerCode };
+
+  console.log("tenantId", tenantId, mobileNumber, city);
 
   if (window.location.href.includes("/search-results")) fetchBillParams = { consumerCode };
 

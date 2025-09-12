@@ -132,6 +132,9 @@ import PropertyLedger from "./pageComponents/PropertyLedger";
 import DetailLedgerPage from "./pageComponents/PropertyDetailLedger";
 import DemandNote from "./pageComponents/DemandNote";
 
+import PropertyCardsLanding from "./pages/citizen/PropertyCardsLanding/PropertyCardsLanding";
+import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
+
 
 const componentsToRegister = {
   AssessmentDetailsSection,
@@ -250,6 +253,8 @@ const componentsToRegister = {
   OtherDetailLayout,
   PTSelectWard,
   PropertAddressLayout,
+  PropertyCardsLanding,
+  PaymentForm,
 };
 
 const addComponentsToRegistry = () => {

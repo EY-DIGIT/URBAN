@@ -5,6 +5,7 @@ import { shouldHideBackButton } from "../../utils";
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { PTMyPayments } from "./MyPayments";
+import PropertyCardsLanding from "./PropertyCardsLanding/PropertyCardsLanding";
 
 const hideBackButtonConfig = [
   { screenPath: "property/new-application/acknowledgement" },
@@ -30,6 +31,8 @@ const App = () => {
   const PropertyInformation = Digit?.ComponentRegistryService?.getComponent("PropertyInformation");
   const PropertyOwnerHistory = Digit?.ComponentRegistryService?.getComponent("PropertyOwnerHistory");
   const PreviewDemand = Digit?.ComponentRegistryService?.getComponent("PreviewDemand");
+  const PropertyCardsLanding = Digit?.ComponentRegistryService?.getComponent("PropertyCardsLanding");
+  const PaymentForm = Digit?.ComponentRegistryService?.getComponent("PaymentForm");
 
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
@@ -41,6 +44,8 @@ const App = () => {
           {!shouldHideBackButton(hideBackButtonConfig) ? <BackButton>Back</BackButton> : ""}
           <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
           {/* <PrivateRoute path={`${path}/property/PreviewDemand`} component={PreviewDemand} /> */}
+          <PrivateRoute path={`${path}/property/Actions`} component={PropertyCardsLanding}></PrivateRoute>
+          <PrivateRoute path={`${path}/property/previewPayment/:consumerCode`} component={PaymentForm}></PrivateRoute>
 
           <PrivateRoute path={`${path}/property/edit-application`} component={EditProperty} />
           <Route path={`${path}/property/citizen-search`} component={SearchPropertyComponent} />
@@ -57,6 +62,7 @@ const App = () => {
           <PrivateRoute path={`${path}/property/owner-history/:tenantId/:propertyIds`} component={PropertyOwnerHistory}></PrivateRoute>
           {/* <Redirect to={`/`}></Redirect> */}
           <PrivateRoute path={`${path}/property/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
+
         </AppContainer>
       </Switch>
     </span>
