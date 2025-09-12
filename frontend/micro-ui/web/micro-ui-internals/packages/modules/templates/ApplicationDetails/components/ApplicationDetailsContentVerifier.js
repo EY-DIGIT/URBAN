@@ -21,7 +21,7 @@ import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
 import NOCDocuments from "./NOCDocuments";
 import PermissionCheck from "./PermissionCheck";
-import PropertyDocuments from "./PropertyDocuments";
+import PropertyDocuments from "./PropertyDocumentTimeline";
 import PropertyEstimates from "./PropertyEstimates";
 import PropertyFloors from "./PropertyFloors";
 import PropertyOwners from "./PropertyOwners";
@@ -73,6 +73,8 @@ function ApplicationDetailsContentVerifier({
     return `${day}/${month}/${year}`;
   };
   const getTimelineCaptions = (checkpoint, index = 0) => {
+console.log("ABCDFG ===",checkpoint)
+
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
         date: checkpoint?.auditDetails?.created,
@@ -698,6 +700,20 @@ function ApplicationDetailsContentVerifier({
               {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
               {!workflowDetails?.isLoading && !isDataLoading && (
                 <Fragment>
+                 
+                    {/* {applicationDetails?.applicationDetails?.map((detail, index) => (
+                <div key={index}>
+ 
+ 
+ 
+ 
+                  {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
+ 
+                </div>
+              ))} */}
+
+
+
                   {/* <CardSectionHeader style={{ ...styles.sectionTitle, marginBottom: "16px", marginTop: "32px" }}>
                   {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
                 </CardSectionHeader> */}
@@ -743,6 +759,8 @@ function ApplicationDetailsContentVerifier({
             </React.Fragment>
           )}
         </div>
+
+
     }
   ];
 
