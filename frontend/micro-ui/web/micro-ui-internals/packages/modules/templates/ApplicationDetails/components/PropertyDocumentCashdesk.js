@@ -11,6 +11,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
   const [filesArray, setFilesArray] = useState(() => []);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [pdfFiles, setPdfFiles] = useState({});
+  const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
 
   useEffect(() => {
     let acc = [];
@@ -75,7 +76,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                   }}
                 >
                   {/* {t(document?.title)} */}
-                  Reports
+               Reports
                 </div>
 
                 {/* ✅ REPLACED: New navigation links */}
@@ -94,7 +95,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                     })}
                     style={{ ...styles.linkButton }}
                   >
-                    Ledger
+                  <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px" }} />  Ledger
                   </button>
                   {/* Detail Ledger */}
                   <button
@@ -104,7 +105,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                     })}
                     style={{ ...styles.linkButton }}
                   >
-                    Detail Ledger
+                  <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px" }} />  Detail Ledger
                   </button>
                   {/* Demand */}
                   <button
@@ -122,7 +123,7 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow = false, 
                       alt="Download icon"
                       style={{ width: "20px", height: "20px" }}
                     /> */}
-                    Demand Note
+                 <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px" }} />   Demand Note
                   </button>
                 </div>
 

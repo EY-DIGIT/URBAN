@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Dropdown, TextInput, SubmitBar } from "@egovernments/digit-ui-react-components";
 
 const OwnershipDetailsSection = ({
@@ -58,6 +58,8 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
   //   setOwners(updated);
   // };
 
+  
+  
   const updateOwner = (index, field, value) => {
     console.log("RELLLLL=",value)
     const updated = [...owners];
@@ -78,6 +80,11 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
 
   const renderOwnerForm = (index) => {
     const owner = owners[index];
+
+    const fixedAadhaar = "123412341234";
+if (owner.aadhaar !== fixedAadhaar) {
+  handleOwnerAadhaarChange(index, fixedAadhaar);
+}
 
     return (
       <div key={index}>
@@ -265,7 +272,8 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
             )}
           </div>
           {/* Aadhaar */}
-          <div style={styles.flex30}>
+
+          {/* <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>{t("Aadhaar ID")} <span className="mandatory" style={styles.mandatory}>*</span></div>
             <TextInput
               style={styles.widthInput}
@@ -275,12 +283,33 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
               onChange={(e) => handleOwnerAadhaarChange(index, e.target.value)}
               placeholder={t("Enter")}
             />
-            {/* ✅ CHANGE THIS LINE */}
-            {/* It should now look for the correct, dynamic error key */}
+          
             {formErrors[`owner-${index}-aadhaar`] && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-aadhaar`]}</p>
             )}
-          </div>
+          </div> */}
+
+            <div style={styles.flex30}>
+      <div style={styles.poppinsLabel}>
+        {t("Aadhaar ID")}{" "}
+        <span className="mandatory" style={styles.mandatory}>
+          *
+        </span>
+      </div>
+      <TextInput
+        style={styles.widthInput}
+        value={fixedAadhaar}
+        disabled
+        placeholder={t("Enter")}
+      />
+      {formErrors[`owner-${index}-aadhaar`] && (
+        <p style={{ color: "red", fontSize: "12px" }}>
+          {formErrors[`owner-${index}-aadhaar`]}
+        </p>
+      )}
+    </div>
+
+
 
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>

@@ -383,35 +383,37 @@ const AddressSection = ({
   }, []);
 
   // Update Wards when Zone changes
-  // useEffect(() => {
-  //   if (addressDetails.zone && boundaryData?.children?.length > 0) {
-  //     const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
-  //     const wardList = selectedZone?.children || [];
-  //     const formattedWards = wardList.map((ward) => ({
-  //       code: ward.code,
-  //       name: ward.name || ward.code,
-  //     }));
-  //     setWards(formattedWards);
-  //   } else {
-  //     setWards([]);
-  //   }
-  // }, [addressDetails.zone, boundaryData]);
+  useEffect(() => {
+    if (addressDetails.zone && boundaryData?.children?.length > 0) {
+      const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
+      const wardList = selectedZone?.children || [];
+      const formattedWards = wardList.map((ward) => ({
+        code: ward.code,
+        name: ward.name || ward.code,
+      }));
+      setWards(formattedWards);
+    } else {
+      setWards([]);
+    }
+  }, [addressDetails.zone, boundaryData]);
 
   // Update Colonies when Ward changes
-  useEffect(() => {
-    if (addressDetails.zone && addressDetails.ward && boundaryData?.children?.length > 0) {
-      const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
-      const selectedWard = selectedZone?.children?.find((w) => w.code === addressDetails.ward.code);
-      const colonyList = selectedWard?.children || [];
-      const formattedColonies = colonyList.map((col) => ({
-        code: col.code,
-        name: col.name || col.code,
-      }));
-      setColonies(formattedColonies);
-    } else {
-      setColonies([]);
-    }
-  }, [addressDetails.ward, addressDetails.zone, boundaryData]);
+
+
+  // useEffect(() => {
+  //   if (addressDetails.zone && addressDetails.ward && boundaryData?.children?.length > 0) {
+  //     const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
+  //     const selectedWard = selectedZone?.children?.find((w) => w.code === addressDetails.ward.code);
+  //     const colonyList = selectedWard?.children || [];
+  //     const formattedColonies = colonyList.map((col) => ({
+  //       code: col.code,
+  //       name: col.name || col.code,
+  //     }));
+  //     setColonies(formattedColonies);
+  //   } else {
+  //     setColonies([]);
+  //   }
+  // }, [addressDetails.ward, addressDetails.zone, boundaryData]);
 
   useEffect(() => {
   if (
