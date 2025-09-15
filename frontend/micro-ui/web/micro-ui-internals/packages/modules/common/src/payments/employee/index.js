@@ -32,12 +32,15 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
         {isFsm ? <Link to={`/digit-ui/employee/fsm/inbox`}>/ {t("ES_TITLE_INBOX")}</Link> : null}/ {link}
       </p>
       <Switch>
+        {/* Opens CollectPayment, where the user initiates payment. */}
         <Route path={`${currentPath}/collect/:businessService/:consumerCode`}>
           <CollectPayment {...commonProps} basePath={currentPath} />
         </Route>
+        {/* Shows SuccessfulPayment confirmation. */}
         <Route path={`${currentPath}/success/:businessService/:receiptNumber/:consumerCode`}>
           <SuccessfulPayment {...commonProps} />
         </Route>
+        {/* Loads IFrameInterface, e.g., for 3rd party PG or POS UI. */}
         <Route path={`${currentPath}/integration/:moduleName/:pageName`}>
           <IFrameInterface {...commonProps} />
         </Route>

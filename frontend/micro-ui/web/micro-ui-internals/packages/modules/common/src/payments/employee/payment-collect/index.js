@@ -23,7 +23,9 @@ export const CollectPayment = (props) => {
   if (window.location.href.includes("ISWSAPP")) consumerCode = new URLSearchParams(search).get("applicationNumber");
   if (window.location.href.includes("ISWSCON") || ModuleWorkflow === "WS") consumerCode = decodeURIComponent(consumerCode);
 
+  // gets bill details (total due, amount, etc.).
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
+
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
   const { data: applicationData } = Digit.Hooks.fsm.useSearch(
     tenantId,
