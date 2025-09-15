@@ -186,42 +186,84 @@
 
 
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { CardSubHeader, PDFSvg } from "@egovernments/digit-ui-react-components";
 
 function PropertyDocuments({ documents = [], svgStyles = {}, isSendBackFlow = false }) {
-  const { t } = useTranslation();
-  const [filesArray, setFilesArray] = useState([]);
-  const [pdfFiles, setPdfFiles] = useState({});
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  // const { t } = useTranslation();
+  // const [filesArray, setFilesArray] = useState([]);
+  // const [pdfFiles, setPdfFiles] = useState({});
+  // const tenantId = Digit.ULBService.getCurrentTenantId();
 
-  // Always default to [] to avoid null issues
-  const workflowDocs = documents?.filter((doc) => doc?.title === "PT_WORKFLOW_DOCS") || [];
+  // // Always default to [] to avoid null issues
+  // const workflowDocs = documents?.filter((doc) => doc?.title === "PT_WORKFLOW_DOCS") || [];
 
-  const checkLocation =
-    window.location.href.includes("employee/tl") ||
-    window.location.href.includes("/obps") ||
-    window.location.href.includes("employee/ws");
+  // const checkLocation =
+  //   window.location.href.includes("employee/tl") ||
+  //   window.location.href.includes("/obps") ||
+  //   window.location.href.includes("employee/ws");
 
-  const isStakeholderApplication = window.location.href.includes("stakeholder");
+  // const isStakeholderApplication = window.location.href.includes("stakeholder");
 
-  useEffect(() => {
-    let acc = [];
-    workflowDocs.forEach((element) => {
-      acc = [...acc, ...(element?.values || [])];
+  // useEffect(() => {
+  //   let acc = [];
+  //   workflowDocs.forEach((element) => {
+  //     acc = [...acc, ...(element?.values || [])];
+  //   });
+  //   setFilesArray(acc.map((value) => value?.fileStoreId).filter(Boolean)); // filter out null/undefined
+  // }, [workflowDocs]);
+
+  // useEffect(() => {
+  //   if (filesArray.length > 0) {
+  //     const fetchTenant = workflowDocs?.[0]?.BS === "BillAmend" ? tenantId : Digit.ULBService.getStateId();
+  //     Digit.UploadServices.Filefetch(filesArray, fetchTenant).then((res) => {
+  //       setPdfFiles(res?.data || {});
+  //     });
+  //   }
+  // }, [filesArray, workflowDocs, tenantId]);
+
+
+
+
+const { t } = useTranslation();
+const [filesArray, setFilesArray] = useState([]);
+const [pdfFiles, setPdfFiles] = useState({});
+const tenantId = Digit.ULBService.getCurrentTenantId();
+
+
+const workflowDocs = useMemo(() => {
+  return documents?.filter((doc) => doc?.title === "PT_WORKFLOW_DOCS") || [];
+}, [documents]);
+
+const checkLocation =
+  window.location.href.includes("employee/tl") ||
+  window.location.href.includes("/obps") ||
+  window.location.href.includes("employee/ws");
+
+const isStakeholderApplication = window.location.href.includes("stakeholder");
+
+
+useEffect(() => {
+  const acc = workflowDocs.flatMap((element) => element?.values || []);
+  const fileStoreIds = acc.map((value) => value?.fileStoreId).filter(Boolean);
+  setFilesArray(fileStoreIds);
+}, [workflowDocs]);
+
+
+useEffect(() => {
+  if (filesArray.length > 0) {
+    const fetchTenant =
+      workflowDocs?.[0]?.BS === "BillAmend"
+        ? tenantId
+        : Digit.ULBService.getStateId();
+
+    Digit.UploadServices.Filefetch(filesArray, fetchTenant).then((res) => {
+      setPdfFiles(res?.data || {});
     });
-    setFilesArray(acc.map((value) => value?.fileStoreId).filter(Boolean)); // filter out null/undefined
-  }, [workflowDocs]);
+  }
+}, [filesArray, tenantId]); 
 
-  useEffect(() => {
-    if (filesArray.length > 0) {
-      const fetchTenant = workflowDocs?.[0]?.BS === "BillAmend" ? tenantId : Digit.ULBService.getStateId();
-      Digit.UploadServices.Filefetch(filesArray, fetchTenant).then((res) => {
-        setPdfFiles(res?.data || {});
-      });
-    }
-  }, [filesArray, workflowDocs, tenantId]);
 
   return (
     <div style={{ marginTop: "19px" }}>

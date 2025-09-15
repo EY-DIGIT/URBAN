@@ -355,6 +355,10 @@ const PropertyForm = () => {
     const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
     const history = useHistory();
     const stateId = Digit.ULBService.getStateId();
+    const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
+    const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
+    
+ 
 
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -375,7 +379,12 @@ const PropertyForm = () => {
 
     const [floorList, setFloorList] = useState([]);
     const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
-      useEffect(() => {
+    useEffect(() => {
+        setMutationHappened(false);
+        clearSuccessData();
+    }, []);
+
+    useEffect(() => {
     if (isLoadingF) return;
 
     const floors = FloorAll?.PropertyTax?.Floor || [];
@@ -397,10 +406,8 @@ const PropertyForm = () => {
     setFloorList(mappedFloors);
   }, [isLoadingF, FloorAll]);
 
-  console.log("FLOOR NO=",floorList)
 
-
-   const [boundaryData, setBoundaryData] = useState(null);
+  const [boundaryData, setBoundaryData] = useState(null);
   const [zones, setZones] = useState([]);
   const [wards, setWards] = useState([]);
   const [colonies, setColonies] = useState([]);
@@ -562,7 +569,7 @@ const PropertyForm = () => {
                 })),
                 landArea: assessmentDetails?.plotArea,
                 propertyType: proOwnerDetail?.propertyType,
-                noOfFloors: parseInt(unit.floorNo) || 1,
+                noOfFloors: unit.length || null,
                 superBuiltUpArea: null,
                 usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
                 additionalDetails: {
