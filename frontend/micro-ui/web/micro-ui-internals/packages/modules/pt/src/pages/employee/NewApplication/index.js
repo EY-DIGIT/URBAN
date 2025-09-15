@@ -101,6 +101,7 @@ const NewApplication = () => {
     fromYear: "",
     toYear: ""
   }]);
+  console.log("HHHHHHUNITTTT==",unit);
   const [propertyDetails, setPropertyDetails] = useState({
     propertyType: "",
     roomsArea: "",
@@ -170,7 +171,13 @@ const NewApplication = () => {
 
       },
       onError: (error) => {
-        alert("Estimate error:", error);
+        console.log("Estimate error===:", error);
+         const apiErrors = error?.response?.data?.Errors || error?.Errors || [];
+        const newErrors = {};
+        apiErrors.forEach((apiErr) => {
+          newErrors[apiErr.code] = apiErr.message;
+        });
+        setServerErrors(newErrors);
       },
     });
   };
@@ -192,18 +199,18 @@ const NewApplication = () => {
         address: {
           city: "indore",
           locality: {
-            code: addressDetails.colony?.code || "SUN02",
-            name: addressDetails.colony?.name || "map with zone",
+            code: addressDetails.colony?.code || "",
+            name: addressDetails.colony?.name || "",
           },
-          zone: addressDetails.zone?.code || "SUN02",
-          street: addressDetails.address || "main",
-          doorNo: addressDetails.doorNo || "23",
+          zone: addressDetails.zone?.code || "",
+          street: addressDetails.address || "",
+          doorNo: addressDetails.doorNo || "",
           pincode: addressDetails.pincode || "",
-          ward: addressDetails.ward?.code || "1",
+          ward: addressDetails.ward?.code || "",
           documents: [],
         },
 
-        ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+        ownershipCategory: ownershipType || "",
         propertyCategory:propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
@@ -212,7 +219,7 @@ const NewApplication = () => {
           name: owner.name || `Owner ${index + 1}`,
           salutationHindi: owner.hindiTitle,
           hindiName: owner.hindiName || "",
-          fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
+          fatherOrHusbandName: owner.fatherHusbandName || "",
           gender: "MALE",
           aadhaarNumber: owner.aadhaar || "",
           altContactNumber: owner.altNumber || "",
@@ -271,11 +278,11 @@ const NewApplication = () => {
 
         units: unit.map(unit => (
           {
-            usageCategory: unit.usageType || "RESIDENTIAL",
-            usesCategoryMajor: unit.usageType || "RESIDENTIAL",
-            occupancyType: unit.usageFactor || "SELFOCCUPIED",
+            usageCategory: unit.usageType || "",
+            usesCategoryMajor: unit.usageType || "",
+            occupancyType: unit.usageFactor || "",
             constructionDetail: {
-              builtUpArea: unit.area || "3000",
+              builtUpArea: unit.area || "",
               constructionType: unit.constructionType || null,
             },
             floorNo: parseInt(unit.floorNo) || 0,
@@ -286,12 +293,12 @@ const NewApplication = () => {
           })),
 
 
-        landArea: assessmentDetails.plotArea?.toString() || "3000",
+        landArea: assessmentDetails.plotArea?.toString() || "",
         propertyType: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
         noOfFloors: parseInt(unit.floorNo) || 1,
         superBuiltUpArea: null,
         // usageCategory: unit.usageType || "RESIDENTIAL",
-        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
+        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "",
 
         additionalDetails: {
           inflammable: false,
@@ -314,11 +321,11 @@ const NewApplication = () => {
           },
           unit: unit.map(unit => (
             {
-              usageCategory: unit.usageType || "RESIDENTIAL",
-              usesCategoryMajor: unit.usageType || "RESIDENTIAL",
-              occupancyType: unit.usageFactor || "SELFOCCUPIED",
+              usageCategory: unit.usageType || "",
+              usesCategoryMajor: unit.usageType || "",
+              occupancyType: unit.usageFactor || "",
               constructionDetail: {
-                builtUpArea: unit.area || "3000",
+                builtUpArea: unit.area || "",
                 constructionType: unit.constructionType || null,
               },
               floorNo: parseInt(unit.floorNo) || 0,
@@ -359,6 +366,13 @@ const NewApplication = () => {
       onError: (err) => {
 
         alert(t("Submission failed"));
+        
+         const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
+        const newErrors = {};
+        apiErrors.forEach((apiErr) => {
+          newErrors[apiErr.code] = apiErr.message;
+        });
+        setServerErrors(newErrors);
       },
     });
   };
@@ -421,7 +435,9 @@ const NewApplication = () => {
         errors[`owner-${index}-aadhaar`] = "Valid 12-digit Aadhaar number is required.";
       }
       // Samagra ID (only if checkbox is not ticked)
+      console.log("samagraID==",!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID)))
       if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+        console.log("STEP33")
         errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
       }
     });
@@ -491,18 +507,18 @@ const NewApplication = () => {
         address: {
           city: "indore",
           locality: {
-            code: addressDetails.colony?.code || "SUN02",
-            name: addressDetails.colony?.name || "map with zone",
+            code: addressDetails.colony?.code || "",
+            name: addressDetails.colony?.name || "",
           },
-          zone: addressDetails.zone?.code || "SUN02",
-          street: addressDetails.address || "main",
-          doorNo: addressDetails.doorNo || "23",
+          zone: addressDetails.zone?.code || "",
+          street: addressDetails.address || "",
+          doorNo: addressDetails.doorNo || "",
           pincode: addressDetails.pincode || "",
-          ward: addressDetails.ward?.code || "1",
+          ward: addressDetails.ward?.code || "",
           documents: [],
         },
 
-        ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+        ownershipCategory: ownershipType || "",
         propertyCategory:propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
@@ -511,7 +527,7 @@ const NewApplication = () => {
           name: owner.name || `Owner ${index + 1}`,
           salutationHindi: owner.hindiTitle,
           hindiName: owner.hindiName || "",
-          fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
+          fatherOrHusbandName: owner.fatherHusbandName || "",
           gender: "MALE",
           aadhaarNumber: owner.aadhaar || "",
           altContactNumber: owner.altNumber || "",
@@ -569,11 +585,11 @@ const NewApplication = () => {
 
         units: unit.map(unit => (
           {
-            usageCategory: unit.usageType || "RESIDENTIAL",
-            usesCategoryMajor: unit.usageType || "RESIDENTIAL",
-            occupancyType: unit.usageFactor || "SELFOCCUPIED",
+            usageCategory: unit.usageType || "",
+            usesCategoryMajor: unit.usageType || "",
+            occupancyType: unit.usageFactor || "",
             constructionDetail: {
-              builtUpArea: unit.area || "3000",
+              builtUpArea: unit.area || "",
               constructionType: unit.constructionType || null,
             },
             floorNo: parseInt(unit.floorNo) || 0,
@@ -582,12 +598,12 @@ const NewApplication = () => {
             fromYear: unit.fromYear,
             toYear: unit.toYear,
           })),
-        landArea: assessmentDetails.plotArea?.toString() || "3000",
+        landArea: assessmentDetails.plotArea?.toString() || "",
         propertyType: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
         noOfFloors: parseInt(unit.floorNo) || 1,
         superBuiltUpArea: null,
         // usageCategory: unit.usageType || "RESIDENTIAL",
-        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
+        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "",
 
         additionalDetails: {
           inflammable: false,
@@ -610,11 +626,11 @@ const NewApplication = () => {
           },
           unit: unit.map(unit => (
             {
-              usageCategory: unit.usageType || "RESIDENTIAL",
-              usesCategoryMajor: unit.usageType || "RESIDENTIAL",
-              occupancyType: unit.usageFactor || "SELFOCCUPIED",
+              usageCategory: unit.usageType || "",
+              usesCategoryMajor: unit.usageType || "",
+              occupancyType: unit.usageFactor || "",
               constructionDetail: {
-                builtUpArea: unit.area || "3000",
+                builtUpArea: unit.area || "",
                 constructionType: unit.constructionType || null,
               },
               floorNo: parseInt(unit.floorNo) || 0,
@@ -1019,10 +1035,14 @@ const NewApplication = () => {
   useEffect(() => {
     if (!unitDetails || unitDetails.length === 0) return;
 
-    const formattedUnits = unitDetails.map((unit) => ({
+    const formattedUnits = unitDetails.map((unit) => (
+      
+      
+      {
       usageType: unit && unit.usageCategory ? unit.usageCategory : "",
       usageFactor: unit && unit.occupancyType ? unit.occupancyType : "", // Fill if needed
       floorNo: unit && unit.floorNo ? unit.floorNo.toString() : "",
+      
       constructionType:
         unit &&
           unit.constructionDetail &&
@@ -1037,7 +1057,11 @@ const NewApplication = () => {
           : "",
       fromYear: unit && unit.fromYear ? unit.fromYear : "",
       toYear: unit && unit.toYear ? unit.toYear : "",
-    }));
+
+      
+    }
+  
+  ));
 
     setUnit(formattedUnits);
   }, [unitDetails]);
@@ -1316,6 +1340,8 @@ const handleDropdownChange = (field, selectedOption) => {
 
   const handleUnitChange = (index, key, value) => {
     const updatedUnits = [...unit];
+
+    console.log("Floor and Unit==",key , "=", value )
     updatedUnits[index][key] = value;
     setUnit(updatedUnits);
   };

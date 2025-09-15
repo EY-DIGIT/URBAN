@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
     Loader, Card,
     SubmitBar,
@@ -11,7 +11,7 @@ import DownloadPdfButton from "./DownloadPDF";
 const styles = {
     container: {
         padding: "20px",
-        fontFamily: "Arial, sans-serif",
+        // fontFamily: "Arial, sans-serif",
         fontSize: "14px",
     },
     row: {
@@ -53,7 +53,7 @@ const styles = {
         width: "300px",
     },
     label: {
-        fontFamily: "Poppins",
+        // fontFamily: "Poppins",
         fontWeight: 400,
         fontSize: "14px",
         lineHeight: "22px",
@@ -62,7 +62,7 @@ const styles = {
         width: "200px"
     },
     sectionHeader: {
-        fontFamily: "Poppins",
+        // fontFamily: "Poppins",
         fontWeight: "bold",
         fontSize: "16px",
         lineHeight: "100%",
@@ -74,7 +74,7 @@ const styles = {
         color: "#6b133f",
     },
     sectionHeaderDemand: {
-        fontFamily: "Poppins",
+        // fontFamily: "Poppins",
         fontWeight: "bold",
         fontSize: "22px",
         lineHeight: "100%",
@@ -110,7 +110,7 @@ const styles = {
          backgroundColor:"rgba(107, 19, 63, 0.2)",
         // border:"1px,0px,0px,1px #B9B9B9",
         textAlign: "center",
-        fontFamily: "Inter",
+        // fontFamily: "Inter",
         fontWeight: 400,
         fontSize: "12px",
         lineHeight: "130%",
@@ -126,7 +126,7 @@ const styles = {
         // border:"1px,0px,0px,1px #B9B9B9",
         padding: "8px 4px",
         textAlign: "center",
-        fontFamily: "Inter",
+        // fontFamily: "Inter",
         fontWeight: 400,
         fontSize: "12px",
         lineHeight: "130%",
@@ -146,7 +146,7 @@ const styles = {
         borderRadius: "12px",
         cursor: "pointer",
         // width: "202px",
-        fontFamily: "Poppins",
+        // fontFamily: "Poppins",
         fontWeight: 400,
         fontSize: "12px",
         lineHeight: "100%",
@@ -193,7 +193,7 @@ const styles = {
         cursor: "pointer",
         // float: "right",
         marginTop: "20px",
-        fontFamily: "Poppins",
+        // fontFamily: "Poppins",
         fontWeight: 500,
         fontSize: "14px",
         lineHeight: "100%",
@@ -292,6 +292,40 @@ const DemandNote = () => {
     };
 
 
+       const [boundaryData, setBoundaryData] = useState(null);
+      const [zones, setZones] = useState([]);
+      const [wards, setWards] = useState([]);
+      const [colonies, setColonies] = useState([]);
+     
+            useEffect(() => {
+        (async () => {
+          try {
+            const tenantId = Digit.ULBService.getCurrentTenantId();
+            const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+    
+            console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+    
+            const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+            if (cityBoundary?.children?.length > 0) {
+              setBoundaryData(cityBoundary);
+    
+              const zoneOptions = cityBoundary.children.map((zone) => ({
+                code: zone.code,
+                name: zone.name || zone.code,
+              }));
+              setZones(zoneOptions);
+            } else {
+              console.warn("❌ No boundary children found.");
+            }
+          } catch (error) {
+            console.error("❌ Error fetching boundary data:", error);
+          }
+        })();
+      }, []);
+    
+      console.log("Zones No=",zones)
+
+
     return (
 
         <div style={{ position: "relative" }}>
@@ -317,7 +351,9 @@ const DemandNote = () => {
                                 <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
                             </div>
                             <div style={styles.row}>
-                                <InputField label="Zone" value={address?.zone || "N/A"} />
+                                <InputField label="Zone"   value={
+          zones.find((f) => f.code === address?.zone)?.name || "N/A"
+        } />
                                 <InputField label="Ward" value={address?.ward || "N/A"} />
                                 <InputField label="Colony" value={address?.locality?.name || "N/A"} />
                             </div>
@@ -356,10 +392,10 @@ const DemandNote = () => {
                                             <td style={styles.td}>{item.floorNo}</td>
                                             <td style={styles.td}>{item.constructionType}</td>
                                             <td style={styles.td}>{item.area}</td>
-                                            <td style={styles.td}>{item.factor}</td>
-                                            <td style={styles.td}>{item.alv}</td>
-                                            <td style={styles.td}>{item?.discount}</td>
-                                            <td style={styles.td}>{item?.tpv}</td>
+                                            <td style={styles.td}>{Math.round(item.factor)}</td>
+                                        <td style={styles.td}>{Math.round(item.alv)}</td>
+                                        <td style={styles.td}>{Math.round(item?.discount)}</td>
+                                        <td style={styles.td}>{Math.round(item?.tpv)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -381,7 +417,7 @@ const DemandNote = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {taxSummaries.map((item) => (
+                                    {/* {taxSummaries.map((item) => (
                                         <tr key={item.year}>
                                             <td style={styles.td}>{item.year}</td>
                                             <td style={styles.td}>{item.tpv}</td>
@@ -397,7 +433,24 @@ const DemandNote = () => {
                                             <td style={styles.td}>₹ {item.penalty}</td>
                                             <td style={styles.td}>{item.netTax}</td>
                                         </tr>
-                                    ))}
+                                    ))} */}
+                                     {taxSummaries.map((item) => (
+                                <tr key={item.year}>
+                                    <td style={styles.td}>{item.year}</td>
+                                    <td style={styles.td}>{Math.round(item.tpv)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.propertyTax)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.samekit)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.educationCess)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.jalKar)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.jalNikas)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.urbanTax)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.sevaKar)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.totalTax)}</td>
+                                    <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.penalty)}</td>
+                                    <td style={styles.td}>{Math.round(item.netTax)}</td>
+                                </tr>
+                            ))}
                                     <tr>
                                         <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
                                         <td style={styles.td}>

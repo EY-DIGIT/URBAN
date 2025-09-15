@@ -21,7 +21,7 @@ import BPADocuments from "./BPADocuments";
 import InspectionReport from "./InspectionReport";
 import NOCDocuments from "./NOCDocuments";
 import PermissionCheck from "./PermissionCheck";
-import PropertyDocuments from "./PropertyDocuments";
+import PropertyDocuments from "./PropertyDocumentTimeline";
 import PropertyEstimates from "./PropertyEstimates";
 import PropertyFloors from "./PropertyFloors";
 import PropertyOwners from "./PropertyOwners";
@@ -73,6 +73,8 @@ function ApplicationDetailsContentVerifier({
     return `${day}/${month}/${year}`;
   };
   const getTimelineCaptions = (checkpoint, index = 0) => {
+console.log("ABCDFG ===",checkpoint)
+
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
         date: checkpoint?.auditDetails?.created,
@@ -132,6 +134,10 @@ function ApplicationDetailsContentVerifier({
   const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
   const isWS = window.location.href.includes("employee/ws");
+
+
+
+  
 
   const getRowStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
@@ -198,6 +204,110 @@ function ApplicationDetailsContentVerifier({
   const documents = application?.documents || [];
   console.log("application", application)
   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+  const stateId = Digit.ULBService.getStateId();
+
+  // const stateId = Digit.ULBService.getStateId();
+    const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
+    const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
+      const { data: RoadFactors, isLoading:{} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
+  const RoadFactorList = (RoadFactors?.PropertyTax?.RoadFactor || []).map((item) => ({
+    code: item.code,
+    name: item.name, // Show year like "2024-25"
+  }));
+  
+    const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
+    const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
+    const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
+    const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
+   
+   
+  
+   
+    const salutationOptions = (Menu || []).map((item) => ({
+      code: item.code,
+      name: t(item.name), // Use i18nKey for translation
+    }));
+  const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
+      code: item.code,
+      name: t(item.name), // Use i18nKey for translation
+    }));
+    const dropdownOptions = (Array.isArray(OwnerShipCategoryOb) ? OwnerShipCategoryOb : []).map(item => ({
+      code: item.code,
+      name: t(item.name)
+    }));
+  
+    const[showFather,setShowFather]=useState("");
+    // console.log("DROPDOWNOPTION==",formErrors)
+    const propertyCategoryOptions=(PropertyCategory || []).map((item)=>({
+  
+      code:item.code,
+      name:t(item.name),
+    }))
+  
+     console.log("propertyCategoryOptions==",RoadFactorList);
+
+
+
+
+  const [boundaryData, setBoundaryData] = useState(null);
+  const [zones, setZones] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [colonies, setColonies] = useState([]);
+  const [rateZones, setRateZones] = useState([]);
+        useEffect(() => {
+    (async () => {
+      try {
+        const tenantId = Digit.ULBService.getCurrentTenantId();
+        const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+
+        console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+
+        const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+        if (cityBoundary?.children?.length > 0) {
+          setBoundaryData(cityBoundary);
+
+          const zoneOptions = cityBoundary.children.map((zone) => ({
+            code: zone.code,
+            name: zone.name || zone.code,
+          }));
+          setZones(zoneOptions);
+        } else {
+          console.warn("❌ No boundary children found.");
+        }
+      } catch (error) {
+        console.error("❌ Error fetching boundary data:", error);
+      }
+    })();
+  }, []);
+
+  console.log("Zones No=",zones)
+
+
+   const [floorList, setFloorList] = useState([]);
+      const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
+        useEffect(() => {
+      if (isLoadingF) return;
+  
+      const floors = FloorAll?.PropertyTax?.Floor || [];
+  
+      const mappedFloors = floors
+        .filter(floor => floor?.code && floor?.active)
+        .map(floor => ({
+          i18nKey: floor.name,
+          code: floor.code,
+        }))
+        .sort((a, b) => {
+          const getSortValue = (val) => {
+            const num = parseInt(val, 10);
+            return isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
+          };
+          return getSortValue(b.code) - getSortValue(a.code);
+        });
+  
+      setFloorList(mappedFloors);
+    }, [isLoadingF, FloorAll]);
+
+    console.log("FLOOR NO=",floorList)
 
   const getFullAddress = (address) => {
     if (!address) return "";
@@ -252,11 +362,11 @@ function ApplicationDetailsContentVerifier({
           <div style={styles.grid}>
              <div style={styles.flex30}>
               <label style={styles.label}>Property Category<span style={{ color: "red" }}>*</span></label>
-              <input style={styles.input} value={application?.propertyCategory} disabled readOnly />
+              <input style={styles.input}   value={propertyCategoryOptions.find((f) => f.code === application?.propertyCategory)?.name || "N/A" } disabled readOnly />
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>Ownership Type<span style={{ color: "red" }}>*</span></label>
-              <input style={styles.input} value={application?.ownershipCategory} disabled readOnly />
+              <input style={styles.input}  value={dropdownOptions.find((f) => f.code === application?.ownershipCategory)?.name || "N/A" }  disabled readOnly />
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>POA Registration Number</label>
@@ -360,7 +470,7 @@ function ApplicationDetailsContentVerifier({
             <div style={styles.flex30}><label style={styles.label}>Pincode<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.pincode || ""} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Colony<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.locality?.name} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} disabled readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.zone} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input}    value={zones.find((f) => f.code === address?.zone)?.name || "N/A" } disabled readOnly /></div>
           </div>
         </div>
     },
@@ -388,7 +498,7 @@ function ApplicationDetailsContentVerifier({
           {/* <div style={styles.sectionTitle}>Assessment Details</div> */}
           <div style={styles.grid}>
             <div style={styles.flex30}><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} disabled readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.roadFactor} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={RoadFactorList.find((f) => f.code === additionalDetailsT?.unit?.[0]?.roadFactor)?.name || "N/A" } disabled readOnly /></div>
             {/* <div><label style={styles.label}>Old Property ID</label><input style={styles.input} value={application?.oldPropertyId || ""} readOnly /></div> */}
             <div style={styles.flex30}><label style={styles.label}>Plot Area (sq.ft)</label><input style={styles.input} value={application?.landArea} disabled readOnly /></div>
           </div>
@@ -418,7 +528,12 @@ function ApplicationDetailsContentVerifier({
                   </tr>
                 </thead>
                 <tbody>
-                  {(application?.units || []).map((unit, index) => (
+                  {(application?.units || []).map((unit, index) => {
+
+                     const floor = floorList.find(f => f.code === unit?.floorNo.toString());
+                     console.log("FLOOR KYA AAYA=",floor);
+
+                 return (
                     <tr key={index}>
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
                         <select
@@ -444,7 +559,7 @@ function ApplicationDetailsContentVerifier({
                           disabled
                           style={{ border: "none", background: "none", width: "100%" }}
                         >
-                          <option value={unit?.floorNo?.toString() || ""}>{unit?.floorNo?.toString() || ""}</option>
+                          <option value={floor?.i18nKey || ""}>{floor?.i18nKey || ""}</option>
                         </select>
                       </td>
                       <td style={{ padding: "8px", border: "1px solid #ccc" }}>
@@ -483,7 +598,9 @@ function ApplicationDetailsContentVerifier({
                         </select>
                       </td>
                     </tr>
-                  ))}
+                  )
+                }
+                  )}
                 </tbody>
               </table>
             </div>
@@ -583,6 +700,20 @@ function ApplicationDetailsContentVerifier({
               {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
               {!workflowDetails?.isLoading && !isDataLoading && (
                 <Fragment>
+                 
+                    {/* {applicationDetails?.applicationDetails?.map((detail, index) => (
+                <div key={index}>
+ 
+ 
+ 
+ 
+                  {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
+ 
+                </div>
+              ))} */}
+
+
+
                   {/* <CardSectionHeader style={{ ...styles.sectionTitle, marginBottom: "16px", marginTop: "32px" }}>
                   {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
                 </CardSectionHeader> */}
@@ -628,6 +759,8 @@ function ApplicationDetailsContentVerifier({
             </React.Fragment>
           )}
         </div>
+
+
     }
   ];
 

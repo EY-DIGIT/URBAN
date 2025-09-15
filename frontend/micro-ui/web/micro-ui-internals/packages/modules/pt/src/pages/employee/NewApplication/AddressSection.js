@@ -383,19 +383,19 @@ const AddressSection = ({
   }, []);
 
   // Update Wards when Zone changes
-  useEffect(() => {
-    if (addressDetails.zone && boundaryData?.children?.length > 0) {
-      const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
-      const wardList = selectedZone?.children || [];
-      const formattedWards = wardList.map((ward) => ({
-        code: ward.code,
-        name: ward.name || ward.code,
-      }));
-      setWards(formattedWards);
-    } else {
-      setWards([]);
-    }
-  }, [addressDetails.zone, boundaryData]);
+  // useEffect(() => {
+  //   if (addressDetails.zone && boundaryData?.children?.length > 0) {
+  //     const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
+  //     const wardList = selectedZone?.children || [];
+  //     const formattedWards = wardList.map((ward) => ({
+  //       code: ward.code,
+  //       name: ward.name || ward.code,
+  //     }));
+  //     setWards(formattedWards);
+  //   } else {
+  //     setWards([]);
+  //   }
+  // }, [addressDetails.zone, boundaryData]);
 
   // Update Colonies when Ward changes
   useEffect(() => {
@@ -412,6 +412,39 @@ const AddressSection = ({
       setColonies([]);
     }
   }, [addressDetails.ward, addressDetails.zone, boundaryData]);
+
+  useEffect(() => {
+  if (
+    addressDetails.zone &&
+    addressDetails.ward &&
+    boundaryData?.children?.length > 0
+  ) {
+    const selectedZone = boundaryData.children.find(
+      (z) => z.code === addressDetails.zone.code
+    );
+    const selectedWard = selectedZone?.children?.find(
+      (w) => w.code === addressDetails.ward.code
+    );
+    const colonyList = selectedWard?.children || [];
+
+    // format colonies
+    const formattedColonies = colonyList.map((col) => ({
+      code: col.code,
+      name: col.name || col.code,
+    }));
+
+    // remove duplicates by `name`
+    const uniqueColonies = formattedColonies.filter(
+      (col, index, self) =>
+        index === self.findIndex((c) => c.name === col.name)
+    );
+
+    setColonies(uniqueColonies);
+  } else {
+    setColonies([]);
+  }
+}, [addressDetails.ward, addressDetails.zone, boundaryData]);
+
 
   // Update RateZones when Colony changes
   useEffect(() => {

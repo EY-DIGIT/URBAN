@@ -301,6 +301,8 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
   const [constructionTypes, setConstructionTypes] = useState([]);
   const [floorList, setFloorList] = useState([]);
   const [occupancyTypes, setOccupancyTypes] = useState([]);
+  console.log("UNIT====",unit);
+  console.log("floorList====",floorList)
 
   const startYear = 1997;
   const currentFY = new Date().getMonth() >= 3 ? new Date().getFullYear() : new Date().getFullYear() - 1;
@@ -407,7 +409,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
               }}>{t("Usage Factor")}</th>
               <th  style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("Floor No")}</th>
+              }}>{t("Floor Number")}</th>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
               }}>{t("Type of Construction")}</th>

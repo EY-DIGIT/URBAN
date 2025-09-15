@@ -106,6 +106,7 @@ const AttachmentsSection = ({ t = (label) => label, documents }) => {
       }
     }
   }, [documents]);
+  console.log("DOCUMENTS==",documents)
 
   useEffect(() => {
     const handleResize = () => {

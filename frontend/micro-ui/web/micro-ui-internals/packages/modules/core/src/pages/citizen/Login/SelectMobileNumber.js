@@ -229,7 +229,8 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
   const [isCCFEnabled, setisCCFEnabled] = useState(false);
   const [mdmsConfig, setMdmsConfig] = useState("");
   const { isLoading, data } = Digit.Hooks.useCustomMDMS(Digit.ULBService.getStateId(), "common-masters", [{ name: "CitizenConsentForm" }]);
-
+const { data: { stateInfo, uiHomePage } = {} } = Digit.Hooks.useStore.getInitData();
+console.log("AAAAAAAAAAA",stateInfo)
   useEffect(() => {
     if (data?.["common-masters"]?.CitizenConsentForm?.[0]?.isCitizenConsentFormEnabled) {
       setisCCFEnabled(data?.["common-masters"]?.CitizenConsentForm?.[0]);
@@ -283,7 +284,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
         <div className="left-section">
           <div className="logo-container">
             <img
-              src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/image%2014.svg"
+              src={stateInfo?.uiImageAssets?.indoreMunicipalCorporationLogo}
               alt="IMC Logo"
               style={{ height: "70px", width: "auto" }}
             />
@@ -298,7 +299,7 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
           </div>
           <div className="">
             <img
-              src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/image%201807.svg"
+              src={stateInfo?.uiImageAssets?.indoremap}
               alt="Indore Map"
               className="map-image"
             />

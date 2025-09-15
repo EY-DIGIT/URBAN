@@ -24,6 +24,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
   const { data: storeData, isLoading: isStoreLoading } = Digit.Hooks.useStore.getInitData();
 
   const { stateInfo } = storeData || {};
+  console.log("AAAAAAAAAAAAAa=",stateInfo)
   const [user, setUser] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const [disable, setDisable] = useState(false);
@@ -139,7 +140,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         }}
       >
         <img
-          src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/MP%20Emblem%201%201.svg"
+          src={stateInfo?.uiImageAssets?.madhyaPradeshStateEmblemLogo}
           alt="MP Logo"
           style={{ height: "40px", width: "auto" }}
         />
@@ -200,7 +201,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
               <div style={{ textAlign: "center" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "30px" }}>
                   <img
-                    src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/image%2014.svg"
+                    src={stateInfo?.uiImageAssets?.indoreMunicipalCorporationLogo}
                     alt="IMC Logo"
                     style={{ height: "70px", width: "auto" }}
                   />
@@ -214,8 +215,8 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
                   </div>
                 </div>
                 <img
-                  src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/image%201807.svg"
-                  alt="Indore Map"
+                  src={stateInfo?.uiImageAssets?.indoremap}
+                  alt="Indore Mapppp"
                   style={{ 
                     // width: "180px", 
                     // height: "auto", 
@@ -255,7 +256,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
                 paddingTop: "10px" 
               }}>
                 <img
-                  src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/image%2014.svg"
+                  src={stateInfo?.uiImageAssets?.indoreMunicipalCorporationLogo}
                   alt="IMC Logo"
                   style={{ height: "50px", width: "auto" }}
                 />
@@ -268,8 +269,8 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
                   </div>
                 </div>
                 <img
-                  src="https://tfstate8auyj.blob.core.windows.net/egov-dev-assets/image%201807.svg"
-                  alt="Indore Map"
+                  src={stateInfo?.uiImageAssets?.indoremap}
+                  alt="Indore Maplll"
                   style={{ 
                     // width: "100px", 
                     // height: "auto", 

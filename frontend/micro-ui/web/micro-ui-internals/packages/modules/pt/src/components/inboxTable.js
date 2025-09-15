@@ -101,6 +101,10 @@ const PTinboxTable = () => {
     const [offset, setOffset] = useState(0);
     const { t } = useTranslation();
     const limit = 10;
+    
+const { data: storeData } = Digit.Hooks.useStore.getInitData();
+  const { stateInfo } = storeData || {};
+  console.log("Sate Info=",stateInfo)
 
     const tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -183,7 +187,7 @@ const PTinboxTable = () => {
                                                 href={`/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`}
                                                 style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                             >
-                                                <img src="https://devtfstatep7f19.blob.core.windows.net/imc-dev-assets/Icon%201.svg" alt="Property" style={{ width: "20px",height:"30px" }} />
+                                                <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px",height:"30px" }} />
                                             </a>
                                         </td>
                                     </tr>

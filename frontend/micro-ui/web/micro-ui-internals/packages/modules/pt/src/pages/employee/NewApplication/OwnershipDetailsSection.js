@@ -28,7 +28,7 @@ const OwnershipDetailsSection = ({
   const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
   const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
   const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
-  console.log("uiHome==",Relationship);
+  console.log("uiHome==",PropertyCategory);
 
   console.log("MenuHindi", formErrors)
   const salutationOptions = (Menu || []).map((item) => ({
@@ -177,7 +177,16 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
                   }
                   : null
               }
-              select={(val) => updateOwner(index, "relationship", val.code)}
+              // select={(val) => updateOwner(index, "relationship", val.code)}
+
+               select={(val) => {
+    updateOwner(index, "relationship", val.code);
+
+    
+    if (val.code === "Not applicable") {
+      updateOwner(index, "fatherHusbandName", "Not Applicable");
+    }
+  }}
               optionKey="name"
               placeholder={t("Select")}
               style={styles.widthInput}
@@ -198,9 +207,9 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
               value={owner.fatherHusbandName}
               onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
               placeholder={t("Enter")}
-              disabled={showFather==="Not applicable"?true:false}
+              disabled={owner.relationship === "Not applicable"}
             />
-  {showFather==="Not applicable"?
+  {owner.relationship==="Not applicable"?
          "":  <div>  {formErrors[`owner-${index}-fatherHusbandName`] && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
             )}</div>}
@@ -295,9 +304,11 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
                 {t("I don't have Samagra ID")}
               </label>
             </div>
-            {formErrors?.samagraID && (
-              <p style={{ color: "red", fontSize: "12px" }}>{formErrors.samagraID}</p>
-            )}
+            {formErrors["owner-0-samagraID"] && (
+      <p style={{ color: "red", fontSize: "12px" }}>
+        {formErrors["owner-0-samagraID"]}
+      </p>
+    )}
           </div>
 
         </div>
