@@ -1447,7 +1447,7 @@ const EditUpdateForm = ({ applicationData }) => {
 
         landArea: assessmentDetails.plotArea?.toString() || "3000",
         propertyType: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
-        noOfFloors: parseInt(unit.floorNo) || 1,
+        noOfFloors: unit.length || null,
         superBuiltUpArea: null,
         // usageCategory: unit.usageType || "RESIDENTIAL",
         usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",

@@ -701,7 +701,7 @@ console.log("ABCDFG ===",checkpoint)
               {!workflowDetails?.isLoading && !isDataLoading && (
                 <Fragment>
                  
-                    {/* {applicationDetails?.applicationDetails?.map((detail, index) => (
+                    {applicationDetails?.applicationDetails?.map((detail, index) => (
                 <div key={index}>
  
  
@@ -710,7 +710,7 @@ console.log("ABCDFG ===",checkpoint)
                   {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
  
                 </div>
-              ))} */}
+              ))}
 
 
 
