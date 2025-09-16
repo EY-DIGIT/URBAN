@@ -71,7 +71,14 @@ const PropertyLedger = () => {
               <div style={styles.row}>
                 <InputField label="Pin" value={address?.pincode || "N/A"} />
                 <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
-                <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
+                 <InputField
+                                    label="Aadhaar ID"
+                                    value={
+                                        owner?.aadhaarNumber
+                                            ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                                            : "N/A"
+                                    }
+                                />
               </div>
               <div style={styles.row}>
                 <InputField

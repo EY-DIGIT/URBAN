@@ -135,14 +135,14 @@ const EditUpdateForm = ({ applicationData }) => {
         error,
     } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
-    const handleEstimate = () => {
+    const handleEstimate = (newPropertyId, property) => {
         const toYear =
             Array.isArray(unit) && unit.length > 0 ? unit[0].toYear : null;
 
         const payload = {
             Assessment: {
                 financialYear: toYear,
-                propertyId: applicationData?.propertyId,
+                propertyId: newPropertyId,
                 tenantId: tenantId,
                 source: "MUNICIPAL_RECORDS",
                 channel: "CITIZEN",
@@ -174,7 +174,7 @@ const EditUpdateForm = ({ applicationData }) => {
             onSuccess: (data) => {
                 history.push({
                     pathname: "/digit-ui/employee/pt/PreviewView",
-                    state: { data, applicationData }// send full object
+                    state: { data, proOwnerDetail:property }// send full object
                 });
             },
             onError: (error) => {
@@ -394,7 +394,8 @@ const EditUpdateForm = ({ applicationData }) => {
                     setStatus(property.status);
                     // setShowSuccessModal(true);
                     // setShowPreviewButton(true);
-                    PreviewDemand();
+                     PreviewDemand(property.propertyId, property);
+
 
                 }
             },
@@ -803,9 +804,9 @@ const EditUpdateForm = ({ applicationData }) => {
         setShowPreviewButton(false);
         setShowAssesmentPop(false);
     }
-    const PreviewDemand = () => {
+    const PreviewDemand = (newPropertyId, property) => {
         // setShowAssesmentPop(true);
-        handleEstimate();
+        handleEstimate(newPropertyId, property);
     };
 
     useEffect(() => {

@@ -767,7 +767,14 @@ const PropertyForm = () => {
                             <div style={styles.row}>
                                 <InputField label="Pincode" value={address?.pincode || "N/A"} />
                                 <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
-                                <InputField label="Aadhaar ID" value={owner?.aadhaarNumber || "N/A"} />
+                                 <InputField
+                                    label="Aadhaar ID"
+                                    value={
+                                        owner?.aadhaarNumber
+                                            ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                                            : "N/A"
+                                    }
+                                />
                             </div>
                             <div style={styles.row}>
                                 <InputField

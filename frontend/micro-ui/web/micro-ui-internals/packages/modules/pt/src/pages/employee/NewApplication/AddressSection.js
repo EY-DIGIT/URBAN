@@ -362,7 +362,7 @@ const AddressSection = ({
         const tenantId = Digit.ULBService.getCurrentTenantId();
         const response = await Digit.LocationService.getRevenueLocalities(tenantId);
 
-        console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+        console.log("🔍 Raw TenantBoundary Response:", response);
 
         const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
         if (cityBoundary?.children?.length > 0) {
