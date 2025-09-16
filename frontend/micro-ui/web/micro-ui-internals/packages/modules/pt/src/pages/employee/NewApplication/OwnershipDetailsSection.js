@@ -135,7 +135,7 @@ if (owner.aadhaar !== fixedAadhaar) {
                 select={(val) => updateOwner(index, "hindiTitle", val.code)}
                 optionKey="name"
                 style={styles.dropdown30}
-                placeholder={t("Mr")}
+                placeholder={t("श्री")}
               />
               <TextInput
                 style={styles.textBox}
