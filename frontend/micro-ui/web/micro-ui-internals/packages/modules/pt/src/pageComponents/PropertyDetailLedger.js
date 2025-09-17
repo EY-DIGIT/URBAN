@@ -45,10 +45,10 @@ const PropertyDetailLedger = () => {
         <div style={styles.cardD}>
           <div style={styles.sectionHeaderDemand}>Detail Ledger Report</div>
           <div style={styles.row}>
-                        {/* <InputField label="Property id" value={calculation?.serviceNumber || "N/A"} />
+            {/* <InputField label="Property id" value={calculation?.serviceNumber || "N/A"} />
                            <InputField label="Old Property id" value="567889" /> */}
-                        <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
-                    </div>
+            <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
+          </div>
 
 
           {ownersDetail.map((owner, index) => (
@@ -67,7 +67,14 @@ const PropertyDetailLedger = () => {
               <div style={styles.row}>
                 <InputField label="Pin" value={address?.pincode || "N/A"} />
                 <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
-                <InputField label="Aadhaar" value={owner?.aadhaarNumber || "N/A"} />
+                <InputField
+                  label="Aadhaar ID"
+                  value={
+                    owner?.aadhaarNumber
+                      ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                      : "N/A"
+                  }
+                />
               </div>
               <div style={styles.row}>
                 <InputField
@@ -87,7 +94,7 @@ const PropertyDetailLedger = () => {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  {[ "Usage Type", "Usage Factor", "Floor No.", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
+                  {["Usage Type", "Usage Factor", "Floor No.", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
                     <th key={h} style={styles.th}>{h}</th>
                   ))}
                 </tr>
@@ -117,7 +124,7 @@ const PropertyDetailLedger = () => {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  {["Year", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Penalty","Rebate","Net Tax",  "Collection /Paid", "Cumulative Balance"].map((h) => (
+                  {["Year", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Penalty", "Rebate", "Net Tax", "Collection /Paid", "Cumulative Balance"].map((h) => (
                     <th key={h} style={styles.th}>{h}</th>
                   ))}
                 </tr>
@@ -157,8 +164,8 @@ const PropertyDetailLedger = () => {
 
             <div style={styles.buttonContainer}>
 
-            <button style={styles.confirmBtn} onClick={handleBackClick}>Back</button>
-             
+              <button style={styles.confirmBtn} onClick={handleBackClick}>Back</button>
+
             </div>
           </div>
         </div>
@@ -169,152 +176,152 @@ const PropertyDetailLedger = () => {
 
 const styles = {
   container: {
-      padding: "20px",
-      fontFamily: "Arial, sans-serif",
-      fontSize: "14px",
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
+    fontSize: "14px",
   },
   row: {
-      display: "flex",
-      flexWrap: "wrap",
-      marginBottom: "16px",
-      justifyContent: "space-between",
-      width: "100%"
+    display: "flex",
+    flexWrap: "wrap",
+    marginBottom: "16px",
+    justifyContent: "space-between",
+    width: "100%"
   },
   rowOwnerName: {
-      // display: "flex",
-      flexWrap: "wrap",
-      gap: "20px",
-      marginBottom: "16px",
-      // justifyContent: "space-between",
-      width: "100%"
+    // display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    marginBottom: "16px",
+    // justifyContent: "space-between",
+    width: "100%"
   },
   field: {
-      display: "block",
-      // flexDirection: "column",
-      alignItems: "center",
+    display: "block",
+    // flexDirection: "column",
+    alignItems: "center",
 
   },
   input: {
-      height: "35px",
-      border: "1px solid #D9D9D9",
-      borderRadius: "6px",
-      padding: "6px 10px",
-      fontSize: "14px",
-      width: "300px"
+    height: "35px",
+    border: "1px solid #D9D9D9",
+    borderRadius: "6px",
+    padding: "6px 10px",
+    fontSize: "14px",
+    width: "300px"
 
   },
   inputs: {
-      height: "35px",
-      border: "1px solid #D9D9D9",
-      borderRadius: "6px",
-      padding: "6px 10px",
-      fontSize: "14px",
-      width: "300px",
+    height: "35px",
+    border: "1px solid #D9D9D9",
+    borderRadius: "6px",
+    padding: "6px 10px",
+    fontSize: "14px",
+    width: "300px",
   },
   label: {
-      fontFamily: "Poppins",
-      fontWeight: 400,
-      fontSize: "14px",
-      lineHeight: "22px",
-      letterSpacing: "0%",
-      color: "#282828",
-      width: "200px"
+    fontFamily: "Poppins",
+    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "22px",
+    letterSpacing: "0%",
+    color: "#282828",
+    width: "200px"
   },
   sectionHeader: {
-      fontFamily: "Poppins",
-      fontWeight: "bold",
-      fontSize: "16px",
-      lineHeight: "100%",
-      letterSpacing: "0%",
-      // textDecoration: "underline",
-      textDecorationStyle: "solid",
-      textDecorationOffset: "0%",
-      textDecorationThickness: "0%",
-      color: "#6b133f",
+    fontFamily: "Poppins",
+    fontWeight: "bold",
+    fontSize: "16px",
+    lineHeight: "100%",
+    letterSpacing: "0%",
+    // textDecoration: "underline",
+    textDecorationStyle: "solid",
+    textDecorationOffset: "0%",
+    textDecorationThickness: "0%",
+    color: "#6b133f",
   },
   sectionHeaderDemand: {
-      fontFamily: "Poppins",
-      fontWeight: "bold",
-      fontSize: "22px",
-      lineHeight: "100%",
-      letterSpacing: "0%",
-      // textDecoration: "underline",
-      textDecorationStyle: "solid",
-      textDecorationOffset: "0%",
-      textDecorationThickness: "0%",
-      color: "#6b133f",
+    fontFamily: "Poppins",
+    fontWeight: "bold",
+    fontSize: "22px",
+    lineHeight: "100%",
+    letterSpacing: "0%",
+    // textDecoration: "underline",
+    textDecorationStyle: "solid",
+    textDecorationOffset: "0%",
+    textDecorationThickness: "0%",
+    color: "#6b133f",
   },
   tableContainer: {
-      width: "100%",
-      overflowX: "auto",
-      marginBottom: "20px",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-      '@media (max-width: 768px)': {
-          fontSize: "11px"
-      }
+    width: "100%",
+    overflowX: "auto",
+    marginBottom: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "6px",
+    '@media (max-width: 768px)': {
+      fontSize: "11px"
+    }
   },
   table: {
-      width: "100%",
-      borderCollapse: "collapse",
-      minWidth: "800px",
-      '@media (max-width: 768px)': {
-          minWidth: "600px"
-      }
+    width: "100%",
+    borderCollapse: "collapse",
+    minWidth: "800px",
+    '@media (max-width: 768px)': {
+      minWidth: "600px"
+    }
   },
   th: {
-      border: "1px solid #ccc",
-      padding: "8px 4px",
-      // backgroundColor: "#B9B9B9",
-       backgroundColor:"rgba(107, 19, 63, 0.2)",
-      // border:"1px,0px,0px,1px #B9B9B9",
-      textAlign: "center",
-      fontFamily: "Inter",
-      fontWeight: 400,
-      fontSize: "12px",
-      lineHeight: "130%",
-      color: "black",
-      whiteSpace: "nowrap",
-      '@media (max-width: 768px)': {
-          padding: "6px 3px",
-          fontSize: "10px"
-      }
+    border: "1px solid #ccc",
+    padding: "8px 4px",
+    // backgroundColor: "#B9B9B9",
+    backgroundColor: "rgba(107, 19, 63, 0.2)",
+    // border:"1px,0px,0px,1px #B9B9B9",
+    textAlign: "center",
+    fontFamily: "Inter",
+    fontWeight: 400,
+    fontSize: "12px",
+    lineHeight: "130%",
+    color: "black",
+    whiteSpace: "nowrap",
+    '@media (max-width: 768px)': {
+      padding: "6px 3px",
+      fontSize: "10px"
+    }
   },
   td: {
-      border: "1px solid #ccc",
-      // border:"1px,0px,0px,1px #B9B9B9",
-      padding: "8px 4px",
-      textAlign: "center",
-      fontFamily: "Inter",
-      fontWeight: 400,
-      fontSize: "12px",
-      lineHeight: "130%",
-      color: "#000000",
-      whiteSpace: "nowrap",
-      '@media (max-width: 768px)': {
-          padding: "6px 3px",
-          fontSize: "10px"
-      }
+    border: "1px solid #ccc",
+    // border:"1px,0px,0px,1px #B9B9B9",
+    padding: "8px 4px",
+    textAlign: "center",
+    fontFamily: "Inter",
+    fontWeight: 400,
+    fontSize: "12px",
+    lineHeight: "130%",
+    color: "#000000",
+    whiteSpace: "nowrap",
+    '@media (max-width: 768px)': {
+      padding: "6px 3px",
+      fontSize: "10px"
+    }
   },
   downloadBtn: {
-      float: "right",
-      marginBottom: "10px",
-      padding: "6px 12px",
-      background: "white",
-      border: "1px solid #6b133f",
-      borderRadius: "12px",
-      cursor: "pointer",
-      // width: "202px",
-      fontFamily: "Poppins",
-      fontWeight: 400,
-      fontSize: "12px",
-      lineHeight: "100%",
-      letterSpacing: "3%",
-      textAlign: "center",
-      color: "#6b133f",
-      position: "absolute",
-      right: "0px",
-      top: "-42px",
+    float: "right",
+    marginBottom: "10px",
+    padding: "6px 12px",
+    background: "white",
+    border: "1px solid #6b133f",
+    borderRadius: "12px",
+    cursor: "pointer",
+    // width: "202px",
+    fontFamily: "Poppins",
+    fontWeight: 400,
+    fontSize: "12px",
+    lineHeight: "100%",
+    letterSpacing: "3%",
+    textAlign: "center",
+    color: "#6b133f",
+    position: "absolute",
+    right: "0px",
+    top: "-42px",
   },
   // cardD: {
   //     backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
@@ -325,96 +332,96 @@ const styles = {
   //     borderRadius: "12px",
   // },
   cardD: {
-      backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
-      boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
-      padding: "16px",
-      marginBottom: "22px",
-      borderRadius: "12px",
-      width: "100%",
-      boxSizing: "border-box",
-      overflow: "hidden",
-      '@media (max-width: 768px)': {
-          padding: "12px",
-          marginBottom: "16px"
-      },
-      '@media (max-width: 630px)': {
-          padding: "8px",
-          marginBottom: "12px",
-          borderRadius: "8px"
-      }
+    backgroundColor: "rgba(255, 255, 255, var(--bg-opacity))",
+    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
+    padding: "16px",
+    marginBottom: "22px",
+    borderRadius: "12px",
+    width: "100%",
+    boxSizing: "border-box",
+    overflow: "hidden",
+    '@media (max-width: 768px)': {
+      padding: "12px",
+      marginBottom: "16px"
+    },
+    '@media (max-width: 630px)': {
+      padding: "8px",
+      marginBottom: "12px",
+      borderRadius: "8px"
+    }
   },
   confirmBtn: {
-      padding: "10px 30px",
-      backgroundColor: "#6b133f",
-      color: "#fff",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      // float: "right",
-      marginTop: "20px",
-      fontFamily: "Poppins",
-      fontWeight: 500,
-      fontSize: "14px",
-      lineHeight: "100%",
-      letterSpacing: "3%",
-      color: "#FFFFFF",
-      display: "flex",
-      marginLeft: "auto"
+    padding: "10px 30px",
+    backgroundColor: "#6b133f",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    // float: "right",
+    marginTop: "20px",
+    fontFamily: "Poppins",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "100%",
+    letterSpacing: "3%",
+    color: "#FFFFFF",
+    display: "flex",
+    marginLeft: "auto"
   },
   bottomText: {
-      color: "red",
-      fontSize: "12px",
-      marginTop: "8px",
+    color: "red",
+    fontSize: "12px",
+    marginTop: "8px",
   },
   modalOverlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      backgroundColor: "rgba(0,0,0,0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 9999,
-      padding: "20px",
-      boxSizing: "border-box"
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+    padding: "20px",
+    boxSizing: "border-box"
   },
   modalContent: {
-      background: "#fff",
-      borderRadius: "8px",
-      padding: "40px",
-      textAlign: "center",
-      width: "500px",
-      maxWidth: "100%",
-      '@media (max-width: 768px)': {
-          padding: "24px",
-          width: "100%",
-          maxWidth: "350px"
-      }
+    background: "#fff",
+    borderRadius: "8px",
+    padding: "40px",
+    textAlign: "center",
+    width: "500px",
+    maxWidth: "100%",
+    '@media (max-width: 768px)': {
+      padding: "24px",
+      width: "100%",
+      maxWidth: "350px"
+    }
   },
   modalButtonContainer: {
-      display: "flex",
-      justifyContent: "center",
-      gap: "20px",
-      '@media (max-width: 768px)': {
-          flexDirection: "column",
-          gap: "12px"
-      }
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    '@media (max-width: 768px)': {
+      flexDirection: "column",
+      gap: "12px"
+    }
   },
   modalButton: {
-      backgroundColor: "#6b133f",
-      color: "#fff",
-      padding: "8px 20px",
-      borderRadius: "6px",
-      border: "none",
-      cursor: "pointer",
-      fontSize: "14px",
-      '@media (max-width: 768px)': {
-          padding: "12px 20px",
-          fontSize: "13px",
-          width: "100%"
-      }
+    backgroundColor: "#6b133f",
+    color: "#fff",
+    padding: "8px 20px",
+    borderRadius: "6px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "14px",
+    '@media (max-width: 768px)': {
+      padding: "12px 20px",
+      fontSize: "13px",
+      width: "100%"
+    }
   }
 };
 

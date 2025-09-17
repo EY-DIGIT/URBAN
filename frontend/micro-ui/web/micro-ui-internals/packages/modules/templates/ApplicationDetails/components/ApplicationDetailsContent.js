@@ -63,11 +63,14 @@ const ApplicationDetailsContent = ({
 
   useEffect(() => {
     const handlePOSMessage = (event) => {
+      console.log("📩 Message received from POS SDK:", event.data);
+  
       try {
         const data = JSON.parse(event.data);
   
         if (data.action === "POS_PAYMENT_SUCCESS") {
-          // Store POS details in state
+          console.log("✅ POS Payment Success:", data);
+  
           setPosDetails({
             referenceNumber: data.referenceNumber,
             edcBankName: data.bankName,
@@ -75,21 +78,75 @@ const ApplicationDetailsContent = ({
             cardLast4Digit: data.cardLast4,
           });
   
-          alert("POS Payment Success ✅");
-        } else if (data.action === "POS_PAYMENT_FAILED") {
+          alert("POS Payment Successful ✅");
+  
+          // Call backend to generate receipt
+          handlePaymentPostPOSSuccess(data);
+        } 
+        else if (data.action === "POS_PAYMENT_FAILED") {
+          console.error("❌ POS Payment Failed:", data.error);
           alert("POS Payment Failed ❌: " + data.error);
+        } else {
+          console.warn("⚠️ Unknown POS message action:", data.action);
         }
       } catch (err) {
-        console.error("Error parsing POS message", err);
+        console.error("❌ Error parsing POS message:", err);
       }
     };
-    // Add event listener
+  
     window.addEventListener("message", handlePOSMessage);
-
+  
     return () => {
       window.removeEventListener("message", handlePOSMessage);
     };
   }, []);
+  
+  
+  const handlePaymentPostPOSSuccess = async (posData) => {
+    try {
+      const tenantId = billData?.tenantId || "pg.citya";
+      const consumerCode = applicationData?.propertyId;
+  
+      const receiptRequest = {
+        Payment: {
+          mobileNumber: billData?.mobileNumber || "9999999999",
+          paymentDetails: [
+            {
+              billId: billData?.id,
+              businessService: billData?.businessService,
+              totalAmountPaid: parseFloat(posData.amount),
+              remarks: remarks,
+            },
+          ],
+          tenantId,
+          totalAmountPaid: parseFloat(posData.amount),
+          paymentMode: "POS",
+          payerName: billData?.payerName,
+          paidBy: "OWNER",
+          transactionNumber: posData.txnId,
+          instrumentNumber: posData.txnId,
+          instrumentDate: Date.now(),
+        },
+        RequestInfo: {
+          apiId: "Rainmaker",
+          authToken: Digit.SessionStorage.get("auth-token"),
+          userInfo: Digit.UserService.getUser().info,
+          msgId: `${Date.now()}|en_IN`,
+          plainAccessRequest: {},
+        },
+      };
+  
+      const response = await Digit.PaymentService.createReciept(tenantId, receiptRequest);
+  
+      setReceiptNumber(response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber);
+      setShowAmount(response?.Payments?.[0]?.paymentDetails?.[0]?.totalAmountPaid);
+      setShowConfirmation(true);
+  
+    } catch (err) {
+      console.error("Error creating receipt post POS:", err);
+    }
+  };
+  
 
   
   const toggleMode = (mode) => {
@@ -254,106 +311,129 @@ const ApplicationDetailsContent = ({
       console.error("❌ Remarks validation failed");
       return;
     }
+
+    const amountToPay = billFetch?.totalAmount || 0; // total due
+
+    // Trigger POS SDK
+    handlePOSPayment(amountToPay);
+
+    // try {
+    //   // ✅ Fetch fresh bill before processing
+    //   const billResponse = await Digit.PTService.fetchPaymentDetails({
+    //     tenantId,
+    //     consumerCodes: consumerCode,
+    //   });
+
+    //   console.log("✅ Bill Response:", billResponse);
+
+    //   const BillList = billResponse?.Bill || [];
+
+    //   if (!BillList.length) {
+    //     alert("❌ This bill has already been paid or is not valid.");
+    //     console.warn("⚠️ No valid bill found for ConsumerCode:", consumerCode);
+    //     return;
+    //   }
+
+    //   const bill = BillList[0]; // fresh bill
+    //   console.log("📄 Selected Bill:", bill);
+
+    //   const totalAmount =
+    //     (parseFloat(bill.totalAmount) || 0) + (parseFloat(advancePayment) || 0);
+    //   console.log("💰 Total Amount to Pay:", totalAmount);
+
+    //   // ✅ Construct dynamic receipt request
+    //   const receiptRequest = {
+    //     Payment: {
+    //       mobileNumber: bill?.mobileNumber || "9999999999",
+    //       paymentDetails: [
+    //         {
+    //           businessService: bill?.businessService,
+    //           billId: bill?.id,
+    //           totalDue: bill?.totalAmount,
+    //           totalAmountPaid: totalAmount,
+    //           remarks: remarks,
+    //         },
+    //       ],
+    //       tenantId: bill?.tenantId || tenantId,
+    //       totalDue: bill?.totalAmount,
+    //       totalAmountPaid: totalAmount,
+    //       paymentMode: "POS",//selectedPaymentMode,
+    //       payerName: bill?.payerName || "Unknown User",
+    //       paidBy: "OWNER",
+
+    //       // Instrument details – can be filled dynamically from POS SDK
+    //       transactionNumber: Date.now().toString(), // Example: unique TXN ID
+    //       instrumentNumber: Date.now().toString(), // Example placeholder
+    //       instrumentDate: new Date().getTime(),
+    //     },
+    //     RequestInfo: {
+    //       apiId: "Rainmaker",
+    //       authToken: Digit.SessionStorage.get("auth-token"), // ✅ dynamically get logged-in token
+    //       userInfo: Digit.UserService.getUser().info, // ✅ get logged-in user details
+    //       msgId: `${Date.now()}|en_IN`,
+    //       plainAccessRequest: {},
+    //     },
+    //   };
+
+    //   console.log("📝 Final Receipt Request Payload:", receiptRequest);
+
+    //   // ✅ Call API
+    //   console.log("📡 Calling createReciept API...");
+    //   // const response = await Digit.PaymentService.createReciept(
+    //   //   tenantId,
+    //   //   receiptRequest
+    //   // );
+
+    //   console.log("✅ API Response:", response);
+
+    //   // ✅ Success handling
+    //   const receiptNumber =
+    //     response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber;
+    //   const totalAmountPaid =
+    //     response?.Payments?.[0]?.paymentDetails?.[0]?.totalAmountPaid;
+
+    //   console.log("🎉 Payment Successful!");
+    //   console.log("Receipt Number:", receiptNumber);
+    //   console.log("Amount Paid:", totalAmountPaid);
+
+    //   setShowAmount(totalAmountPaid);
+    //   setReceiptNumber(receiptNumber);
+    //   setShowConfirmation(true);
+    //   fetchBill();
+    //   setFormErrors("");
+    // } catch (error) {
+    //   console.error("❌ Payment API Error:", error);
+
+    //   const errorMsg = error?.response?.data?.Errors?.map((e) => e?.code)?.join(", ");
+    //   console.error("Error Message from API:", errorMsg);
+
+    //   if (errorMsg?.includes("BILL_ALREADY_PAID")) {
+    //     setFormErrors("This bill is already paid.");
+    //   } else if (errorMsg?.includes("BILL_EXPIRED")) {
+    //     setFormErrors("This bill has expired. Please regenerate.");
+    //   } else {
+    //     setFormErrors(errorMsg || "Payment failed. Please try again.");
+    //   }
+    // }
+  };
+
+  const handlePOSPayment = (amount) => {
+    console.log("🚀 Initiating POS Payment with amount:", amount);
   
-    try {
-      // ✅ Fetch fresh bill before processing
-      const billResponse = await Digit.PTService.fetchPaymentDetails({
-        tenantId,
-        consumerCodes: consumerCode,
-      });
-  
-      console.log("✅ Bill Response:", billResponse);
-  
-      const BillList = billResponse?.Bill || [];
-  
-      if (!BillList.length) {
-        alert("❌ This bill has already been paid or is not valid.");
-        console.warn("⚠️ No valid bill found for ConsumerCode:", consumerCode);
-        return;
-      }
-  
-      const bill = BillList[0]; // fresh bill
-      console.log("📄 Selected Bill:", bill);
-  
-      const totalAmount =
-        (parseFloat(bill.totalAmount) || 0) + (parseFloat(advancePayment) || 0);
-      console.log("💰 Total Amount to Pay:", totalAmount);
-  
-      // ✅ Construct dynamic receipt request
-      const receiptRequest = {
-        Payment: {
-          mobileNumber: bill?.mobileNumber || "9999999999",
-          paymentDetails: [
-            {
-              businessService: bill?.businessService,
-              billId: bill?.id,
-              totalDue: bill?.totalAmount,
-              totalAmountPaid: totalAmount,
-              remarks: remarks,
-            },
-          ],
-          tenantId: bill?.tenantId || tenantId,
-          totalDue: bill?.totalAmount,
-          totalAmountPaid: totalAmount,
-          paymentMode: "POS",//selectedPaymentMode,
-          payerName: bill?.payerName || "Unknown User",
-          paidBy: "OWNER",
-  
-          // Instrument details – can be filled dynamically from POS SDK
-          transactionNumber: Date.now().toString(), // Example: unique TXN ID
-          instrumentNumber: Date.now().toString(), // Example placeholder
-          instrumentDate: new Date().getTime(),
-        },
-        RequestInfo: {
-          apiId: "Rainmaker",
-          authToken: Digit.SessionStorage.get("auth-token"), // ✅ dynamically get logged-in token
-          userInfo: Digit.UserService.getUser().info, // ✅ get logged-in user details
-          msgId: `${Date.now()}|en_IN`,
-          plainAccessRequest: {},
-        },
+    if (window.ReactNativeWebView) {
+      const message = {
+        action: "INITIATE_POS_PAYMENT",
+        amount: amount,
       };
   
-      console.log("📝 Final Receipt Request Payload:", receiptRequest);
-  
-      // ✅ Call API
-      console.log("📡 Calling createReciept API...");
-      // const response = await Digit.PaymentService.createReciept(
-      //   tenantId,
-      //   receiptRequest
-      // );
-  
-      console.log("✅ API Response:", response);
-  
-      // ✅ Success handling
-      const receiptNumber =
-        response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber;
-      const totalAmountPaid =
-        response?.Payments?.[0]?.paymentDetails?.[0]?.totalAmountPaid;
-  
-      console.log("🎉 Payment Successful!");
-      console.log("Receipt Number:", receiptNumber);
-      console.log("Amount Paid:", totalAmountPaid);
-  
-      setShowAmount(totalAmountPaid);
-      setReceiptNumber(receiptNumber);
-      setShowConfirmation(true);
-      fetchBill();
-      setFormErrors("");
-    } catch (error) {
-      console.error("❌ Payment API Error:", error);
-  
-      const errorMsg = error?.response?.data?.Errors?.map((e) => e?.code)?.join(", ");
-      console.error("Error Message from API:", errorMsg);
-  
-      if (errorMsg?.includes("BILL_ALREADY_PAID")) {
-        setFormErrors("This bill is already paid.");
-      } else if (errorMsg?.includes("BILL_EXPIRED")) {
-        setFormErrors("This bill has expired. Please regenerate.");
-      } else {
-        setFormErrors(errorMsg || "Payment failed. Please try again.");
-      }
+      console.log("📡 Sending message to React Native WebView:", message);
+      window.ReactNativeWebView.postMessage(JSON.stringify(message));
+    } else {
+      console.warn("⚠️ ReactNativeWebView not available. POS SDK cannot be triggered.");
+      alert("POS SDK not available");
     }
   };
+  
   
   
 

@@ -10,12 +10,12 @@ const OwnershipDetailsSection = ({
   owners,
   setOwners,
   addNewOwner,
-  isJointStarted, styles, formErrors, handleOwnerAadhaarChange ,handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange,propertyCategoryInput,propertyCategoryInputChange
+  isJointStarted, styles, formErrors, handleOwnerAadhaarChange, handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange, propertyCategoryInput, propertyCategoryInputChange
 }) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
   const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
-   const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
+  const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
 
   const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
   const salutationOptions = (Menu || []).map((item) => ({
@@ -28,10 +28,10 @@ const OwnershipDetailsSection = ({
     name: t(item.name)
   }));
 
-  const propertyCategoryOptions=(PropertyCategory || []).map((item)=>({
+  const propertyCategoryOptions = (PropertyCategory || []).map((item) => ({
 
-    code:item.code,
-    name:t(item.name),
+    code: item.code,
+    name: t(item.name),
   }))
 
   // const updateOwner = (index, field, value) => {
@@ -65,7 +65,7 @@ const OwnershipDetailsSection = ({
 
           {/* Name with Title */}
           <div style={styles.flex30}>
-            <div style={{...styles.poppinsLabel , color: "#555"}}>
+            <div style={{ ...styles.poppinsLabel, color: "#555" }}>
               {t("Owner Name")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <div style={styles.nameInputContainer}>
@@ -77,21 +77,21 @@ const OwnershipDetailsSection = ({
                 optionKey="name"
                 style={styles.dropdown30}
                 placeholder={t("Mr")}
-                placeholderStyle={{ color: "#000" }}  
+                placeholderStyle={{ color: "#000" }}
                 disable={true}
               />
               <TextInput
-              disabled
+                disabled
                 style={styles.textBox}
                 placeholder={t("Enter")}
                 value={owner.name}
                 onChange={(e) => handleOwnerNameChange(index, "name", e.target.value)}
-                />
+              />
             </div>
             {/* ✅ CHANGE THIS: Use the dynamic key */}
             {formErrors[`owner-${index}-name`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-name`]}</p>
-          )}
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-name`]}</p>
+            )}
           </div>
           {/* Hindi Name */}
           <div style={styles.flex30}>
@@ -107,7 +107,7 @@ const OwnershipDetailsSection = ({
                 optionKey="name"
                 style={styles.dropdown30}
                 placeholder={t("Mr")}
-                 disable={true}
+                disable={true}
               />
               <TextInput
                 style={styles.textBox}
@@ -115,14 +115,14 @@ const OwnershipDetailsSection = ({
                 value={owner.hindiName}
                 disabled
                 onChange={(e) => handleOwnerNameChange(index, "hindiName", e.target.value)}
-                />
+              />
             </div>
-             {/* ✅ CHANGE THIS: Use the dynamic key */}
-          {formErrors[`owner-${index}-hindiName`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-hindiName`]}</p>
-          )}
+            {/* ✅ CHANGE THIS: Use the dynamic key */}
+            {formErrors[`owner-${index}-hindiName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-hindiName`]}</p>
+            )}
           </div>
-    
+
           {/* Relationship */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
@@ -135,7 +135,7 @@ const OwnershipDetailsSection = ({
                 { code: "HUSBAND", name: t("Husband") },
                 { code: "GUARDIAN", name: t("Guardian") }
               ]}
-               disable={true}
+              disable={true}
               selected={{ name: owner.relationship }}
               select={(val) => updateOwner(index, "relationship", val.name)}
               optionKey="name"
@@ -147,21 +147,21 @@ const OwnershipDetailsSection = ({
             )}
           </div>
 
-           {/* Father/Husband Name */}
+          {/* Father/Husband Name */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
               {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <TextInput
-            disabled
+              disabled
               style={styles.widthInput}
               value={owner.fatherHusbandName}
               onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
               placeholder={t("Enter")}
             />
-             {formErrors[`owner-${index}-fatherHusbandName`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
-          )}
+            {formErrors[`owner-${index}-fatherHusbandName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+            )}
           </div>
           {/* Email */}
           <div style={styles.flex30}>
@@ -173,9 +173,9 @@ const OwnershipDetailsSection = ({
               placeholder={t("Enter")}
               disabled
             />
-             {formErrors[`owner-${index}-email`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-email`]}</p>
-          )}
+            {formErrors[`owner-${index}-email`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-email`]}</p>
+            )}
           </div>
           {/* Mobile */}
           <div style={styles.flex30}>
@@ -191,42 +191,47 @@ const OwnershipDetailsSection = ({
               placeholder={t("Enter")}
             />
             {formErrors[`owner-${index}-mobile`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-mobile`]}</p>
-          )}
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-mobile`]}</p>
+            )}
           </div>
 
           {/* Alternative Number */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>{t("Alternative Number")}</div>
             <TextInput
-            disabled
+              disabled
               value={owner.altNumber}
               onChange={(e) => handleOwnerContactChange(index, "altNumber", e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
             />
             {formErrors[`owner-${index}-altNumber`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-altNumber`]}</p>
-          )}
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-altNumber`]}</p>
+            )}
           </div>
-           {/* Aadhaar */}
-        <div style={styles.flex30}>
-          <div style={styles.poppinsLabel}>{t("Aadhaar ID")} <span className="mandatory" style={styles.mandatory}>*</span></div>
-          <TextInput
-            style={styles.widthInput}
-            value={owner.aadhaar}
-            disabled
-            // ✅ CHANGE THIS LINE
-            // It should now call the new handler passed from the parent
-            onChange={(e) => handleOwnerAadhaarChange(index, e.target.value)}
-            placeholder={t("Enter")}
-          />
-          {/* ✅ CHANGE THIS LINE */}
-          {/* It should now look for the correct, dynamic error key */}
-          {formErrors[`owner-${index}-aadhaar`] && (
-            <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-aadhaar`]}</p>
-          )}
-        </div>
+          {/* Aadhaar */}
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>{t("Aadhaar ID")} <span className="mandatory" style={styles.mandatory}>*</span></div>
+            <TextInput
+              style={styles.widthInput}
+              // value={owner.aadhaar}
+              value={
+                owner?.aadhaar
+                  ? owner.aadhaar.replace(/\d(?=\d{4})/g, "X")
+                  : ""
+              }
+              disabled
+              // ✅ CHANGE THIS LINE
+              // It should now call the new handler passed from the parent
+              onChange={(e) => handleOwnerAadhaarChange(index, e.target.value)}
+              placeholder={t("Enter")}
+            />
+            {/* ✅ CHANGE THIS LINE */}
+            {/* It should now look for the correct, dynamic error key */}
+            {formErrors[`owner-${index}-aadhaar`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-aadhaar`]}</p>
+            )}
+          </div>
 
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
@@ -236,7 +241,7 @@ const OwnershipDetailsSection = ({
               value={owner.samagraID}
               onChange={(e) => updateOwner(index, "samagraID", e.target.value)}
               style={styles.widthInput}
-              
+
               disabled
               placeholder={t("Enter")}
             />
@@ -261,7 +266,7 @@ const OwnershipDetailsSection = ({
     );
   };
 
-  console.log("propertyCategoryInputpropertyCategoryInput=",propertyCategoryInput)
+  console.log("propertyCategoryInputpropertyCategoryInput=", propertyCategoryInput)
 
   return (
     <div>
@@ -269,27 +274,27 @@ const OwnershipDetailsSection = ({
 
         {/* Name with Title */}
 
-         <div style={styles.flex30}>
-                  <div style={styles.poppinsLabel}>
-                    {t("Property Category")} <span className="mandatory" style={styles.mandatory}>*</span>
-                  </div>
-                  <Dropdown
-                    style={styles.widthInput}
-                    t={t}
-                    option={propertyCategoryOptions}
-                    
-                    selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
-                    select={propertyCategoryInputChange}
-                    optionKey="name"
-                    placeholder={t("Select")}
-                     disable={true}
-                  />
-                  {formErrors?.propertyCategoryInput && (
-                    <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
-                      {formErrors.propertyCategoryInput}
-                    </p>
-                  )}
-                </div>
+        <div style={styles.flex30}>
+          <div style={styles.poppinsLabel}>
+            {t("Property Category")} <span className="mandatory" style={styles.mandatory}>*</span>
+          </div>
+          <Dropdown
+            style={styles.widthInput}
+            t={t}
+            option={propertyCategoryOptions}
+
+            selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
+            select={propertyCategoryInputChange}
+            optionKey="name"
+            placeholder={t("Select")}
+            disable={true}
+          />
+          {formErrors?.propertyCategoryInput && (
+            <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+              {formErrors.propertyCategoryInput}
+            </p>
+          )}
+        </div>
 
         <div style={styles.flex30}>
           <div style={styles.poppinsLabel}>
@@ -304,7 +309,7 @@ const OwnershipDetailsSection = ({
             select={handleOwnershipTypeChange}
             optionKey="name"
             placeholder={t("Select")}
-             disable={true}
+            disable={true}
           />
           {formErrors?.ownershipType && (
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
@@ -327,7 +332,7 @@ const OwnershipDetailsSection = ({
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>{formErrors.registryId}</p>
           )}
         </div>
-         <div style={styles.flex30}></div>
+        <div style={styles.flex30}></div>
       </div>
       {owners.map((_, index) => renderOwnerForm(index))}
 

@@ -448,7 +448,16 @@ console.log("ABCDFG ===",checkpoint)
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Aadhar No.<span style={{ color: "red" }}>*</span></label>
-                  <input style={styles.input} value={owner.aadhaarNumber || ""} disabled readOnly />
+                 
+                   <input style={styles.input}
+                                    label="Aadhaar ID"
+                                    value={
+                                        owner?.aadhaarNumber
+                                            ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                                            : "N/A"
+                                    }
+                                    disabled readOnly
+                                />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Samagra ID <span style={{ color: "red" }}>*</span></label>

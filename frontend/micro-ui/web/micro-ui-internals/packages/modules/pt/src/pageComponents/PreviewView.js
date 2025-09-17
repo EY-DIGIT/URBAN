@@ -95,7 +95,7 @@ const styles = {
         border: "1px solid #ccc",
         padding: "8px",
         // backgroundColor: "#6b133f",
-        backgroundColor:"rgba(107, 19, 63, 0.2)",
+        backgroundColor: "rgba(107, 19, 63, 0.2)",
         textAlign: "center",
         // fontFamily: "Inter",
         fontWeight: 400,
@@ -103,7 +103,7 @@ const styles = {
         lineHeight: "130%",
         letterSpacing: "0%",
         // color: "white",
-        color:"#6b133f",
+        color: "#6b133f",
     },
     td: {
         border: "1px solid #ccc",
@@ -167,7 +167,7 @@ const styles = {
         fontSize: "12px",
         marginTop: "8px",
     },
-      modalOverlay: {
+    modalOverlay: {
         position: "fixed",
         top: 0,
         left: 0,
@@ -237,231 +237,239 @@ const PropertyForm = () => {
     let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
 
     const location = useLocation();
-    const { data, applicationData } = location.state || {}; // receive full object
+    const { data, proOwnerDetail } = location.state || {}; // receive full object
     const calculation = data?.Calculation?.[0];
 
     const propertyFYDetails = calculation?.propertyFYDetails || [];
     const taxSummaries = calculation?.propertyFYTaxSummaries || [];
-    console.log("propertyDetail", applicationData)
-    const ownersDetail = applicationData?.owners || [];
-    const address = applicationData?.address || {};
+    console.log("propertyDetail", proOwnerDetail)
+    const ownersDetail = proOwnerDetail?.owners || [];
+    const address = proOwnerDetail?.address || {};
 
     const stateId = Digit.ULBService.getStateId();
 
-     const [floorList, setFloorList] = useState([]);
-        const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
-          useEffect(() => {
+    const [floorList, setFloorList] = useState([]);
+    const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
+    useEffect(() => {
         if (isLoadingF) return;
-    
+
         const floors = FloorAll?.PropertyTax?.Floor || [];
-    
+
         const mappedFloors = floors
-          .filter(floor => floor?.code && floor?.active)
-          .map(floor => ({
-            i18nKey: floor.name,
-            code: floor.code,
-          }))
-          .sort((a, b) => {
-            const getSortValue = (val) => {
-              const num = parseInt(val, 10);
-              return isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
-            };
-            return getSortValue(b.code) - getSortValue(a.code);
-          });
-    
+            .filter(floor => floor?.code && floor?.active)
+            .map(floor => ({
+                i18nKey: floor.name,
+                code: floor.code,
+            }))
+            .sort((a, b) => {
+                const getSortValue = (val) => {
+                    const num = parseInt(val, 10);
+                    return isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
+                };
+                return getSortValue(b.code) - getSortValue(a.code);
+            });
+
         setFloorList(mappedFloors);
-      }, [isLoadingF, FloorAll]);
-    
-      console.log("FLOOR NO=",floorList)
+    }, [isLoadingF, FloorAll]);
 
- const [boundaryData, setBoundaryData] = useState(null);
-  const [zones, setZones] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [colonies, setColonies] = useState([]);
-  const [rateZones, setRateZones] = useState([]);
-        useEffect(() => {
-    (async () => {
-      try {
-        const tenantId = Digit.ULBService.getCurrentTenantId();
-        const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+    console.log("FLOOR NO=", floorList)
 
-        console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+    const [boundaryData, setBoundaryData] = useState(null);
+    const [zones, setZones] = useState([]);
+    const [wards, setWards] = useState([]);
+    const [colonies, setColonies] = useState([]);
+    const [rateZones, setRateZones] = useState([]);
+    useEffect(() => {
+        (async () => {
+            try {
+                const tenantId = Digit.ULBService.getCurrentTenantId();
+                const response = await Digit.LocationService.getRevenueLocalities(tenantId);
 
-        const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
-        if (cityBoundary?.children?.length > 0) {
-          setBoundaryData(cityBoundary);
+                console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
 
-          const zoneOptions = cityBoundary.children.map((zone) => ({
-            code: zone.code,
-            name: zone.name || zone.code,
-          }));
-          setZones(zoneOptions);
-        } else {
-          console.warn("❌ No boundary children found.");
-        }
-      } catch (error) {
-        console.error("❌ Error fetching boundary data:", error);
-      }
-    })();
-  }, []);
+                const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+                if (cityBoundary?.children?.length > 0) {
+                    setBoundaryData(cityBoundary);
 
-  console.log("Zones No=",zones)
+                    const zoneOptions = cityBoundary.children.map((zone) => ({
+                        code: zone.code,
+                        name: zone.name || zone.code,
+                    }));
+                    setZones(zoneOptions);
+                } else {
+                    console.warn("❌ No boundary children found.");
+                }
+            } catch (error) {
+                console.error("❌ Error fetching boundary data:", error);
+            }
+        })();
+    }, []);
+
+    console.log("Zones No=", zones)
 
     // const handleConfirm = () => {
     //     const flag = true;
-    //     const propertyId = applicationData?.propertyId;
+    //     const propertyId = proOwnerDetail?.propertyId;
     //     history.push({
     //         pathname: `applicationsearch/application-details/${propertyId}`, // 👈 send via query params
     //         state: { propertyId, flag } // 👈 also send via state if needed
     //     });
     // };
-const handleConfirm = () => {
-  const flag = true;
-  const propertyId = applicationData?.propertyId;
+    const handleConfirm = () => {
+        const flag = true;
+        const propertyId = proOwnerDetail?.propertyId;
 
-  sessionStorage.setItem("flag", JSON.stringify(flag));
-  window.location.href = `/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`;
-};
+        sessionStorage.setItem("flag", JSON.stringify(flag));
+        window.location.href = `/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`;
+    };
 
     return (
         <div id="downloadable-component">
-        <div style={{ position: "relative" }}>
-            <button style={styles.downloadBtn}><DownloadPdfButton targetId="downloadable-component" /></button>
-            <div style={styles.cardD}>
-                <div style={styles.sectionHeaderDemand}>Demand</div>
+            <div style={{ position: "relative" }}>
+                <button style={styles.downloadBtn}><DownloadPdfButton targetId="downloadable-component" /></button>
+                <div style={styles.cardD}>
+                    <div style={styles.sectionHeaderDemand}>Demand</div>
 
-                <div style={styles.row}>
-                    {/* <InputField label="Property id" value={calculation?.serviceNumber || "N/A"} />
+                    <div style={styles.row}>
+                        {/* <InputField label="Property id" value={calculation?.serviceNumber || "N/A"} />
                            <InputField label="Old Property id" value="567889" /> */}
-                    <InputField label="Rate zone" value={applicationData?.units[0].rateZone || "N/A"} />
+                        <InputField label="Rate zone" value={proOwnerDetail?.units[0].rateZone || "N/A"} />
+                    </div>
+                    {ownersDetail.map((owner, index) => (
+                        <React.Fragment key={owner.uuid || index}>
+                            <div style={styles.sectionHeader}>Owner {index + 1}</div>
+                            <div style={{ marginTop: "14px" }}></div>
+                            <div style={styles.row}>
+                                <InputField label="Owner Name" value={` ${owner?.name || "N/A"}`} />
+
+                                <InputField label="Father/Husband Name" value={owner?.fatherOrHusbandName} />
+
+                                <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
+                            </div>
+                            <div style={styles.row}>
+
+                                <InputField
+                                    label="Zone"
+                                    value={
+                                        zones.find((f) => f.code === address?.zone)?.name || "N/A"
+                                    }
+                                />
+
+                                {/* <InputField label="Zone" value={address?.zone || "N/A"} /> */}
+                                <InputField label="Ward" value={address?.ward || "N/A"} />
+                                <InputField label="Colony" value={address?.locality?.name || "N/A"} />
+                            </div>
+                            <div style={styles.row}>
+                                <InputField label="Pincode" value={address?.pincode || "N/A"} />
+                                <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
+                                <InputField
+                                    label="Aadhaar ID"
+                                    value={
+                                        owner?.aadhaarNumber
+                                            ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                                            : "N/A"
+                                    }
+                                />
+
+                            </div>
+                            <div style={styles.row}>
+                                <InputField label="Email ID" value={owner?.emailId || "N/A"} />
+                                <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
+                                <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
+                            </div>
+                        </React.Fragment>
+                    ))}
                 </div>
-                {ownersDetail.map((owner, index) => (
-                    <React.Fragment key={owner.uuid || index}>
-                        <div style={styles.sectionHeader}>Owner {index + 1}</div>
-                        <div style={{marginTop:"14px"}}></div>
-                        <div style={styles.row}>
-                            <InputField label="Owner Name" value={` ${owner?.name || "N/A"}`} />
+                <div style={styles.cardD}>
+                    {/* Table 1 - Property Details */}
+                    <div style={styles.sectionHeader}>Tax Details</div>
+                    <div style={{ overflowX: 'auto', width: '100%' }}>
+                        <table style={styles.table}>
+                            <thead>
+                                <tr>
+                                    {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
+                                        <th key={h} style={styles.th}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {propertyFYDetails.map((item) => {
+                                    const floor = floorList.find(f => f.code === item.floorNo);
+                                    return (
 
-                            <InputField label="Father/Husband Name" value={owner?.fatherOrHusbandName} />
+                                        <tr key={item.year}>
+                                            <td style={styles.td}>{item.year}</td>
+                                            <td style={styles.td}>{item.usageType}</td>
+                                            <td style={styles.td}>{item.usageFactor}</td>
+                                            <td style={styles.td}>{floor?.i18nKey}</td>
+                                            <td style={styles.td}>{item.constructionType}</td>
+                                            <td style={styles.td}>{item.area}</td>
+                                            <td style={styles.td}>{Math.round(item.factor)}</td>
+                                            <td style={styles.td}>{Math.round(item.alv)}</td>
+                                            <td style={styles.td}>{Math.round(item?.discount)}</td>
+                                            <td style={styles.td}>{Math.round(item?.tpv)}</td>
+                                        </tr>
+                                    )
+                                }
 
-                            <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
-                        </div>
-                        <div style={styles.row}>
-                            
-<InputField
-        label="Zone"
-        value={
-          zones.find((f) => f.code === address?.zone)?.name || "N/A"
-        }
-      />
+                                )
 
-                            {/* <InputField label="Zone" value={address?.zone || "N/A"} /> */}
-                            <InputField label="Ward" value={address?.ward || "N/A"} />
-                            <InputField label="Colony" value={address?.locality?.name || "N/A"} />
-                        </div>
-                        <div style={styles.row}>
-                            <InputField label="Pincode" value={address?.pincode || "N/A"} />
-                            <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
-                            <InputField label="Aadhaar ID" value={owner?.aadhaarNumber || "N/A"} />
-                        </div>
-                        <div style={styles.row}>
-                            <InputField label="Email ID" value={owner?.emailId || "N/A"} />
-                            <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
-                            <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
-                        </div>
-                    </React.Fragment>
-                ))}
-            </div>
-            <div style={styles.cardD}>
-                {/* Table 1 - Property Details */}
-                <div style={styles.sectionHeader}>Tax Details</div>
-                <div style={{ overflowX: 'auto', width: '100%' }}>
-                    <table style={styles.table}>
-                        <thead>
-                            <tr>
-                                {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
-                                    <th key={h} style={styles.th}>{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                             {propertyFYDetails.map((item) => {
-                                                                        const floor = floorList.find(f => f.code === item.floorNo);
-                               return  (
-
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style={styles.cardD}>
+                    {/* Table 2 - Tax Summary */}
+                    <div style={styles.sectionHeader}>Property Tax Summary</div>
+                    <div style={{ overflowX: 'auto', width: '100%' }}>
+                        <table style={styles.table}>
+                            <thead>
+                                <tr>
+                                    {["Year", "TPV", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Rebate", "Penalty", "Net Tax"].map((h) => (
+                                        <th key={h} style={styles.th}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {taxSummaries.map((item) => (
                                     <tr key={item.year}>
                                         <td style={styles.td}>{item.year}</td>
-                                        <td style={styles.td}>{item.usageType}</td>
-                                        <td style={styles.td}>{item.usageFactor}</td>
-                                        <td style={styles.td}>{  floor?.i18nKey   }</td>
-                                        <td style={styles.td}>{item.constructionType}</td>
-                                        <td style={styles.td}>{item.area}</td>
-                                        <td style={styles.td}>{Math.round(item.factor)}</td>
-                                        <td style={styles.td}>{Math.round(item.alv)}</td>
-                                        <td style={styles.td}>{Math.round(item?.discount)}</td>
-                                        <td style={styles.td}>{Math.round(item?.tpv)}</td>
+                                        <td style={styles.td}>{Math.round(item.tpv)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.propertyTax)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.samekit)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.educationCess)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.jalKar)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.jalNikas)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.urbanTax)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.sevaKar)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.totalTax)}</td>
+                                        <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.penalty)}</td>
+                                        <td style={styles.td}>{Math.round(item.netTax)}</td>
                                     </tr>
-                                )
-                            }
-                            
-                            )
-                                
-                                }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div style={styles.cardD}>
-                {/* Table 2 - Tax Summary */}
-                <div style={styles.sectionHeader}>Property Tax Summary</div>
-                <div style={{ overflowX: 'auto', width: '100%' }}>
-                    <table style={styles.table}>
-                        <thead>
-                            <tr>
-                                {["Year", "TPV", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Rebate", "Penalty", "Net Tax"].map((h) => (
-                                    <th key={h} style={styles.th}>{h}</th>
                                 ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {taxSummaries.map((item) => (
-                                <tr key={item.year}>
-                                    <td style={styles.td}>{item.year}</td>
-                                    <td style={styles.td}>{Math.round(item.tpv)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.propertyTax)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.samekit)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.educationCess)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.jalKar)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.jalNikas)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.urbanTax)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.sevaKar)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.totalTax)}</td>
-                                    <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.penalty)}</td>
-                                    <td style={styles.td}>{Math.round(item.netTax)}</td>
+                                <tr>
+                                    <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
+                                    <td style={styles.td}>
+                                        ₹ {taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)}
+                                    </td>
                                 </tr>
-                            ))}
-                            <tr>
-                                <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
-                                <td style={styles.td}>
-                                    ₹ {taxSummaries.reduce((sum, item) => sum + (item.netTax || 0), 0).toFixed(2)}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style={styles.bottomText}>
-                    All values mentioned are in “₹” (Indian Rupees).
-                </div>
-                <div style={{ display: "flex", width: "224px", marginLeft: "auto" }}>
-                    <button style={styles.confirmBtn} onClick={() => window.history.back()}>
-                        Back
-                    </button>
-                    <button style={styles.confirmBtn} onClick={() => handleConfirm()}>Confirm</button>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style={styles.bottomText}>
+                        All values mentioned are in “₹” (Indian Rupees).
+                    </div>
+                    <div style={{ display: "flex", width: "224px", marginLeft: "auto" }}>
+                        <button style={styles.confirmBtn} onClick={() => window.history.back()}>
+                            Back
+                        </button>
+                        <button style={styles.confirmBtn} onClick={() => handleConfirm()}>Confirm</button>
+                    </div>
                 </div>
             </div>
         </div>
-</div>
     );
 };
 
