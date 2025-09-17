@@ -135,6 +135,9 @@ import DemandNote from "./pageComponents/DemandNote";
 import PropertyCardsLanding from "./pages/citizen/PropertyCardsLanding/PropertyCardsLanding";
 import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
 
+//Citizen Services
+import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenServicesLandingCards"
+
 
 const componentsToRegister = {
   AssessmentDetailsSection,
@@ -255,6 +258,7 @@ const componentsToRegister = {
   PropertAddressLayout,
   PropertyCardsLanding,
   PaymentForm,
+  CitizenServicesCards,
 };
 
 const addComponentsToRegistry = () => {

@@ -33,6 +33,7 @@ const App = () => {
   const PreviewDemand = Digit?.ComponentRegistryService?.getComponent("PreviewDemand");
   const PropertyCardsLanding = Digit?.ComponentRegistryService?.getComponent("PropertyCardsLanding");
   const PaymentForm = Digit?.ComponentRegistryService?.getComponent("PaymentForm");
+  const CitizenServices = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
 
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
@@ -62,6 +63,9 @@ const App = () => {
           <PrivateRoute path={`${path}/property/owner-history/:tenantId/:propertyIds`} component={PropertyOwnerHistory}></PrivateRoute>
           {/* <Redirect to={`/`}></Redirect> */}
           <PrivateRoute path={`${path}/property/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
+
+          {/* Citizen Services */}
+          <PrivateRoute path={`${path}/citizen-services`} component={CitizenServices}></PrivateRoute>
 
         </AppContainer>
       </Switch>

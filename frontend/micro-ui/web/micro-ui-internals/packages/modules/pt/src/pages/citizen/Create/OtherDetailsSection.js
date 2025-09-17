@@ -55,7 +55,7 @@ const OtherDetailsSection = ({
     <div>
 
       {/* Other Details Heading */}
-      <div style={styles.assessmentStyle}>{t("Other Details")}</div>
+      <div style={styles.assessmentStyle}>{t("Other Details")}{` (To be filled by IMC)`}</div>
 
       {/* Property Info */}
       {/* <div style={styles.formSection}> */}

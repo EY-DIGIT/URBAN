@@ -230,7 +230,7 @@ const EmployeeHome = ({ modules }) => {
             ),
             dropdownOptions: [
                 { label: "Namantran", link: "/namantran" },
-                { label: "Cash Desk", link: "/cash-desk" },
+                { label: "Cash Desk", link: "/digit-ui/employee/pt/search" },
                 { label: "Change in Property", link: "/change-property" },
                 { label: "New Property Application", link: "/digit-ui/employee/pt/PropertyLandingPage" }
             ]
@@ -253,7 +253,7 @@ const EmployeeHome = ({ modules }) => {
                 </div>
             ),
             dropdownOptions: [
-                { label: "View Rentals", link: "/view-rentals" },
+                { label: "View Rentals", link: "dashboard/marriage", isExternal: true },
                 { label: "Add New Rental", link: "/add-rental" },
                 { label: "Rental History", link: "/rental-history" },
                 { label: "Payment Status", link: "/payment-status" }

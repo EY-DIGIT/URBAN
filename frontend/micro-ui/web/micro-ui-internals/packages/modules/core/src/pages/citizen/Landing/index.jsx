@@ -21,7 +21,7 @@ const styles = {
     servicesGrid: {
         display: "grid",
         justifyContent: "space-around",
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
         gap: "20px",
         maxWidth: "1200px",
         margin: "0 auto",
@@ -199,6 +199,8 @@ if (!document.head.querySelector('style[data-dropdown-animation]')) {
 const ServiceCard = ({
     title,
     icon,
+    citizenLink,
+    isExternal,
     dropdownOptions,
     isDropdownOpen,
     onToggle,
@@ -209,9 +211,22 @@ const ServiceCard = ({
     // const userType = JSON.parse(sessionStorage.getItem("Digit.userType")).value;
     const getUserType = () => Digit.UserService.getType();
     console.log("userType", getUserType());
+    const user = Digit.UserService.getUser();
+    const accessToken = user?.access_token;
+    const refreshToken = user?.refresh_token;
+
+    const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
+    // console.log("stateInfo==", stateInfo);
+
+    const baseURL = `${stateInfo?.BAPURL}`;
+
     const handleViewClick = () => {
         if (getUserType() === "citizen") {
-            window.location.href = "/digit-ui/citizen/pt/property/Actions";
+            if(isExternal){
+                window.location.href = `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+            }else{
+                window.location.href = citizenLink 
+            }
         }
         else {
             onToggle(cardIndex);
@@ -257,7 +272,7 @@ const ServiceCard = ({
                             onMouseEnter={() => setHoveredItem(index)}
                             onMouseLeave={() => setHoveredItem(null)}
                         >
-                            <a href={option.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <a href={option?.isExternal? `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}` : option.link} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 {option?.label}
                             </a>
                         </div>
@@ -295,10 +310,12 @@ const RevenueServices = () => {
             ),
             dropdownOptions: [
                 { label: "Namantran", link: "/namantran" },
-                { label: "Cash Desk", link: "/cash-desk" },
+                { label: "Cash Desk", link: "/digit-ui/employee/pt/search" },
                 { label: "Change in Property", link: "/change-property" },
                 { label: "New Property Application", link: "/digit-ui/citizen/pt/property/new-application" }
-            ]
+            ],
+            citizenLink: "/digit-ui/citizen/pt/property/Actions",
+            isExternal: false
         },
         {
             title: "Rental",
@@ -322,7 +339,9 @@ const RevenueServices = () => {
                 { label: "Add New Rental", link: "/add-rental" },
                 { label: "Rental History", link: "/rental-history" },
                 { label: "Payment Status", link: "/payment-status" }
-            ]
+            ],
+            citizenLink: "dashboard/rental",
+            isExternal: true
         },
         {
             title: "Water",
@@ -345,7 +364,9 @@ const RevenueServices = () => {
                 { label: "Usage History", link: "/usage-history" },
                 { label: "Connection Request", link: "/connection-request" },
                 { label: "Complaint", link: "/complaint" }
-            ]
+            ],
+            citizenLink: "/dashboard/water",
+            isExternal: false
         }
     ];
 
@@ -358,6 +379,8 @@ const RevenueServices = () => {
                         key={index}
                         title={service.title}
                         icon={service.icon}
+                        citizenLink={service.citizenLink}
+                        isExternal={service.isExternal}
                         dropdownOptions={service.dropdownOptions}
                         isDropdownOpen={openDropdown === index}
                         onToggle={handleDropdownToggle}

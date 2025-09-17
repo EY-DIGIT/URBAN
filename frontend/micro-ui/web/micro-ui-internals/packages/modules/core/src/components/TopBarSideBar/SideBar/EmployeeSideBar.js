@@ -192,6 +192,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import SubMenu from "./SubMenu";
+import StaticEmployeeSideBar from "./SubMenuNew"
 import { Loader, SearchIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import NavItem from "./NavItem";
@@ -334,9 +335,15 @@ const EmployeeSideBar = () => {
     //       return <NavItem key={`${item?.label}-${index}`} item={item} />;
     //     })
     // );
-    return res?.map((item, index) => {
-      return <SubMenu item={item} key={index + 1} />;
-    });
+
+    //uncomment for old sidebar
+    // return res?.map((item, index) => {
+    //   return <SubMenu item={item} key={index + 1} />;
+    // });
+
+    return (
+      <StaticEmployeeSideBar />
+    );
   };
 
   if (isLoading) {

@@ -67,26 +67,42 @@ const optionButtonStyle = {
 
 const selectedOptionStyle = {
   ...optionButtonStyle,
-  backgroundColor: '#6B133F',
-  color: 'white',
-  border: '2px solid #6B133F'
+  backgroundColor: "#6B133F",
+  color: "white",
+  border: "2px solid #6B133F"
 };
 
 const unselectedOptionStyle = {
   ...optionButtonStyle,
-  backgroundColor: 'white',
-  color: '#333',
-  border: '2px solid #e0e0e0'
+  backgroundColor: "white",
+  color: "#333",
+  border: "2px solid #e0e0e0"
+};
+
+const hoverStyle = {
+  ...selectedOptionStyle
 };
 
 const Popup = ({ show, onClose }) => {
   if (!show) return null;
 
-  const [selectedOption, setSelectedOption] = useState('own');
+  const [selectedOption, setSelectedOption] = useState('');
+  const [hovered, setHovered] = useState(null);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     onClose(option);
+  };
+
+
+  const getStyle = (option) => {
+    if (selectedOption === option) {
+      return selectedOptionStyle;
+    }
+    if (hovered === option) {
+      return hoverStyle;
+    }
+    return unselectedOptionStyle;
   };
 
   return (
@@ -96,14 +112,18 @@ const Popup = ({ show, onClose }) => {
           <h2 style={titleStyle}>Paying For</h2>
           <div style={optionsContainerStyle}>
             <button
-              style={selectedOption === 'own' ? selectedOptionStyle : unselectedOptionStyle}
+              style={getStyle("own")}
+              onMouseEnter={() => setHovered("own")}
+              onMouseLeave={() => setHovered(null)}
               onClick={() => handleOptionClick('own')}
             >
               Own Property
             </button>
             <button
-              style={selectedOption === 'behalf' ? selectedOptionStyle : unselectedOptionStyle}
-              onClick={() => handleOptionClick('behalf')}
+              style={getStyle("behalf")}
+              onMouseEnter={() => setHovered("behalf")}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => handleOptionClick("behalf")}
             >
               On Behalf Of Someone
             </button>

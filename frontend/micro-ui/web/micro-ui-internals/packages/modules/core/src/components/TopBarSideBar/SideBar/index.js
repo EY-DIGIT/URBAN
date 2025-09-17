@@ -3,7 +3,7 @@ import { CitizenSideBar } from "./CitizenSideBar";
 import EmployeeSideBar from "./EmployeeSideBar";
 
 const SideBar = ({ t, CITIZEN, isSidebarOpen, toggleSidebar, handleLogout, mobileView, userDetails, modules, linkData, islinkDataLoading, isSideBarScroll,setSideBarScrollTop  }) => {
-  console.log("SideBar component rendered", { handleLogout});
+  console.log("SideBar component rendered", { handleLogout}, CITIZEN, mobileView);
   if (CITIZEN)
     return (
       <CitizenSideBar
