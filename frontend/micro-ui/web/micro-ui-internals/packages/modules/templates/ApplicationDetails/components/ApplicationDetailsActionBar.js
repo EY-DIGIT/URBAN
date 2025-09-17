@@ -195,7 +195,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
           </div>
         </ActionBar>
       )}
-      {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (
+      {/* {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (
         <ActionBar style={{ ...ActionBarStyle }}>
           <button
             style={{ color: "#FFFFFF", fontSize: "18px" }}
@@ -206,7 +206,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
             {t(`${forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}_${actions?.[0]?.action}`)}
           </button>
         </ActionBar>
-      )}
+      )} */}
     </React.Fragment>
   );
 }

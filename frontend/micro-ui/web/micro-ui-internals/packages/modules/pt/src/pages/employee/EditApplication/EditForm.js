@@ -1371,7 +1371,7 @@ const EditUpdateForm = ({ applicationData }) => {
               documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
             },
             {
-              documentType: "Photo Captured",
+              documentType: "Property Photograph",
               fileStoreId: capturedPhoto || null,
               documentUid: capturedPhoto || null,
             },
@@ -1409,7 +1409,7 @@ const EditUpdateForm = ({ applicationData }) => {
             documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
           },
           {
-            documentType: "Photo Captured",
+            documentType: "Property Photograph",
             fileStoreId: capturedPhoto || null,
             documentUid: capturedPhoto || null,
           },
@@ -2074,7 +2074,7 @@ const EditUpdateForm = ({ applicationData }) => {
       lat: applicationData?.address?.geoLocation?.latitude,
       long: applicationData?.address?.geoLocation?.longitude
     });
-    setCapturedPhoto(applicationData?.documents.find(d => d.documentType === "Photo Captured")?.fileStoreId || null);
+    setCapturedPhoto(applicationData?.documents.find(d => d.documentType === "Property Photograph")?.fileStoreId || null);
   }, [applicationData]);
 
 

@@ -101,8 +101,11 @@ border-radius:0px 8px 8px 0px;
   .map-image {
     width: 100%;
     height: auto;
-    max-width: 300px;
-    min-width: 250px;
+    // max-width: 300px;
+    // min-width: 250px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
   }
   
   .welcome-text,

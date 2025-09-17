@@ -144,6 +144,8 @@ const NewApplication = () => {
     error,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
+  const [isLoader, setIsLoader] = useState(false);
+
   const handleEstimate = (newPropertyId, propertyData) => {
   console.log("CHECKKKKKKK=", propertyDocuments);
 
@@ -347,9 +349,10 @@ const NewApplication = () => {
         source: "MUNICIPAL_RECORDS",
       }
     }
-
+setIsLoader(true);
     mutationUpdate.mutate(payload, {
       onSuccess: (data) => {
+        setIsLoader(false);
         const property = data?.Properties?.[0];
         if (property) {
 
@@ -364,6 +367,7 @@ const NewApplication = () => {
         }
       },
       onError: (err) => {
+         setIsLoader(false);
 
         alert(t("Submission failed"));
         
@@ -650,8 +654,10 @@ const NewApplication = () => {
       }
     };
 
+      setIsLoader(true);
     mutation.mutate(payload, {
       onSuccess: (data) => {
+        setIsLoader(false);
         const property = data?.Properties?.[0];
         if (property) {
           setProOwnerDetail(property);
@@ -665,6 +671,7 @@ const NewApplication = () => {
       },
 
       onError: (err) => {
+        setIsLoader(true);
         const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
         const newErrors = {};
         apiErrors.forEach((apiErr) => {
@@ -1397,6 +1404,10 @@ const handleDropdownChange = (field, selectedOption) => {
   };
 
   if (isLoading) {
+    return <Loader />;
+  }
+
+   if (isLoader) {
     return <Loader />;
   }
 

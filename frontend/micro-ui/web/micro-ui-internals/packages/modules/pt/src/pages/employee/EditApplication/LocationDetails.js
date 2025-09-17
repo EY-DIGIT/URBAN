@@ -559,7 +559,7 @@ const LocationDetails = ({ handleLocationUpdate, handlePhotoCapture, application
           <TextInput  disable={true} style={style2.widthInput} value={coords.lng} readOnly />
           {formErrors.longLat && <span style={{ color: "red" }}>{formErrors.longLat}</span>}
         </div>
-        {!applicationData?.documents.find(d => d.documentType === "Photo Captured")?.fileStoreId && (
+        {!applicationData?.documents.find(d => d.documentType === "Property Photograph")?.fileStoreId && (
           <div
             style={{
               display: "flex",

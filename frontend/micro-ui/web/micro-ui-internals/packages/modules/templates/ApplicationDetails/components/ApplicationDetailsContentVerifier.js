@@ -73,7 +73,7 @@ function ApplicationDetailsContentVerifier({
     return `${day}/${month}/${year}`;
   };
   const getTimelineCaptions = (checkpoint, index = 0) => {
-console.log("ABCDFG ===",checkpoint)
+// console.log("ABCDFG ===",checkpoint)
 
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
@@ -477,9 +477,11 @@ console.log("ABCDFG ===",checkpoint)
             <div style={styles.flex30}><label style={styles.label}>Door/House No.<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.doorNo} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Address<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.street} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Pincode<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.pincode || ""} disabled readOnly /></div>
+             <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input}    value={zones.find((f) => f.code === address?.zone)?.name || "N/A" } disabled readOnly /></div>
+             <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Colony<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.locality?.name} disabled readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} disabled readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input}    value={zones.find((f) => f.code === address?.zone)?.name || "N/A" } disabled readOnly /></div>
+            
+           
           </div>
         </div>
     },

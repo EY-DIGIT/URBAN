@@ -26,6 +26,7 @@ const EditUpdateForm = ({ applicationData }) => {
     const location = useLocation();
     console.log("EditUpdateForm Props:", applicationData);
     const { t } = useTranslation();
+    const [isLoader, setIsLoader] = useState(false);
 
     const [proOwnerDetail, setProOwnerDetail] = useState(null);
     const [showPreviewButton, setShowPreviewButton] = useState(false);
@@ -135,6 +136,7 @@ const EditUpdateForm = ({ applicationData }) => {
         error,
     } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
+
     const handleEstimate = (newPropertyId, property) => {
         const toYear =
             Array.isArray(unit) && unit.length > 0 ? unit[0].toYear : null;
@@ -182,6 +184,10 @@ const EditUpdateForm = ({ applicationData }) => {
             },
         });
     };
+
+
+
+
     const handleSubmitUpdate = async () => {
 
         const payload = {
@@ -255,7 +261,7 @@ const EditUpdateForm = ({ applicationData }) => {
                             documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
                         },
                         {
-                            documentType: "Photo Captured",
+                            documentType: "Property Photograph",
                             fileStoreId: capturedPhoto || null,
                             documentUid: capturedPhoto || null,
                         },
@@ -293,7 +299,7 @@ const EditUpdateForm = ({ applicationData }) => {
                         documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
                     },
                     {
-                        documentType: "Photo Captured",
+                        documentType: "Property Photograph",
                         fileStoreId: capturedPhoto || null,
                         documentUid: capturedPhoto || null,
                     },
@@ -383,8 +389,10 @@ const EditUpdateForm = ({ applicationData }) => {
 
         }
 
+        setIsLoader(true);
         mutationUpdate.mutate(payload, {
             onSuccess: (data) => {
+                setIsLoader(false);
                 const property = data?.Properties?.[0];
                 if (property) {
 
@@ -400,6 +408,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 }
             },
             onError: (err) => {
+                 setIsLoader(false);
 
                 alert(t("Submission failed"));
             },
@@ -940,7 +949,7 @@ const EditUpdateForm = ({ applicationData }) => {
             lat: applicationData?.address?.geoLocation?.latitude,
             long: applicationData?.address?.geoLocation?.longitude
         });
-        setCapturedPhoto(applicationData?.documents.find(d => d.documentType === "Photo Captured")?.fileStoreId || null);
+        setCapturedPhoto(applicationData?.documents.find(d => d.documentType === "Property Photograph")?.fileStoreId || null);
     }, [applicationData]);
 
 
@@ -1085,6 +1094,10 @@ const EditUpdateForm = ({ applicationData }) => {
           .filter(Boolean) // remove empty/null
           .join(", ");
       };
+
+               if (isLoader) {
+    return <Loader />;
+  }
     
     return (
 
