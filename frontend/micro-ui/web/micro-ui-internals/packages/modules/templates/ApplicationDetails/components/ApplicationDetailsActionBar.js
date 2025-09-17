@@ -108,7 +108,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     ptCalculationEstimateMutate(payload, {
       onSuccess: (data) => {
         history.push({
-          pathname: "/digit-ui/employee/pt/PreviewView",
+          pathname: "/digit-ui/employee/pt/PreviewEstimateDemand",
           state: { data, applicationData }// send full object
         });
         console.log("Estimate success:", data);

@@ -14,6 +14,7 @@ import PropertyFloorDetails from "./pageComponents/PropertyFloorDetails";
 import PropertyTax from "./pageComponents/PropertyTax";
 import PreviewDemand from "./pageComponents/PreviewDemand";
 import PreviewView from "./pageComponents/PreviewView";
+import PreviewEstimateDemand from "./pageComponents/PreviewEstimateDemand";
 import PropertyType from "./pageComponents/PropertyType";
 import PropertyUsageType from "./pageComponents/PropertyUsageType";
 import ProvideSubUsageType from "./pageComponents/ProvideSubUsageType";
@@ -160,6 +161,7 @@ const componentsToRegister = {
   DemandNote,
   DetailLedgerPage,
   PreviewView,
+  PreviewEstimateDemand,
   PTSelectPincode,
   PTSelectAddress,
   PTSelectStreet,
