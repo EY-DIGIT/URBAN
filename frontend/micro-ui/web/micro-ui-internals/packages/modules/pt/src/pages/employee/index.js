@@ -179,6 +179,8 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Response = Digit?.ComponentRegistryService?.getComponent("PTResponse");
   const TransferOwnership = Digit?.ComponentRegistryService?.getComponent("PTTransferOwnership");
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
+   const CitizenServicesCards = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
+  
 
   const isRes = window.location.href.includes("pt/response");
   const isLocation = window.location.href.includes("pt") || window.location.href.includes("application");
@@ -235,6 +237,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/property-mutate/:id`} component={() => <TransferOwnership parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-mutate-docs-required/:id`} component={() => <DocsRequired parentRoute={path} />} />
           <PrivateRoute path={`${path}/search`} component={(props) => <Search {...props} t={t} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/citizen-services`} component={CitizenServicesCards}></PrivateRoute>
           <PrivateRoute
             path={`${path}/searchold`}
             component={() => (

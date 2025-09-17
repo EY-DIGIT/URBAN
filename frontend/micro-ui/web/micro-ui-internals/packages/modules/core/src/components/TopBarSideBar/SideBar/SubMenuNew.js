@@ -241,7 +241,7 @@ const StaticEmployeeSideBar = ({ linkData, islinkDataLoading }) => {
     },
     {
       title: "Citizen Services",
-      link: "/digit-ui/citizen/pt/citizen-services",
+      link: "/digit-ui/employee/pt/citizen-services",
       icon: ". . ."
     }
   ];
