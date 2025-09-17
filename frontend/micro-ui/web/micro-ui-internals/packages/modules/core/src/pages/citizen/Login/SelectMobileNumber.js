@@ -20,6 +20,7 @@ const mobileStyles = `
 
 height:48px;
 border-radius:0px 8px 8px 0px;
+margin-bottom: 0px;
  }
  .citizen-form-step .card .citizen-card-input{
  height:48px;
@@ -29,7 +30,7 @@ border-radius:0px 8px 8px 0px;
     background: linear-gradient(135deg, rgb(74, 111, 165) 0%, rgb(22, 96, 136) 50%, rgb(74, 111, 165) 100%);
     background-size: cover;
     background-repeat: no-repeat;
-    min-height: 100vh;
+    min-height: 85vh;
     width: 100%;
     display: flex;
     align-items: center;
@@ -315,7 +316,7 @@ console.log("AAAAAAAAAAA",stateInfo)
           <div style={{display:"flex",justifyContent:"center",marginTop:"10px"}}><div style={{width:"161px",height:"5px",display:"flex",backgroundColor:"#6B133F",alignItems:"center"}}> </div></div>
        
           <p className="portal-title"  style={{marginTop:"10px"}}><b style={{fontSize:"20px"}}>  IMC Citizen</b></p>
-          <div className="citizen-form-step">
+          <div className="citizen-form-step" style={{textAlign:"center"}}>
  <FormStep 
             isDisabled={checkDisbaled()}
             onSelect={onSelect}

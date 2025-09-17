@@ -8,20 +8,27 @@ const SubmitBar = forwardRef((props, ref) => {
       disabled={props.disabled ? true : false}
       className={`${props.disabled ? "submit-bar-disabled" : "submit-bar"} ${props.className ? props.className : ""}`}
       type={props.submit ? "submit" : "button"}
-      style={{ ...props.style ,  
-              marginTop: "1rem",
-              // padding: "0.5rem 1.5rem",
-              backgroundColor: "#6b133f",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              margin:"auto"
-            }}
+      style={{
+        ...props.style,
+        backgroundColor: "#6b133f",
+        color: "white",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+        margin: "auto",
+        marginTop: "25px",
+      }}
       onClick={props.onSubmit}
-      {... props.form ? {form: props.form} : {}}
+      {...props.form ? { form: props.form } : {}}
     >
-      <header>{props.label}</header>
+      <header style={{
+        backgroundColor: "#6b133f",
+        borderRadius: "5px",
+        textAlign: "center",
+        margin: 0,
+        padding: 0,
+        width: "100%",
+      }}>{props.label}</header>
     </button>
   );
 });
