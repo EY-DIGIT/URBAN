@@ -470,7 +470,7 @@ const TopBarSideBar = ({
   const history = useHistory();
   const [showDialog, setShowDialog] = useState(false);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
-  
+  const getUserType = () => Digit.UserService.getType();  
   const isMobile = windowWidth <= 768;
   const isTablet = windowWidth > 768 && windowWidth <= 1024;
   const isDesktop = windowWidth > 1024;
@@ -522,7 +522,12 @@ const TopBarSideBar = ({
   };
 
   const userProfile = () => {
-    history.push("/digit-ui/employee/user/profile");
+    if(getUserType() === "citizen"){
+      history.push("/digit-ui/citizen/user/profile")
+    }
+    else{
+      history.push("/digit-ui/employee/user/profile");
+    }
   };
 
   const userOptions = [
@@ -768,7 +773,7 @@ const TopBarSideBar = ({
           />
         </div>
 
-        <div className="content-wrapper" style={{marginTop:"70px"}}>
+        <div className="content-wrapper" style={{marginTop:"60px"}}>
           {/* Desktop Sidebar */}
           {showSidebar && !isMobile && (
             <div className="sidebar-desktop">

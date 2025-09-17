@@ -155,7 +155,7 @@ const Home = ({
          islinkDataLoading={islinkDataLoading}
        />
 
-      <div className={`main center-container citizen-home-container mb-25`}>
+      <div className={window.location.pathname == "/digit-ui/citizen/login" ? "" : `main center-container citizen-home-container`}>
         {hideSidebar ? null : (
           <div className="SideBarStatic" style={{height:"100%",width:"240px",boxShadow:"2px 0 4px rgba(0,0,0,0.1)",background:"white"}}>
             <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
@@ -218,13 +218,14 @@ const Home = ({
       </div>
           <div style={{
              backgroundColor: "#6B133F",
-     color: "white",
-     padding: "10px",
-     textAlign: "center",
-     fontWeight: 600,
-      marginTop: "16px",
-     fontFamily: "Inter",
-     fontSize: "16px",
+            color: "white",
+            padding: "10px",
+            textAlign: "center",
+            fontWeight: 600,
+            // marginTop: "16px",
+            fontFamily: "Inter",
+            fontSize: "16px",
+            height: "50px"
                 }}>
         © 2025 Copyright Indore Municipal Corporation
       </div>

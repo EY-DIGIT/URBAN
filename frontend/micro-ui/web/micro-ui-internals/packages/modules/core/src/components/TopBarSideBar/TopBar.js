@@ -376,7 +376,7 @@ const TopBar = ({
   const history = useHistory();
   const location = useLocation();
   const loggedIn = userDetails?.access_token ? true : false;
-console.log("STATE INFO=",stateInfo)
+console.log("STATE INFO=",stateInfo, userOptions)
   // Fetch profile picture
   useEffect(() => {
     const fetchProfile = async () => {
@@ -678,7 +678,8 @@ console.log("STATE INFO=",stateInfo)
               )}
 
               {/* User Profile Dropdown */}
-              {loggedIn && !CITIZEN && (
+                {loggedIn && (
+              // {loggedIn && !CITIZEN && (
                 <div style={{ height: "40px" }}>
                   <Dropdown
                     option={userOptions}
