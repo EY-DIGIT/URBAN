@@ -15,9 +15,27 @@ const ChangeLanguage = (prop) => {
 
   if (isLoading) return null;
 
+
+
+
+
+
+
   if (isDropdown) {
     return (
-      <div style={{height:"20px"}}>
+      <React.Fragment>
+      
+ <style>
+        {`        
+ 
+.headerArrow .language-dropdown-page .employee-select-wrap svg{
+  fill: white !important;
+}    
+        `}
+      </style>
+
+      <div className="headerArrow">
+      <div style={{height:"20px"}} className="language-dropdown-page">
         <Dropdown
           option={languages}
           selected={languages.find((language) => language.value === selectedLanguage)}
@@ -27,6 +45,9 @@ const ChangeLanguage = (prop) => {
           customSelector={<label className="cp">{languages.find((language) => language.value === selected).label}</label>}
         />
       </div>
+      </div>
+
+      </React.Fragment>
     );
   } else {
     return (

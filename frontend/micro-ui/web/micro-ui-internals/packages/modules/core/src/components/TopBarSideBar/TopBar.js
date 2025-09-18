@@ -512,6 +512,17 @@ console.log("STATE INFO=",stateInfo, userOptions)
   };
 
   return (
+
+    <React.Fragment>
+
+       <style>
+        {`        
+ .headerArrow2 .employee-select-wrap svg{
+  fill: white !important;
+}    
+        `}
+      </style>
+
     <div>
       {!loggedIn && (
         <div
@@ -712,9 +723,12 @@ console.log("STATE INFO=",stateInfo, userOptions)
                   <p style={{color:"white",fontSize:"12px",fontWeight:700}}> Role: {userLogin?.user?.[0]?.type}</p>
                   </div>
                   <div>
+
+                    <div className="headerArrow2">
                   
                   <Dropdown
                     option={userOptions}
+                  
                     optionKey={"name"}
                     select={handleUserDropdownSelection}
                     showArrow={true}
@@ -739,6 +753,7 @@ console.log("STATE INFO=",stateInfo, userOptions)
                     }
                   />
                   </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -746,6 +761,8 @@ console.log("STATE INFO=",stateInfo, userOptions)
         </div>
       )}
     </div>
+</ React.Fragment>
+
   );
 };
 
