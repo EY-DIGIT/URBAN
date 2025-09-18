@@ -365,7 +365,7 @@ const RevenueServices = () => {
                 { label: "Connection Request", link: "/connection-request" },
                 { label: "Complaint", link: "/complaint" }
             ],
-            citizenLink: "/dashboard/water",
+            citizenLink: "/digit-ui/citizen/ws-home",
             isExternal: false
         }
     ];
