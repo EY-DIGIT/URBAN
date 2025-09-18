@@ -312,7 +312,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
 
   return (
     <div className="user-profile" style={{marginLeft:"auto"}}>
-      <section style={{ margin: userType === "citizen" ? "8px" : "24px" }}>
+      <section style={{ margin: "24px" }}>
         {userType === "citizen" ? (
           <BackButton></BackButton>
         ) : (
@@ -336,36 +336,32 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         style={{
           display: "flex",
           flex: 1,
-          flexDirection: windowWidth < 768 || userType === "citizen" ? "column" : "row",
-          margin: userType === "citizen" ? "8px" : "16px",
-          gap: userType === "citizen" ? "" : "0 24px",
-          boxShadow: userType === "citizen" ? "1px 1px 4px 0px rgba(0,0,0,0.2)" : "",
-          background: userType === "citizen" ? "white" : "",
-          borderRadius: userType === "citizen" ? "4px" : "",
-          maxWidth: userType === "citizen" ? "960px" : "",
+          flexDirection: windowWidth < 768 || "row",
+          margin: "16px",
+          gap: "0 24px"
         }}
       >
         <section
           style={{
             position: "relative",
             display: "flex",
-            flex: userType === "citizen" ? 1 : 2.5,
+            flex: 2.5,
             justifyContent: "center",
             alignItems: "center",
             maxWidth: "100%",
             height: "376px",
             borderRadius: "4px",
-            boxShadow: userType === "citizen" ? "" : "1px 1px 4px 0px rgba(0,0,0,0.2)",
-            border: `${userType === "citizen" ? "8px" : "24px"} solid #fff`,
+            boxShadow: "1px 1px 4px 0px rgba(0,0,0,0.2)",
+            border: "24px solid #fff",
             background: "#EEEEEE",
-            padding: userType === "citizen" ? "8px" : "16px",
+            padding: "16px",
           }}
         >
           <div
             style={{
               position: "relative",
-              height: userType === "citizen" ? "114px" : "150px",
-              width: userType === "citizen" ? "114px" : "150px",
+              height: "150px",
+              width: "150px",
               margin: "16px",
             }}
           >
@@ -388,13 +384,13 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            flex: userType === "citizen" ? 1 : 7.5,
+            flex: 7.5,
             width: "100%",
             borderRadius: "4px",
             height: "fit-content",
-            boxShadow: userType === "citizen" ? "" : "1px 1px 4px 0px rgba(0,0,0,0.2)",
+            boxShadow: "1px 1px 4px 0px rgba(0,0,0,0.2)",
             background: "white",
-            padding: userType === "citizen" ? "8px" : "24px",
+            padding: "24px",
             paddingBottom : "20px",
           }}
         >
@@ -501,11 +497,10 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                  "CORE_COMMON_PROFILE_GENDER"
-                )}`}</CardLabel>
+                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : {width: "300px"}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
                 <Dropdown
                   style={{ width: "100%",border: "1px solid #B1B4B6" }}
+                  className="form-field"
                   selected={gender?.length === 1 ? gender[0] : gender}
                   disable={gender?.length === 1 || editScreen}
                   option={menu}
