@@ -376,16 +376,20 @@ const TopBar = ({
   const history = useHistory();
   const location = useLocation();
   const loggedIn = userDetails?.access_token ? true : false;
+  const [userLogin,setUserLogin]=useState();
 console.log("STATE INFO=",stateInfo, userOptions)
   // Fetch profile picture
   useEffect(() => {
     const fetchProfile = async () => {
       const uuid = userDetails?.info?.uuid;
       const tenant = Digit.ULBService.getCurrentTenantId();
+     
       if (uuid) {
         try {
           const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
           const photo = usersResponse?.user?.[0]?.photo?.split(",")?.[0];
+          setUserLogin(usersResponse);
+           console.log("Tenant====",usersResponse)
           if (photo) setProfilePic(photo);
         } catch (error) {
           console.error("Error fetching profile:", error);
@@ -468,7 +472,7 @@ console.log("STATE INFO=",stateInfo, userOptions)
 
   const fontSizeButtonStyles = {
     background: "none",
-    border: "1px solid rgba(255,255,255,0.3)",
+    // border: "1px solid rgba(255,255,255,0.3)",
     color: "white",
     padding: mobileView ? "4px 8px" : "5px 10px",
     borderRadius: "4px",
@@ -484,8 +488,11 @@ console.log("STATE INFO=",stateInfo, userOptions)
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: mobileView ? "32px" : "36px",
-    height: mobileView ? "32px" : "36px",
+    width: mobileView ? "32px" : "40px",
+    height: mobileView ? "32px" : "40px",
+    borderRadius:"15px",
+    backgroundColor:"var(--Miscellaneous-Button---Destructive-BG, rgba(255, 56, 60, 0.14))",
+
   };
 
   const notificationBadgeStyles = {
@@ -616,7 +623,39 @@ console.log("STATE INFO=",stateInfo, userOptions)
             {/* Right Section */}
             <div style={rightSectionStyles}>
               {/* Font Size Controls - Desktop Only */}
-              {!mobileView && (
+
+                 {/* Notification Icon */}
+              {loggedIn &&  (
+                <div onClick={handleNotificationClick} style={notificationStyles }>
+                  <span style={{ fontSize: mobileView ? "18px" : "20px" }}>🔔</span>
+                  {notificationCountLoaded && unreadCount > 0 && (
+                    <span style={notificationBadgeStyles}>
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </span>
+                  )}
+                </div>
+              )}
+
+               {/* Language Selector */}
+              {showLanguageChange && (
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "white"
+                }}>
+                  <ChangeLanguage dropdown={true} />
+                </div>
+              )}
+             
+
+               {!mobileView && (
+                <div style={{ display: "flex", width:"1px", height:"50px",alignItems: "center" ,backgroundColor:"white"}}>
+                 <h1></h1>
+                  
+                </div>
+              )}
+
+               {!mobileView && (
                 <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
                   <button
                     onClick={() => changeFontSize('small')}
@@ -654,40 +693,33 @@ console.log("STATE INFO=",stateInfo, userOptions)
                 </div>
               )}
 
-              {/* Language Selector */}
-              {showLanguageChange && (
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "white"
-                }}>
-                  <ChangeLanguage dropdown={true} />
-                </div>
-              )}
+             
 
-              {/* Notification Icon */}
-              {loggedIn && !CITIZEN && (
-                <div onClick={handleNotificationClick} style={notificationStyles}>
-                  <span style={{ fontSize: mobileView ? "18px" : "20px" }}>🔔</span>
-                  {notificationCountLoaded && unreadCount > 0 && (
-                    <span style={notificationBadgeStyles}>
-                      {unreadCount > 99 ? "99+" : unreadCount}
-                    </span>
-                  )}
+              {!mobileView && (
+                <div style={{ display: "flex", width:"1px", height:"50px",alignItems: "center" ,backgroundColor:"white"}}>
+                 <h1></h1>
+                  
                 </div>
               )}
 
               {/* User Profile Dropdown */}
                 {loggedIn && (
               // {loggedIn && !CITIZEN && (
-                <div style={{ height: "40px" }}>
+                <div style={{ height: "40px" ,display:"flex"}}>
+                  <div>
+
+                  <p style={{color:"white",fontSize:"12px"}}> Hello, <span style={{fontWeight:700}}> {userLogin?.user?.[0]?.name}</span></p>
+                  <p style={{color:"white",fontSize:"12px",fontWeight:700}}> Role: {userLogin?.user?.[0]?.type}</p>
+                  </div>
+                  <div>
+                  
                   <Dropdown
                     option={userOptions}
                     optionKey={"name"}
                     select={handleUserDropdownSelection}
                     showArrow={true}
                     freeze={true}
-                    style={{ marginLeft: "8px" }}
+                    // style={{ marginLeft: "4px" }}
                     customSelector={
                       profilePic ? (
                         <img
@@ -706,6 +738,7 @@ console.log("STATE INFO=",stateInfo, userOptions)
                       )
                     }
                   />
+                  </div>
                 </div>
               )}
             </div>
