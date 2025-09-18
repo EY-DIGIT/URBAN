@@ -497,19 +497,21 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>
-                <CardLabel style={editScreen ? { color: "#B1B4B6", width: "300px" } : {width: "300px"}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
-                <Dropdown
-                  style={{ width: "100%",border: "1px solid #B1B4B6" }}
-                  className="form-field"
-                  selected={gender?.length === 1 ? gender[0] : gender}
-                  disable={gender?.length === 1 || editScreen}
-                  option={menu}
-                  select={setGenderName}
-                  value={gender}
-                  optionKey="code"
-                  t={t}
-                  name="gender"
-                />
+                <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : {width: "300px"}}>{`${t("CORE_COMMON_PROFILE_GENDER")}`}</CardLabel>
+                <div style={{width: "100%"}}>
+                  <Dropdown
+                    style={{ width: "100%",border: "1px solid #B1B4B6" }}
+                    className="form-field"
+                    selected={gender?.length === 1 ? gender[0] : gender}
+                    disable={gender?.length === 1 || editScreen}
+                    option={menu}
+                    select={setGenderName}
+                    value={gender}
+                    optionKey="code"
+                    t={t}
+                    name="gender"
+                  />
+                </div>
               </LabelFieldPair>
 
               <LabelFieldPair style={{ display: "flex" }}>

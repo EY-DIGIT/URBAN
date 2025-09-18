@@ -96,15 +96,15 @@ const styles = {
 
     dropdownMenu: {
         position: "absolute",
-        top: "100%",
+        top: "0", // Changed from "100%" to "0"
         left: "0",
         right: "0",
         background: "white",
-        borderRadius: "0 0 12px 12px",
+        borderRadius: "12px", // Changed from "0 0 12px 12px" to "12px"
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
         zIndex: 1000,
         border: "1px solid #e0e0e0",
-        borderTop: "none",
+        // Remove borderTop: "none" since we want full border now
         animation: "dropdownFadeIn 0.2s ease-out",
     },
 
@@ -224,10 +224,10 @@ const ServiceCard = ({
         // console.log("checking====>>", getUserType(), title, isExternal)
         // debugger;
         if (getUserType() === "citizen" || title === "Rental") {
-            if(isExternal){
+            if (isExternal) {
                 window.location.href = `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`;
-            }else{
-                window.location.href = citizenLink 
+            } else {
+                window.location.href = citizenLink
             }
         }
         else {
@@ -253,7 +253,7 @@ const ServiceCard = ({
         >
             <div style={styles.cardContent}>
                 <div style={styles.iconContainer}>
-                    <img src={stateInfo?.uiImageAssets[icon]}/>
+                    <img src={stateInfo?.uiImageAssets[icon]} />
                 </div>
                 <h3 style={styles.serviceTitle}>{title}</h3>
             </div>
@@ -274,7 +274,7 @@ const ServiceCard = ({
                             onMouseEnter={() => setHoveredItem(index)}
                             onMouseLeave={() => setHoveredItem(null)}
                         >
-                            <a href={option?.isExternal? `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}` : option.link} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <a href={option?.isExternal ? `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}` : option.link} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 {option?.label}
                             </a>
                         </div>
