@@ -65,7 +65,7 @@ const PropertyCardsLanding = () => {
 
     if (!tenantId) {
 
-        window.location.replace("https://citizenservicesdev.eydemoapp.in/landing/index.html");
+        window.location.replace(stateInfo?.BAPURL);
 
     }
 

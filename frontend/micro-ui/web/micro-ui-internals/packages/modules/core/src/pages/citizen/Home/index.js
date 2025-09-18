@@ -72,7 +72,7 @@ const Home = () => {
     //  Digit.SessionStorage.get("locale") === null
     //       ? history.push(`https://citizenservicesdev.eydemoapp.in/landing/index.html`)
     //       : history.push(`/digit-ui/citizen/select-location`);
-    window.location.replace("https://citizenservicesdev.eydemoapp.in/landing/index.html");
+    window.location.replace(stateInfo?.BAPURL);
 
   }
 
