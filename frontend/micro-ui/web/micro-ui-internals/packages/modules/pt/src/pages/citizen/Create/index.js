@@ -134,6 +134,9 @@ const CreateProperty = () => {
   }));
 
   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+  const tenantInfo = Digit.SessionStorage.get("PT_TENANTS");
+
+  // console.log("tenantInfo", tenantInfo[0]?.code)
 
   const tenantId = userInfo1?.tenantId;
   const mutation = Digit.Hooks.pt.usePropertyAPI(tenantId, true);
@@ -145,7 +148,7 @@ const CreateProperty = () => {
     data: ptCalculationEstimateData,
     mutate: ptCalculationEstimateMutate,
     error,
-  } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
+  } = Digit.Hooks.pt.usePtCalculationEstimate(tenantInfo[0]?.code);
 
   const handleEstimate = (newPropertyId, propertyData) => {
     console.log("CHECKKKKKKK=", propertyDocuments);
@@ -158,7 +161,7 @@ const CreateProperty = () => {
       Assessment: {
         financialYear: toYear,
         propertyId: newPropertyId,
-        tenantId: tenantId,
+        tenantId: tenantInfo[0]?.code,
         source: "MUNICIPAL_RECORDS",
         channel: "CITIZEN",
         assessmentDate: Date.now(),
@@ -362,7 +365,7 @@ const CreateProperty = () => {
           setStatus(property.status);
           // setShowSuccessModal(true);
           setShowPreviewButton(true);
-          PreviewDemand(property.propertyId, property);
+          // PreviewDemand(property.propertyId, property);
 
         }
       },
@@ -504,8 +507,8 @@ const CreateProperty = () => {
     }
     const payload = {
       Property: {
-        updateIMC: true,
-        tenantId: userInfo1?.tenantId,
+        updateIMC: false,
+        tenantId: tenantInfo[0]?.code,
         registryId: registryId,
         // oldPropertyId: assessmentDetails.oldPropertyId || null,
         essentialTax: propertyDetails.essentialTax?.code,
@@ -663,9 +666,13 @@ const CreateProperty = () => {
           setAcknowledgmentNumber(property.acknowldgementNumber);
           setPropertyId(property.propertyId);
           setStatus(property.status);
+          history.push({
+            pathname: "/digit-ui/citizen/pt/property/acknowledgement-pt",
+            state: { property: property }
+          });
           // setShowSuccessModal(true);
           // setShowPreviewButton(true);
-          PreviewDemand(property.propertyId, property);
+          // PreviewDemand(property.propertyId, property);
         }
       },
 

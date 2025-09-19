@@ -329,7 +329,7 @@ const EmployeeHome = ({ modules }) => {
         </div> */}
 
         <div className="content-area" style={{ padding: isMobile ? "10px" : "0px", marginTop: isMobile ? "0px" : "40px" }}>
-          <div className="content-header" style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "center", marginBottom: "20px", gap: isMobile ? "10px" : "0" }}>
+          <div className="content-header" style={{ flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "center", marginBottom: "20px", gap: isMobile ? "10px" : "0" }}>
             {/* <h2>Home</h2> */}
             <div style={styles.servicesGrid}>
                 {services.map((service, index) => (
