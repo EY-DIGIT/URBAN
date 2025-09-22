@@ -2010,7 +2010,7 @@ const ApplicationDetailsContent = ({
               <div style={styles.label}>Arrear</div>
               <input
                 readOnly
-                value={estimateData?.Calculation[0]?.arrear || 0}
+                 value={estimateData?.Calculation?.[0]?.arrear || 0}
                 style={styles.input}
               />
             </div>
