@@ -16,7 +16,7 @@ const SearchProperty = ({ onSelect }) => {
   const [showPopup, setShowPopup] = useState(true);
   const [payFor, setPayFor] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // You can make this configurable
@@ -26,11 +26,11 @@ const SearchProperty = ({ onSelect }) => {
 
   console.log("userInfo", userInfo);
 
-  if(payFor == 'own') {
+  if (payFor == 'own') {
     formValue.mobileNumber = userInfo?.info?.mobileNumber;
   }
 
-  const { data: propertyData, isLoading: propertyDataLoading, error } = Digit.Hooks.pt.usePropertySearchWithDue({
+  const { data: propertyData, billData, isLoading: propertyDataLoading, error } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: tenantId,
     filters: {
       ...(formValue.propertyIds ? { propertyIds: formValue.propertyIds } : {}),
@@ -47,13 +47,13 @@ const SearchProperty = ({ onSelect }) => {
 
   // Update search results and reset pagination
   useEffect(() => {
-    console.log("propertyData", propertyData);
-    if (propertyData?.Properties) {
-      setSearchResults(propertyData.Properties);
-      setCurrentPage(1); // Reset to first page on new search
-      setTotalPages(Math.ceil(propertyData.Properties.length / itemsPerPage));
+    if (propertyData?.FormattedData) {
+      setSearchResults(Object.values(propertyData.FormattedData));
+      setCurrentPage(1);
+      setTotalPages(Math.ceil(Object.keys(propertyData.FormattedData).length / itemsPerPage));
     }
   }, [propertyData, itemsPerPage]);
+
 
   // ✅ Update layout on resize
   // useEffect(() => {
@@ -241,7 +241,7 @@ const SearchProperty = ({ onSelect }) => {
       {searchResults.length > 0 && (
         <div style={paymentSectionStyle}>
           <h3 style={paymentHeadingStyle}>{t("Payment")}</h3>
-          
+
           <table style={tableStyle}>
             <thead>
               <tr>
@@ -261,7 +261,7 @@ const SearchProperty = ({ onSelect }) => {
                     <td style={tdStyle}>{owner.name || "-"}</td>
                     <td style={tdStyle}>{owner.mobileNumber || "-"}</td>
                     <td style={tdStyle}>
-                      ₹ {(property.totalDue || 0).toLocaleString("en-IN")}
+                      ₹ {(property.due || 0).toLocaleString("en-IN")}
                     </td>
                     <td style={{ ...tdStyle, textAlign: "center" }}>
                       <button
@@ -283,7 +283,7 @@ const SearchProperty = ({ onSelect }) => {
               <div style={paginationInfo}>
                 Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, searchResults.length)} of {searchResults.length} results
               </div>
-              
+
               <div style={paginationControls}>
                 <button
                   onClick={handlePrevious}
