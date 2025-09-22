@@ -1153,7 +1153,7 @@ import SelfDeclaration from "./SelfDeclaration";
 const EditUpdateForm = ({ applicationData }) => {
   const location = useLocation();
   console.log("EditUpdateForm Propssssssssss:", applicationData.propertyCategory);
-  
+
   const { state } = useLocation();
   const { t } = useTranslation();
 
@@ -1326,7 +1326,7 @@ const EditUpdateForm = ({ applicationData }) => {
         },
 
         ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
-        propertyCategory:propertyCategoryInput,
+        propertyCategory: propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
           uuid: applicationData?.owners?.[index]?.uuid || null,
@@ -1549,7 +1549,7 @@ const EditUpdateForm = ({ applicationData }) => {
     if (!ownershipType) {
       errors.ownershipType = "Ownership type is required.";
     }
-      if (!propertyCategoryInput) {
+    if (!propertyCategoryInput) {
       errors.propertyCategoryInput = "Property Category is required.";
     }
     if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
@@ -1583,9 +1583,18 @@ const EditUpdateForm = ({ applicationData }) => {
         errors[`owner-${index}-aadhaar`] = "Valid 12-digit Aadhaar number is required.";
       }
       // Samagra ID (only if checkbox is not ticked)
-      if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
-        errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      // if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+      //   errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      // }
+      if (
+        !owner.noSamagra &&
+        (!owner.samagraID || !/^\d{8,9}$/.test(owner.samagraID))
+      ) {
+        console.log("STEP33");
+        errors[`owner-${index}-samagraID`] =
+          "Samagra ID is required and must be 8 or 9 digits.";
       }
+
     });
 
     // 4. Property Address
@@ -1939,17 +1948,17 @@ const EditUpdateForm = ({ applicationData }) => {
   };
 
   useEffect(() => {
-  
+
     if (!applicationData) return;
 
-    
-   
+
+
     setOwnershipType(applicationData.ownershipCategory || null);
     setPropertyCategoryInput(applicationData.propertyCategory || null);
     setRegistryId(applicationData.registryId || null);
   }, [applicationData]);
 
-  console.log("Application DATA=",applicationData);
+  console.log("Application DATA=", applicationData);
   useEffect(() => {
     if (!applicationData || applicationData.length === 0) return;
 
@@ -2084,12 +2093,12 @@ const EditUpdateForm = ({ applicationData }) => {
 
     setPropertyCategoryInput(val.code);
 
-      // 🟢 Clear error live when user selects value
-  setFormErrors((prev) => {
-    const newErrors = { ...prev };
-    delete newErrors.propertyCategoryInput;
-    return newErrors;
-  });
+    // 🟢 Clear error live when user selects value
+    setFormErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.propertyCategoryInput;
+      return newErrors;
+    });
 
     // ❗ Only reset if required. Don't reset if owners already exist.
     // if (val.code === "INDIVIDUAL.SINGLEOWNER") {

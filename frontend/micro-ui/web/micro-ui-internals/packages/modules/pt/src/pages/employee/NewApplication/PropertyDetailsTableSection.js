@@ -508,7 +508,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
 
                 <td style={styles.tableCell}>
                   <input
-                    type="number"
+                    type="text"
                     style={{
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",

@@ -439,10 +439,19 @@ const CreateProperty = () => {
       }
       // Samagra ID (only if checkbox is not ticked)
       console.log("samagraID==", !owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID)))
-      if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
-        console.log("STEP33")
-        errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      // if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+      //   console.log("STEP33")
+      //   errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      // }
+      if (
+        !owner.noSamagra &&
+        (!owner.samagraID || !/^\d{8,9}$/.test(owner.samagraID))
+      ) {
+        console.log("STEP33");
+        errors[`owner-${index}-samagraID`] =
+          "Samagra ID is required and must be 8 or 9 digits.";
       }
+
     });
 
     // 4. Property Address

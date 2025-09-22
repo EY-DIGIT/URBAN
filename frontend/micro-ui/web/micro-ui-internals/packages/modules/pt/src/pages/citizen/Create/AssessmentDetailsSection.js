@@ -73,7 +73,7 @@ const AssessmentDetailsSection = ({
           value={assessmentDetails.plotArea}
           onChange={handleAssessmentInputChange}
           placeholder={t("Enter")}
-          type="number"
+          type="text"
         />
       </div>
 

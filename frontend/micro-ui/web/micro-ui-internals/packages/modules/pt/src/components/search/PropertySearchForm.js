@@ -1,3 +1,11 @@
+
+import {
+  Loader, Card,
+  SubmitBar,
+  TextInput,
+  Dropdown,
+  CheckBox,
+} from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -17,6 +25,23 @@ const SearchPTID = ({
     const month = today.getMonth() + 1;
     return month >= 4 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
   };
+
+
+    const [selectZone,setSelectZone]=useState(null);
+    const [selectWard,setSelectWard]=useState(null);
+    const [selectColony,setSelectColony]=useState(null);
+
+    console.log("selectZone===",payload);
+     console.log("selectWard===",selectWard);
+   
+
+    const [boundaryData, setBoundaryData] = useState(null);
+    const [zones, setZones] = useState([]);
+    const [wards, setWards] = useState([]);
+    const [colonies, setColonies] = useState([]);
+    const [rateZones, setRateZones] = useState([]);
+  
+
 
   const { 
     register, 
@@ -41,12 +66,16 @@ const SearchPTID = ({
       ownerEnglish: payload.ownerEnglish || '',
     },
     mode: 'onChange'
+    
   });
 
   const [submittedData, setSubmittedData] = useState(null);
   
   // Watch all form values
   const formValue = watch();
+
+
+
 
   // Set assessment year on mount
   useEffect(() => {
@@ -80,6 +109,97 @@ const SearchPTID = ({
     console.log("Form reset");
     onReset();
   };
+
+
+  console.log("submittedData===",submittedData)
+
+
+      // Fetch boundary data and extract zones
+    useEffect(() => {
+      (async () => {
+        try {
+          const tenantId = Digit.ULBService.getCurrentTenantId();
+          const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+  
+          console.log("🔍 Raw TenantBoundary Response:", response);
+  
+          const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+          if (cityBoundary?.children?.length > 0) {
+            setBoundaryData(cityBoundary);
+  
+            const zoneOptions = cityBoundary.children.map((zone) => ({
+              code: zone.code,
+              name: zone.name || zone.code,
+            }));
+            setZones(zoneOptions);
+          } else {
+            console.warn("❌ No boundary children found.");
+          }
+        } catch (error) {
+          console.error("❌ Error fetching boundary data:", error);
+        }
+      })();
+    }, []);
+
+
+    console.log("Zones====",zones)
+
+    
+  
+   
+
+  useEffect(() => {
+    if (selectZone && boundaryData?.children?.length > 0) {
+      const selectedZone = boundaryData.children.find((z) => z.code === selectZone.code);
+      const wardList = selectedZone?.children || [];
+      const formattedWards = wardList.map((ward) => ({
+        code: ward.code,
+        name: ward.name || ward.code,
+      }));
+      setWards(formattedWards);
+    } else {
+      setWards([]);
+    }
+  }, [selectZone, boundaryData]);
+  console.log("wards====",wards);
+
+  // Update Colonies when Ward changes
+
+
+
+  useEffect(() => {
+  if (
+    selectZone &&
+    selectWard &&
+    boundaryData?.children?.length > 0
+  ) {
+    const selectedZone = boundaryData.children.find(
+      (z) => z.code === selectZone.code
+    );
+    const selectedWard = selectedZone?.children?.find(
+      (w) => w.code === selectWard.code
+    );
+    const colonyList = selectedWard?.children || [];
+
+    // format colonies
+    const formattedColonies = colonyList.map((col) => ({
+      code: col.code,
+      name: col.name || col.code,
+    }));
+
+    // remove duplicates by `name`
+    const uniqueColonies = formattedColonies.filter(
+      (col, index, self) =>
+        index === self.findIndex((c) => c.name === col.name)
+    );
+
+    setColonies(uniqueColonies);
+  } else {
+    setColonies([]);
+  }
+}, [selectWard, selectZone, boundaryData]);
+
+console.log("Colony====",colonies);
 
   // Log form values when they change
   useEffect(() => {
@@ -457,38 +577,28 @@ const SearchPTID = ({
                 />
               </div>
               
-              {/* Colony */}
-              <div className="form-field">
-                <label className="form-label">Colony</label>
-                <input
-                  className="form-input"
-                  type="text"
-                  placeholder="Enter colony"
-                  {...register("colony")}
-                  onChange={(e) => {
-                    setValue("colony", e.target.value);
-                  }}
-                />
-              </div>
-              
-              {/* Ward */}
-              <div className="form-field">
-                <label className="form-label">Ward</label>
-                <input
-                  className="form-input"
-                  type="text"
-                  placeholder="Enter ward"
-                  {...register("ward")}
-                  onChange={(e) => {
-                    setValue("ward", e.target.value);
-                  }}
-                />
-              </div>
-              
+                    
               {/* Zone */}
               <div className="form-field">
                 <label className="form-label">Zone</label>
-                <input
+
+                 <Dropdown
+                          // style={styles.widthInput}
+                           className="form-input"
+                          t={t}
+                          option={zones}
+                           {...register("zone")}
+                      
+                          select={(option) => {
+                           
+                            setValue("zone", option.code)
+                            setSelectZone(option);
+                           
+                          }}
+                          optionKey="name"
+                          placeholder="select"
+                        />
+                {/* <input
                   className="form-input"
                   type="text"
                   placeholder="Enter zone"
@@ -496,7 +606,73 @@ const SearchPTID = ({
                   onChange={(e) => {
                     setValue("zone", e.target.value);
                   }}
-                />
+                /> */}
+
+              </div>
+
+               {/* Ward */}
+              <div className="form-field">
+                <label className="form-label">Ward</label>
+
+                   <Dropdown
+                          // style={styles.widthInput}
+                           className="form-input"
+                          t={t}
+                          option={wards}
+                           {...register("ward")}
+                          select={(option) => {
+                           
+                            setValue("ward", option.code)
+                           
+
+                             setSelectWard(option);
+                           
+                          }}
+                          optionKey="name"
+                          placeholder="select"
+                        />
+                {/* <input
+                  className="form-input"
+                  type="text"
+                  placeholder="Enter ward"
+                  {...register("ward")}
+                  onChange={(e) => {
+                    setValue("ward", e.target.value);
+                  }}
+                /> */}
+              </div>
+
+                {/* Colony */}
+              <div className="form-field">
+                <label className="form-label">Colony</label>
+
+                   <Dropdown
+                      
+                           className="form-input"
+                          t={t}
+                          option={colonies}
+                           {...register("colony")}
+                          select={(option) => {
+                           
+                            setValue("colony", option.code)
+                            // setSelectZone(option);
+
+                             setSelectColony(option);
+                           
+                          }}
+                          optionKey="name"
+                          placeholder="select"
+                        />
+
+                {/* <input
+                  className="form-input"
+                  type="text"
+                  placeholder="Enter colony"
+                  {...register("colony")}
+                  onChange={(e) => {
+                    setValue("colony", e.target.value);
+                  }}
+                /> */}
               </div>
               
               {/* Email ID */}

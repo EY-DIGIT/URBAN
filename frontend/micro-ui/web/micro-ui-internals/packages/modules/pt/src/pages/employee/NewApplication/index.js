@@ -71,8 +71,8 @@ const NewApplication = () => {
     }
   ]);
   const [ownershipType, setOwnershipType] = useState(null);
-   const [propertyCategoryInput, setPropertyCategoryInput] = useState(null);
-   
+  const [propertyCategoryInput, setPropertyCategoryInput] = useState(null);
+
   const [registryId, setRegistryId] = useState("");
   const [selectedRateZone, setSelectedRateZone] = useState("");
   const [addressDetails, setAddressDetails] = useState({
@@ -101,7 +101,7 @@ const NewApplication = () => {
     fromYear: "",
     toYear: ""
   }]);
-  console.log("HHHHHHUNITTTT==",unit);
+  console.log("HHHHHHUNITTTT==", unit);
   const [propertyDetails, setPropertyDetails] = useState({
     propertyType: "",
     roomsArea: "",
@@ -147,7 +147,7 @@ const NewApplication = () => {
   const [isLoader, setIsLoader] = useState(false);
 
   const handleEstimate = (newPropertyId, propertyData) => {
-  console.log("CHECKKKKKKK=", propertyDocuments);
+    console.log("CHECKKKKKKK=", propertyDocuments);
 
 
     const toYear =
@@ -168,13 +168,13 @@ const NewApplication = () => {
       onSuccess: (data) => {
         history.push({
           pathname: "/digit-ui/employee/pt/PreviewDemand",
-          state: { data, proOwnerDetail:propertyData, documents, propertyDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress }
+          state: { data, proOwnerDetail: propertyData, documents, propertyDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress }
         });
 
       },
       onError: (error) => {
         console.log("Estimate error===:", error);
-         const apiErrors = error?.response?.data?.Errors || error?.Errors || [];
+        const apiErrors = error?.response?.data?.Errors || error?.Errors || [];
         const newErrors = {};
         apiErrors.forEach((apiErr) => {
           newErrors[apiErr.code] = apiErr.message;
@@ -213,7 +213,7 @@ const NewApplication = () => {
         },
 
         ownershipCategory: ownershipType || "",
-        propertyCategory:propertyCategoryInput,
+        propertyCategory: propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
           salutation: owner.title || "mr",
@@ -252,11 +252,11 @@ const NewApplication = () => {
           //   },
 
           // ],
-          documents:documentsToSubmit,
+          documents: documentsToSubmit,
         })),
 
         institution: null,
-        documents:documentsToSubmit,
+        documents: documentsToSubmit,
 
         // documents: [
         //   {
@@ -349,7 +349,7 @@ const NewApplication = () => {
         source: "MUNICIPAL_RECORDS",
       }
     }
-setIsLoader(true);
+    setIsLoader(true);
     mutationUpdate.mutate(payload, {
       onSuccess: (data) => {
         setIsLoader(false);
@@ -367,11 +367,11 @@ setIsLoader(true);
         }
       },
       onError: (err) => {
-         setIsLoader(false);
+        setIsLoader(false);
 
         alert(t("Submission failed"));
-        
-         const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
+
+        const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
         const newErrors = {};
         apiErrors.forEach((apiErr) => {
           newErrors[apiErr.code] = apiErr.message;
@@ -398,7 +398,7 @@ setIsLoader(true);
     if (!ownershipType) {
       errors.ownershipType = "Ownership type is required.";
     }
-     if (!propertyCategoryInput) {
+    if (!propertyCategoryInput) {
       errors.propertyCategoryInput = "Property Category is required.";
     }
     if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
@@ -419,13 +419,13 @@ setIsLoader(true);
       }
 
       // Father/Husband Name
-      if(owner.relationship!== "Not applicable"){
-      if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
-        errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
+      if (owner.relationship !== "Not applicable") {
+        if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
+          errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
+        }
       }
-    }
 
-      console.log("owner.relationship==",owner.relationship);
+      console.log("owner.relationship==", owner.relationship);
       // Relationship
       if (!owner.relationship) {
         errors[`owner-${index}-relationship`] = "Relationship is required.";
@@ -439,11 +439,20 @@ setIsLoader(true);
         errors[`owner-${index}-aadhaar`] = "Valid 12-digit Aadhaar number is required.";
       }
       // Samagra ID (only if checkbox is not ticked)
-      console.log("samagraID==",!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID)))
-      if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
-        console.log("STEP33")
-        errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      console.log("samagraID==", !owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID)))
+      // if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+      //   console.log("STEP33")
+      //   errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      // }
+      if (
+        !owner.noSamagra &&
+        (!owner.samagraID || !/^\d{8,9}$/.test(owner.samagraID))
+      ) {
+        console.log("STEP33");
+        errors[`owner-${index}-samagraID`] =
+          "Samagra ID is required and must be 8 or 9 digits.";
       }
+
     });
 
     // 4. Property Address
@@ -487,7 +496,7 @@ setIsLoader(true);
   };
 
   const handleSubmit = async () => {
-  const finalErrors = validateForm();
+    const finalErrors = validateForm();
     setFormErrors(finalErrors);
     // setServerErrors({});
 
@@ -495,7 +504,7 @@ setIsLoader(true);
       console.log("❌ Form has validation errors → API not called");
       return;
     }
-    
+
     const documentsToSubmit = buildDocumentPayload(documents);
     if (generalDetails?.acknowldgementNumber) {
       handleSubmitUpdate();
@@ -523,7 +532,7 @@ setIsLoader(true);
         },
 
         ownershipCategory: ownershipType || "",
-        propertyCategory:propertyCategoryInput,
+        propertyCategory: propertyCategoryInput,
 
         owners: owners.map((owner, index) => ({
           salutation: owner.title || "mr",
@@ -654,7 +663,7 @@ setIsLoader(true);
       }
     };
 
-      setIsLoader(true);
+    setIsLoader(true);
     mutation.mutate(payload, {
       onSuccess: (data) => {
         setIsLoader(false);
@@ -671,7 +680,7 @@ setIsLoader(true);
       },
 
       onError: (err) => {
-        setIsLoader(true);
+        setIsLoader(false);
         const apiErrors = err?.response?.data?.Errors || err?.Errors || [];
         const newErrors = {};
         apiErrors.forEach((apiErr) => {
@@ -874,14 +883,14 @@ setIsLoader(true);
   //   setFormErrors(newErrors);
   // };
 
-     // Validation for PINCODE:
-     const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      let newErrors = { ...formErrors };
-  
-      setAddressDetails(prev => ({ ...prev, [name]: value }));
-  
-       // Field-level validation
+  // Validation for PINCODE:
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    let newErrors = { ...formErrors };
+
+    setAddressDetails(prev => ({ ...prev, [name]: value }));
+
+    // Field-level validation
     switch (name) {
       case "pincode":
         if (!value) {
@@ -892,7 +901,7 @@ setIsLoader(true);
           delete newErrors.pincode;
         }
         break;
-  
+
       case "address":
         if (!value) {
           newErrors.address = "Address is required.";
@@ -902,7 +911,7 @@ setIsLoader(true);
           delete newErrors.address;
         }
         break;
-  
+
       case "doorNo":
         if (!value) {
           newErrors.doorNo = "Door/House No is required.";
@@ -910,14 +919,14 @@ setIsLoader(true);
           delete newErrors.doorNo;
         }
         break;
-  
+
       default:
         break;
     }
-  
-  
-      setFormErrors(newErrors);
-    };
+
+
+    setFormErrors(newErrors);
+  };
 
   // Validation for Correspondance Address:
 
@@ -969,22 +978,22 @@ setIsLoader(true);
     setRegistryId(generalDetails.registryId || null);
   }, [generalDetails]);
 
-  console.log("generalDetails=",generalDetails);
-  console.log("generalDetails=",propertyDocuments);
+  console.log("generalDetails=", generalDetails);
+  console.log("generalDetails=", propertyDocuments);
 
   useEffect(() => {
-  if (!propertyDocuments || propertyDocuments.length === 0) return;
+    if (!propertyDocuments || propertyDocuments.length === 0) return;
 
-  const docMap = {
-    photoId: propertyDocuments.find(d => d.documentType === "Proof of Identity") || null,
-    ownershipDoc: propertyDocuments.find(d => d.documentType === "Proof of Ownership") || null,
-    sellersRegistry: propertyDocuments.find(d => d.documentType === "Others") || null,
-  };
+    const docMap = {
+      photoId: propertyDocuments.find(d => d.documentType === "Proof of Identity") || null,
+      ownershipDoc: propertyDocuments.find(d => d.documentType === "Proof of Ownership") || null,
+      sellersRegistry: propertyDocuments.find(d => d.documentType === "Others") || null,
+    };
 
-  console.log("docMap=", docMap);
-  setDocuments(docMap);
+    console.log("docMap=", docMap);
+    setDocuments(docMap);
 
-}, [propertyDocuments]);
+  }, [propertyDocuments]);
 
 
   useEffect(() => {
@@ -1043,46 +1052,46 @@ setIsLoader(true);
     if (!unitDetails || unitDetails.length === 0) return;
 
     const formattedUnits = unitDetails.map((unit) => (
-      
-      
-      {
-      usageType: unit && unit.usageCategory ? unit.usageCategory : "",
-      usageFactor: unit && unit.occupancyType ? unit.occupancyType : "", // Fill if needed
-      floorNo: unit && unit.floorNo ? unit.floorNo.toString() : "",
-      
-      constructionType:
-        unit &&
-          unit.constructionDetail &&
-          unit.constructionDetail.constructionType
-          ? unit.constructionDetail.constructionType
-          : "",
-      area:
-        unit &&
-          unit.constructionDetail &&
-          unit.constructionDetail.builtUpArea
-          ? unit.constructionDetail.builtUpArea.toString()
-          : "",
-      fromYear: unit && unit.fromYear ? unit.fromYear : "",
-      toYear: unit && unit.toYear ? unit.toYear : "",
 
-      
-    }
-  
-  ));
+
+      {
+        usageType: unit && unit.usageCategory ? unit.usageCategory : "",
+        usageFactor: unit && unit.occupancyType ? unit.occupancyType : "", // Fill if needed
+        floorNo: unit && unit.floorNo ? unit.floorNo.toString() : "",
+
+        constructionType:
+          unit &&
+            unit.constructionDetail &&
+            unit.constructionDetail.constructionType
+            ? unit.constructionDetail.constructionType
+            : "",
+        area:
+          unit &&
+            unit.constructionDetail &&
+            unit.constructionDetail.builtUpArea
+            ? unit.constructionDetail.builtUpArea.toString()
+            : "",
+        fromYear: unit && unit.fromYear ? unit.fromYear : "",
+        toYear: unit && unit.toYear ? unit.toYear : "",
+
+
+      }
+
+    ));
 
     setUnit(formattedUnits);
   }, [unitDetails]);
 
-const propertyCategoryInputChange = (val) => {
+  const propertyCategoryInputChange = (val) => {
 
     setPropertyCategoryInput(val.code);
 
-      // 🟢 Clear error live when user selects value
-  setFormErrors((prev) => {
-    const newErrors = { ...prev };
-    delete newErrors.propertyCategoryInput;
-    return newErrors;
-  });
+    // 🟢 Clear error live when user selects value
+    setFormErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.propertyCategoryInput;
+      return newErrors;
+    });
 
     // ❗ Only reset if required. Don't reset if owners already exist.
     // if (val.code === "INDIVIDUAL.SINGLEOWNER") {
@@ -1099,12 +1108,12 @@ const propertyCategoryInputChange = (val) => {
 
     setOwnershipType(val.code);
 
-      // 🟢 Clear error live when user selects value
-  setFormErrors((prev) => {
-    const newErrors = { ...prev };
-    delete newErrors.ownershipType;
-    return newErrors;
-  });
+    // 🟢 Clear error live when user selects value
+    setFormErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.ownershipType;
+      return newErrors;
+    });
 
     // ❗ Only reset if required. Don't reset if owners already exist.
     if (val.code === "INDIVIDUAL.SINGLEOWNER") {
@@ -1259,49 +1268,49 @@ const propertyCategoryInputChange = (val) => {
 
   const capitalize = (s) => s?.charAt(0)?.toUpperCase() + s?.slice(1) || "";
 
-const handleDropdownChange = (field, selectedOption) => {
-  console.log("handleDropdownChange", field, selectedOption);
+  const handleDropdownChange = (field, selectedOption) => {
+    console.log("handleDropdownChange", field, selectedOption);
 
-  // 1) update addressDetails in one atomic update and reset dependents
-  setAddressDetails((prev) => {
-    const next = { ...prev, [field]: selectedOption };
+    // 1) update addressDetails in one atomic update and reset dependents
+    setAddressDetails((prev) => {
+      const next = { ...prev, [field]: selectedOption };
 
-    if (field === "zone") {
-      next.ward = null;
-      next.colony = null;
-      next.rateZone = null;
-    } else if (field === "ward") {
-      next.colony = null;
-      next.rateZone = null;
-    } else if (field === "colony") {
-      next.rateZone = null;
-    }
-    return next;
-  });
+      if (field === "zone") {
+        next.ward = null;
+        next.colony = null;
+        next.rateZone = null;
+      } else if (field === "ward") {
+        next.colony = null;
+        next.rateZone = null;
+      } else if (field === "colony") {
+        next.rateZone = null;
+      }
+      return next;
+    });
 
-  // 2) update formErrors live (remove error for the field when selected,
-  //    also remove errors for dependents when parent resets)
-  setFormErrors((prev) => {
-    const copy = { ...prev };
+    // 2) update formErrors live (remove error for the field when selected,
+    //    also remove errors for dependents when parent resets)
+    setFormErrors((prev) => {
+      const copy = { ...prev };
 
-    if (selectedOption) delete copy[field];
-    else copy[field] = `${capitalize(field)} is required.`;
+      if (selectedOption) delete copy[field];
+      else copy[field] = `${capitalize(field)} is required.`;
 
-    // If you changed zone/ward/colony, clear dependent errors (don't set them)
-    if (field === "zone") {
-      delete copy.ward;
-      delete copy.colony;
-      delete copy.rateZone;
-    } else if (field === "ward") {
-      delete copy.colony;
-      delete copy.rateZone;
-    } else if (field === "colony") {
-      delete copy.rateZone;
-    }
+      // If you changed zone/ward/colony, clear dependent errors (don't set them)
+      if (field === "zone") {
+        delete copy.ward;
+        delete copy.colony;
+        delete copy.rateZone;
+      } else if (field === "ward") {
+        delete copy.colony;
+        delete copy.rateZone;
+      } else if (field === "colony") {
+        delete copy.rateZone;
+      }
 
-    return copy;
-  });
-};
+      return copy;
+    });
+  };
 
   const formatFullAddress = (addressDetails) => {
     if (!addressDetails) return "";
@@ -1348,7 +1357,7 @@ const handleDropdownChange = (field, selectedOption) => {
   const handleUnitChange = (index, key, value) => {
     const updatedUnits = [...unit];
 
-    console.log("Floor and Unit==",key , "=", value )
+    console.log("Floor and Unit==", key, "=", value)
     updatedUnits[index][key] = value;
     setUnit(updatedUnits);
   };
@@ -1407,7 +1416,7 @@ const handleDropdownChange = (field, selectedOption) => {
     return <Loader />;
   }
 
-   if (isLoader) {
+  if (isLoader) {
     return <Loader />;
   }
 
@@ -1465,7 +1474,7 @@ const handleDropdownChange = (field, selectedOption) => {
               updateRateZone={updateRateZone}
               styles={styles}
               formErrors={formErrors}
-              setFormErrors={setFormErrors}  
+              setFormErrors={setFormErrors}
             />
           </div>
           <div style={styles.card}>
@@ -1565,8 +1574,8 @@ const handleDropdownChange = (field, selectedOption) => {
 
             )}
 
-             {/* ✅ Global error messages from backend */}
-             {Object.keys(serverErrors).length > 0 && (
+            {/* ✅ Global error messages from backend */}
+            {Object.keys(serverErrors).length > 0 && (
               <div
                 style={{
                   marginTop: "16px",
@@ -1599,7 +1608,7 @@ const handleDropdownChange = (field, selectedOption) => {
                 <SubmitBar label={t("Preview")} onSubmit={PreviewDemand} style={{ background: "#6b133f" }} />
               )} */}
               {/* {!showPreviewButton && ( */}
-                <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
+              <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
               {/* )} */}
             </div>
           </div>

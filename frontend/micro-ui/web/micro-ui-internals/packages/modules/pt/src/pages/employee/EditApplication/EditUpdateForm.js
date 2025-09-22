@@ -176,7 +176,7 @@ const EditUpdateForm = ({ applicationData }) => {
             onSuccess: (data) => {
                 history.push({
                     pathname: "/digit-ui/employee/pt/PreviewView",
-                    state: { data, proOwnerDetail:property }// send full object
+                    state: { data, proOwnerDetail: property }// send full object
                 });
             },
             onError: (error) => {
@@ -223,7 +223,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 },
 
                 ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
-                propertyCategory:propertyCategoryInput,
+                propertyCategory: propertyCategoryInput,
 
                 owners: owners.map((owner, index) => ({
                     salutation: owner.title || "mr",
@@ -402,13 +402,13 @@ const EditUpdateForm = ({ applicationData }) => {
                     setStatus(property.status);
                     // setShowSuccessModal(true);
                     // setShowPreviewButton(true);
-                     PreviewDemand(property.propertyId, property);
+                    PreviewDemand(property.propertyId, property);
 
 
                 }
             },
             onError: (err) => {
-                 setIsLoader(false);
+                setIsLoader(false);
 
                 alert(t("Submission failed"));
             },
@@ -430,8 +430,8 @@ const EditUpdateForm = ({ applicationData }) => {
             errors.ownershipType = "Ownership type is required.";
         }
         if (!propertyCategoryInput) {
-      errors.propertyCategoryInput = "Property Category is required.";
-    }
+            errors.propertyCategoryInput = "Property Category is required.";
+        }
         if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
             errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
         }
@@ -463,9 +463,18 @@ const EditUpdateForm = ({ applicationData }) => {
                 errors[`owner-${index}-aadhaar`] = "Valid 12-digit Aadhaar number is required.";
             }
             // Samagra ID (only if checkbox is not ticked)
-            if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
-                errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+            // if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+            //     errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+            // }
+            if (
+                !owner.noSamagra &&
+                (!owner.samagraID || !/^\d{8,9}$/.test(owner.samagraID))
+            ) {
+                console.log("STEP33");
+                errors[`owner-${index}-samagraID`] =
+                    "Samagra ID is required and must be 8 or 9 digits.";
             }
+
         });
 
         // 4. Property Address
@@ -957,25 +966,25 @@ const EditUpdateForm = ({ applicationData }) => {
 
     const propertyCategoryInputChange = (val) => {
 
-    setPropertyCategoryInput(val.code);
+        setPropertyCategoryInput(val.code);
 
-      // 🟢 Clear error live when user selects value
-  setFormErrors((prev) => {
-    const newErrors = { ...prev };
-    delete newErrors.propertyCategoryInput;
-    return newErrors;
-  });
+        // 🟢 Clear error live when user selects value
+        setFormErrors((prev) => {
+            const newErrors = { ...prev };
+            delete newErrors.propertyCategoryInput;
+            return newErrors;
+        });
 
-    // ❗ Only reset if required. Don't reset if owners already exist.
-    // if (val.code === "INDIVIDUAL.SINGLEOWNER") {
-    //   setOwners((prev) => [prev[0]]); // keep first only
-    // } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
-    //   // Do nothing if owners already prefilled
-    //   if (owners.length === 0) {
-    //     setOwners([{}]); // fallback if empty
-    //   }
-    // }
-  };
+        // ❗ Only reset if required. Don't reset if owners already exist.
+        // if (val.code === "INDIVIDUAL.SINGLEOWNER") {
+        //   setOwners((prev) => [prev[0]]); // keep first only
+        // } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
+        //   // Do nothing if owners already prefilled
+        //   if (owners.length === 0) {
+        //     setOwners([{}]); // fallback if empty
+        //   }
+        // }
+    };
 
     const handleOwnershipTypeChange = (val) => {
 
@@ -1084,21 +1093,21 @@ const EditUpdateForm = ({ applicationData }) => {
         if (!addressDetails) return "";
         const { doorNo, address, pincode, zone, ward, colony } = addressDetails;
         return [
-          doorNo,
-          address,
-          colony?.name,
-          ward?.name,
-          zone?.name,
-          pincode,
+            doorNo,
+            address,
+            colony?.name,
+            ward?.name,
+            zone?.name,
+            pincode,
         ]
-          .filter(Boolean) // remove empty/null
-          .join(", ");
-      };
+            .filter(Boolean) // remove empty/null
+            .join(", ");
+    };
 
-               if (isLoader) {
-    return <Loader />;
-  }
-    
+    if (isLoader) {
+        return <Loader />;
+    }
+
     return (
 
         <React.Fragment>
@@ -1149,9 +1158,9 @@ const EditUpdateForm = ({ applicationData }) => {
                             t={t}
                             correspondenceAddress={
                                 isSameAsPropertyAddress
-                                  ? formatFullAddress(addressDetails)
-                                  : correspondenceAddress
-                              }
+                                    ? formatFullAddress(addressDetails)
+                                    : correspondenceAddress
+                            }
                             handleCorrespondenceChange={handleCorrespondenceChange}
                             isSameAsPropertyAddress={isSameAsPropertyAddress}
                             handleSameAsPropertyToggle={handleSameAsPropertyToggle}

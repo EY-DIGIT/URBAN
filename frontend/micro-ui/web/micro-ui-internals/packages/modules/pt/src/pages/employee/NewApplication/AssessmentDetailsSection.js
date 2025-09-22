@@ -74,7 +74,7 @@ const AssessmentDetailsSection = ({
           value={assessmentDetails.plotArea}
           onChange={handleAssessmentInputChange}
           placeholder={t("Enter")}
-          type="number"
+          type="text"
         />
           {formErrors?.plotArea && (
     <p style={{ color: "red", fontSize: "12px" }}>{formErrors.plotArea}</p>
