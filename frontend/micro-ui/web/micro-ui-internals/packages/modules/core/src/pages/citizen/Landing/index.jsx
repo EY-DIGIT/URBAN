@@ -20,8 +20,8 @@ const styles = {
 
     servicesGrid: {
         display: "grid",
-        justifyContent: "space-around",
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        justifyContent: "center", // Changed from space-around to center
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 300px))", // Increased minmax values
         gap: "20px",
         maxWidth: "1200px",
         margin: "0 auto",
@@ -37,6 +37,8 @@ const styles = {
         overflow: "visible",
         display: "flex",
         flexDirection: "column",
+        width: "100%", // Ensure cards don't exceed container
+        maxWidth: "300px", // Add max width constraint
     },
 
     serviceCardHover: {
@@ -45,7 +47,7 @@ const styles = {
     },
 
     cardContent: {
-        padding: "32px 24px 0px", // Removed bottom padding
+        padding: "32px 24px 0px",
         textAlign: "center",
         position: "relative",
         flex: "1",
@@ -68,21 +70,21 @@ const styles = {
         fontWeight: 600,
         color: "#333",
         margin: "0 0 24px 0",
-        flex: "1", // This will push the button to the bottom
+        flex: "1",
     },
 
     viewButton: {
         background: "#6B133F",
         color: "white",
         border: "none",
-        padding: "16px 0", // Increased padding for better coverage
-        borderRadius: "0 0 12px 12px", // Only bottom corners rounded
+        padding: "16px 0",
+        borderRadius: "0 0 12px 12px",
         fontSize: "1rem",
         fontWeight: 500,
         cursor: "pointer",
         transition: "all 0.2s ease",
         width: "100%",
-        marginTop: "auto", // Push to bottom
+        marginTop: "auto",
         position: "relative",
     },
 
@@ -96,15 +98,14 @@ const styles = {
 
     dropdownMenu: {
         position: "absolute",
-        top: "0", // Changed from "100%" to "0"
+        top: "0",
         left: "0",
         right: "0",
         background: "white",
-        borderRadius: "12px", // Changed from "0 0 12px 12px" to "12px"
+        borderRadius: "12px",
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
         zIndex: 1000,
         border: "1px solid #e0e0e0",
-        // Remove borderTop: "none" since we want full border now
         animation: "dropdownFadeIn 0.2s ease-out",
     },
 
@@ -127,7 +128,6 @@ const styles = {
         color: "#6B133F",
     },
 
-    // Icons
     propertyIcon: {
         display: "flex",
         alignItems: "center",
@@ -150,51 +150,114 @@ const styles = {
         width: "36px",
         height: "36px",
     },
-
-    // Media queries can't directly go into a plain style object
-    // If using Material-UI / Emotion / Styled-Components, you'd wrap them differently
-    // but here's an indicative structure:
-    responsive: {
-        "@media (max-width: 768px)": {
-            revenueServicesContainer: { padding: "15px" },
-            mainTitle: { fontSize: "1.4rem", marginBottom: "30px", paddingLeft: "10px" },
-            servicesGrid: { gridTemplateColumns: "1fr", gap: "16px", padding: "0 10px" },
-            cardContent: { padding: "28px 20px 0px" },
-            iconContainer: { width: "70px", height: "70px" },
-            serviceTitle: { fontSize: "1.2rem" },
-        },
-
-        "@media (max-width: 480px)": {
-            mainTitle: { fontSize: "1.3rem", textAlign: "left" },
-            cardContent: { padding: "24px 16px 0px" },
-            dropdownMenu: { left: "0", right: "0" },
-        },
-
-        "@media (min-width: 1200px)": {
-            servicesGrid: { gridTemplateColumns: "repeat(3, 1fr)", maxWidth: "900px" },
-        },
-    },
 };
 
-// Add keyframes for dropdown animation
-const styleSheet = document.createElement("style");
-styleSheet.type = "text/css";
-styleSheet.innerText = `
-@keyframes dropdownFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
+// Create comprehensive media query styles
+const createResponsiveStyles = () => {
+    const mediaQueries = `
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 480px) {
+            .revenue-services-container {
+                padding: 15px !important;
+            }
+            .main-title {
+                font-size: 1.3rem !important;
+                margin-bottom: 30px !important;
+                padding-left: 10px !important;
+            }
+            .services-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+                padding: 0 10px !important;
+            }
+            .card-content {
+                padding: 24px 16px 0px !important;
+            }
+            .icon-container {
+                width: 70px !important;
+                height: 70px !important;
+            }
+            .service-title {
+                font-size: 1.2rem !important;
+            }
+        }
+
+        /* Tablet portrait styles */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .revenue-services-container {
+                padding: 18px !important;
+            }
+            .main-title {
+                font-size: 1.4rem !important;
+                margin-bottom: 35px !important;
+                padding-left: 15px !important;
+            }
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 18px !important;
+                max-width: 600px !important;
+                padding: 0 15px !important;
+            }
+            .card-content {
+                padding: 28px 20px 0px !important;
+            }
+        }
+
+        /* Tablet landscape and small desktop styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+                max-width: 700px !important;
+                padding: 0 20px !important;
+            }
+        }
+
+        /* Medium desktop styles */
+        @media (min-width: 1025px) and (max-width: 1199px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 20px !important;
+                max-width: 900px !important;
+                padding: 0 20px !important;
+            }
+        }
+
+        /* Large desktop styles */
+        @media (min-width: 1200px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 24px !important;
+                max-width: 950px !important;
+                padding: 0 20px !important;
+            }
+        }
+    `;
+
+    // Remove existing stylesheet if it exists
+    const existingStylesheet = document.head.querySelector('style[data-revenue-services]');
+    if (existingStylesheet) {
+        existingStylesheet.remove();
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-`;
-if (!document.head.querySelector('style[data-dropdown-animation]')) {
-    styleSheet.setAttribute('data-dropdown-animation', 'true');
+
+    // Create and append new stylesheet
+    const styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.setAttribute('data-revenue-services', 'true');
+    styleSheet.innerText = mediaQueries;
     document.head.appendChild(styleSheet);
-}
+};
 
 const ServiceCard = ({
     title,
@@ -208,7 +271,7 @@ const ServiceCard = ({
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
-    // const userType = JSON.parse(sessionStorage.getItem("Digit.userType")).value;
+    
     const getUserType = () => Digit.UserService.getType();
     console.log("userType", getUserType());
     const user = Digit.UserService.getUser();
@@ -216,21 +279,16 @@ const ServiceCard = ({
     const refreshToken = user?.refresh_token;
 
     const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
-    // console.log("stateInfo==", stateInfo);
-
     const baseURL = `${stateInfo?.BAPURL}`;
 
     const handleViewClick = () => {
-        // console.log("checking====>>", getUserType(), title, isExternal)
-        // debugger;
         if (getUserType() === "citizen" || title === "Rental") {
             if (isExternal) {
                 window.location.href = `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`;
             } else {
                 window.location.href = citizenLink
             }
-        }
-        else {
+        } else {
             onToggle(cardIndex);
         }
     };
@@ -247,15 +305,16 @@ const ServiceCard = ({
 
     return (
         <div
+            className="service-card"
             style={cardStyle}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div style={styles.cardContent}>
-                <div style={styles.iconContainer}>
+            <div className="card-content" style={styles.cardContent}>
+                <div className="icon-container" style={styles.iconContainer}>
                     <img src={stateInfo?.uiImageAssets[icon]} />
                 </div>
-                <h3 style={styles.serviceTitle}>{title}</h3>
+                <h3 className="service-title" style={styles.serviceTitle}>{title}</h3>
             </div>
             <button style={buttonStyle} onClick={handleViewClick}>
                 View
@@ -288,8 +347,12 @@ const ServiceCard = ({
 const RevenueServices = () => {
     const [openDropdown, setOpenDropdown] = useState(null);
 
+    // Initialize responsive styles
+    React.useEffect(() => {
+        createResponsiveStyles();
+    }, []);
+
     const handleDropdownToggle = (cardIndex) => {
-        // If the same card is clicked, close it. Otherwise, open the new one and close others.
         setOpenDropdown(openDropdown === cardIndex ? null : cardIndex);
     };
 
@@ -309,12 +372,7 @@ const RevenueServices = () => {
         {
             title: "Rental",
             icon: "rental_1",
-            dropdownOptions: [
-                // { label: "View Rentals", link: "/view-rentals" },
-                // { label: "Add New Rental", link: "/add-rental" },
-                // { label: "Rental History", link: "/rental-history" },
-                // { label: "Payment Status", link: "/payment-status" }
-            ],
+            dropdownOptions: [],
             citizenLink: "dashboard/rental",
             isExternal: true
         },
@@ -333,9 +391,9 @@ const RevenueServices = () => {
     ];
 
     return (
-        <div style={styles.revenueServicesContainer}>
-            <h1 style={styles.mainTitle}>Revenue Services</h1>
-            <div style={styles.servicesGrid}>
+        <div className="revenue-services-container" style={styles.revenueServicesContainer}>
+            <h1 className="main-title" style={styles.mainTitle}>Revenue Services</h1>
+            <div className="services-grid" style={styles.servicesGrid}>
                 {services.map((service, index) => (
                     <ServiceCard
                         key={index}
