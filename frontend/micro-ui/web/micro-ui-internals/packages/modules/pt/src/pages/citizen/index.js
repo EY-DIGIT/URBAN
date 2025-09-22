@@ -34,6 +34,8 @@ const App = () => {
   const PropertyCardsLanding = Digit?.ComponentRegistryService?.getComponent("PropertyCardsLanding");
   const PaymentForm = Digit?.ComponentRegistryService?.getComponent("PaymentForm");
   const CitizenServices = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
+  const SuccessPage = Digit?.ComponentRegistryService?.getComponent("SuccessPage");
+
 
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
@@ -66,6 +68,7 @@ const App = () => {
 
           {/* Citizen Services */}
           <PrivateRoute path={`${path}/citizen-services`} component={CitizenServices}></PrivateRoute>
+          <PrivateRoute path={`${path}/property/acknowledgement-pt`} component={SuccessPage}></PrivateRoute>
 
         </AppContainer>
       </Switch>

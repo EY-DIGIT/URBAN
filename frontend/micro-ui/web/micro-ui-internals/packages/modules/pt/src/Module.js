@@ -138,6 +138,7 @@ import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
 
 //Citizen Services
 import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenServicesLandingCards"
+import SuccessPage from "./pages/citizen/Create/SuccessPage"
 
 
 const componentsToRegister = {
@@ -261,6 +262,7 @@ const componentsToRegister = {
   PropertyCardsLanding,
   PaymentForm,
   CitizenServicesCards,
+  SuccessPage,
 };
 
 const addComponentsToRegistry = () => {

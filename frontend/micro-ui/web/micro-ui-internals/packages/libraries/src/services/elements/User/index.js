@@ -55,8 +55,8 @@ export const UserService = {
         window.location.replace("/digit-ui/citizen");
       } else {
         // window.location.replace("/digit-ui/employee/user/language-selection");
-        // window.location.replace("/digit-ui/employee/user/login");
-        window.location.replace("https://citizenservicesdev.eydemoapp.in/landing/index.html");
+        window.location.replace("/digit-ui/employee/user/login");
+        // window.location.replace("https://citizenservicesdev.eydemoapp.in/landing/index.html");
 
       }
     }

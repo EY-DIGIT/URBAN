@@ -65,7 +65,7 @@ const PropertyCardsLanding = () => {
 
     if (!tenantId) {
 
-        window.location.replace("https://citizenservicesdev.eydemoapp.in/landing/index.html");
+        window.location.replace(stateInfo?.BAPURL);
 
     }
 
@@ -80,18 +80,6 @@ const PropertyCardsLanding = () => {
         >
             <div className="main-content-wrapper" style={{ flex: 1 }}>
                 <div className="content-area" style={{ padding: isDesktop ? 20 : isTablet ? 15 : 10 }}>
-                    <div
-                        className="content-header"
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginBottom: 20,
-                            flexWrap: isMobile ? "wrap" : "nowrap",
-                        }}
-                    >
-                    </div>
-
                     {/* Favorite Cards */}
                     <div className="favorite-card">
                         <div className="card-header-view" style={{ marginBottom: 15 }}>
