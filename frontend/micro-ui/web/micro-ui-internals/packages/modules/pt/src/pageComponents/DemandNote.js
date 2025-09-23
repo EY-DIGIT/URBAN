@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Loader, Card,
     SubmitBar,
@@ -107,7 +107,7 @@ const styles = {
         border: "1px solid #ccc",
         padding: "8px 4px",
         // backgroundColor: "#B9B9B9",
-         backgroundColor:"rgba(107, 19, 63, 0.2)",
+        backgroundColor: "rgba(107, 19, 63, 0.2)",
         // border:"1px,0px,0px,1px #B9B9B9",
         textAlign: "center",
         // fontFamily: "Inter",
@@ -292,39 +292,55 @@ const DemandNote = () => {
     };
 
 
-       const [boundaryData, setBoundaryData] = useState(null);
-      const [zones, setZones] = useState([]);
-      const [wards, setWards] = useState([]);
-      const [colonies, setColonies] = useState([]);
-     
-            useEffect(() => {
-        (async () => {
-          try {
-            const tenantId = Digit.ULBService.getCurrentTenantId();
-            const response = await Digit.LocationService.getRevenueLocalities(tenantId);
-    
-            console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
-    
-            const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
-            if (cityBoundary?.children?.length > 0) {
-              setBoundaryData(cityBoundary);
-    
-              const zoneOptions = cityBoundary.children.map((zone) => ({
-                code: zone.code,
-                name: zone.name || zone.code,
-              }));
-              setZones(zoneOptions);
-            } else {
-              console.warn("❌ No boundary children found.");
-            }
-          } catch (error) {
-            console.error("❌ Error fetching boundary data:", error);
-          }
-        })();
-      }, []);
-    
-      console.log("Zones No=",zones)
+    const [boundaryData, setBoundaryData] = useState(null);
+    const [zones, setZones] = useState([]);
+    const [wards, setWards] = useState([]);
+    const [colonies, setColonies] = useState([]);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                const tenantId = Digit.ULBService.getCurrentTenantId();
+                const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+
+                console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+
+                const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+                if (cityBoundary?.children?.length > 0) {
+                    setBoundaryData(cityBoundary);
+
+                    const zoneOptions = cityBoundary.children.map((zone) => ({
+                        code: zone.code,
+                        name: zone.name || zone.code,
+                    }));
+                    setZones(zoneOptions);
+                } else {
+                    console.warn("❌ No boundary children found.");
+                }
+            } catch (error) {
+                console.error("❌ Error fetching boundary data:", error);
+            }
+        })();
+    }, []);
+
+    const getCurrentFY = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // 0-based → Jan = 0
+
+        if (month < 4) {
+            // Before April → still in last FY
+            return `${year - 1}-${String(year).slice(-2)}`;
+        } else {
+            // April onwards → new FY
+            return `${year}-${String(year + 1).slice(-2)}`;
+        }
+    };
+
+    const currentFY = getCurrentFY();
+    const currentFYDetails = propertyFYDetails.filter(
+        (item) => item.year === currentFY
+    );
 
     return (
 
@@ -342,7 +358,7 @@ const DemandNote = () => {
                     {ownersDetail.map((owner, index) => (
                         <React.Fragment key={owner.uuid || index}>
                             <div style={styles.sectionHeader}>Owner {index + 1}</div>
-                            <div style={{marginTop:"14px"}}></div>
+                            <div style={{ marginTop: "14px" }}></div>
                             <div style={styles.row} >
                                 <InputField label="Owner Name" value={` ${owner?.name || "N/A"}`} />
 
@@ -351,16 +367,16 @@ const DemandNote = () => {
                                 <InputField label="Address" value={owner?.permanentAddress || "N/A"} />
                             </div>
                             <div style={styles.row}>
-                                <InputField label="Zone"   value={
-          zones.find((f) => f.code === address?.zone)?.name || "N/A"
-        } />
+                                <InputField label="Zone" value={
+                                    zones.find((f) => f.code === address?.zone)?.name || "N/A"
+                                } />
                                 <InputField label="Ward" value={address?.ward || "N/A"} />
                                 <InputField label="Colony" value={address?.locality?.name || "N/A"} />
                             </div>
                             <div style={styles.row}>
                                 <InputField label="Pincode" value={address?.pincode || "N/A"} />
                                 <InputField label="Mobile Number" value={owner?.mobileNumber || "N/A"} />
-                                 <InputField
+                                <InputField
                                     label="Aadhaar ID"
                                     value={
                                         owner?.aadhaarNumber
@@ -385,13 +401,13 @@ const DemandNote = () => {
                             <table style={styles.table}>
                                 <thead>
                                     <tr>
-                                        {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
+                                        {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
                                             <th key={h} style={styles.th}>{h}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {propertyFYDetails.map((item) => (
+                                    {currentFYDetails.map((item) => (
                                         <tr key={item.year}>
                                             <td style={styles.td}>{item.year}</td>
                                             <td style={styles.td}>{item.usageType}</td>
@@ -400,9 +416,9 @@ const DemandNote = () => {
                                             <td style={styles.td}>{item.constructionType}</td>
                                             <td style={styles.td}>{item.area}</td>
                                             <td style={styles.td}>{Math.round(item.factor)}</td>
-                                        <td style={styles.td}>{Math.round(item.alv)}</td>
-                                        <td style={styles.td}>{Math.round(item?.discount)}</td>
-                                        <td style={styles.td}>{Math.round(item?.tpv)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.alv)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item?.discount)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item?.tpv)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -441,23 +457,23 @@ const DemandNote = () => {
                                             <td style={styles.td}>{item.netTax}</td>
                                         </tr>
                                     ))} */}
-                                     {taxSummaries.map((item) => (
-                                <tr key={item.year}>
-                                    <td style={styles.td}>{item.year}</td>
-                                    <td style={styles.td}>{Math.round(item.tpv)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.propertyTax)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.samekit)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.educationCess)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.jalKar)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.jalNikas)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.urbanTax)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.sevaKar)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.totalTax)}</td>
-                                    <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
-                                    <td style={styles.td}>₹ {Math.round(item.penalty)}</td>
-                                    <td style={styles.td}>{Math.round(item.netTax)}</td>
-                                </tr>
-                            ))}
+                                    {taxSummaries.map((item) => (
+                                        <tr key={item.year}>
+                                            <td style={styles.td}>{item.year}</td>
+                                            <td style={styles.td}>{Math.round(item.tpv)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.propertyTax)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.samekit)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.educationCess)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.jalKar)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.jalNikas)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.urbanTax)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.sevaKar)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.totalTax)}</td>
+                                            <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.penalty)}</td>
+                                            <td style={styles.td}>{Math.round(item.netTax)}</td>
+                                        </tr>
+                                    ))}
                                     <tr>
                                         <td colSpan={12} style={{ ...styles.td, fontWeight: "bold", textAlign: "right" }}>TOTAL</td>
                                         <td style={styles.td}>

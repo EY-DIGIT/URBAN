@@ -27,7 +27,24 @@ const PropertyDetailLedger = () => {
   const handleBackClick = () => {
     history.goBack();
   };
+  const getCurrentFY = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // 0-based → Jan = 0
 
+    if (month < 4) {
+      // Before April → still in last FY
+      return `${year - 1}-${String(year).slice(-2)}`;
+    } else {
+      // April onwards → new FY
+      return `${year}-${String(year + 1).slice(-2)}`;
+    }
+  };
+
+  const currentFY = getCurrentFY();
+  const currentFYDetails = propertyFYDetails.filter(
+    (item) => item.year === currentFY
+  );
   return (
     <div id="downloadable-component">
       <div style={{
@@ -100,7 +117,7 @@ const PropertyDetailLedger = () => {
                 </tr>
               </thead>
               <tbody>
-                {propertyFYDetails.map((item) => (
+                {currentFYDetails.map((item) => (
                   <tr key={item.year}>
                     <td style={styles.td}>{item.usageType}</td>
                     <td style={styles.td}>{item.usageFactor}</td>
@@ -108,9 +125,9 @@ const PropertyDetailLedger = () => {
                     <td style={styles.td}>{item.constructionType}</td>
                     <td style={styles.td}>{item.area}</td>
                     <td style={styles.td}>{item.factor}</td>
-                    <td style={styles.td}>{item.alv}</td>
-                    <td style={styles.td}>{item?.discount}</td>
-                    <td style={styles.td}>{item?.tpv}</td>
+                    <td style={styles.td}>₹ {item.alv}</td>
+                    <td style={styles.td}>₹ {item?.discount}</td>
+                    <td style={styles.td}>₹ {item?.tpv}</td>
                   </tr>
                 ))}
               </tbody>
@@ -124,7 +141,7 @@ const PropertyDetailLedger = () => {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  {["Year", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Penalty", "Rebate", "Net Tax", "Collection /Paid", "Cumulative Balance"].map((h) => (
+                  {["Year", "Property Tax", "Consolidated Tax", "Education Cess", "Water Cess", "Drainage Cess", "Urban Development Cess", "Service Charge", "Total Tax", "Penalty", "Rebate", "Net Tax", "Collection /Paid", "Cumulative Balance"].map((h) => (
                     <th key={h} style={styles.th}>{h}</th>
                   ))}
                 </tr>
@@ -140,11 +157,12 @@ const PropertyDetailLedger = () => {
                     <td style={styles.td}>₹ {item.jalNikas}</td>
                     <td style={styles.td}>₹ {item.urbanTax}</td>
                     <td style={styles.td}>₹ {item.sevaKar}</td>
-                    <td style={styles.td}>₹ {item.penalty || 0}</td>
-                    <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
                     <td style={styles.td}>₹ {item.totalTax}</td>
-                    <td style={styles.td}>{item.collection || 0}</td>
-                    <td style={styles.td}>{calculation?.cumulativeBalance || 0}</td>
+                    <td style={styles.td}>₹ {item.penalty || 0}</td>
+                    <td style={styles.td}>₹ {item.rebate}</td>
+                    <td style={styles.td}>₹ {item.netTax}</td>
+                    <td style={styles.td}>₹ {item.paidAmount || 0}</td>
+                    <td style={styles.td}>₹ {item?.cumulativeBalance || 0}</td>
                   </tr>
                 ))}
                 {/* <tr>

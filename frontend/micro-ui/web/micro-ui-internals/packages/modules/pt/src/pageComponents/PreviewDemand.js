@@ -813,9 +813,9 @@ const PropertyForm = () => {
                                         <td style={styles.td}>{item.area}</td>
                                        
                                         <td style={styles.td}>{Math.round(item.factor)}</td>
-                                        <td style={styles.td}>{Math.round(item.alv)}</td>
-                                        <td style={styles.td}>{Math.round(item?.discount)}</td>
-                                        <td style={styles.td}>{Math.round(item?.tpv)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.alv)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item?.discount)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item?.tpv)}</td>
                                     </tr>
                                 )
                             }
@@ -871,7 +871,7 @@ const PropertyForm = () => {
                                     <td style={styles.td}>₹ {Math.round(item.totalTax)}</td>
                                     <td style={styles.td}>₹ {Math.abs(item.rebate)}</td>
                                     <td style={styles.td}>₹ {Math.round(item.penalty)}</td>
-                                    <td style={styles.td}>{Math.round(item.netTax)}</td>
+                                    <td style={styles.td}>₹ {Math.round(item.netTax)}</td>
                                 </tr>
                             ))}
                                 <tr>

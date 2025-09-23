@@ -64,22 +64,22 @@
 //   useEffect(() => {
 //     const handlePOSMessage = (event) => {
 //       console.log("📩 Message received from POS SDK:", event.data);
-  
+
 //       try {
 //         const data = JSON.parse(event.data);
-  
+
 //         if (data.action === "POS_PAYMENT_SUCCESS") {
 //           console.log("✅ POS Payment Success:", data);
-  
+
 //           setPosDetails({
 //             referenceNumber: data.referenceNumber,
 //             edcBankName: data.bankName,
 //             cardName: data.cardType,
 //             cardLast4Digit: data.cardLast4,
 //           });
-  
+
 //           alert("POS Payment Successful ✅");
-  
+
 //           // Call backend to generate receipt
 //           handlePaymentPostPOSSuccess(data);
 //         } 
@@ -93,20 +93,20 @@
 //         console.error("❌ Error parsing POS message:", err);
 //       }
 //     };
-  
+
 //     window.addEventListener("message", handlePOSMessage);
-  
+
 //     return () => {
 //       window.removeEventListener("message", handlePOSMessage);
 //     };
 //   }, []);
-  
-  
+
+
 //   const handlePaymentPostPOSSuccess = async (posData) => {
 //     try {
 //       const tenantId = billData?.tenantId || "pg.citya";
 //       const consumerCode = applicationData?.propertyId;
-  
+
 //       const receiptRequest = {
 //         Payment: {
 //           mobileNumber: billData?.mobileNumber || "9999999999",
@@ -135,24 +135,24 @@
 //           plainAccessRequest: {},
 //         },
 //       };
-  
+
 //       const response = await Digit.PaymentService.createReciept(tenantId, receiptRequest);
-  
+
 //       setReceiptNumber(response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber);
 //       setShowAmount(response?.Payments?.[0]?.paymentDetails?.[0]?.totalAmountPaid);
 //       setShowConfirmation(true);
-  
+
 //     } catch (err) {
 //       console.error("Error creating receipt post POS:", err);
 //     }
 //   };
-  
 
-  
+
+
 //   const toggleMode = (mode) => {
 //     setSelectedModes([mode]);
 //     setSelectedMode(mode);
-  
+
 //     if (mode === "POS") {
 //       if (window.ReactNativeWebView) {
 //         // Trigger RN bridge call
@@ -305,7 +305,7 @@
 //     const tenantId = billData?.tenantId || "pg.citya";
 //     const consumerCode = applicationData?.propertyId;
 //     const selectedPaymentMode = selectedMode; // e.g. "CARD" | "CASH" | "CHEQUE"
-  
+
 //     if (!remarks.trim()) {
 //       setFormErrors("Remarks are required.");
 //       console.error("❌ Remarks validation failed");
@@ -419,13 +419,13 @@
 
 //   const handlePOSPayment = (amount) => {
 //     console.log("🚀 Initiating POS Payment with amount:", amount);
-  
+
 //     if (window.ReactNativeWebView) {
 //       const message = {
 //         action: "INITIATE_POS_PAYMENT",
 //         amount: amount,
 //       };
-  
+
 //       console.log("📡 Sending message to React Native WebView:", message);
 //       window.ReactNativeWebView.postMessage(JSON.stringify(message));
 //     } else {
@@ -433,9 +433,9 @@
 //       alert("POS SDK not available");
 //     }
 //   };
-  
-  
-  
+
+
+
 
 //   const fetchBill = async () => {
 //     if (!applicationData?.propertyId) return;
@@ -515,13 +515,13 @@
 //         try {
 //           const tenantId = Digit.ULBService.getCurrentTenantId();
 //           const response = await Digit.LocationService.getRevenueLocalities(tenantId);
-  
+
 //           console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
-  
+
 //           const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
 //           if (cityBoundary?.children?.length > 0) {
 //             setBoundaryData(cityBoundary);
-  
+
 //             const zoneOptions = cityBoundary.children.map((zone) => ({
 //               code: zone.code,
 //               name: zone.name || zone.code,
@@ -535,7 +535,7 @@
 //         }
 //       })();
 //     }, []);
-  
+
 //     console.log("Zones No=",zones)
 
 
@@ -710,15 +710,15 @@
 //             </div>
 //             <div style={styles.column}>
 //               <div style={styles.label}></div>
-           
+
 //             </div>
 //             <div style={styles.column}>
 //               <div style={styles.label}></div>
-            
+
 //             </div>
 //             <div style={styles.column}>
 //               <div style={styles.label}></div>
-             
+
 //             </div>
 //           </div>
 //         )}
@@ -1351,7 +1351,9 @@ const ApplicationDetailsContent = ({
   const [estimateData, setEstimateData] = useState("");
   const [remarks, setRemarks] = useState("");
   const [showAmount, setShowAmount] = useState(0);
-   const stateId = Digit.ULBService.getStateId();
+  const [amountHalfOFFull, setAmontHalfOFfull] = useState(0);
+  const [defaultAmount, setDefaultAmount] = useState(0)
+  const stateId = Digit.ULBService.getStateId();
 
   const [chequeDetails, setChequeDetails] = useState({
     issueDate: "",
@@ -1376,6 +1378,7 @@ const ApplicationDetailsContent = ({
   const [formErrors, setFormErrors] = useState("");
   const [selectedMode, setSelectedMode] = useState("");
   const [receiptNumber, setReceiptNumber] = useState("");
+  const [errors, setErrors] = useState("");
 
   const tenantIdUniq = Digit.ULBService.getCurrentTenantId();
   const billData = workflowDetails?.data?.actionState?.nextActions?.[1].Bill;
@@ -1424,6 +1427,10 @@ const ApplicationDetailsContent = ({
       onSuccess: (data) => {
 
         setEstimateData(data);
+
+        const defaultAmt = parseFloat(data.Calculation[0].taxAmount || 0);
+
+        setAmontHalfOFfull(defaultAmt.toFixed(2));
         // fetchBill()
       },
       onError: (error) => {
@@ -1448,6 +1455,7 @@ const ApplicationDetailsContent = ({
 
 
   const handlePaymentPartial = async () => {
+    console.log("manualAmount", manualAmount)
     const tenantId = billData?.tenantId || "pg.citya";
     const consumerCode = applicationData?.propertyId;
     const selectedPaymentMode = selectedMode;
@@ -1456,7 +1464,7 @@ const ApplicationDetailsContent = ({
       setFormErrors("Remarks are required.");
       return;
     }
- setIsLoader(true);
+    setIsLoader(true);
     try {
       // ✅ Fetch fresh bill before processing
       const billResponse = await Digit.PTService.fetchPaymentDetails({
@@ -1467,16 +1475,21 @@ const ApplicationDetailsContent = ({
       const BillList = billResponse?.Bill || [];
 
       // ❌ Abort if bill is already paid or not found
-      if (!BillList.length) {
-        alert("❌ This bill has already been paid or is not valid.");
-        return;
-      }
+      // if (!BillList.length) {
+      //   alert("❌ This bill has already been paid or is not valid.");
+      //   return;
+      // }
 
       const bill = BillList[0];
       const totalAmount = parseFloat(bill.totalAmount) || 0;
 
       // ✅ Validate manualAmount
       let amountToPay = totalAmount;
+      if (manualAmount === "" || isNaN(parseFloat(manualAmount))) {
+        alert("⚠️ Please enter a valid payment amount.");
+        return;
+      }
+
       if (manualAmount !== "" && !isNaN(parseFloat(manualAmount))) {
         const enteredAmount = parseFloat(manualAmount);
 
@@ -1484,8 +1497,8 @@ const ApplicationDetailsContent = ({
           alert("⚠️ Payment amount cannot be less than 50% of total due.");
           return;
         }
-        if (enteredAmount > totalAmount) {
-          alert("⚠️ Payment amount cannot exceed 100% of total due.");
+        if (enteredAmount >= totalAmount) {
+            alert("⚠️ Payment amount must be less than 100% of total due.");
           return;
         }
 
@@ -1527,9 +1540,9 @@ const ApplicationDetailsContent = ({
     } catch (error) {
       const errorMsg = error?.response?.data?.Errors?.map((e) => e?.code)?.join(", ");
       setFormErrors(errorMsg || "Unknown error while processing payment");
-    }finally {
-    setIsLoader(false); 
-  }
+    } finally {
+      setIsLoader(false);
+    }
   };
 
   // const handlePayment = async () => {
@@ -1603,39 +1616,37 @@ const ApplicationDetailsContent = ({
     const tenantId = billData?.tenantId || "pg.citya";
     const consumerCode = applicationData?.propertyId;
     const selectedPaymentMode = selectedMode; // e.g. "CARD" | "CASH" | "CHEQUE"
-  
+
     if (!remarks.trim()) {
       setFormErrors("Remarks are required.");
-      console.error("❌ Remarks validation failed");
+
       return;
     }
 
     setIsLoader(true);
-  
+
     try {
       // ✅ Fetch fresh bill before processing
       const billResponse = await Digit.PTService.fetchPaymentDetails({
         tenantId,
         consumerCodes: consumerCode,
       });
-  
-      console.log("✅ Bill Response:", billResponse);
-  
+
       const BillList = billResponse?.Bill || [];
-  
+
       if (!BillList.length) {
         alert("❌ This bill has already been paid or is not valid.");
-        console.warn("⚠️ No valid bill found for ConsumerCode:", consumerCode);
+
         return;
       }
-  
+
       const bill = BillList[0]; // fresh bill
-      console.log("📄 Selected Bill:", bill);
-  
+
+
       const totalAmount =
         (parseFloat(bill.totalAmount) || 0) + (parseFloat(advancePayment) || 0);
-      console.log("💰 Total Amount to Pay:", totalAmount);
-  
+
+
       // ✅ Construct dynamic receipt request
       const receiptRequest = {
         Payment: {
@@ -1655,53 +1666,39 @@ const ApplicationDetailsContent = ({
           paymentMode: selectedPaymentMode,
           payerName: bill?.payerName || "Unknown User",
           paidBy: "OWNER",
-  
+
           // Instrument details – can be filled dynamically from POS SDK
           transactionNumber: Date.now().toString(), // Example: unique TXN ID
           instrumentNumber: Date.now().toString(), // Example placeholder
           instrumentDate: new Date().getTime(),
-        },
-        RequestInfo: {
-          apiId: "Rainmaker",
-          authToken: Digit.SessionStorage.get("auth-token"), // ✅ dynamically get logged-in token
-          userInfo: Digit.UserService.getUser().info, // ✅ get logged-in user details
-          msgId: `${Date.now()}|en_IN`,
-          plainAccessRequest: {},
-        },
+        }
       };
-  
-      console.log("📝 Final Receipt Request Payload:", receiptRequest);
-  
-      // ✅ Call API
-      console.log("📡 Calling createReciept API...");
+      console.log("💡 Receipt Request:", receiptRequest);
+
       const response = await Digit.PaymentService.createReciept(
         tenantId,
         receiptRequest
       );
-  
-      console.log("✅ API Response:", response);
-  
+
+
+
       // ✅ Success handling
       const receiptNumber =
         response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber;
       const totalAmountPaid =
         response?.Payments?.[0]?.paymentDetails?.[0]?.totalAmountPaid;
-  
-      console.log("🎉 Payment Successful!");
-      console.log("Receipt Number:", receiptNumber);
-      console.log("Amount Paid:", totalAmountPaid);
-  
+
       setShowAmount(totalAmountPaid);
       setReceiptNumber(receiptNumber);
       setShowConfirmation(true);
       fetchBill();
       setFormErrors("");
     } catch (error) {
-      console.error("❌ Payment API Error:", error);
-  
+
+
       const errorMsg = error?.response?.data?.Errors?.map((e) => e?.code)?.join(", ");
-      console.error("Error Message from API:", errorMsg);
-  
+
+
       if (errorMsg?.includes("BILL_ALREADY_PAID")) {
         setFormErrors("This bill is already paid.");
       } else if (errorMsg?.includes("BILL_EXPIRED")) {
@@ -1709,12 +1706,12 @@ const ApplicationDetailsContent = ({
       } else {
         setFormErrors(errorMsg || "Payment failed. Please try again.");
       }
-    }finally {
-    setIsLoader(false); 
-  }
+    } finally {
+      setIsLoader(false);
+    }
   };
-  
-  
+
+
 
   const fetchBill = async () => {
     if (!applicationData?.propertyId) return;
@@ -1778,48 +1775,92 @@ const ApplicationDetailsContent = ({
     return <Loader />;
   }
 
-      const { data: RoadFactors, isLoading:{} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
+  const { data: RoadFactors, isLoading: { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
   const RoadFactorList = (RoadFactors?.PropertyTax?.RoadFactor || []).map((item) => ({
     code: item.code,
     name: item.name, // Show year like "2024-25"
   }));
 
-    const [boundaryData, setBoundaryData] = useState(null);
-    const [zones, setZones] = useState([]);
-    const [wards, setWards] = useState([]);
-    const [colonies, setColonies] = useState([]);
-    const [rateZones, setRateZones] = useState([]);
-          useEffect(() => {
-      (async () => {
-        try {
-          const tenantId = Digit.ULBService.getCurrentTenantId();
-          const response = await Digit.LocationService.getRevenueLocalities(tenantId);
-  
-          console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
-  
-          const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
-          if (cityBoundary?.children?.length > 0) {
-            setBoundaryData(cityBoundary);
-  
-            const zoneOptions = cityBoundary.children.map((zone) => ({
-              code: zone.code,
-              name: zone.name || zone.code,
-            }));
-            setZones(zoneOptions);
-          } else {
-            console.warn("❌ No boundary children found.");
-          }
-        } catch (error) {
-          console.error("❌ Error fetching boundary data:", error);
+  const [boundaryData, setBoundaryData] = useState(null);
+  const [zones, setZones] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [colonies, setColonies] = useState([]);
+  const [rateZones, setRateZones] = useState([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const tenantId = Digit.ULBService.getCurrentTenantId();
+        const response = await Digit.LocationService.getRevenueLocalities(tenantId);
+
+        console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+
+        const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
+        if (cityBoundary?.children?.length > 0) {
+          setBoundaryData(cityBoundary);
+
+          const zoneOptions = cityBoundary.children.map((zone) => ({
+            code: zone.code,
+            name: zone.name || zone.code,
+          }));
+          setZones(zoneOptions);
+        } else {
+          console.warn("❌ No boundary children found.");
         }
-      })();
-    }, []);
-  
-  
-       if (isLoader) {
+      } catch (error) {
+        console.error("❌ Error fetching boundary data:", error);
+      }
+    })();
+  }, []);
+
+
+  if (isLoader) {
     return <Loader />;
   }
 
+  // ✅ handle user input
+  // const handleAmountChange = (e) => {
+  //   const entered = parseFloat(e.target.value) || 0;
+  //   setAmontHalfOFfull(e.target.value);
+
+  //   // Advance = entered - defaultAmount, but min 0
+  //   const arrear = parseFloat(estimateData.Calculation[0].arrear || 0);
+  //   const currentYear = parseFloat(estimateData.Calculation[0].currentYearTax || 0);
+  //   const previousBalance = parseFloat(estimateData.Calculation[0].previousBalance || 0);
+  //   const defaultAmt = arrear + currentYear - previousBalance;
+
+  //   const advance = entered - defaultAmt;
+
+  //   setAdvancePayment(advance > 0 ? advance.toFixed(2) : "0.00");
+  // };
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+
+    // Allow empty input so user can clear the field
+    if (value === "") {
+      setAmontHalfOFfull("");
+      setAdvancePayment("0.00");
+      setErrors("");
+      return;
+    }
+
+    const entered = parseFloat(value);
+
+    // Default calculation
+
+    const defaultAmt = parseFloat(estimateData.Calculation[0].taxAmount || 0);
+
+    // Validate entered amount
+    if (entered < defaultAmt) {
+      setErrors(`Amount should be at least ${defaultAmt.toFixed(2)}`);
+      setAdvancePayment("0.00");
+    } else {
+      setErrors("");
+      const advance = entered - defaultAmt;
+      setAdvancePayment(advance.toFixed(2));
+    }
+
+    setAmontHalfOFfull(value); // always update input value
+  };
 
   return (
     <div>
@@ -1873,7 +1914,7 @@ const ApplicationDetailsContent = ({
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Zone</div>
-            <input type="text" readOnly  value={zones.find((f) => f.code === applicationData?.address?.zone)?.name || "N/A" } style={styles.input} />
+            <input type="text" readOnly value={zones.find((f) => f.code === applicationData?.address?.zone)?.name || "N/A"} style={styles.input} />
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Colony</div>
@@ -1886,7 +1927,7 @@ const ApplicationDetailsContent = ({
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Road Factor</div>
-            <input type="text" readOnly   value={RoadFactorList.find((f) => f.code === applicationData?.units?.[0]?.roadFactor)?.name || "N/A" } style={styles.input} />
+            <input type="text" readOnly value={RoadFactorList.find((f) => f.code === applicationData?.units?.[0]?.roadFactor)?.name || "N/A"} style={styles.input} />
           </div>
           <div style={styles.flex30}>
             <div style={styles.label}>Address</div>
@@ -1899,12 +1940,12 @@ const ApplicationDetailsContent = ({
           </div>
           {applicationDetails?.applicationDetails?.map((detail, index) => (
             <>
-              {detail?.additionalDetails?.documents && 
-              <PropertyDocuments 
-              documents={detail?.additionalDetails?.documents} 
-              applicationDetails={applicationDetails} 
-              estimateData={estimateData} 
-              />}
+              {detail?.additionalDetails?.documents &&
+                <PropertyDocuments
+                  documents={detail?.additionalDetails?.documents}
+                  applicationDetails={applicationDetails}
+                  estimateData={estimateData}
+                />}
             </>
           ))}
         </div>
@@ -1969,7 +2010,7 @@ const ApplicationDetailsContent = ({
             {/* Total Payment Amount */}
             <div style={styles.column}>
               <div style={styles.label}>Total Payable Amount</div>
-              <input
+              {/* <input
                 value={(() => {
                   const arrear = parseFloat(estimateData?.Calculation?.[0]?.arrear || 0);
                   const currentYear = parseFloat(estimateData?.Calculation?.[0]?.currentYearTax || 0);
@@ -1977,7 +2018,14 @@ const ApplicationDetailsContent = ({
                   return (arrear + currentYear - previousBalance).toFixed(2);
                 })()}
                 style={styles.input2}
+              /> */}
+              <input
+                disabled={parseFloat(amountHalfOFFull) < 0}
+                value={amountHalfOFFull}
+                onChange={handleAmountChange}
+                style={styles.input2}
               />
+              {errors && <div style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>{errors}</div>}
             </div>
             <div style={styles.columnBreak}></div>
 
@@ -1985,22 +2033,23 @@ const ApplicationDetailsContent = ({
             <div style={styles.column}>
               <div style={styles.label}>Advance</div>
               <input
+                disabled
                 value={advancePayment}
-                onChange={(e) => setAdvancePayment(e.target.value)}
+                // onChange={(e) => setAdvancePayment(e.target.value)}
                 style={styles.input2}
               />
             </div>
             <div style={styles.column}>
               <div style={styles.label}></div>
-           
+
             </div>
             <div style={styles.column}>
               <div style={styles.label}></div>
-            
+
             </div>
             <div style={styles.column}>
               <div style={styles.label}></div>
-             
+
             </div>
           </div>
         )}
@@ -2010,7 +2059,7 @@ const ApplicationDetailsContent = ({
               <div style={styles.label}>Arrear</div>
               <input
                 readOnly
-                 value={estimateData?.Calculation?.[0]?.arrear || 0}
+                value={estimateData?.Calculation?.[0]?.arrear || 0}
                 style={styles.input}
               />
             </div>
@@ -2271,7 +2320,7 @@ const ApplicationDetailsContent = ({
                 Download Receipt
               </button>
               <button style={styles.homeButton} onClick={() => {
-                window.location.href = "/digit-ui/employee"; 
+                window.location.href = "/digit-ui/employee";
               }}>
                 Home
               </button>

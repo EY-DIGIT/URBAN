@@ -31,6 +31,24 @@ const PropertyLedger = () => {
   const handleBackClick = () => {
     history.goBack();
   };
+const getCurrentFY = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1; // 0-based → Jan = 0
+
+  if (month < 4) {
+    // Before April → still in last FY
+    return `${year - 1}-${String(year).slice(-2)}`;
+  } else {
+    // April onwards → new FY
+    return `${year}-${String(year + 1).slice(-2)}`;
+  }
+};
+
+const currentFY = getCurrentFY();
+const currentFYDetails = propertyFYDetails.filter(
+  (item) => item.year === currentFY
+);
 
   return (
     <div id="downloadable-component">
@@ -71,14 +89,14 @@ const PropertyLedger = () => {
               <div style={styles.row}>
                 <InputField label="Pin" value={address?.pincode || "N/A"} />
                 <InputField label="Mobile no" value={owner?.mobileNumber || "N/A"} />
-                 <InputField
-                                    label="Aadhaar ID"
-                                    value={
-                                        owner?.aadhaarNumber
-                                            ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
-                                            : "N/A"
-                                    }
-                                />
+                <InputField
+                  label="Aadhaar ID"
+                  value={
+                    owner?.aadhaarNumber
+                      ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                      : "N/A"
+                  }
+                />
               </div>
               <div style={styles.row}>
                 <InputField
@@ -97,20 +115,20 @@ const PropertyLedger = () => {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  {["Usage Type", "Usage Factor", "Floor No.", "Construction Type", "Area", "Rate"].map((h) => (
+                  {["Usage Type", "Usage Factor", "Floor No.", "Construction Type", "Area (Sq ft)", "Rate"].map((h) => (
                     <th key={h} style={styles.th}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {propertyFYDetails.map((item) => (
+                {currentFYDetails.map((item) => (
                   <tr key={item.year}>
                     <td style={styles.td}>{item.usageType}</td>
                     <td style={styles.td}>{item.usageFactor}</td>
                     <td style={styles.td}>{item.floorNo}</td>
                     <td style={styles.td}>{item.constructionType}</td>
                     <td style={styles.td}>{item.area}</td>
-                    <td style={styles.td}>{item.factor}</td>
+                    <td style={styles.td}>₹ {item.factor}</td>
                   </tr>
                 ))}
               </tbody>
@@ -133,9 +151,9 @@ const PropertyLedger = () => {
                 {taxSummaries.map((item) => (
                   <tr key={item.year}>
                     <td style={styles.td}>{item.year}</td>
-                    <td style={styles.td}>{item.netTax || 0}</td>
-                    <td style={styles.td}>₹ {item.Collection || 0}</td>
-                    <td style={styles.td}>₹ {calculation?.cumulativeBalance || 0}</td>
+                    <td style={styles.td}>₹ {item.netTax || 0}</td>
+                    <td style={styles.td}>₹ {item.paidAmount || 0}</td>
+                    <td style={styles.td}>₹ {item?.cumulativeBalance || 0}</td>
                   </tr>
                 ))}
                 {/* <tr>
