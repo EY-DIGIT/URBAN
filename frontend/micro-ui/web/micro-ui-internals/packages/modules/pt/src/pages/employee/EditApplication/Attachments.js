@@ -284,8 +284,8 @@ const AttachmentsSection = ({
           <label style={styles.fileLabel}>
             {t(label)} {isRequired && <span style={{ color: "red" }}>*</span>}
           </label>
-          <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div>
-          <div style={styles.descText}>Accepts: Aadhaar, Driving License, Pan Card, Voter ID</div>
+          {/* <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div> */}
+          {/* <div style={styles.descText}>Accepts: Aadhaar, Driving License, Pan Card, Voter ID</div> */}
         </div>
 
         <input
