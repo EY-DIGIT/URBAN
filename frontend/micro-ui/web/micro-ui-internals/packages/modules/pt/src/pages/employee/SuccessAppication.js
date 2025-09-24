@@ -202,6 +202,8 @@ const SuccessApplications = () => {
         )
     }
 
+    
+
     return (
         <div>
             <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
@@ -269,9 +271,22 @@ const SuccessApplications = () => {
                         color: "#717182"
                     }}>
                         {/* {t("Application Number")} */}
-                        Application Has Been  {data?.Properties?.[0]?.processInstance?.action
+                   
+                        Application  
+                        {data?.Properties?.[0]?.processInstance?.action==="SENDBACK"?<React.Fragment><span> Send Back</span></React.Fragment>:<React.Fragment>  
+                        
+                         {" "} {data?.Properties?.[0]?.processInstance?.action
                             ?.toLowerCase()
-                            ?.replace(/^\w/, (c) => c.toUpperCase())}ed{" "} Successfully
+                            ?.replace(/^\w/, (c) => c.toUpperCase())}ed
+
+                        </React.Fragment>}
+                        
+                         {/* {data?.Properties?.[0]?.processInstance?.action
+                            ?.toLowerCase()
+                            ?.replace(/^\w/, (c) => c.toUpperCase())} */}
+
+
+                            {" "} Successfully
                         <br />
                         {appDetailsToShow?.applicationData?.acknowldgementNumber && <strong> {appDetailsToShow?.applicationData?.acknowldgementNumber}</strong>}
                     </p>
