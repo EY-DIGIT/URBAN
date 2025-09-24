@@ -155,7 +155,7 @@ const Home = ({
          islinkDataLoading={islinkDataLoading}
        />
 
-      <div className={window.location.pathname == "/digit-ui/citizen/login" ? "" : `main center-container citizen-home-container`}>
+      <div className={window.location.pathname == "/digit-ui/citizen/login" ? "" : `main center-container citizen-home-container`} style={{backgroundColor: "#F3F2F7"}}>
         {hideSidebar ? null : (
           <div className="SideBarStatic" style={{height:"100%",width:"240px",boxShadow:"2px 0 4px rgba(0,0,0,0.1)",background:"white"}}>
             <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />

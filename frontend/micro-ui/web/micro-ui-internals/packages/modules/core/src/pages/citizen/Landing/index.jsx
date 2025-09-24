@@ -4,9 +4,9 @@ const styles = {
     revenueServicesContainer: {
         minHeight: "100vh",
         width: "100%",
-        background: "#f5f5f5",
         padding: "20px",
         fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif",
+        backgroundColor: "#F3F2F7"
     },
 
     mainTitle: {
@@ -29,16 +29,20 @@ const styles = {
     },
 
     serviceCard: {
-        background: "white",
-        borderRadius: "12px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-        transition: "all 0.3s ease",
-        position: "relative",
-        overflow: "visible",
-        display: "flex",
-        flexDirection: "column",
-        width: "100%", // Ensure cards don't exceed container
-        maxWidth: "300px", // Add max width constraint
+        backgroundColor: '#ffffff',
+        borderRadius: '16px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04)',
+        border: '1px solid #f0f0f0',
+        textAlign: 'center',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        maxWidth: '280px',
+        width: '100%',
+        margin: '0 auto',
+        position: 'relative',
+        height: '280px', // Fixed height
+        display: 'flex',
+        flexDirection: 'column',
     },
 
     serviceCardHover: {
@@ -47,17 +51,19 @@ const styles = {
     },
 
     cardContent: {
-        padding: "32px 24px 0px",
-        textAlign: "center",
-        position: "relative",
-        flex: "1",
-        display: "flex",
-        flexDirection: "column",
+        padding: '32px 24px',
+        flex: '1', // Take available space
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
 
     iconContainer: {
         width: "80px",
         height: "80px",
+        borderRadius: '50%',
+        backgroundColor: '#f8f9fa',
+        border: '2px solid #e9ecef',
         margin: "0 auto 20px",
         display: "flex",
         alignItems: "center",
@@ -66,11 +72,18 @@ const styles = {
     },
 
     serviceTitle: {
-        fontSize: "1.25rem",
-        fontWeight: 600,
-        color: "#333",
-        margin: "0 0 24px 0",
-        flex: "1",
+        fontSize: '18px',
+        fontWeight: '600',
+        color: '#1a1a1a',
+        margin: '0 0 8px 0',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        height: '48px', // Fixed height for 2 lines
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        lineHeight: '1.3',
     },
 
     viewButton: {
@@ -84,8 +97,10 @@ const styles = {
         cursor: "pointer",
         transition: "all 0.2s ease",
         width: "100%",
-        marginTop: "auto",
-        position: "relative",
+        position: "absolute", // Position at bottom
+        bottom: "0",
+        left: "0",
+        right: "0",
     },
 
     viewButtonHover: {

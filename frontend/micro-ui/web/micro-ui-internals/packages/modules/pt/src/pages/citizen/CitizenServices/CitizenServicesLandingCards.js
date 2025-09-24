@@ -34,8 +34,8 @@ const Card = ({
     };
 
     const iconContainerStyles = {
-        width: '64px',
-        height: '64px',
+        width: '80px',
+        height: '80px',
         borderRadius: '50%',
         backgroundColor: '#f8f9fa',
         border: '2px solid #e9ecef',
@@ -121,12 +121,13 @@ const Card = ({
 // Container for responsive grid
 const CardContainer = ({ children }) => {
     const containerStyles = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '24px',
-        padding: '24px',
-        maxWidth: '1200px',
-        margin: '0 auto'
+        display: "grid",
+        justifyContent: "center", // Changed from space-around to center
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 300px))", // Increased minmax values
+        gap: "20px",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "0 20px",
     };
 
     // Responsive adjustments
@@ -195,12 +196,24 @@ const CitizenServicesCards = () => {
 
     const baseURL = `${stateInfo?.BAPURL}`;
 
+    const styles = {
+        mainTitle: {
+            fontSize: "1.5rem",
+            fontWeight: 600,
+            color: "#666",
+            marginBottom: "40px",
+            textAlign: "left",
+            paddingLeft: "20px",
+        },
+    }
+
     return (
         <div style={{
             minHeight: '100vh',
-            backgroundColor: '#f9fafb',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            backgroundColor: "#F3F2F7"
         }}>
+            <h1 className="main-title" style={styles.mainTitle}>Citizen Services</h1>
             <CardContainer>
                 {cardData.map((card) => (
                     <Card

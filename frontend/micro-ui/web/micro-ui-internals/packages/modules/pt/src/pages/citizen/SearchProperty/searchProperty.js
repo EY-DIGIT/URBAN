@@ -44,15 +44,23 @@ const SearchProperty = ({ onSelect }) => {
       staleTime: Infinity,
     },
   });
+// const activeProperties = propertyData?.filter(property => property.status === "ACTIVE");
 
   // Update search results and reset pagination
-  useEffect(() => {
-    if (propertyData?.FormattedData) {
-      setSearchResults(Object.values(propertyData.FormattedData));
-      setCurrentPage(1);
-      setTotalPages(Math.ceil(Object.keys(propertyData.FormattedData).length / itemsPerPage));
-    }
-  }, [propertyData, itemsPerPage]);
+useEffect(() => {
+  console.log("propertyData===========>>", propertyData);
+
+  if (propertyData?.FormattedData) {
+    // Convert object to array, filter for ACTIVE, then use in state
+    const activeResults = Object.values(propertyData.FormattedData).filter(
+      (property) => property.status === "ACTIVE"
+    );
+
+    setSearchResults(activeResults);
+    setCurrentPage(1);
+    setTotalPages(Math.ceil(activeResults.length / itemsPerPage));
+  }
+}, [propertyData, itemsPerPage]);
 
 
   // ✅ Update layout on resize

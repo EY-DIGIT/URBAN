@@ -10,7 +10,7 @@ import PropertyCardsLanding from "./PropertyCardsLanding/PropertyCardsLanding";
 const hideBackButtonConfig = [
   { screenPath: "property/new-application/acknowledgement" },
   { screenPath: "property/edit-application/acknowledgement" },
-  //{ screenPath: "property/feedback-acknowledgement" }
+  { screenPath: "/digit-ui/citizen/pt/citizen-services" }
 ];
 
 const App = () => {

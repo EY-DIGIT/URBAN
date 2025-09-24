@@ -5,12 +5,13 @@ import { Loader } from "@egovernments/digit-ui-react-components";
 import { stringReplaceAll } from "./utils";
 
 const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
-// const PaymentForm = ({ }) => {
+    // const PaymentForm = ({ }) => {
     const { t } = useTranslation();
     const history = useHistory();
     const { state, pathname, search } = useLocation();
     const userInfo = Digit.UserService.getUser();
     const mobileNumber = userInfo?.info?.mobileNumber;
+    const name = userInfo?.info?.name;
     const tenantId = Digit.ULBService.getCurrentTenantId();
     console.log("tenantId", tenantId, mobileNumber);
     let { consumerCode } = useParams();
@@ -104,22 +105,63 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
     // Handle form submission
     const onSubmit = async () => {
         setIsSubmitting(true);
+        const paymentAmount = getTotal()
+        const filterData = {
+            Transaction: {
+                tenantId: billDetails?.tenantId,
+                txnAmount: paymentAmount || billDetails.totalAmount,
+                module: businessService,
+                billId: billDetails.id,
+                consumerCode: consumerCode,
+                productInfo: "Common Payment",
+                gateway: "EASEBUZZ",
+                taxAndPayments: [
+                    {
+                        billId: billDetails.id,
+                        amountPaid: paymentAmount || billDetails.totalAmount,
+                    },
+                ],
+                user: {
+                    name: name || userInfo?.info?.name || billDetails?.payerName,
+                    mobileNumber: mobileNumber || userInfo?.info?.mobileNumber || billDetails?.mobileNumber,
+                    tenantId: billDetails?.tenantId,
+                },
+                // success
+                callbackUrl: window.location.href.includes("mcollect") || wrkflow === "WNS"
+                    ? `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${wrkflow === "WNS" ? encodeURIComponent(consumerCode) : consumerCode}/${tenantId}?workflow=${wrkflow === "WNS" ? wrkflow : "mcollect"}`
+                    : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${wrkflow === "WNS" ? encodeURIComponent(consumerCode) : consumerCode}/${tenantId}`,
+                additionalDetails: {
+                    isWhatsapp: false,
+                },
+            },
+        };
 
         try {
-            const paymentAmount = getTotal();
-
-            // Navigate to payment processing
-            history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
-                paymentAmount,
-                tenantId: billDetails.tenantId,
-                name: bill?.payerName,
-                mobileNumber: bill?.mobileNumber,
-            });
+            const data = await Digit.PaymentService.createCitizenReciept(billDetails?.tenantId, filterData);
+            const redirectUrl = data?.Transaction?.redirectUrl;
+            window.location = redirectUrl;
         } catch (error) {
-            console.error('Payment navigation error:', error);
-        } finally {
-            setIsSubmitting(false);
+            let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
+            if (error.response?.data?.Errors?.[0]) {
+                const { code, message } = error.response?.data?.Errors?.[0];
+                messageToShow = code;
+            }
+            setShowToast({ key: true, label: t(messageToShow) });
         }
+
+        // try {
+        //     const paymentAmount = getTotal();
+        //     history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
+        //         paymentAmount,
+        //         tenantId: billDetails.tenantId,
+        //         name: bill?.payerName,
+        //         mobileNumber: bill?.mobileNumber,
+        //     });
+        // } catch (error) {
+        //     console.error('Payment navigation error:', error);
+        // } finally {
+        //     setIsSubmitting(false);
+        // }
     };
 
     // Show loader while data is being fetched
