@@ -24,7 +24,8 @@ import SelfDeclaration from "./SelfDeclaration";
 
 const EditUpdateForm = ({ applicationData }) => {
     const location = useLocation();
-    console.log("EditUpdateForm Props:", applicationData);
+    const { state } = useLocation();
+    console.log("EditUpdateForm Props:", state);
     const { t } = useTranslation();
     const [isLoader, setIsLoader] = useState(false);
 
@@ -127,6 +128,7 @@ const EditUpdateForm = ({ applicationData }) => {
     const tenantId = userInfo1?.tenantId;
     const mutation = Digit.Hooks.pt.usePropertyAPI(tenantId, true);
     const mutationUpdate = Digit.Hooks.pt.useUpdateContent(tenantId, true);
+    const mutationUpdatesss = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
     let tenantIdss = Digit.ULBService.getCurrentTenantId();
 
     const {
@@ -388,31 +390,267 @@ const EditUpdateForm = ({ applicationData }) => {
             }
 
         }
+        const payloads = {
+            Property: {
+                id: applicationData?.id,
+                registryId: applicationData?.registryId || "",
+                propertyId: applicationData?.propertyId || "",
+                accountId: applicationData?.accountId || "",
+                acknowldgementNumber: applicationData?.acknowldgementNumber || "",
+                status: applicationData?.status,
+                tenantId: userInfo1?.tenantId,
+                oldPropertyId: assessmentDetails.oldPropertyId || null,
+                essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
+                address: {
+                    city: "indore",
+                    locality: {
+                        code: addressDetails.colony?.code || "SUN02",
+                        name: addressDetails.colony?.name || "map with zone",
+                        latitude: longLat.lat,
+                        longitude: longLat.long,
+                    },
+                    geoLocation: {
+                        latitude: longLat.lat || applicationData?.address?.geoLocation?.latitude,
+                        longitude: longLat.long || applicationData?.address?.geoLocation?.longitude,
+                    },
+                    zone: addressDetails.zone?.code || "SUN02",
+                    street: addressDetails.address || "main",
+                    doorNo: addressDetails.doorNo || "23",
+                    pincode: addressDetails.pincode || "",
+                    ward: addressDetails.ward?.code || "1",
+                    documents: [],
+                },
 
+                ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+                propertyCategory: propertyCategoryInput,
+
+                owners: owners.map((owner, index) => ({
+                    uuid: applicationData?.owners?.[index]?.uuid || null,
+                    userName: applicationData?.owners?.[index]?.userName || null,
+                    active: true,
+                    status: "ACTIVE",
+                    salutation: owner.title || "mr",
+                    title: "title",
+                    name: owner.name || `Owner ${index + 1}`,
+                    salutationHindi: owner.hindiTitle,
+                    hindiName: owner.hindiName || "",
+                    fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
+                    gender: "MALE",
+                    aadhaarNumber: owner.aadhaar || "",
+                    altContactNumber: owner.altNumber || "",
+                    isCorrespondenceAddress: correspondenceAddress,
+                    mobileNumber: owner.mobile,
+                    emailId: owner.email,
+                    ownerType: propertyDetails.exemption.code,
+                    roles: applicationData?.owners?.[index]?.roles || [],
+                    permanentAddress:
+                        addressDetails.address,
+                    type: "CITIZEN",
+                    relationship: owner.relationship || "FATHER",
+                    samagraId: owner.samagraID,
+                    tenantId: applicationData?.owners?.[index]?.tenantId || userInfo1?.tenantId || "",
+                    documents: [
+                        {
+                            documentType: "Proof of Identity",
+                            fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+                            documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+                        },
+                        documents?.sellersRegistry && {
+
+                            documentType: "Others",
+                            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
+                        },
+                        {
+                            documentType: "Proof of Ownership",
+                            fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+                            documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+                        },
+                        {
+                            documentType: "Property Photograph",
+                            fileStoreId: capturedPhoto || null,
+                            documentUid: capturedPhoto || null,
+                        },
+                        ...Object.keys(documents)
+                            .filter(key => key.startsWith("others_"))
+                            .map(key => ({
+                                documentType: "Others",  // 👈 these will go separately
+                                fileStoreId:
+                                    documents[key]?.fileStoreId ||
+                                    applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                                documentUid:
+                                    documents[key]?.documentUid ||
+                                    applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+                            })),
+                    ].filter(Boolean),
+                })),
+
+                institution: null,
+
+                documents: [
+                    {
+                        documentType: "Proof of Identity",
+                        fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+                        documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+                    },
+                    documents?.sellersRegistry && {
+
+                        documentType: "Others",
+                        fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                        documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
+                    },
+                    {
+                        documentType: "Proof of Ownership",
+                        fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+                        documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+                    },
+                    {
+                        documentType: "Property Photograph",
+                        fileStoreId: capturedPhoto || null,
+                        documentUid: capturedPhoto || null,
+                    },
+                    ...Object.keys(documents)
+                        .filter(key => key.startsWith("others_"))
+                        .map(key => ({
+                            documentType: "Others",  // 👈 these will go separately
+                            fileStoreId:
+                                documents[key]?.fileStoreId ||
+                                applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                            documentUid:
+                                documents[key]?.documentUid ||
+                                applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+                        })),
+                ].filter(Boolean),
+
+                units: unit.map((unit, index) => (
+                    {
+                        id: applicationData?.units?.[index]?.id || null, // Preserve existing unit IDs if updating
+                        active: true,
+                        usageCategory: unit.usageType || "RESIDENTIAL",
+                        usesCategoryMajor: unit.usageType || "RESIDENTIAL",
+                        occupancyType: unit.usageFactor || "SELFOCCUPIED",
+                        constructionDetail: {
+                            builtUpArea: unit.area || "3000",
+                            constructionType: unit.constructionType || null,
+                        },
+                        floorNo: parseInt(unit.floorNo) || 0,
+                        rateZone: selectedRateZone ? selectedRateZone : rateZones?.[0]?.code || "",
+                        roadFactor: assessmentDetails.roadFactor?.code || applicationData?.units[0]?.roadFactor,
+                        fromYear: unit.fromYear,
+                        toYear: unit.toYear,
+                    })),
+
+
+                landArea: assessmentDetails.plotArea?.toString() || "3000",
+                propertyType: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
+                noOfFloors: unit.length || null,
+                superBuiltUpArea: null,
+                // usageCategory: unit.usageType || "RESIDENTIAL",
+                usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
+
+                additionalDetails: {
+                    inflammable: false,
+                    heightAbove36Feet: false,
+                    propertyType: {
+                        i18nKey: "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY",
+                        code: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
+                    },
+                    mobileTower: checkboxes.mobileTower || false,
+                    bondRoad: checkboxes.broadRoad || false,
+                    advertisement: checkboxes.advertisement || false,
+                    builtUpArea: null,
+                    noOfFloors: {
+                        i18nKey: "PT_GROUND_FLOOR_OPTION",
+                        code: 0,
+                    },
+                    noOofBasements: {
+                        i18nKey: "PT_NO_BASEMENT_OPTION",
+                        code: 0,
+                    },
+                    unit: unit.map(unit => (
+                        {
+                            usageCategory: unit.usageType || "RESIDENTIAL",
+                            usesCategoryMajor: unit.usageType || "RESIDENTIAL",
+                            occupancyType: unit.usageFactor || "SELFOCCUPIED",
+                            constructionDetail: {
+                                builtUpArea: unit.area || "3000",
+                                constructionType: unit.constructionType || null,
+                            },
+                            floorNo: parseInt(unit.floorNo) || 0,
+                            rateZone: selectedRateZone ? selectedRateZone : rateZones?.[0]?.code || "",
+                            roadFactor: assessmentDetails.roadFactor?.code || applicationData?.units[0]?.roadFactor,
+                            fromYear: unit.fromYear,
+                            toYear: unit.toYear,
+                            active: true,
+                        })),
+                    basement1: null,
+                    basement2: null,
+                },
+                // workflow: {
+                //   action: "OPEN",
+                //   moduleName: "PT",
+                //   businessService: "PT.UPDATE"
+                // },
+                workflow: {
+                    action: state?.action?.action === "UPDATE" ? "REOPEN" : "OPEN",
+                    moduleName: "PT",
+                    businessService: state?.action?.action === "UPDATE" ? "PT.CREATE" : "PT.UPDATE"
+                },
+                applicationStatus: "UPDATE",
+                channel: "CFC_COUNTER",
+                creationReason: "CREATE",
+                source: "MUNICIPAL_RECORDS",
+            }
+
+        }
         setIsLoader(true);
-        mutationUpdate.mutate(payload, {
-            onSuccess: (data) => {
-                setIsLoader(false);
-                const property = data?.Properties?.[0];
-                if (property) {
-
-                    setProOwnerDetail(property);
-                    setAcknowledgmentNumber(property.acknowldgementNumber);
-                    setPropertyId(property.propertyId);
-                    setStatus(property.status);
-                    // setShowSuccessModal(true);
-                    // setShowPreviewButton(true);
-                    PreviewDemand(property.propertyId, property);
+        if (state?.action?.action === "UPDATE" && status?.creationReasonDefine !== "UPDATE") {
 
 
-                }
-            },
-            onError: (err) => {
-                setIsLoader(false);
+            mutationUpdatesss.mutate(payloads, {
+                onSuccess: (data) => {
+                    const property = data?.Properties?.[0];
+                    if (property) {
+                        setProOwnerDetail(property);
+                        setAcknowledgmentNumber(property.acknowldgementNumber);
+                        setPropertyId(property.propertyId);
+                        setStatus(property.status);
+                        // setShowSuccessModal(true);
+                        // setShowPreviewButton(true);
+                        PreviewDemand(property.propertyId, property);
+                    }
+                },
+                onError: (err) => {
+                    setIsLoader(false);
 
-                alert(t("Submission failed"));
-            },
-        });
+                    alert(t("Submission failed"));
+                },
+            });
+        } else {
+            mutationUpdate.mutate(payload, {
+                onSuccess: (data) => {
+                    setIsLoader(false);
+                    const property = data?.Properties?.[0];
+                    if (property) {
+
+                        setProOwnerDetail(property);
+                        setAcknowledgmentNumber(property.acknowldgementNumber);
+                        setPropertyId(property.propertyId);
+                        setStatus(property.status);
+                        // setShowSuccessModal(true);
+                        // setShowPreviewButton(true);
+                        PreviewDemand(property.propertyId, property);
+
+
+                    }
+                },
+                onError: (err) => {
+                    setIsLoader(false);
+
+                    alert(t("Submission failed"));
+                },
+            });
+        }
     };
     const validateForm = () => {
         const errors = {};

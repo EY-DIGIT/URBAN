@@ -322,7 +322,15 @@ const PropertyForm = () => {
         sessionStorage.setItem("flag", JSON.stringify(flag));
         window.location.href = `/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`;
     };
-
+ const handleGobackEdit = () => {
+     const propertyId = proOwnerDetail?.propertyId;
+        history.push({
+            pathname: `/digit-ui/employee/pt/edit-update-application/${propertyId}`,
+            state: {
+                creationReasonDefine: proOwnerDetail.creationReason
+            },
+        });
+    };
     return (
         <div id="downloadable-component">
             <div style={{ position: "relative" }}>
@@ -462,7 +470,7 @@ const PropertyForm = () => {
                         All values mentioned are in “₹” (Indian Rupees).
                     </div>
                     <div style={{ display: "flex", width: "224px", marginLeft: "auto" }}>
-                        <button style={styles.confirmBtn} onClick={() => window.history.back()}>
+                        <button style={styles.confirmBtn} onClick={() => handleGobackEdit()}>
                             Back
                         </button>
                         <button style={styles.confirmBtn} onClick={() => handleConfirm()}>Confirm</button>
