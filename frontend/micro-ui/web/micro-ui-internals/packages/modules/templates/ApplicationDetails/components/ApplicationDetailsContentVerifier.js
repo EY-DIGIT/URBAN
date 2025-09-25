@@ -73,14 +73,21 @@ function ApplicationDetailsContentVerifier({
     return `${day}/${month}/${year}`;
   };
   const getTimelineCaptions = (checkpoint, index = 0) => {
-// console.log("ABCDFG ===",checkpoint)
+
 
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
+
+    
+      // let showBill=applicationData?.channel === "CFC_COUNTER" ? "Bill Collector" :  applicationData?.channel;
+   
       const caption = {
         date: checkpoint?.auditDetails?.created,
-        // source: ""
-        source: applicationData?.channel || "",
+        // // source: ""
+        // source: showBill || "",
+ 
+         source: applicationData?.channel || ""
       };
+     
       return <TLCaption data={caption} />;
     } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
       //From BE side assigneeMobileNumber is masked/unmasked with connectionHoldersMobileNumber and not assigneeMobileNumber
@@ -202,7 +209,7 @@ function ApplicationDetailsContentVerifier({
   const address = application?.address || {};
   const unitde = application?.units?.[0] || {};
   const documents = application?.documents || [];
-  console.log("application", application)
+  console.log("application", additionalDetailsT)
   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
   const stateId = Digit.ULBService.getStateId();
 
@@ -280,7 +287,7 @@ function ApplicationDetailsContentVerifier({
     })();
   }, []);
 
-  console.log("Zones No=",zones)
+
 
 
    const [floorList, setFloorList] = useState([]);
@@ -307,7 +314,7 @@ function ApplicationDetailsContentVerifier({
       setFloorList(mappedFloors);
     }, [isLoadingF, FloorAll]);
 
-    console.log("FLOOR NO=",floorList)
+  
 
   const getFullAddress = (address) => {
     if (!address) return "";

@@ -144,7 +144,7 @@ const AttachmentsSection = ({ t = (label) => label, documents }) => {
           <label style={styles.fileLabel}>
             {t(label)} {isMandatory && <span style={{ color: "red" }}>*</span>}
           </label>
-          <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div>
+          {/* <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div> */}
         </div>
         <div style={styles.buttonArea}>
           {fileUrl ? (

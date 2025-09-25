@@ -14,7 +14,9 @@ const TLCaption = ({ data,OpenImage,privacy={}}) => {
         <TelePhone mobile={data.mobileNumber}  privacy={privacy} />
         <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
       </span>}
-      {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
+
+      {data.source==="CFC_COUNTER"?<React.Fragment><p>Bill Collector</p></React.Fragment>:<React.Fragment>{data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}</React.Fragment>}
+      {/* {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>} */}
       {data.comment && <Reason otherComment={data?.otherComment} headComment={data?.comment}></Reason>}
       {data?.wfComment ? <div>{data?.wfComment?.map( e => 
       <div className="TLComments">
