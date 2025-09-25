@@ -604,8 +604,7 @@ const EditUpdateForm = ({ applicationData }) => {
 
         }
         setIsLoader(true);
-        if (state?.action?.action === "UPDATE" && status?.creationReasonDefine !== "UPDATE") {
-
+        if (state?.action?.action === "UPDATE" && state?.creationReasonDefine !== "UPDATE") {
 
             mutationUpdatesss.mutate(payloads, {
                 onSuccess: (data) => {
