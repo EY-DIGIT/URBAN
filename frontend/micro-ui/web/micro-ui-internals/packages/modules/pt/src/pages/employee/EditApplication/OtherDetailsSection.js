@@ -40,14 +40,18 @@ console.log("propertyDetails", propertyDetails);
   //     setOwnerTypeOptions(options);
   //   }
   // }, [isLoadingO, OwnerType]);
+
+
   useEffect(() => {
+
+    // console.log("AAAAAAAAAAAGGGGGGGGG=",OwnerType);
     if (OwnerType?.length) {
       const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
 
       if (filteredItems.length) {
         const options = filteredItems.map((item) => ({
           code: item.code,
-          name: t(item.name),
+          name: item.name,
         }));
         setOwnerTypeOptions(options);
       }
@@ -65,6 +69,10 @@ console.log("propertyDetails", propertyDetails);
   }, [isLoadingOe, EssentialTax]);
 
   if (isLoading) return <Loader />;
+
+//   console.log("essentialTaxOptions222222====",essentialTaxOptions);
+// console.log("ownerTypeOptions2222222====",ownerTypeOptions);
+// console.log("MDMS EssentialTax Raw22222222=====", EssentialTax);
 
   
   return (
@@ -132,12 +140,13 @@ console.log("propertyDetails", propertyDetails);
             optionKey="name"
             placeholder={t("Select")}
           />
-        </div> */}
+        </div> */}          
         <div style={styles.flex302}>
   <div style={styles.poppinsLabel}>{t("Exemption Applicable")}</div>
   <Dropdown
     style={styles.widthInput}
-    t={t}
+    // t={t}
+     t={(val) => val} 
     option={ownerTypeOptions}
     selected={ownerTypeOptions.find((opt) => opt.code === propertyDetails.exemption)} 
     select={(option) => handlePropertyDetailsChange("exemption", option)}
