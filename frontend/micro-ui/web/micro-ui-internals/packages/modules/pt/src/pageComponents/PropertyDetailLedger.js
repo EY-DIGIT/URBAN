@@ -46,18 +46,22 @@ const PropertyDetailLedger = () => {
     (item) => item.year === currentFY
   );
   return (
-    <div id="downloadable-component">
-      <div style={{
-        position: "relative",
-        width: "100%",
-        maxWidth: "100vw",
-        overflowX: "hidden",
-        boxSizing: "border-box",
-        ...styles.container
-      }}>
-        <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
-          <button style={styles.downloadBtn} > <DownloadPdfButton targetId="downloadable-component" /></button>
-        </div>
+    // <div id="downloadable-component">
+    //   <div style={{
+    //     position: "relative",
+    //     width: "100%",
+    //     maxWidth: "100vw",
+    //     overflowX: "hidden",
+    //     boxSizing: "border-box",
+    //     ...styles.container
+    //   }}>
+    //     <div style={{ marginBottom: "20px", display: "flex", justifyContent: "flex-end" }}>
+    //       <button style={styles.downloadBtn} > <DownloadPdfButton targetId="downloadable-component" /></button>
+    //     </div>
+
+          <div style={{ position: "relative" }}>
+            <button style={styles.downloadBtn}> <DownloadPdfButton targetId="downloadable-component" /> </button>
+            <div id="downloadable-component">
 
         <div style={styles.cardD}>
           <div style={styles.sectionHeaderDemand}>Detail Ledger Report</div>
@@ -187,8 +191,9 @@ const PropertyDetailLedger = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        </div>
+        </div>
+     
   );
 };
 

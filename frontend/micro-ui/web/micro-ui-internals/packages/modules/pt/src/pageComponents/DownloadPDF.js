@@ -50,7 +50,9 @@
 
 import React from "react";
 
+
 function DownloadPdfButton({ targetId }) {
+   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   const handleDownload = () => {
     const element = document.getElementById(targetId);
     if (!element) return;
@@ -102,7 +104,7 @@ function DownloadPdfButton({ targetId }) {
     }, 500);
   };
 
-  return <button onClick={handleDownload}>⬇ Download</button>;
+  return <button onClick={handleDownload}>  <img src={stateInfo?.uiImageAssets?.downloadiconsmall} alt="ALT Download" style={{ width:"18px",height:"18px",display:"inline-flex" }} />  Download</button>;
 }
 
 export default DownloadPdfButton;
