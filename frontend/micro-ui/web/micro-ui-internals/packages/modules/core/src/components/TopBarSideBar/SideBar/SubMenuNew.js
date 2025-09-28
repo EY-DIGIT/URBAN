@@ -225,19 +225,19 @@ const StaticEmployeeSideBar = ({ linkData, islinkDataLoading }) => {
 
   const newMenuItems = [
     {
-      title: "Home",
+      title: t("SIDEMENU_HOME"),
       link: "/digit-ui/employee/home",
       icon: "home_selected_1",
       selectedIcon: "home_selected"
     },
     {
-      title: "Revenue Services",
+      title: t("SIDEMENU_REVENUE_SERVICES"),
       link: "/digit-ui/employee",
       icon: "revenue",
       selectedIcon: "revenue_selected"
     },
     {
-      title: "Citizen Services",
+      title: t("SIDEMENU_CITIZEN_SERVICES"),
       link: "/digit-ui/employee/pt/citizen-services",
       icon: "citizen",
       selectedIcon: "citizen_selected"

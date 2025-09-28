@@ -44,23 +44,23 @@ const SearchProperty = ({ onSelect }) => {
       staleTime: Infinity,
     },
   });
-// const activeProperties = propertyData?.filter(property => property.status === "ACTIVE");
+  // const activeProperties = propertyData?.filter(property => property.status === "ACTIVE");
 
   // Update search results and reset pagination
-useEffect(() => {
-  console.log("propertyData===========>>", propertyData);
+  useEffect(() => {
+    console.log("propertyData===========>>", propertyData);
 
-  if (propertyData?.FormattedData) {
-    // Convert object to array, filter for ACTIVE, then use in state
-    const activeResults = Object.values(propertyData.FormattedData).filter(
-      (property) => property.status === "ACTIVE"
-    );
+    if (propertyData?.FormattedData) {
+      // Convert object to array, filter for ACTIVE, then use in state
+      const activeResults = Object.values(propertyData.FormattedData).filter(
+        (property) => property.status === "ACTIVE"
+      );
 
-    setSearchResults(activeResults);
-    setCurrentPage(1);
-    setTotalPages(Math.ceil(activeResults.length / itemsPerPage));
-  }
-}, [propertyData, itemsPerPage]);
+      setSearchResults(activeResults);
+      setCurrentPage(1);
+      setTotalPages(Math.ceil(activeResults.length / itemsPerPage));
+    }
+  }, [propertyData, itemsPerPage]);
 
 
   // ✅ Update layout on resize
@@ -190,12 +190,12 @@ useEffect(() => {
       }}
     >
       <div style={containerStyle}>
-        <h4 style={headingStyle}>{t("Search Property")}</h4>
+        <h4 style={headingStyle}>{t("SEARCH_PROPERTY")}</h4>
         <div style={rowStyle}>
           <div style={inputGroupWrapper}>
             <div>
               <label style={labelStyle}>
-                {t("Property ID")} <span style={{ color: "red" }}>*</span>
+                {t("PROPERTY_ID")} <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="text"
@@ -236,10 +236,10 @@ useEffect(() => {
 
           <div style={buttonGroupStyle}>
             <button onClick={handleClear} style={clearButtonStyle}>
-              {t("Clear")}
+              {t("CITIZEN_CLEAR_BUTTON")}
             </button>
             <button onClick={onPropertySearch} style={findButtonStyle}>
-              {t("Find")}
+              {t("CITIZEN_FIND_BUTTON")}
             </button>
           </div>
         </div>
@@ -248,16 +248,16 @@ useEffect(() => {
       {/* Results Table */}
       {searchResults.length > 0 && (
         <div style={paymentSectionStyle}>
-          <h3 style={paymentHeadingStyle}>{t("Payment")}</h3>
+          <h3 style={paymentHeadingStyle}>{t("PAYMENT")}</h3>
 
           <table style={tableStyle}>
             <thead>
               <tr>
-                <th style={thStyle}>{t("Property ID")}</th>
-                <th style={thStyle}>{t("Owner Name")}</th>
-                <th style={thStyle}>{t("Mobile Number")}</th>
-                <th style={thStyle}>{t("Payment Amount")}</th>
-                <th style={{ ...thStyle, textAlign: "center" }}>{t("Action")}</th>
+                <th style={thStyle}>{t("PROPERTY_ID")}</th>
+                <th style={thStyle}>{t("OWNER_NAME")}</th>
+                <th style={thStyle}>{t("MOBILE_NUMBER")}</th>
+                <th style={thStyle}>{t("PAYMENT_AMOUNT")}</th>
+                <th style={{ ...thStyle, textAlign: "center" }}>{t("ACTION")}</th>
               </tr>
             </thead>
             <tbody>
@@ -273,10 +273,15 @@ useEffect(() => {
                     </td>
                     <td style={{ ...tdStyle, textAlign: "center" }}>
                       <button
-                        style={payButtonStyle}
+                        style={{
+                          ...payButtonStyle,
+                          opacity: property.due === 0 || !property?.due ? 0.5 : 1,
+                          cursor: property.due === 0 || !property?.due ? "not-allowed" : "pointer"
+                        }}
                         onClick={() => proceedToPay(property)}
+                        disabled={!property?.due || property.due === 0}
                       >
-                        {t("Pay")}
+                        {t("PAY")}
                       </button>
                     </td>
                   </tr>

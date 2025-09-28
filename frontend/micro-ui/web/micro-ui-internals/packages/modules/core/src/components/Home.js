@@ -168,6 +168,7 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 
 
 const EmployeeHome = ({ modules }) => {
+  const { t } = useTranslation();
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const user = Digit.UserService.getUser();
@@ -213,19 +214,19 @@ const EmployeeHome = ({ modules }) => {
 
       const services = [
         {
-            title: "Property",
+            title: t("PROPERTY"),
             icon: "property_1",
             dropdownOptions: [
-                { label: "Namantran", link: "/namantran" },
-                { label: "Cash Desk", link: "/digit-ui/employee/pt/search" },
-                { label: "Change in Property", link: "/change-property" },
-                { label: "New Property Application", link: "/digit-ui/employee/pt/PropertyLandingPage" }
+                { label: t("NAMANTRAN"), link: "/namantran" },
+                { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
+                { label: t("CHANGEINPROPERTY"), link: "/change-property" },
+                { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" }
             ],
             citizenLink: "",
             isExternal: false
         },
         {
-            title: "Rental",
+            title: t("RENTAL"),
             icon: "rental_1",
             dropdownOptions: [
                 // { label: "View Rentals", link: "dashboard/marriage" },
@@ -237,13 +238,13 @@ const EmployeeHome = ({ modules }) => {
             isExternal: true
         },
         {
-            title: "Water",
+            title: t("WATER"),
             icon: "water_1",
             dropdownOptions: [
-                { label: "Water Bill", link: "/water-bill" },
-                { label: "Usage History", link: "/usage-history" },
-                { label: "Connection Request", link: "/connection-request" },
-                { label: "Complaint", link: "/complaint" }
+                { label: t("WATERBILL"), link: "/water-bill" },
+                { label: t("USAGEHISTORY"), link: "/usage-history" },
+                { label: t("CONNECTIONREQUEST"), link: "/connection-request" },
+                { label: t("COMPLAINT"), link: "/complaint" }
             ],
             citizenLink: "",
             isExternal: false
@@ -330,7 +331,7 @@ const EmployeeHome = ({ modules }) => {
 
         <div className="content-area" style={{ padding: isMobile ? "10px" : "0px", marginTop: isMobile ? "0px" : "40px" }}>
           <div className="content-header" style={{ flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "center", marginBottom: "20px", gap: isMobile ? "10px" : "0" }}>
-            <h1 className="main-title" style={styles.mainTitle}>Revenue Services</h1>
+            <h1 className="main-title" style={styles.mainTitle}>{t("SIDEMENU_REVENUE_SERVICES")}</h1>
             <div style={styles.servicesGrid}>
                 {services.map((service, index) => (
                     <ServiceCard

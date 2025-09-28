@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 
 const Card = ({
     icon,
@@ -146,50 +147,51 @@ const CardContainer = ({ children }) => {
     );
 };
 
-// Card data configuration
-const cardData = [
-    {
-        id: 'marriage',
-        icon: "marriage_icon",
-        title: 'Marriage',
-        link: 'dashboard/marriage'
-    },
-    {
-        id: 'funeralVan',
-        icon: "funeral_van_icon",
-        title: 'Request for funeral van',
-        link: 'service/6'
-    },
-    {
-        id: 'waterTanker',
-        icon: "water_tanker_icon",
-        title: 'Request For Water Tanker',
-        link: 'service/5'
-    },
-    {
-        id: 'litterCollection',
-        icon: "litter_collection_icon",
-        title: 'Request For Litter Collection',
-        link: 'service/18'
-    },
-    {
-        id: 'debrisCollection',
-        icon: "debris_icon",
-        title: 'Request For Debris Collection',
-        link: 'service/19'
-    },
-    {
-        id: 'amusementPlaces',
-        icon: "amusement_icon",
-        title: 'Request For Auditorium / Public Amusement Places / Public Garden',
-        link: 'service/20'
-    },
-];
-
 const CitizenServicesCards = () => {
+    const { t } = useTranslation();
     const user = Digit.UserService.getUser();
     const accessToken = user?.access_token;
     const refreshToken = user?.refresh_token;
+
+    // Card data configuration
+    const cardData = [
+        {
+            id: 'marriage',
+            icon: "marriage_icon",
+            title: t("MARRIAGE"),
+            link: 'dashboard/marriage'
+        },
+        {
+            id: 'funeralVan',
+            icon: "funeral_van_icon",
+            title: t("REQUEST_FOR_FUNERAL_VAN"),
+            link: 'service/6'
+        },
+        {
+            id: 'waterTanker',
+            icon: "water_tanker_icon",
+            title: t("REQUEST_FOR_WATER_TANKER"),
+            link: 'service/5'
+        },
+        {
+            id: 'litterCollection',
+            icon: "litter_collection_icon",
+            title: t("REQUEST_FOR_LITTER_COLLECTION"),
+            link: 'service/18'
+        },
+        {
+            id: 'debrisCollection',
+            icon: "debris_icon",
+            title: t("REQUEST_FOR_DEBRIS_COLLECTION"),
+            link: 'service/19'
+        },
+        {
+            id: 'amusementPlaces',
+            icon: "amusement_icon",
+            title: t("REQUEST_FOR_AUDITORIUM") + t("PUBLIC_AMUSEMENT_PLACES"),
+            link: 'service/20'
+        },
+    ];
 
     const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
     console.log("stateInfo==", stateInfo);

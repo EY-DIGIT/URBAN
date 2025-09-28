@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 const backdropStyle = {
   position: "fixed",
@@ -84,16 +85,49 @@ const hoverStyle = {
 };
 
 const Popup = ({ show, onClose }) => {
-  if (!show) return null;
-
+  const { t } = useTranslation();
+  const isMountedRef = useRef(true);
   const [selectedOption, setSelectedOption] = useState('');
   const [hovered, setHovered] = useState(null);
 
+  // Track mounted state
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  // Reset state when show prop changes
+  useEffect(() => {
+    if (show && isMountedRef.current) {
+      setSelectedOption('');
+      setHovered(null);
+    }
+  }, [show]);
+
+  if (!show) return null;
+
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    onClose(option);
+    if (isMountedRef.current) {
+      setSelectedOption(option);
+    }
+    // Call onClose immediately - don't wait for state update
+    if (onClose) {
+      onClose(option);
+    }
   };
 
+  const handleMouseEnter = (option) => {
+    if (isMountedRef.current) {
+      setHovered(option);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isMountedRef.current) {
+      setHovered(null);
+    }
+  };
 
   const getStyle = (option) => {
     if (selectedOption === option) {
@@ -109,23 +143,23 @@ const Popup = ({ show, onClose }) => {
     <div style={backdropStyle}>
       <div style={containerStyle}>
         <div style={popupStyle}>
-          <h2 style={titleStyle}>Paying For</h2>
+          <h2 style={titleStyle}>{t("PAYING_FOR")}</h2>
           <div style={optionsContainerStyle}>
             <button
               style={getStyle("own")}
-              onMouseEnter={() => setHovered("own")}
-              onMouseLeave={() => setHovered(null)}
+              onMouseEnter={() => handleMouseEnter("own")}
+              onMouseLeave={handleMouseLeave}
               onClick={() => handleOptionClick('own')}
             >
-              Own Property
+              {t("OWN_PROPERTY")}
             </button>
             <button
               style={getStyle("behalf")}
-              onMouseEnter={() => setHovered("behalf")}
-              onMouseLeave={() => setHovered(null)}
+              onMouseEnter={() => handleMouseEnter("behalf")}
+              onMouseLeave={handleMouseLeave}
               onClick={() => handleOptionClick("behalf")}
             >
-              On Behalf Of Someone
+              {t("ON_BEHALF_OF_SOMEONE")}
             </button>
           </div>
         </div>

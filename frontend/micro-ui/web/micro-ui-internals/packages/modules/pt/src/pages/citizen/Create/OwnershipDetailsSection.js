@@ -97,7 +97,7 @@ if (owner.aadhaar !== fixedAadhaar) {
           {/* Name with Title */}
           <div style={styles.flex30}>
             <div style={{ ...styles.poppinsLabel, color: "#555" }}>
-              {t("Owner Name")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("OWNER_NAME")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <div style={styles.nameInputContainer}>
               <Dropdown
@@ -125,7 +125,7 @@ if (owner.aadhaar !== fixedAadhaar) {
           {/* Hindi Name */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
-              {t("Owner Name (हिंदी में)")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("OWNER_NAME")+"(हिंदी में)"} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <div style={styles.nameInputContainer}>
               <Dropdown
@@ -153,7 +153,7 @@ if (owner.aadhaar !== fixedAadhaar) {
              {/* Relationship */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
-              {t("Relationship")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("RELATIONSHIP")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             {/* <Dropdown
               t={t}
@@ -207,7 +207,7 @@ if (owner.aadhaar !== fixedAadhaar) {
           {/* Father/Husband Name */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
-              {t("Father/Husband Name")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("FATHER_HUSBAND_NAME")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <TextInput
               style={styles.widthInput}
@@ -231,7 +231,7 @@ if (owner.aadhaar !== fixedAadhaar) {
          
           {/* Email */}
           <div style={styles.flex30}>
-            <div style={styles.poppinsLabel}>{t("Email ID")}</div>
+            <div style={styles.poppinsLabel}>{t("EMAIL_ID")}</div>
             <TextInput
               value={owner.email}
               onChange={(e) => handleOwnerEmailChange(index, e.target.value)}
@@ -245,7 +245,7 @@ if (owner.aadhaar !== fixedAadhaar) {
           {/* Mobile */}
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
-              {t("Mobile Number")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("MOBILE_NUMBER")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <TextInput
               value={owner.mobile}
@@ -260,7 +260,7 @@ if (owner.aadhaar !== fixedAadhaar) {
 
           {/* Alternative Number */}
           <div style={styles.flex30}>
-            <div style={styles.poppinsLabel}>{t("Alternative Number")}</div>
+            <div style={styles.poppinsLabel}>{t("ALTERNATIVE_NUMBER")}</div>
             <TextInput
               value={owner.altNumber}
               onChange={(e) => handleOwnerContactChange(index, "altNumber", e.target.value)}
@@ -291,7 +291,7 @@ if (owner.aadhaar !== fixedAadhaar) {
 
             <div style={styles.flex30}>
       <div style={styles.poppinsLabel}>
-        {t("Aadhaar ID")}{" "}
+        {t("AADHAAR_ID")}{" "}
         <span className="mandatory" style={styles.mandatory}>
           *
         </span>
@@ -313,7 +313,7 @@ if (owner.aadhaar !== fixedAadhaar) {
 
           <div style={styles.flex30}>
             <div style={styles.poppinsLabel}>
-              {t("Samagra ID")} <span className="mandatory" style={styles.mandatory}>*</span>
+              {t("SAMAGRA_ID")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
             <TextInput
               value={owner.samagraID}
@@ -330,7 +330,7 @@ if (owner.aadhaar !== fixedAadhaar) {
                   onChange={(e) => updateOwner(index, "noSamagra", e.target.checked)}
                   style={{ marginRight: "8px" }}
                 />
-                {t("I don't have Samagra ID")}
+                {t("NO_SAMAGRA_ID")}
               </label>
             </div>
             {formErrors["owner-0-samagraID"] && (
@@ -352,7 +352,7 @@ if (owner.aadhaar !== fixedAadhaar) {
         {/* Name with Title */}
         <div style={styles.flex30}>
           <div style={styles.poppinsLabel}>
-            {t("Property Category")} <span className="mandatory" style={styles.mandatory}>*</span>
+            {t("PROPERTY_CATEGORY")} <span className="mandatory" style={styles.mandatory}>*</span>
           </div>
           <Dropdown
             style={styles.widthInput}
@@ -373,7 +373,7 @@ if (owner.aadhaar !== fixedAadhaar) {
 
         <div style={styles.flex30}>
           <div style={styles.poppinsLabel}>
-            {t("Provide Ownership Details")} <span className="mandatory" style={styles.mandatory}>*</span>
+            {t("PROVIDE_OWNERSHIP_DETAILS")} <span className="mandatory" style={styles.mandatory}>*</span>
           </div>
           <Dropdown
             style={styles.widthInput}
@@ -393,7 +393,7 @@ if (owner.aadhaar !== fixedAadhaar) {
         </div>
         <div style={styles.flex30}>
           <div style={styles.poppinsLabel}>
-            {t("POA Registration Number")}
+            {t("POA_REGISTRATION_NUMBER")}
           </div>
           <TextInput
             value={registryId}

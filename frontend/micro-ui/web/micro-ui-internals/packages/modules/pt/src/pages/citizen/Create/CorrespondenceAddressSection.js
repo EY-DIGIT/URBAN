@@ -11,7 +11,7 @@ const CorrespondenceAddressSection = ({
   return (
     <div style={{ marginBottom: "20px" }}>
       <div style={styles.styleMtop}></div>
-      <div style={styles.assessmentStyle}>{t("Correspondence Address")}</div>
+      <div style={styles.assessmentStyle}>{t("CORRESPONDENCE_ADDRESS")}</div>
       <div style={{ display: "flex" }}>
         <textarea
           style={styles.widthInputs}
@@ -28,7 +28,7 @@ const CorrespondenceAddressSection = ({
               checked={isSameAsPropertyAddress}
               style={{ padding: "10px" }}
             />
-            {"  "} {t("Same as property address")}
+            {"  "} {t("SAME_AS_PROPERTY_ADDRESS")}
           </label>
         </div>
       </div>

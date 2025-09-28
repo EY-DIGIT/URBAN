@@ -1436,14 +1436,13 @@ const CreateProperty = () => {
 
   return (
     <React.Fragment>
-      <div style={styles.assessmentStyles}></div>
+      <div style={styles.assessmentStyles}></div> 
       {!showSuccessModal && (
         <div >
 
           {/* Attachments Section */}
           <div style={styles.card}>
-            <div style={styles.assessmentStyle}>{t("Ownership Details")}</div>
-
+            <div style={styles.assessmentStyle}>{t("OWNERSHIP_DETAILS")}</div>
             <OwnershipDetailsSection
               t={t}
               ownershipType={ownershipType}
@@ -1466,7 +1465,7 @@ const CreateProperty = () => {
           </div>
 
           <div style={styles.card}>
-            <div style={styles.assessmentStyle}>{t("Property Address")}</div>
+            <div style={styles.assessmentStyle}>{t("PROPERTY_ADDRESS")}</div>
             <AddressSection
               t={t}
               addressDetails={addressDetails}
@@ -1494,7 +1493,7 @@ const CreateProperty = () => {
             />
           </div>
           <div style={userData === "citizen" ? { ...styles.card, pointerEvents: "none", opacity: "0.4" } : styles.card}>
-            <div style={styles.assessmentStyle}>{t("Assessment Details")}{` (To be filled by IMC)`}</div>
+            <div style={styles.assessmentStyle}>{t("ASSESSMENT_DETAILS")}{`TO_BE_FILLED_BY_IMC`}</div>
             <AssessmentDetailsSection
               t={t}
               assessmentDetails={assessmentDetails}
@@ -1505,7 +1504,7 @@ const CreateProperty = () => {
             />
           </div>
           <div style={userData === "citizen" ? { ...styles.card, pointerEvents: "none", opacity: "0.4" } : styles.card}>
-            <div style={styles.assessmentStyle}>{t("Property Details")}{` (To be filled by IMC)`}</div>
+            <div style={styles.assessmentStyle}>{t("PROPERTY_DETAILS")}{`TO_BE_FILLED_BY_IMC`}</div>
             <PropertyDetailsTableSection
               t={t}
               unit={unit}
@@ -1540,7 +1539,7 @@ const CreateProperty = () => {
           </div>
           {/* Self Declaration */}
           <div style={styles.card}>
-            <div style={styles.poppinsLabel}>{t("Self Declaration")}</div>
+            <div style={styles.poppinsLabel}>{t("SELF_DECLARATION")}</div>
             <label style={styles.poppinsTextStyle}>
               <input
                 style={{ marginRight: "10px" }}
@@ -1587,7 +1586,7 @@ const CreateProperty = () => {
             )}
             <div style={styles.buttonContainer}>
 
-              <SubmitBar label={t("Save")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
+              <SubmitBar label={t("SAVE")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
               {showConfirmationModal && (
                 <ConfirmationModal
                   t={t}

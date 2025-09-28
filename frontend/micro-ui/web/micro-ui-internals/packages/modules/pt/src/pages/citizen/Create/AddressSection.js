@@ -435,7 +435,7 @@ const AddressSection = ({
       {/* Door/House Number */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("Door/House Number")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("DOOR_HOUSE_NUMBER")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <TextInput
           style={styles.widthInput}
@@ -449,7 +449,7 @@ const AddressSection = ({
       {/* Address */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("Address")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("ADDRESS")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <TextInput
           style={styles.widthInput}
@@ -463,7 +463,7 @@ const AddressSection = ({
       {/* Pincode */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("Pincode")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("PINCODE")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <TextInput
           style={styles.widthInput}
@@ -477,7 +477,7 @@ const AddressSection = ({
       {/* Zone Dropdown */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("Zone")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("ZONE")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
           style={styles.widthInput}
@@ -502,7 +502,7 @@ const AddressSection = ({
       {/* Ward Dropdown */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("Ward")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("WARD")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
           style={styles.widthInput}
@@ -525,7 +525,7 @@ const AddressSection = ({
       {/* Colony Dropdown */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("Colony")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("COLONY")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
           style={styles.widthInput}

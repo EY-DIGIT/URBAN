@@ -55,7 +55,7 @@ const OtherDetailsSection = ({
     <div>
 
       {/* Other Details Heading */}
-      <div style={styles.assessmentStyle}>{t("Other Details")}{` (To be filled by IMC)`}</div>
+      <div style={styles.assessmentStyle}>{t("OTHER_DETAILS")}{`TO_BE_FILLED_BY_IMC`}</div>
 
       {/* Property Info */}
       {/* <div style={styles.formSection}> */}
@@ -88,7 +88,7 @@ const OtherDetailsSection = ({
       <div>
         <div style={styles.flex45}>
 
-          <div style={styles.poppinsLabel}>{t("Exemption Applicable")}</div>
+          <div style={styles.poppinsLabel}>{t("EXEMPTION_AVAILABLE")}</div>
           <Dropdown
             style={styles.widthInput300}
             t={t}
@@ -105,7 +105,7 @@ const OtherDetailsSection = ({
       {/* Additional Checkboxes */}
       <div style={styles.checkboxContainer}>
         <label style={styles.poppinsLabels}>
-          {t("Mobile Tower")}{" "}
+          {t("MOBILE_TOWER")}{" "}
           <input
             type="checkbox"
             checked={checkboxes.mobileTower}
@@ -113,7 +113,7 @@ const OtherDetailsSection = ({
           />
         </label>
         <label style={styles.poppinsLabels}>
-          {t("Bond Road")}{" "}
+          {t("BOND_ROAD")}{" "}
           <input
             type="checkbox"
             checked={checkboxes.broadRoad}
@@ -121,7 +121,7 @@ const OtherDetailsSection = ({
           />
         </label>
         <label style={styles.poppinsLabels}>
-          {t("Advertisement")}{" "}
+          {t("ADVERTISEMENT")}{" "}
           <input
             type="checkbox"
             checked={checkboxes.advertisement}

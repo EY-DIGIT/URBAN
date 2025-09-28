@@ -323,7 +323,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
     return (
         <div style={containerStyle}>
             {/* Applicant Details Section */}
-            <div style={sectionStyle}>Applicant Details</div>
+            <div style={sectionStyle}>{t("APPLICANTDETAILS")}</div>
             <div style={contentStyle}>
                 <div style={gridStyle}>
                     {renderField('Property ID', consumerCodes, true)}
@@ -333,7 +333,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
             </div>
 
             {/* Owner Details Section */}
-            <div style={sectionStyle}>Owner Details</div>
+            <div style={sectionStyle}>{t("OWNERDETAILS")}</div>
             <div style={contentStyle}>
                 <div style={gridStyle}>
                     {renderField('Owner Name', billList?.payerName, true)}
@@ -343,7 +343,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
             </div>
 
             {/* Property Address Section */}
-            <div style={sectionStyle}>Property Address</div>
+            <div style={sectionStyle}>{t("PROPERTYADDRESS")}</div>
             <div style={contentStyle}>
                 <div style={gridStyle}>
                     {renderField('Address', billList?.payerAddress, true)}
@@ -354,34 +354,30 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
             </div>
 
             {/* Tax Details Section */}
-            <div style={sectionStyle}>Tax Details</div>
+            <div style={sectionStyle}>{t("TAXDETAILS")}</div>
             <div style={taxSectionStyle}>
                 <div style={taxRowStyle}>
-                    <span style={{ fontWeight: '500' }}>Arrear</span>
+                    <span style={{ fontWeight: '500' }}>{t("ARREAR")}</span>
                     <span>₹ {Arrears.toLocaleString()}</span>
                 </div>
                 <div style={taxRowStyle}>
-                    <span style={{ fontWeight: '500' }}>Advance</span>
+                    <span style={{ fontWeight: '500' }}>{t("ADVANCE")}</span>
                     <span>₹ {getAdvanceAmount().toLocaleString()}</span>
                 </div>
                 <div style={taxRowStyle}>
-                    <span style={{ fontWeight: '500' }}>Net Tax</span>
+                    <span style={{ fontWeight: '500' }}>{t("NETTAX")}</span>
                     <span>₹ {(billDetails?.amount || 0).toLocaleString()}</span>
                 </div>
                 <div style={taxRowStyle}>
-                    <span style={{ fontWeight: '500' }}>Rebate</span>
+                    <span style={{ fontWeight: '500' }}>{t("REBATE")}</span>
                     <span>₹ {getRebate().toLocaleString()}</span>
                 </div>
                 <div style={totalRowStyle}>
-                    <span>Total Payable Amount</span>
+                    <span>{t("TOTALPAYABLEAMOUNT")}</span>
                     <span>₹ {getTotal().toLocaleString()}</span>
                 </div>
 
-                <div style={disclaimerStyle}>
-                    *Tax calculation is based on current system data. If there is any
-                    difference in the tax calculation, the property owner will have to
-                    pay the difference amount later.
-                </div>
+                <div style={disclaimerStyle}>{t("TAX_PAY_DISCLAIMER")}</div>
 
                 <button
                     style={buttonStyle}
@@ -400,7 +396,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
                             animation: 'spin 1s linear infinite'
                         }} />
                     )}
-                    {isSubmitting ? 'Processing...' : 'Proceed to Payment'}
+                    {isSubmitting ? t("PROCESSING") : t("PROCEEDTOPAYMENT")}
                 </button>
             </div>
 
