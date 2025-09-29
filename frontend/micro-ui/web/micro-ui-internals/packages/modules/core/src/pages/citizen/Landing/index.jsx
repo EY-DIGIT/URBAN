@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from "react-i18next";
 
 const styles = {
     revenueServicesContainer: {
@@ -284,6 +285,7 @@ const ServiceCard = ({
     onToggle,
     cardIndex
 }) => {
+    const { t } = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     
@@ -360,6 +362,7 @@ const ServiceCard = ({
 };
 
 const RevenueServices = () => {
+    const { t } = useTranslation();
     const [openDropdown, setOpenDropdown] = useState(null);
 
     // Initialize responsive styles
@@ -373,32 +376,32 @@ const RevenueServices = () => {
 
     const services = [
         {
-            title: "Property",
+            title: t("PROPERTY"),
             icon: "property_1",
             dropdownOptions: [
-                { label: "Namantran", link: "/namantran" },
-                { label: "Cash Desk", link: "/digit-ui/employee/pt/search" },
-                { label: "Change in Property", link: "/change-property" },
-                { label: "New Property Application", link: "/digit-ui/citizen/pt/property/new-application" }
+                { label: t("NAMANTRAN"), link: "/namantran" },
+                { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
+                { label: t("CHANGEINPROPERTY"), link: "/change-property" },
+                { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/citizen/pt/property/new-application" }
             ],
             citizenLink: "/digit-ui/citizen/pt/property/Actions",
             isExternal: false
         },
         {
-            title: "Rental",
+            title: t("RENTAL"),
             icon: "rental_1",
             dropdownOptions: [],
             citizenLink: "dashboard/rental",
             isExternal: true
         },
         {
-            title: "Water",
+            title: t("WATER"),
             icon: "water_1",
             dropdownOptions: [
-                { label: "Water Bill", link: "/water-bill" },
-                { label: "Usage History", link: "/usage-history" },
-                { label: "Connection Request", link: "/connection-request" },
-                { label: "Complaint", link: "/complaint" }
+                { label: t("WATERBILL"), link: "/water-bill" },
+                { label: t("USAGEHISTORY"), link: "/usage-history" },
+                { label: t("CONNECTIONREQUEST"), link: "/connection-request" },
+                { label: t("COMPLAINT"), link: "/complaint" }
             ],
             citizenLink: "/digit-ui/citizen/ws-home",
             isExternal: false
@@ -407,7 +410,7 @@ const RevenueServices = () => {
 
     return (
         <div className="revenue-services-container" style={styles.revenueServicesContainer}>
-            <h1 className="main-title" style={styles.mainTitle}>Revenue Services</h1>
+            <h1 className="main-title" style={styles.mainTitle}>{t("SIDEMENU_REVENUE_SERVICES")}</h1>
             <div className="services-grid" style={styles.servicesGrid}>
                 {services.map((service, index) => (
                     <ServiceCard

@@ -21,7 +21,7 @@ const AssessmentDetailsSection = ({
     <div style={styles.formSection}>
       {/* Rate Zone */}
       <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>{t("Rate Zone")}<span className="mandatory" style={styles.mandatory}>*</span></div>
+        <div style={styles.poppinsLabel}>{t("RATE_ZONE")}<span className="mandatory" style={styles.mandatory}>*</span></div>
         <TextInput
           style={styles.widthInput}
           name="rateZone"
@@ -37,7 +37,7 @@ const AssessmentDetailsSection = ({
 
       {/* Road Factor */}
       <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>{t("Road Factor")}<span className="mandatory" style={styles.mandatory}>*</span></div>
+        <div style={styles.poppinsLabel}>{t("ROAD_FACTOR")}<span className="mandatory" style={styles.mandatory}>*</span></div>
         <Dropdown
           style={styles.widthInput}
           t={t}
@@ -66,7 +66,7 @@ const AssessmentDetailsSection = ({
 
       {/* Plot Area */}
       <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>{t("Plot Area")}</div>
+        <div style={styles.poppinsLabel}>{t("PLOT_AREA")}</div>
         <TextInput
           style={styles.widthInput}
           name="plotArea"

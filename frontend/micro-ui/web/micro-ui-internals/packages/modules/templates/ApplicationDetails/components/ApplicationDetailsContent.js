@@ -1345,6 +1345,11 @@ const ApplicationDetailsContent = ({
   oldValue,
   isInfoLabel = false
 }) => {
+
+  // console.log("applicationDetailsapplicationDetails===",applicationDetails);
+  console.log("applicationDataapplicationData===",applicationData);
+    console.log("applicationDataapplicationDataapplicationDataapplicationData===",applicationData?.address?.locality?.children[0]?.name);
+
   const [advancePayment, setAdvancePayment] = useState(0);
   const [manualAmount, setManualAmount] = useState("");
   const [selectedModes, setSelectedModes] = useState([]);
@@ -1759,12 +1764,20 @@ const ApplicationDetailsContent = ({
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = Digit.ULBService.getStateId();
     const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { receiptNumbers: receiptNumber });
+    console.log("PAYMENTS=",payments)
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
     if (!payments.Payments[0]?.fileStoreId) {
       const paymentsWithCalculation = payments.Payments.map(payment => ({
         ...payment,
         Calculation: estimateData?.Calculation?.[0] || {},
+        plotArea:applicationData?.landArea,
+        isCheque:selectedMode==="Cheque"?1:0,
+        chequeDetails:chequeDetails,
+        ward: applicationData?.address?.ward,
+         zone: applicationData?.address?.zone,
+         rateZone: applicationData?.address?.locality?.children[0]?.name,
+         address: applicationData?.address?.doorNo+" ,"+applicationData?.address?.street+"  ,"+applicationData?.address?.locality?.name+"  ,"+applicationData?.address?.pincode
       }));
       response = await Digit.PaymentService.generatePdf(state, { Payments: paymentsWithCalculation }, generatePdfKey);
     }

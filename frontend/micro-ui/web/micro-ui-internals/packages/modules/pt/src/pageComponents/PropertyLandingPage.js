@@ -1,7 +1,9 @@
 import { ArrowDirection } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const DashboardLayout = () => {
+  const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024 && window.innerWidth > 768);
   
@@ -328,42 +330,42 @@ const DashboardLayout = () => {
           <div style={styles.statusCards}>
             {[
               {
-                label: "Total Applied", 
+                label: t("TOTALAPPLIED"), 
                 value: getValueFromResponse("totalProperties", 100), 
                 key: "totalProperties",
                 icon: "total_applied",
                 style: styles.tileText
               },
               {
-                label: "Created", 
+                label: t("CREATED"), 
                 value: getValueFromResponse("totalPropertiesCreated", 50), 
                 key: "totalPropertiesCreated",
                 icon: "created",
                 style: styles.tileText
               },
               {
-                label: "Forwarded", 
+                label: t("FORWARDED"), 
                 value: getValueFromResponse("totalPropertiesForwarded", 20), 
                 key: "totalPropertiesForwarded",
                 icon: "forwarded",
                 style: styles.tileText
               },
               {
-                label: "Approved", 
+                label: t("APPROVED"), 
                 value: getValueFromResponse("totalPropertiesApproved", 100), 
                 key: "totalPropertiesApproved",
                 icon: "approved_1",
                 style: styles.tileText
               },
               {
-                label: "Send Back", 
+                label: t("SENDBACK"), 
                 value: getValueFromResponse("totalPropertiesSentBack", 30), 
                 key: "totalPropertiesSentBack",
                 icon: "sent_back",
                 style: styles.tileText
               },
               {
-                label: "Rejected", 
+                label: t("REJECTED"), 
                 value: getValueFromResponse("totalPropertiesRejected", 30), 
                 key: "totalPropertiesRejected",
                 icon: "rejected_1",
@@ -389,7 +391,7 @@ const DashboardLayout = () => {
           </div>
           
           <div style={styles.contentHeader}>
-            <h2>Actions</h2>
+            <h2>{t("ACTION")}</h2>
           </div>
           
           {/* Action Cards */}
@@ -397,12 +399,12 @@ const DashboardLayout = () => {
             {[
               {
                 image: "new_application",
-                text: "New Property Application Form",
+                text: t("NEWPROPERTYAPPLICATIONFORM"),
                 link: "/digit-ui/employee/pt/new-application",
               },
               {
                 image: "file_search",
-                text: "Track Application",
+                text: t("TRACKAPPLICATION"),
                 link: "/digit-ui/employee/pt/application-search",
               },
             ].map((card) => (

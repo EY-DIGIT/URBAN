@@ -394,19 +394,19 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
   return (
     <div style={{ marginTop: "1rem" }}>
       <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
-        <label style={styles.poppinsLabel}>Property Type</label>
+        <label style={styles.poppinsLabel}>{t("PROPERTY_TYPE")}</label>
       </div>
         <div style={{ overflowX: "auto", maxWidth: "100%" }}>
       <table style={styles.table}>
         <thead>
           <tr>
-            <th style={styles.tableHeader}>{t("Usage Type")}</th>
-            <th style={styles.tableHeader}>{t("Usage Factor")}</th>
-            <th style={styles.tableHeader}>{t("Floor No")}</th>
-            <th style={styles.tableHeader}>{t("Type of Construction")}</th>
-            <th style={styles.tableHeader}>{t("Area (Sq feet)")}</th>
-            <th style={styles.tableHeader}>{t("From Year")}</th>
-            <th style={styles.tableHeader}>{t("To Year")}</th>
+            <th style={styles.tableHeader}>{t("USAGE_TYPE")}</th>
+            <th style={styles.tableHeader}>{t("USAGE_FACTOR")}</th>
+            <th style={styles.tableHeader}>{t("FLOOR_NO")}</th>
+            <th style={styles.tableHeader}>{t("TYPE_OF_CONSTRUCTION")}</th>
+            <th style={styles.tableHeader}>{t("AREA_SQ_FEET")}</th>
+            <th style={styles.tableHeader}>{t("FROM_YEAR")}</th>
+            <th style={styles.tableHeader}>{t("TO_YEAR")}</th>
           </tr>
         </thead>
         <tbody>
@@ -518,7 +518,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
                     }
                   }}
                 >
-                  <option value="" disabled>{t("From Year")}</option>
+                  <option value="" disabled>{t("FROM_YEAR")}</option>
                   {years.map((yearObj) => (
                     <option key={yearObj.value} value={yearObj.value}>
                       {yearObj.label}
@@ -538,7 +538,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
                   onChange={(e) => handleUnitChange(index, "toYear", e.target.value)}
                   disabled={!unit.fromYear}
                 >
-                  <option value="" disabled>{t("To Year")}</option>
+                  <option value="" disabled>{t("TO_YEAR")}</option>
                   <option value={currentFYString}>{currentFYString}</option>
                 </select>
               </td>
@@ -555,7 +555,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, style
 
       <div style={{ textAlign: "right", marginTop: "0.5rem"}}>
         <a href="#" style={styles.addMoreLink} onClick={(e) => { e.preventDefault(); addUnit(); }}>
-          {t("Add more")}
+          {t("ADD_MORE")}
         </a>
       </div>
     </div>

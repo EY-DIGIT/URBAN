@@ -65,7 +65,7 @@ const AttachmentsSection = ({
         <div style={styles.iconBox}>{renderSvg()}</div>
         <div style={styles.labelArea}>
           <label style={styles.fileLabel}>
-            {t(label)} {isRequired && <span style={{ color: "red" }}>*</span>}
+            {t("ATTACHMENTS")} {isRequired && <span style={{ color: "red" }}>*</span>}
           </label>
           <div style={styles.descText}>JPG, PNG or PDF, file size no more than 2MB</div>
           <div style={styles.descText}>Accepts: Aadhaar, Driving License, Pan Card, Voter ID</div>
@@ -128,7 +128,7 @@ const AttachmentsSection = ({
 
   return (
     <div style={styles.wrapper}>
-      <h3 style={styles.header}>Attachments</h3>
+      <h3 style={styles.header}>{t("ATTACHMENTS")}</h3>
       <p style={styles.subHeader}>
         (*Accepted File Type: JPG/PNG/PDF **Maximum File Size: 2MB)
       </p>
@@ -139,9 +139,9 @@ const AttachmentsSection = ({
           gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
         }}
       >
-        {renderFileInput("photoId", "Proof of Identity", true)}
-        {renderFileInput("ownershipDoc", "Proof of Ownership", true)}
-        {renderFileInput("sellersRegistry", "Others", false)}
+        {renderFileInput("photoId", t("PROOF_OF_IDENTITY"), true)}
+        {renderFileInput("ownershipDoc", t("PROOF_OF_OWNERSHIP"), true)}
+        {renderFileInput("sellersRegistry", "OTHERS", false)}
 
         {/* Render dynamic others fields */}
         {/* {othersFields.map((field) =>

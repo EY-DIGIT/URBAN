@@ -108,22 +108,22 @@ const PropertyCardsLanding = () => {
                         >
                             {[
                                 {
-                                    label: "New Property Application",
+                                    label: t("NEW_PROPERTY_APPLICATION"),
                                     image: "new_application",
                                     url: "/digit-ui/citizen/pt/property/new-application",
                                 },
                                 {
-                                    label: "Track Application",
+                                    label: t("TRACK_APPLICATION"),
                                     image: "file_search",
                                     url: "/digit-ui/citizen/pt/property/citizen-search",
                                 },
                                 {
-                                    label: "Pay",
+                                    label: t("PAY"),
                                     image: "inr",
                                     url: "/digit-ui/citizen/pt/property/citizen-search",
                                 },
                                 {
-                                    label: "My Properties",
+                                    label: t("MY_PROPERTIES"),
                                     image: "my_properties",
                                     url: "/digit-ui/citizen/pt/property/my-properties",
                                 },
