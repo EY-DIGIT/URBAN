@@ -104,6 +104,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
 
     // Handle form submission
     const onSubmit = async () => {
+        console.log("bill=====>>", bill, data)
         setIsSubmitting(true);
         const paymentAmount = getTotal()
         const filterData = {
@@ -111,13 +112,13 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
                 tenantId: billDetails?.tenantId,
                 txnAmount: paymentAmount || billDetails.totalAmount,
                 module: businessService,
-                billId: billDetails.id,
+                billId: bill.id,
                 consumerCode: consumerCode,
                 productInfo: "Common Payment",
                 gateway: "EASEBUZZ",
                 taxAndPayments: [
                     {
-                        billId: billDetails.id,
+                        billId: bill.id,
                         amountPaid: paymentAmount || billDetails.totalAmount,
                     },
                 ],
