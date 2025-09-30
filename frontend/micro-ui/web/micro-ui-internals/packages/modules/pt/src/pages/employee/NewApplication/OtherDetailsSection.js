@@ -116,7 +116,8 @@ console.log("MDMS EssentialTax Raw =====", EssentialTax);
               ...opt,
               i18nKey: opt.name,   // ✅ full label text
             }))}
-            selected={propertyDetails.ownerType}
+            //selected={propertyDetails.OwnerType}
+            selected={propertyDetails.exemption}
             select={(option) => handlePropertyDetailsChange("exemption", option)}
             optionKey="i18nKey"   // ✅ tell dropdown to use i18nKey
             placeholder="Select"
