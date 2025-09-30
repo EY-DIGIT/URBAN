@@ -104,7 +104,6 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
 
     // Handle form submission
     const onSubmit = async () => {
-        console.log("bill=====>>", bill, data)
         setIsSubmitting(true);
         const paymentAmount = getTotal()
         const filterData = {

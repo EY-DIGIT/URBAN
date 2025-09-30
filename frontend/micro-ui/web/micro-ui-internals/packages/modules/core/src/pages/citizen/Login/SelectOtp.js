@@ -66,7 +66,7 @@ const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t, error, use
           )}
         </p>
         {!error && <CardLabelError>{t("CS_INVALID_OTP")}</CardLabelError>}
-        <p style={styles.returnLogin}>Return to Login</p>
+        <p style={styles.returnLogin} onClick={()=>window.location.href="/digit-ui/citizen/login"}>Return to Login</p>
       </div>
     </div>
   );
