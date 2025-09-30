@@ -352,6 +352,7 @@ const InputFieldBlank = () => (
 );
 
 const PropertyForm = () => {
+    ///////////
     const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
     const history = useHistory();
     const stateId = Digit.ULBService.getStateId();
@@ -367,7 +368,7 @@ const PropertyForm = () => {
     const tenantId = userInfo1?.tenantId;
     const mutationUpdate = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
     const location = useLocation();
-    const { data, proOwnerDetail, documents, checkboxes, rateZones, owners, unit, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress } = location.state || {};
+    const { data, proOwnerDetail, documents, checkboxes, rateZones, owners, unit, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress, isSameAsPropertyAddress } = location.state || {};
     const calculation = data?.Calculation?.[0];
 
     const propertyFYDetails = calculation?.propertyFYDetails || [];
@@ -470,6 +471,16 @@ const PropertyForm = () => {
                 additionalDetails: proOwnerDetail.additionalDetails,
                 workflow: proOwnerDetail.workflow,
                 processInstance: proOwnerDetail.processInstance,
+                // Preserve correspondence address state
+                correspondenceAddressData: {
+                    correspondenceAddress: correspondenceAddress,
+                    isSameAsPropertyAddress: isSameAsPropertyAddress
+                },
+                // Preserve property details for Exemption and Essential Tax fields
+                propertyDetailsData: {
+                    exemption: propertyDetails?.exemption,
+                    essentialTax: propertyDetails?.essentialTax
+                }
             },
         });
     };

@@ -22,6 +22,7 @@ import CorrespondenceAddressSection from "./CorrespondenceAddressSection";
 import SelfDeclaration from "./SelfDeclaration";
 
 const NewApplication = () => {
+  ////////////
   const location = useLocation();
 
   const {
@@ -33,6 +34,8 @@ const NewApplication = () => {
     additionalDetails,
     workflow,
     processInstance,
+    correspondenceAddressData,
+    propertyDetailsData,
   } = location.state || {};
 
   const { t } = useTranslation();
@@ -168,7 +171,7 @@ const NewApplication = () => {
       onSuccess: (data) => {
         history.push({
           pathname: "/digit-ui/employee/pt/PreviewDemand",
-          state: { data, proOwnerDetail: propertyData, documents, propertyDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress }
+          state: { data, proOwnerDetail: propertyData, documents, propertyDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress, isSameAsPropertyAddress }
         });
 
       },
@@ -1034,6 +1037,25 @@ const NewApplication = () => {
       });
     }
   }, [addressDetailsSet]);
+
+  // Restore correspondence address state when coming back from PreviewDemand
+  useEffect(() => {
+    if (correspondenceAddressData) {
+      setCorrespondenceAddress(correspondenceAddressData.correspondenceAddress || "");
+      setIsSameAsPropertyAddress(correspondenceAddressData.isSameAsPropertyAddress || false);
+    }
+  }, [correspondenceAddressData]);
+
+  // Restore property details for Exemption and Essential Tax fields from PreviewDemand
+  useEffect(() => {
+    if (propertyDetailsData) {
+      setPropertyDetails(prevDetails => ({
+        ...prevDetails,
+        exemption: propertyDetailsData.exemption || prevDetails.exemption,
+        essentialTax: propertyDetailsData.essentialTax || prevDetails.essentialTax
+      }));
+    }
+  }, [propertyDetailsData]);
 
   useEffect(() => {
     const firstUnit = unitDetails?.[0];
