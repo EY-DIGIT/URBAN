@@ -322,8 +322,8 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
 
     return (
         <div style={containerStyle}>
-            {/* Applicant Details Section */}
-            <div style={sectionStyle}>{t("APPLICANTDETAILS")}</div>
+            <div style={sectionStyle}>Consumer Details</div>
+            {/* <div style={sectionStyle}>{t("CONSUMERDETAILS")}</div> */}
             <div style={contentStyle}>
                 <div style={gridStyle}>
                     {renderField('Property ID', consumerCodes, true)}
@@ -333,28 +333,29 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
             </div>
 
             {/* Owner Details Section */}
-            <div style={sectionStyle}>{t("OWNERDETAILS")}</div>
-            <div style={contentStyle}>
+            {/* <div style={sectionStyle}>{t("OWNERDETAILS")}</div> */}
+            {/* <div style={contentStyle}> */}
                 <div style={gridStyle}>
                     {renderField('Owner Name', billList?.payerName, true)}
                     {renderField('Father/Husband Name', billList?.additionalDetails?.guardianName)}
                     {renderField('Aadhaar ID', maskAadhaar(billList?.additionalDetails?.aadhaarNumber))}
                 </div>
-            </div>
+            {/* </div> */}
 
             {/* Property Address Section */}
-            <div style={sectionStyle}>{t("PROPERTYADDRESS")}</div>
-            <div style={contentStyle}>
+            {/* <div style={sectionStyle}>{t("PROPERTYADDRESS")}</div>
+            <div style={contentStyle}> */}
                 <div style={gridStyle}>
                     {renderField('Address', billList?.payerAddress, true)}
                     {renderField('Ward', billDetailList?.address?.ward, true)}
                     {renderField('Colony', billDetailList?.address?.colony, true)}
                     {renderField('Zone', billDetailList?.address?.zone, true)}
                 </div>
-            </div>
+            {/* </div> */}
 
             {/* Tax Details Section */}
-            <div style={sectionStyle}>{t("TAXDETAILS")}</div>
+            <div style={sectionStyle}>Payment Details</div>
+            {/* <div style={sectionStyle}>{t("PAYMENTDETAILS")}</div> */}
             <div style={taxSectionStyle}>
                 <div style={taxRowStyle}>
                     <span style={{ fontWeight: '500' }}>{t("ARREAR")}</span>

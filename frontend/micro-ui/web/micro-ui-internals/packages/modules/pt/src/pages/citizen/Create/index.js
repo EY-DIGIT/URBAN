@@ -19,6 +19,7 @@ import AttachmentsSection from "./Attachments";
 import OtherDetailsSection from "./OtherDetailsSection";
 import SuccessModal from "./SuccessModal";
 import CorrespondenceAddressSection from "./CorrespondenceAddressSection";
+import ConfirmationModal from "./ConfirmModal"
 // import SelfDeclaration from "./SelfDeclaration";
 
 const CreateProperty = () => {
@@ -1586,12 +1587,12 @@ const CreateProperty = () => {
             )}
             <div style={styles.buttonContainer}>
 
-              <SubmitBar label={t("SAVE")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
+              <SubmitBar label={t("SAVE")} onSubmit={()=>setShowConfirmationModal(true)} style={{ background: "#6b133f" }} />
               {showConfirmationModal && (
                 <ConfirmationModal
                   t={t}
                   onBack={() => setShowConfirmationModal(false)}
-                  onConfirm={handleConfirmSubmit}
+                  onConfirm={handleSubmit}
                   styles={styles}
                 />
               )}

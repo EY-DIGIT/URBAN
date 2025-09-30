@@ -345,7 +345,8 @@ const AddressSection = ({
   handleDropdownChange,
   styles,
   formErrors,
-  updateRateZone
+  updateRateZone,
+  setFormErrors
 }) => {
   console.log("addressDetails", addressDetails);
   const [boundaryData, setBoundaryData] = useState(null);
@@ -361,7 +362,7 @@ const AddressSection = ({
         const tenantId = Digit.ULBService.getCurrentTenantId();
         const response = await Digit.LocationService.getRevenueLocalities(tenantId);
 
-        console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
+        console.log("🔍 Raw TenantBoundary Response:", response);
 
         const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
         if (cityBoundary?.children?.length > 0) {
@@ -397,20 +398,55 @@ const AddressSection = ({
   }, [addressDetails.zone, boundaryData]);
 
   // Update Colonies when Ward changes
+
+
+  // useEffect(() => {
+  //   if (addressDetails.zone && addressDetails.ward && boundaryData?.children?.length > 0) {
+  //     const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
+  //     const selectedWard = selectedZone?.children?.find((w) => w.code === addressDetails.ward.code);
+  //     const colonyList = selectedWard?.children || [];
+  //     const formattedColonies = colonyList.map((col) => ({
+  //       code: col.code,
+  //       name: col.name || col.code,
+  //     }));
+  //     setColonies(formattedColonies);
+  //   } else {
+  //     setColonies([]);
+  //   }
+  // }, [addressDetails.ward, addressDetails.zone, boundaryData]);
+
   useEffect(() => {
-    if (addressDetails.zone && addressDetails.ward && boundaryData?.children?.length > 0) {
-      const selectedZone = boundaryData.children.find((z) => z.code === addressDetails.zone.code);
-      const selectedWard = selectedZone?.children?.find((w) => w.code === addressDetails.ward.code);
-      const colonyList = selectedWard?.children || [];
-      const formattedColonies = colonyList.map((col) => ({
-        code: col.code,
-        name: col.name || col.code,
-      }));
-      setColonies(formattedColonies);
-    } else {
-      setColonies([]);
-    }
-  }, [addressDetails.ward, addressDetails.zone, boundaryData]);
+  if (
+    addressDetails.zone &&
+    addressDetails.ward &&
+    boundaryData?.children?.length > 0
+  ) {
+    const selectedZone = boundaryData.children.find(
+      (z) => z.code === addressDetails.zone.code
+    );
+    const selectedWard = selectedZone?.children?.find(
+      (w) => w.code === addressDetails.ward.code
+    );
+    const colonyList = selectedWard?.children || [];
+
+    // format colonies
+    const formattedColonies = colonyList.map((col) => ({
+      code: col.code,
+      name: col.name || col.code,
+    }));
+
+    // remove duplicates by `name`
+    const uniqueColonies = formattedColonies.filter(
+      (col, index, self) =>
+        index === self.findIndex((c) => c.name === col.name)
+    );
+
+    setColonies(uniqueColonies);
+  } else {
+    setColonies([]);
+  }
+}, [addressDetails.ward, addressDetails.zone, boundaryData]);
+
 
   // Update RateZones when Colony changes
   useEffect(() => {
@@ -435,13 +471,14 @@ const AddressSection = ({
       {/* Door/House Number */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("DOOR_HOUSE_NUMBER")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("Door/House Number")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <TextInput
           style={styles.widthInput}
           name="doorNo"
           value={addressDetails.doorNo}
           onChange={handleInputChange}
+          placeholder={t("Enter")}
         />
         {formErrors?.doorNo && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.doorNo}</p>}
       </div>
@@ -449,13 +486,14 @@ const AddressSection = ({
       {/* Address */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("ADDRESS")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("Address")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <TextInput
           style={styles.widthInput}
           name="address"
           value={addressDetails.address}
           onChange={handleInputChange}
+          placeholder={t("Enter")}
         />
         {formErrors?.address && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.address}</p>}
       </div>
@@ -463,13 +501,14 @@ const AddressSection = ({
       {/* Pincode */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("PINCODE")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("Pincode")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <TextInput
           style={styles.widthInput}
           name="pincode"
           value={addressDetails.pincode}
           onChange={handleInputChange}
+          placeholder={t("Enter")}
         />
         {formErrors?.pincode && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.pincode}</p>}
       </div>
@@ -477,7 +516,7 @@ const AddressSection = ({
       {/* Zone Dropdown */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("ZONE")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("Zone")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
           style={styles.widthInput}
@@ -486,12 +525,22 @@ const AddressSection = ({
           selected={addressDetails.zone}
           select={(option) => {
             handleDropdownChange("zone", option);
+
             handleDropdownChange("ward", null);
             handleDropdownChange("colony", null);
             handleDropdownChange("rateZone", null);
             setWards([]);
             setColonies([]);
             setRateZones([]);
+
+
+            // Clear only zone error
+            if (formErrors?.zone) {
+              setFormErrors((prev) => {
+                const updated = { ...prev, zone: "" };
+                return updated;
+              });
+            }
           }}
           optionKey="name"
           placeholder={t("Select")}
@@ -502,7 +551,7 @@ const AddressSection = ({
       {/* Ward Dropdown */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("WARD")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("Ward")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
           style={styles.widthInput}
@@ -513,8 +562,16 @@ const AddressSection = ({
             handleDropdownChange("ward", option);
             handleDropdownChange("colony", null);
             handleDropdownChange("rateZone", null);
+        
             setColonies([]);
             setRateZones([]);
+        
+            if (formErrors?.ward) {
+              setFormErrors((prev) => {
+                const updated = { ...prev, ward: "" };
+                return updated;
+              });
+            }
           }}
           optionKey="name"
           placeholder={t("Select")}
@@ -525,7 +582,7 @@ const AddressSection = ({
       {/* Colony Dropdown */}
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>
-          {t("COLONY")}<span className="mandatory" style={styles.mandatory}>*</span>
+          {t("Colony")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
           style={styles.widthInput}
@@ -535,7 +592,15 @@ const AddressSection = ({
           select={(option) => {
             handleDropdownChange("colony", option);
             handleDropdownChange("rateZone", null);
+
             setRateZones([]);
+        
+            if (formErrors?.colony) {
+              setFormErrors((prev) => {
+                const updated = { ...prev, colony: "" };
+                return updated;
+              });
+            }
           }}
           optionKey="name"
           placeholder={t("Select")}
