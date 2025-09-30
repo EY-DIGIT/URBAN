@@ -253,9 +253,15 @@ const SuccessApplications = () => {
                         color: "#000000"
                     }}>
                         Application{" "}
+
+                            {data?.Properties?.[0]?.processInstance?.action==="SENDBACK"?<React.Fragment><span> Send Back</span></React.Fragment>:<React.Fragment> 
+
+
+
                         {data?.Properties?.[0]?.processInstance?.action
                             ?.toLowerCase()
                             ?.replace(/^\w/, (c) => c.toUpperCase())}ed{" "}
+                            </React.Fragment>}
                         {/* Successfully */}
                     </h2>
 
