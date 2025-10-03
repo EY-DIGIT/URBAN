@@ -115,6 +115,11 @@ const SearchProperty = ({ onSelect }) => {
     setSearchResults([]);
     setCurrentPage(1);
     setTotalPages(0);
+    // Clear the input field directly
+    const propertyIdInput = document.getElementById("propertyIdInput");
+    if (propertyIdInput) {
+      propertyIdInput.value = "";
+    }
   };
 
   const handlePopupClose = (option) => {
@@ -193,7 +198,7 @@ const SearchProperty = ({ onSelect }) => {
         <h4 style={headingStyle}>{t("SEARCH_PROPERTY")}</h4>
         <div style={rowStyle}>
           <div style={inputGroupWrapper}>
-            <div>
+            {/* <div>
               <label style={labelStyle}>
                 {t("PROPERTY_ID")} <span style={{ color: "red" }}>*</span>
               </label>
@@ -209,6 +214,25 @@ const SearchProperty = ({ onSelect }) => {
                     mobileNumber: "",
                   }))
                 }
+              />
+            </div> */}
+            <div>
+              <label style={labelStyle}>
+                {t("PROPERTY_ID")} <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="text"
+                id="propertyIdInput"
+                placeholder={t("Enter Property ID")}
+                style={inputStyle}
+                //value={formValue?.propertyIds || ""}
+                // onChange={(e) =>
+                //   setFormValue((prev) => ({
+                //     ...prev,
+                //     propertyIds: e.target.value,
+                //     mobileNumber: "",
+                //   }))
+                // }
               />
             </div>
 
@@ -238,7 +262,21 @@ const SearchProperty = ({ onSelect }) => {
             <button onClick={handleClear} style={clearButtonStyle}>
               {t("CITIZEN_CLEAR_BUTTON")}
             </button>
-            <button onClick={onPropertySearch} style={findButtonStyle}>
+            {/* <button onClick={onPropertySearch} style={findButtonStyle}>
+              {t("CITIZEN_FIND_BUTTON")}
+            </button> */}
+            <button
+              onClick={() => {
+                const propertyId = document.getElementById("propertyIdInput").value; 
+                setFormValue((prev) => ({
+                  ...prev,
+                  propertyIds: propertyId,
+                  mobileNumber: "",
+                }));
+                onPropertySearch();
+              }}
+              style={findButtonStyle}
+            >
               {t("CITIZEN_FIND_BUTTON")}
             </button>
           </div>
@@ -454,7 +492,7 @@ const clearButtonStyle = {
 
 const findButtonStyle = {
   ...baseButtonStyle,
-  backgroundColor: "#D4B5C7",
+  backgroundColor: "#6B133F",
   color: "#fff",
 };
 
