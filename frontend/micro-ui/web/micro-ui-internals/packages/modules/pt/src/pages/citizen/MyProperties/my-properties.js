@@ -89,7 +89,7 @@ const PropertyManagement = ({ applications = [] }) => {
       fontWeight: "500"
     },
     findButton: {
-      backgroundColor: "#6B133F66",
+      backgroundColor: "#6B133F",
       color: "white",
       border: "none",
       padding: "10px 20px",
@@ -226,12 +226,20 @@ const PropertyManagement = ({ applications = [] }) => {
 
   // Handle search
   const handleSearch = () => {
-    setCurrentPage(1);
+    const propertyIdInput = document.getElementById("propertyIdInput");
+    const inputValue = propertyIdInput ? propertyIdInput.value : "";
+    setSearchTerm(inputValue);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleClear = () => {
     setSearchTerm("");
     setCurrentPage(1);
+    // Clear the input field directly
+    const propertyIdInput = document.getElementById("propertyIdInput");
+    if (propertyIdInput) {
+      propertyIdInput.value = "";
+    }
   };
 
   const handlePageChange = (newPage) => {
@@ -427,10 +435,11 @@ const PropertyManagement = ({ applications = [] }) => {
           <input
             style={styles.searchInput}
             type="text"
+            id="propertyIdInput"
             placeholder="Enter Property ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            // value={searchTerm}
+            // onChange={(e) => setSearchTerm(e.target.value)}
+            // onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
           />
           <div style={styles.buttonContainer}>
             <button style={styles.clearButton} onClick={handleClear}>

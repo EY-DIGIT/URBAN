@@ -7,6 +7,7 @@ import Inbox from "./Inbox";
 import PaymentDetails from "./PaymentDetails";
 import Search from "./Search";
 import SearchApp from "./SearchApp";
+import SearchChangePropertyApp from "./SearchChangePropertyApp";
 
 
 const EmployeeApp = ({ path, url, userType }) => {
@@ -54,11 +55,11 @@ const EmployeeApp = ({ path, url, userType }) => {
     ["/digit-ui/employee/pt/search"]: "PT_COMMON_SEARCH_PROPERTY_SUB_HEADER",
     ["/digit-ui/employee/pt/application-search"]: "ES_COMMON_APPLICATION_SEARCH",
     ["/digit-ui/employee/pt/PreviewDemand"]: "PreviewDemand",
-     ["/digit-ui/employee/pt/PropertyLandingPage"]: "New Property Application",
-     ["/digit-ui/employee/pt/PropertyLedger"]: "Property Ledger Page",
-      ["/digit-ui/employee/pt/DemandNote"]: " Demand Note Page",
-     ["/digit-ui/employee/pt/DetailLedgerPage"]: "Detail Ledger Page",
-      ["/digit-ui/employee/pt/application-details/"]: "PT_APPLICATION_TITLE",
+    ["/digit-ui/employee/pt/PropertyLandingPage"]: "New Property Application",
+    ["/digit-ui/employee/pt/PropertyLedger"]: "Property Ledger Page",
+    ["/digit-ui/employee/pt/DemandNote"]: " Demand Note Page",
+    ["/digit-ui/employee/pt/DetailLedgerPage"]: "Detail Ledger Page",
+    ["/digit-ui/employee/pt/application-details/"]: "PT_APPLICATION_TITLE",
   };
 
   const getBreadCrumb = () => {
@@ -71,15 +72,16 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("/digit-ui/employee/pt/property-mutate/")) return t("ES_TITLE_MUTATE_PROPERTY");
     else if (location.pathname.includes("/digit-ui/employee/pt/modify-application/")) return t("PT_UPDATE_PROPERTY");
     else if (location.pathname.includes("/digit-ui/employee/pt/PreviewDemand/")) return t("PreviewDemand");
-     else if (location.pathname.includes("/digit-ui/employee/pt/PreviewView")) return t("Preview Demand");
-      else if (location.pathname.includes("/digit-ui/employee/pt/PreviewEstimateDemand")) return t("Preview Demand");
-     
-     else if (location.pathname.includes("/digit-ui/employee/pt/success-applications/")) return t("PT_APPLICATION_TITLE");
-      else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLandingPage")) return t("Property Landing Page");
-      else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLedger")) return t("Property Ledger Page");
-      else if (location.pathname.includes("/digit-ui/employee/pt/DemandNote")) return t("Demand Note Page");
+    else if (location.pathname.includes("/digit-ui/employee/pt/PreviewView")) return t("Preview Demand");
+    else if (location.pathname.includes("/digit-ui/employee/pt/PreviewEstimateDemand")) return t("Preview Demand");
+    else if (location.pathname.includes("/digit-ui/employee/pt/PreviewDemandChange")) return t("Preview Demand");
 
-      
+    else if (location.pathname.includes("/digit-ui/employee/pt/success-applications/")) return t("PT_APPLICATION_TITLE");
+    else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLandingPage")) return t("Property Landing Page");
+    else if (location.pathname.includes("/digit-ui/employee/pt/PropertyLedger")) return t("Property Ledger Page");
+    else if (location.pathname.includes("/digit-ui/employee/pt/DemandNote")) return t("Demand Note Page");
+
+
   };
 
   const PTBreadCrumbs = ({ location }) => {
@@ -165,15 +167,21 @@ const EmployeeApp = ({ path, url, userType }) => {
   const NewApplication = Digit?.ComponentRegistryService?.getComponent("PTNewApplication");
   const PTPropertyTaxForm = Digit?.ComponentRegistryService?.getComponent("PropertyTaxForm");
   const PreviewDemand = Digit?.ComponentRegistryService?.getComponent("PreviewDemand");
+  const PreviewDemandChange = Digit?.ComponentRegistryService?.getComponent("PreviewDemandChange");
+
   const PreviewView = Digit?.ComponentRegistryService?.getComponent("PreviewView");
   const PreviewEstimateDemand = Digit?.ComponentRegistryService?.getComponent("PreviewEstimateDemand");
+  const PreviewChangeEstimateDemand = Digit?.ComponentRegistryService?.getComponent("PreviewChangeEstimateDemand");
+
   const PropertyLandingPage = Digit?.ComponentRegistryService?.getComponent("PropertyLandingPage");
   const PropertyLedger = Digit?.ComponentRegistryService?.getComponent("PropertyLedger");
   const DemandNote = Digit?.ComponentRegistryService?.getComponent("DemandNote");
   const DetailLedgerPage = Digit?.ComponentRegistryService?.getComponent("DetailLedgerPage");
-  
+
 
   const ApplicationDetails = Digit?.ComponentRegistryService?.getComponent("ApplicationDetails");
+  const ChangePropertyApplicationDetails = Digit?.ComponentRegistryService?.getComponent("ChangePropertyApplicationDetails");
+
   const SuccessAppication = Digit?.ComponentRegistryService?.getComponent("SuccessAppication");
   const PropertyDetails = Digit?.ComponentRegistryService?.getComponent("PTPropertyDetails");
   const AssessmentDetails = Digit?.ComponentRegistryService?.getComponent("PTAssessmentDetails");
@@ -182,8 +190,8 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Response = Digit?.ComponentRegistryService?.getComponent("PTResponse");
   const TransferOwnership = Digit?.ComponentRegistryService?.getComponent("PTTransferOwnership");
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
-   const CitizenServicesCards = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
-   const PTFreezeProperty = Digit?.ComponentRegistryService?.getComponent("PTFreezeProperty");
+  const CitizenServicesCards = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
+  const PTFreezeProperty = Digit?.ComponentRegistryService?.getComponent("PTFreezeProperty");
   
 
   const isRes = window.location.href.includes("pt/response");
@@ -197,7 +205,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
               {t("ES_COMMON_HOME")}
             </Link>{" "}
-            / {" "}<span style={{color:"#6B133F"}}>{getBreadCrumb()}</span>
+            / {" "}<span style={{ color: "#6B133F" }}>{getBreadCrumb()}</span>
           </p>
           {/* {!isRes ? <div style={isNewRegistration ? { marginLeft: "12px" } : { marginLeft: "-4px" }}><PTBreadCrumbs location={location} /></div> : null} */}
           <PrivateRoute exact path={`${path}/`} component={() => <PTLinks matchPath={path} userType={userType} />} />
@@ -216,21 +224,26 @@ const EmployeeApp = ({ path, url, userType }) => {
           />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/PreviewDemand`} component={PreviewDemand} />
+          <PrivateRoute path={`${path}/PreviewDemandChange`} component={PreviewDemandChange} />
+
           <PrivateRoute path={`${path}/PreviewView`} component={PreviewView} />
           <PrivateRoute path={`${path}/PreviewEstimateDemand`} component={PreviewEstimateDemand} />
-          
+          <PrivateRoute path={`${path}/PreviewChangeEstimateDemand`} component={PreviewChangeEstimateDemand} />
+
+
           <PrivateRoute path={`${path}/PropertyLandingPage`} component={PropertyLandingPage} />
           <PrivateRoute path={`${path}/PropertyLedger`} component={PropertyLedger} />
           <PrivateRoute path={`${path}/DemandNote`} component={DemandNote} />
           <PrivateRoute path={`${path}/DetailLedgerPage`} component={DetailLedgerPage} />
-          
+
 
           <PrivateRoute path={`${path}/PTPropertyTaxForm/:id`} component={PTPropertyTaxForm} />
           <PrivateRoute path={`${path}/success-applications/:id`} component={SuccessAppication} />
           <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/applicationsearch/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
-        
+ <PrivateRoute path={`${path}/applicationsearch/ChangePropertyApplicationDetails/:id`} component={() => <ChangePropertyApplicationDetails parentRoute={path} />} />
+
           <PrivateRoute path={`${path}/ptsearch/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/payment-details/:id`} component={() => <PaymentDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/ptsearch/payment-details/:id`} component={() => <PaymentDetails parentRoute={path} />} />
@@ -260,8 +273,9 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/application-search`} component={(props) => <SearchApp {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/freeze-property`} component={(props) => <PTFreezeProperty {...props} parentRoute={path} />} />
 
+          <PrivateRoute path={`${path}/SearchChangePropertyApp`} component={(props) => <SearchChangePropertyApp {...props} parentRoute={path} />} />
 
-         
+
 
 
         </div>

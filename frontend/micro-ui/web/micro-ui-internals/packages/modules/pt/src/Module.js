@@ -13,8 +13,10 @@ import PropertyBasementDetails from "./pageComponents/PropertyBasementDetails";
 import PropertyFloorDetails from "./pageComponents/PropertyFloorDetails";
 import PropertyTax from "./pageComponents/PropertyTax";
 import PreviewDemand from "./pageComponents/PreviewDemand";
+import PreviewDemandChange from "./pageComponents/PreviewDemandChange";
 import PreviewView from "./pageComponents/PreviewView";
 import PreviewEstimateDemand from "./pageComponents/PreviewEstimateDemand";
+import PreviewChangeEstimateDemand from "./pageComponents/PreviewChangeEstimateDemand";
 import PropertyType from "./pageComponents/PropertyType";
 import PropertyUsageType from "./pageComponents/PropertyUsageType";
 import ProvideSubUsageType from "./pageComponents/ProvideSubUsageType";
@@ -84,6 +86,7 @@ import EmptyResultInbox from "./components/empty-result";
 import { TableConfig } from "./config/inbox-table-config";
 import NewApplication from "./pages/employee/NewApplication";
 import ApplicationDetails from "./pages/employee/ApplicationDetails";
+import ChangePropertyApplicationDetails from "./pages/employee/ChangePropertyApplicationDetails";
 import SuccessAppication from "./pages/employee/SuccessAppication";
 import PropertyDetails from "./pages/employee/PropertyDetails";
 import AssessmentDetails from "./pages/employee/AssessmentDetails";
@@ -160,12 +163,14 @@ const componentsToRegister = {
   PTAcknowledgement,
   PropertyTax,
   PreviewDemand,
+  PreviewDemandChange,
   PropertyLandingPage,
   PropertyLedger,
   DemandNote,
   DetailLedgerPage,
   PreviewView,
   PreviewEstimateDemand,
+  PreviewChangeEstimateDemand,
   PTSelectPincode,
   PTSelectAddress,
   PTSelectStreet,
@@ -221,6 +226,7 @@ const componentsToRegister = {
   SelectPTUnits,
   PTNewApplication: NewApplication,
   ApplicationDetails: ApplicationDetails,
+  ChangePropertyApplicationDetails: ChangePropertyApplicationDetails,
   SuccessAppication:SuccessAppication,
   PTPropertyDetails: PropertyDetails,
   PTAssessmentDetails: AssessmentDetails,

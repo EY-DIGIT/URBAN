@@ -351,7 +351,7 @@ const InputFieldBlank = () => (
     </div>
 );
 
-const PropertyForm = () => {
+const PreviewDemandChange = () => {
     const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
     const history = useHistory();
     const stateId = Digit.ULBService.getStateId();
@@ -367,7 +367,7 @@ const PropertyForm = () => {
     const tenantId = userInfo1?.tenantId;
     const mutationUpdate = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
     const location = useLocation();
-    const { data, proOwnerDetail, documents, checkboxes, rateZones, owners, unit, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress, isSameAsPropertyAddress } = location.state || {};
+    const { data, proOwnerDetail, documents, checkboxes, rateZones, owners, unit, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress } = location.state || {};
     const calculation = data?.Calculation?.[0];
 
     const propertyFYDetails = calculation?.propertyFYDetails || [];
@@ -378,6 +378,15 @@ const PropertyForm = () => {
     console.log("proOwnerDetail", proOwnerDetail);
 
     const [floorList, setFloorList] = useState([]);
+     const [flag, setFlag] = useState(false);
+    
+        useEffect(() => {
+            const storedFlag = JSON.parse(sessionStorage.getItem("flagstatus"));
+            if (storedFlag) {
+                setFlag(storedFlag);
+                sessionStorage.removeItem("flagstatus"); // clear after reading once
+            }
+        }, []);
     const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
     useEffect(() => {
         setMutationHappened(false);
@@ -470,16 +479,6 @@ const PropertyForm = () => {
                 additionalDetails: proOwnerDetail.additionalDetails,
                 workflow: proOwnerDetail.workflow,
                 processInstance: proOwnerDetail.processInstance,
-                // Preserve correspondence address state
-                correspondenceAddressData: {
-                    correspondenceAddress: correspondenceAddress,
-                    isSameAsPropertyAddress: isSameAsPropertyAddress
-                },
-                // Preserve property details for Exemption and Essential Tax fields
-                propertyDetailsData: {
-                    exemption: propertyDetails?.exemption,
-                    essentialTax: propertyDetails?.essentialTax
-                }
             },
         });
     };
@@ -791,7 +790,7 @@ const PropertyForm = () => {
                                     label="Email ID"
                                     value={owner?.emailId || "N/A"}
                                 />
-                                <InputField label="git" value={owner?.ownerType || "N/A"} />
+                                <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                                 <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                             </div>
                         </React.Fragment>
@@ -967,4 +966,4 @@ const PropertyForm = () => {
     );
 };
 
-export default PropertyForm;
+export default PreviewDemandChange;

@@ -22,7 +22,6 @@ import CorrespondenceAddressSection from "./CorrespondenceAddressSection";
 import SelfDeclaration from "./SelfDeclaration";
 
 const NewApplication = () => {
-  ////////////
   const location = useLocation();
 
   const {
