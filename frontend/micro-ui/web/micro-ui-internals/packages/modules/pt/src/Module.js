@@ -140,6 +140,8 @@ import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
 import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenServicesLandingCards"
 import SuccessPage from "./pages/citizen/Create/SuccessPage"
 
+import TrackApplication from "./pages/citizen/TrackApplication/TrackApplication"
+
 
 const componentsToRegister = {
   AssessmentDetailsSection,
@@ -263,6 +265,7 @@ const componentsToRegister = {
   PaymentForm,
   CitizenServicesCards,
   SuccessPage,
+  TrackApplication,
 };
 
 const addComponentsToRegistry = () => {

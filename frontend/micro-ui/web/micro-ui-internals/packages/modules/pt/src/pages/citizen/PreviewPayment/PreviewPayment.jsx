@@ -180,6 +180,9 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
         },
         payerName: propertyDetails?.owners?.[0]?.name || "",
         payerAddress: `${propertyDetails?.address?.doorNo || ""}, ${propertyDetails?.address?.street || ""}, ${propertyDetails?.address?.locality?.name || ""}`,
+        mobileNumber: propertyDetails?.owners?.[0]?.mobileNumber || "",
+        exemption: propertyDetails?.owners?.[0]?.ownerType || "",
+        roadFactor: propertyDetails?.units?.[0]?.roadFactor || "",
     };
 
     const billDetailList = {
@@ -192,37 +195,45 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
 
     // Responsive styles
     const containerStyle = {
-        maxWidth: '900px',
-        margin: '0 auto',
+        // maxWidth: '900px',
+        // margin: '0 auto',
         padding: window.innerWidth <= 768 ? '16px' : '20px',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        backgroundColor: '#f8f9fa',
+        // backgroundColor: '#f8f9fa',
         minHeight: '100vh'
     };
 
     const sectionStyle = {
-        backgroundColor: '#6B133F',
-        color: '#fff',
+        backgroundColor: '#ffffff',
+        color: '#6B133F',
         padding: '16px 20px',
         fontSize: '18px',
         fontWeight: '600',
         marginTop: '20px',
         borderRadius: '8px 8px 0 0',
-        margin: '20px 0 0 0'
+        margin: '20px 0 0 0',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
     };
 
     const contentStyle = {
         backgroundColor: '#ffffff',
         padding: window.innerWidth <= 768 ? '16px' : '24px',
         borderRadius: '0 0 8px 8px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        // boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         marginBottom: '20px'
     };
 
     const gridStyle = {
         display: 'grid',
         gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: window.innerWidth <= 768 ? '16px' : '20px',
+        gap: window.innerWidth <= 768 ? '16px' : '45px',
+        marginBottom: '16px'
+    };
+
+    const gridStyle2 = {
+        display: 'grid',
+        gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: window.innerWidth <= 768 ? '16px' : '24px',
         marginBottom: '16px'
     };
 
@@ -325,38 +336,55 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
             <div style={sectionStyle}>Consumer Details</div>
             {/* <div style={sectionStyle}>{t("CONSUMERDETAILS")}</div> */}
             <div style={contentStyle}>
-                <div style={gridStyle}>
+                {/* <div style={gridStyle}>
                     {renderField('Property ID', consumerCodes, true)}
                     {renderField('Plot Area (Sq feet)', billList?.additionalDetails?.plotArea, true)}
                     {renderField('Rate Zone', billList?.additionalDetails?.rateZone, true)}
+                </div> */}
+                 <div style={gridStyle}>
+                    {renderField(t("PROPERTY_ID"), consumerCodes, true)}
+                    {renderField(t("OWNER_NAME"), billList?.payerName, true)}
+                    {renderField(t("MOBILE_NUMBER"), billList?.mobileNumber)}
+                    {renderField('Exemption', billList?.exemption)}
+                    {renderField(t("ROAD_FACTOR"), billList?.roadFactor)}
+                    {renderField(t("COLONY"), billDetailList?.address?.colony, true)}
+                    {/* {renderField('Aadhaar ID', maskAadhaar(billList?.additionalDetails?.aadhaarNumber))} */}
                 </div>
             </div>
 
             {/* Owner Details Section */}
             {/* <div style={sectionStyle}>{t("OWNERDETAILS")}</div> */}
             {/* <div style={contentStyle}> */}
-                <div style={gridStyle}>
+                {/* <div style={gridStyle}>
                     {renderField('Owner Name', billList?.payerName, true)}
-                    {renderField('Father/Husband Name', billList?.additionalDetails?.guardianName)}
+                    {renderField('Mobile Number', billList?.mobileNumber)}
                     {renderField('Aadhaar ID', maskAadhaar(billList?.additionalDetails?.aadhaarNumber))}
-                </div>
+                </div> */}
             {/* </div> */}
 
             {/* Property Address Section */}
             {/* <div style={sectionStyle}>{t("PROPERTYADDRESS")}</div>
             <div style={contentStyle}> */}
                 <div style={gridStyle}>
-                    {renderField('Address', billList?.payerAddress, true)}
-                    {renderField('Ward', billDetailList?.address?.ward, true)}
-                    {renderField('Colony', billDetailList?.address?.colony, true)}
-                    {renderField('Zone', billDetailList?.address?.zone, true)}
+                    {/* {renderField('Address', billList?.payerAddress, true)}
+                    {renderField('Ward', billDetailList?.address?.ward, true)} */}
+                    {/* {renderField('Zone', billDetailList?.address?.zone, true)} */}
                 </div>
             {/* </div> */}
 
             {/* Tax Details Section */}
             <div style={sectionStyle}>Payment Details</div>
             {/* <div style={sectionStyle}>{t("PAYMENTDETAILS")}</div> */}
-            <div style={taxSectionStyle}>
+            <div style={contentStyle}>
+                <div style={gridStyle2}>
+                    {renderField(t("ARREAR"), Arrears.toLocaleString(), true)}
+                    {/* {renderField(t("CURRENT_YEAR_NET_TAX"), (billDetails?.amount || 0).toLocaleString(), true)} */}
+                    {renderField(t("Current Year Net Tax"), (billDetails?.amount || 0).toLocaleString(), true)}
+                    {/* {renderField(t("PREVIOUS_BALANCE"), getAdvanceAmount().toLocaleString(), true)} */}
+                    {renderField(t("Previous Balance"), getAdvanceAmount().toLocaleString(), true)}
+                    {renderField(t("TOTALPAYABLEAMOUNT"), getTotal().toLocaleString(), true)}
+                </div>
+{/*                 
                 <div style={taxRowStyle}>
                     <span style={{ fontWeight: '500' }}>{t("ARREAR")}</span>
                     <span>₹ {Arrears.toLocaleString()}</span>
@@ -378,7 +406,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
                     <span>₹ {getTotal().toLocaleString()}</span>
                 </div>
 
-                <div style={disclaimerStyle}>{t("TAX_PAY_DISCLAIMER")}</div>
+                <div style={disclaimerStyle}>{t("TAX_PAY_DISCLAIMER")}</div> */}
 
                 <button
                     style={buttonStyle}

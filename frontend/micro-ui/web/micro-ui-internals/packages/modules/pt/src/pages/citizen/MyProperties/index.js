@@ -21,7 +21,7 @@ export const MyProperties = () => {
   }
   let filter1 = !isNaN(parseInt(filter))
     ? { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: off, tenantId }
-    : { limit: "4", sortOrder: "ASC", sortBy: "createdTime", offset: "0",mobileNumber:user?.mobileNumber, tenantId };
+    : { limit: "50", sortOrder: "ASC", sortBy: "createdTime", offset: "0",mobileNumber:user?.mobileNumber, tenantId };
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearchNew({ filters: filter1,searchedFrom:"myPropertyCitizen" }, { filters: filter1 });
 
   if (isLoading) {
@@ -42,20 +42,20 @@ export const MyProperties = () => {
           ))}
         {!applicationsList?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>} */}
         <MyProperty applications={applicationsList} />
-        {applicationsList?.length !== 0 && (
+        {/* {applicationsList?.length !== 0 && (
           <div>
             <p style={{ marginLeft: "16px", marginTop: "16px" }}>
               <span className="link">{<Link to={`/digit-ui/citizen/pt/property/my-properties/${t1}`}>{t("PT_LOAD_MORE_MSG")}</Link>}</span>
             </p>
           </div>
-        )}
+        )} */}
       </div>
-      <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+      {/* <p style={{ marginLeft: "16px", marginTop: "16px" }}>
         {t("PT_TEXT_NOT_ABLE_TO_FIND_THE_APPLICATION")}{" "}
         <span className="link" style={{ display: "block" }}>
           <Link to="/digit-ui/citizen/pt/property/new-application/info">{t("PT_COMMON_CLICK_HERE_TO_REGISTER_NEW_PROPERTY")}</Link>
         </span>
-      </p>
+      </p> */}
     </React.Fragment>
   );
 };

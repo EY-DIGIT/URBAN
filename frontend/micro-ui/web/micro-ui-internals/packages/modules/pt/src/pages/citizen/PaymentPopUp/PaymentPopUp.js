@@ -38,6 +38,27 @@ const popupStyle = {
   zIndex: 1000
 };
 
+const backButtonStyle = {
+  position: 'absolute',
+  top: '16px',
+  left: '16px',
+  background: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '8px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '50%',
+  transition: 'background-color 0.2s ease',
+  color: '#6B133F'
+};
+
+const backButtonHoverStyle = {
+  ...backButtonStyle,
+  backgroundColor: 'rgba(107, 19, 63, 0.1)'
+};
+
 const titleStyle = {
   fontSize: '20px',
   fontWeight: '600',
@@ -89,15 +110,14 @@ const Popup = ({ show, onClose }) => {
   const isMountedRef = useRef(true);
   const [selectedOption, setSelectedOption] = useState('');
   const [hovered, setHovered] = useState(null);
+  const [backButtonHovered, setBackButtonHovered] = useState(false);
 
-  // Track mounted state
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
     };
   }, []);
 
-  // Reset state when show prop changes
   useEffect(() => {
     if (show && isMountedRef.current) {
       setSelectedOption('');
@@ -107,11 +127,14 @@ const Popup = ({ show, onClose }) => {
 
   if (!show) return null;
 
+  const handleBackClick = () => {
+    window.history.back();
+  };
+
   const handleOptionClick = (option) => {
     if (isMountedRef.current) {
       setSelectedOption(option);
     }
-    // Call onClose immediately - don't wait for state update
     if (onClose) {
       onClose(option);
     }
@@ -143,6 +166,27 @@ const Popup = ({ show, onClose }) => {
     <div style={backdropStyle}>
       <div style={containerStyle}>
         <div style={popupStyle}>
+          <button
+            style={backButtonHovered ? backButtonHoverStyle : backButtonStyle}
+            onClick={handleBackClick}
+            onMouseEnter={() => setBackButtonHovered(true)}
+            onMouseLeave={() => setBackButtonHovered(false)}
+            aria-label="Go back"
+          >
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          
           <h2 style={titleStyle}>{t("PAYING_FOR")}</h2>
           <div style={optionsContainerStyle}>
             <button

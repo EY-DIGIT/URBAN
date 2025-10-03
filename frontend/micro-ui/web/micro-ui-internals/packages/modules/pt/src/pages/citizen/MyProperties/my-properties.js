@@ -1,11 +1,38 @@
 import React, { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router-dom";
+import { Loader } from "@egovernments/digit-ui-react-components";
 
 const PropertyManagement = ({ applications = [] }) => {
   const { t } = useTranslation();
+  const history = useHistory();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoadingEstimate, setIsLoadingEstimate] = useState(false);
   const itemsPerPage = 10;
+
+  let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
+  const tenantId = userInfo1?.tenantId;
+  const stateId = Digit.ULBService.getStateId();
+
+  const {
+    isLoading: ptCalculationEstimateLoading,
+    data: ptCalculationEstimateData,
+    mutate: ptCalculationEstimateMutate,
+  } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
+
+  // Get generatePdfKey for receipt generation
+  const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
+    select: (data) =>
+      data["common-masters"]?.uiCommonPay?.filter(({ code }) => "PT".includes(code))[0]?.receiptKey || "consolidatedreceipt",
+  });
+
+  // Fetch payment data for all properties
+  const consumerCodes = applications?.map((a) => a.propertyId).join(",");
+  const { data: paymentsData, isLoading: paymentsLoading } = Digit.Hooks.pt.useMyPropertyPayments(
+    { tenantId: tenantId, filters: { consumerCodes: consumerCodes } },
+    { enabled: applications?.length > 0, propertyData: applications }
+  );
 
   // CSS-in-JS styles
   const styles = {
@@ -16,11 +43,8 @@ const PropertyManagement = ({ applications = [] }) => {
       minHeight: "100vh"
     },
     searchSection: {
-      // backgroundColor: "white",
       padding: "20px",
-      // borderRadius: "8px",
       marginBottom: "20px",
-      // boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
     },
     searchTitle: {
       color: "#6B133F",
@@ -130,7 +154,8 @@ const PropertyManagement = ({ applications = [] }) => {
       cursor: "pointer",
       fontSize: "12px",
       fontWeight: "500",
-      whiteSpace: "nowrap"
+      whiteSpace: "nowrap",
+      transition: "all 0.3s ease"
     },
     receiptButton: {
       backgroundColor: "transparent",
@@ -141,7 +166,8 @@ const PropertyManagement = ({ applications = [] }) => {
       cursor: "pointer",
       fontSize: "12px",
       fontWeight: "500",
-      whiteSpace: "nowrap"
+      whiteSpace: "nowrap",
+      transition: "all 0.3s ease"
     },
     pagination: {
       display: "flex",
@@ -173,42 +199,23 @@ const PropertyManagement = ({ applications = [] }) => {
       padding: "40px",
       color: "#666",
       fontSize: "16px"
-    },
-    // Responsive styles
-    "@media (maxWidth: 768px)": {
-      tableHeaderCell: {
-        padding: "8px",
-        fontSize: "12px"
-      },
-      tableCell: {
-        padding: "8px",
-        fontSize: "12px"
-      },
-      actionButtonsContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap"
-      },
-      actionButton: {
-        fontSize: "10px",
-        padding: "4px 8px"
-      },
-      receiptButton: {
-        fontSize: "10px",
-        padding: "4px 8px"
-      }
     }
   };
 
-  // Filter applications based on search term
+  // Filter applications - show only ACTIVE status and apply search term
   const filteredApplications = useMemo(() => {
-    if (!searchTerm) return applications;
+    let filtered = applications.filter(app => app.status === "ACTIVE");
+
+    if (searchTerm) {
+      filtered = filtered.filter(app =>
+        app.propertyId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        app.owners?.some(owner => 
+          owner.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    }
     
-    return applications.filter(app =>
-      app.propertyId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.owners?.some(owner => 
-        owner.name?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+    return filtered;
   }, [applications, searchTerm]);
 
   // Calculate pagination
@@ -219,7 +226,7 @@ const PropertyManagement = ({ applications = [] }) => {
 
   // Handle search
   const handleSearch = () => {
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
   };
 
   const handleClear = () => {
@@ -231,6 +238,172 @@ const PropertyManagement = ({ applications = [] }) => {
     setCurrentPage(newPage);
   };
 
+  // Fetch estimate data for a specific property
+  const fetchEstimateData = async (application) => {
+    return new Promise((resolve, reject) => {
+      const units = application?.units;
+      const yearRange = Array.isArray(units) && units.length > 0
+        ? units[0].toYear
+        : null;
+
+      if (!yearRange || !application?.propertyId) {
+        reject(new Error("Missing required data"));
+        return;
+      }
+
+      const payload = {
+        Assessment: {
+          financialYear: yearRange,
+          propertyId: application?.propertyId,
+          tenantId: tenantId,
+          source: "MUNICIPAL_RECORDS",
+          channel: "CITIZEN",
+          assessmentDate: Date.now(),
+        }
+      };
+
+      ptCalculationEstimateMutate(payload, {
+        onSuccess: (data) => {
+          resolve(data);
+        },
+        onError: (error) => {
+          reject(error);
+        },
+      });
+    });
+  };
+
+  // Navigation handlers - fetch estimate data first
+  const handleLedger = async (application) => {
+    setIsLoadingEstimate(true);
+    try {
+      const estimateData = await fetchEstimateData(application);
+      history.push({
+        pathname: `/digit-ui/employee/pt/PropertyLedger`,
+        state: { 
+          proOwnerDetail: application,
+          calculation: estimateData?.Calculation?.[0],
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching estimate:", error);
+      alert("Failed to load property data. Please try again.");
+    } finally {
+      setIsLoadingEstimate(false);
+    }
+  };
+
+  const handleDetailedLedger = async (application) => {
+    setIsLoadingEstimate(true);
+    try {
+      const estimateData = await fetchEstimateData(application);
+      history.push({
+        pathname: `/digit-ui/employee/pt/DetailLedgerPage`,
+        state: { 
+          proOwnerDetail: application,
+          calculation: estimateData?.Calculation?.[0],
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching estimate:", error);
+      alert("Failed to load property data. Please try again.");
+    } finally {
+      setIsLoadingEstimate(false);
+    }
+  };
+
+  const handleDemandNote = async (application) => {
+    setIsLoadingEstimate(true);
+    try {
+      const estimateData = await fetchEstimateData(application);
+      history.push({
+        pathname: `/digit-ui/employee/pt/DemandNote`,
+        state: { 
+          proOwnerDetail: application,
+          calculation: estimateData?.Calculation?.[0],
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching estimate:", error);
+      alert("Failed to load property data. Please try again.");
+    } finally {
+      setIsLoadingEstimate(false);
+    }
+  };
+
+  // Duplicate Receipt handler - using pre-fetched payment data
+  const handleDuplicateReceipt = async (application) => {
+    setIsLoadingEstimate(true);
+    try {
+      // Find payments for this specific property
+      const propertyPayments = paymentsData?.Payments?.filter(payment => 
+        payment.paymentDetails?.some(detail => detail.bill?.consumerCode === application.propertyId)
+      );
+
+      if (!propertyPayments || propertyPayments.length === 0) {
+        alert("No payment receipts found for this property.");
+        setIsLoadingEstimate(false);
+        return;
+      }
+
+      // Get the most recent payment
+      const latestPayment = propertyPayments[0];
+      const receiptNumber = latestPayment?.paymentDetails?.[0]?.receiptNumber;
+
+      if (!receiptNumber) {
+        alert("Receipt number not found in payment records.");
+        setIsLoadingEstimate(false);
+        return;
+      }
+
+      // Fetch estimate data
+      const estimateData = await fetchEstimateData(application);
+
+      const currentTenantId = Digit.ULBService.getCurrentTenantId();
+      const state = Digit.ULBService.getStateId();
+
+      // Fetch the receipt
+      const payments = await Digit.PaymentService.getReciept(
+        currentTenantId,
+        "PT",
+        { receiptNumbers: receiptNumber }
+      );
+
+      let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
+
+      if (!payments.Payments[0]?.fileStoreId) {
+        // Generate PDF with calculation and property details
+        const paymentsWithCalculation = payments.Payments.map(payment => ({
+          ...payment,
+          Calculation: estimateData?.Calculation?.[0] || {},
+          plotArea: application?.landArea,
+          ward: application?.address?.ward,
+          zone: application?.address?.zone,
+          rateZone: application?.address?.locality?.children?.[0]?.name,
+          address: `${application?.address?.doorNo}, ${application?.address?.street}, ${application?.address?.locality?.name}, ${application?.address?.pincode}`
+        }));
+        response = await Digit.PaymentService.generatePdf(
+          state,
+          { Payments: paymentsWithCalculation },
+          generatePdfKey
+        );
+      }
+
+      // Print/download the receipt
+      const fileStore = await Digit.PaymentService.printReciept(
+        state,
+        { fileStoreIds: response.filestoreIds[0] }
+      );
+      window.open(fileStore[response.filestoreIds[0]], "_blank");
+
+    } catch (error) {
+      console.error("Error generating duplicate receipt:", error);
+      alert("Failed to generate duplicate receipt. Please try again.");
+    } finally {
+      setIsLoadingEstimate(false);
+    }
+  };
+
   const formatOwnerNames = (owners) => {
     if (!owners || owners.length === 0) return "N/A";
     return owners.map(owner => owner.name).join(", ");
@@ -239,6 +412,10 @@ const PropertyManagement = ({ applications = [] }) => {
   const formatStatus = (status) => {
     return status ? t(`PT_COMMON_${status}`) : "N/A";
   };
+
+  if (isLoadingEstimate || paymentsLoading) {
+    return <Loader />;
+  }
 
   return (
     <div style={styles.container}>
@@ -267,7 +444,6 @@ const PropertyManagement = ({ applications = [] }) => {
       </div>
 
       {/* Properties Table Section */}
-
       <h2 style={styles.propertiesTitle}>My Properties</h2>
 
       <div style={styles.propertiesSection}>        
@@ -303,19 +479,63 @@ const PropertyManagement = ({ applications = [] }) => {
                     </td>
                     <td style={styles.tableCell}>
                       <div style={styles.actionButtonsContainer}>
-                        <button style={styles.actionButton}>
+                        <button 
+                          style={styles.actionButton}
+                          onClick={() => handleLedger(application)}
+                          onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "#6B133F";
+                            e.target.style.color = "white";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "transparent";
+                            e.target.style.color = "#6B133F";
+                          }}
+                        >
                           Ledger
                         </button>
-                        <button style={styles.actionButton}>
+                        <button 
+                          style={styles.actionButton}
+                          onClick={() => handleDetailedLedger(application)}
+                          onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "#6B133F";
+                            e.target.style.color = "white";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "transparent";
+                            e.target.style.color = "#6B133F";
+                          }}
+                        >
                           Detailed Ledger
                         </button>
-                        <button style={styles.actionButton}>
+                        <button 
+                          style={styles.actionButton}
+                          onClick={() => handleDemandNote(application)}
+                          onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "#6B133F";
+                            e.target.style.color = "white";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "transparent";
+                            e.target.style.color = "#6B133F";
+                          }}
+                        >
                           Demand Note
                         </button>
                       </div>
                     </td>
                     <td style={styles.tableCell}>
-                      <button style={styles.receiptButton}>
+                      <button 
+                        style={styles.receiptButton}
+                        onClick={() => handleDuplicateReceipt(application)}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#6B133F";
+                          e.target.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "transparent";
+                          e.target.style.color = "#6B133F";
+                        }}
+                      >
                         Duplicate Receipt
                       </button>
                     </td>
@@ -324,7 +544,7 @@ const PropertyManagement = ({ applications = [] }) => {
               ) : (
                 <tr>
                   <td colSpan="5" style={styles.noResults}>
-                    {searchTerm ? "No properties found matching your search." : "No properties available."}
+                    {searchTerm ? "No active properties found matching your search." : "No active properties available."}
                   </td>
                 </tr>
               )}
@@ -368,5 +588,3 @@ const PropertyManagement = ({ applications = [] }) => {
 };
 
 export default PropertyManagement;
-
-

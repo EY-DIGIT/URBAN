@@ -35,7 +35,11 @@ const App = () => {
   const PaymentForm = Digit?.ComponentRegistryService?.getComponent("PaymentForm");
   const CitizenServices = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
   const SuccessPage = Digit?.ComponentRegistryService?.getComponent("SuccessPage");
+  const TrackApplication = Digit?.ComponentRegistryService?.getComponent("TrackApplication");
 
+  const PropertyLedger = Digit?.ComponentRegistryService?.getComponent("PropertyLedger");
+  const DemandNote = Digit?.ComponentRegistryService?.getComponent("DemandNote");
+  const DetailLedgerPage = Digit?.ComponentRegistryService?.getComponent("DetailLedgerPage");
 
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
@@ -69,6 +73,11 @@ const App = () => {
           {/* Citizen Services */}
           <PrivateRoute path={`${path}/citizen-services`} component={CitizenServices}></PrivateRoute>
           <PrivateRoute path={`${path}/property/acknowledgement-pt`} component={SuccessPage}></PrivateRoute>
+          <PrivateRoute path={`${path}/property/trackApplication`} component={TrackApplication}></PrivateRoute>
+
+          <PrivateRoute path={`${path}/PropertyLedger`} component={PropertyLedger} />
+          <PrivateRoute path={`${path}/DemandNote`} component={DemandNote} />
+          <PrivateRoute path={`${path}/DetailLedgerPage`} component={DetailLedgerPage} />
 
         </AppContainer>
       </Switch>
