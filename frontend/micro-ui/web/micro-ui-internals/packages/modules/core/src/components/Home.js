@@ -219,9 +219,9 @@ const EmployeeHome = ({ modules }) => {
             dropdownOptions: [
                 { label: t("NAMANTRAN"), link: "/namantran" },
                 { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
-                { label: t("CHANGEINPROPERTY"), link: "/change-property" },
+                { label: t("CHANGEINPROPERTY"), link: "/digit-ui/employee/pt/SearchChangePropertyApp" },
                 { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" }
-            ],
+            ], 
             citizenLink: "",
             isExternal: false
         },
