@@ -183,6 +183,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const TransferOwnership = Digit?.ComponentRegistryService?.getComponent("PTTransferOwnership");
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
    const CitizenServicesCards = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
+   const PTFreezeProperty = Digit?.ComponentRegistryService?.getComponent("PTFreezeProperty");
   
 
   const isRes = window.location.href.includes("pt/response");
@@ -257,6 +258,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             )}
           />
           <PrivateRoute path={`${path}/application-search`} component={(props) => <SearchApp {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/freeze-property`} component={(props) => <PTFreezeProperty {...props} parentRoute={path} />} />
 
 
          

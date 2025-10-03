@@ -141,6 +141,7 @@ import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenService
 import SuccessPage from "./pages/citizen/Create/SuccessPage"
 
 import TrackApplication from "./pages/citizen/TrackApplication/TrackApplication"
+import PTFreezeProperty from "./components/FreezeProperty"
 
 
 const componentsToRegister = {
@@ -266,6 +267,7 @@ const componentsToRegister = {
   CitizenServicesCards,
   SuccessPage,
   TrackApplication,
+  PTFreezeProperty,
 };
 
 const addComponentsToRegistry = () => {

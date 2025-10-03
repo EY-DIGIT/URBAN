@@ -279,7 +279,7 @@ const PropertyManagement = ({ applications = [] }) => {
     try {
       const estimateData = await fetchEstimateData(application);
       history.push({
-        pathname: `/digit-ui/employee/pt/PropertyLedger`,
+        pathname: `/digit-ui/citizen/pt/PropertyLedger`,
         state: { 
           proOwnerDetail: application,
           calculation: estimateData?.Calculation?.[0],
@@ -298,7 +298,7 @@ const PropertyManagement = ({ applications = [] }) => {
     try {
       const estimateData = await fetchEstimateData(application);
       history.push({
-        pathname: `/digit-ui/employee/pt/DetailLedgerPage`,
+        pathname: `/digit-ui/citizen/pt/DetailLedgerPage`,
         state: { 
           proOwnerDetail: application,
           calculation: estimateData?.Calculation?.[0],
@@ -317,7 +317,7 @@ const PropertyManagement = ({ applications = [] }) => {
     try {
       const estimateData = await fetchEstimateData(application);
       history.push({
-        pathname: `/digit-ui/employee/pt/DemandNote`,
+        pathname: `/digit-ui/citizen/pt/DemandNote`,
         state: { 
           proOwnerDetail: application,
           calculation: estimateData?.Calculation?.[0],
