@@ -1,6 +1,6 @@
 import { CardLabel, DatePicker, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
 import React from "react";
-//test PR
+//test PR new
 const WSActivationDetails = ({ t, config, userType, formData, onSelect }) => {
   const [activationDetails, setActivationDetails] = React.useState({
     meterId: "",
