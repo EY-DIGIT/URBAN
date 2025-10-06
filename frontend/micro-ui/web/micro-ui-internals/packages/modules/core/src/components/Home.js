@@ -204,6 +204,12 @@ const EmployeeHome = ({ modules }) => {
     }
   ];
 
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+  const ARORoles = ["PT_APPROVER"];
+
+  const isARO = ARORoles.some(role => userRoles.includes(role));
+
   // Filter favorites based on role
   const filteredFavorites = allFavorites.filter(fav => {
     if (fav.label === "Property Register" && (roles.includes("PT_APPROVER") || roles.includes("PT_CEMP"))) {
@@ -219,9 +225,10 @@ const EmployeeHome = ({ modules }) => {
             dropdownOptions: [
                 { label: t("NAMANTRAN"), link: "/namantran" },
                 { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
-                { label: t("CHANGEINPROPERTY"), link: "/digit-ui/employee/pt/SearchChangePropertyApp" },
-                { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" }
-            ], 
+                { label: t("CHANGEINPROPERTY"), link: "/change-property" },
+                { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" },
+                ...(isARO ? [{ label: t("Property Freeze/Unfreeze"), link: "/digit-ui/employee/pt/freeze-property" }] : [])
+            ],
             citizenLink: "",
             isExternal: false
         },
