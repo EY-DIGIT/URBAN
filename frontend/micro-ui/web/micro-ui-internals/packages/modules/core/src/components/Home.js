@@ -170,6 +170,7 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 const EmployeeHome = ({ modules }) => {
   const { t } = useTranslation();
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
+    const { data: commonFields, isLoadings } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const user = Digit.UserService.getUser();
   const accessToken = user?.access_token;
@@ -225,7 +226,7 @@ const EmployeeHome = ({ modules }) => {
             dropdownOptions: [
                 { label: t("NAMANTRAN"), link: "/namantran" },
                 { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
-                { label: t("CHANGEINPROPERTY"), link: "/change-property" },
+                { label: t("CHANGEINPROPERTY"), link: "/digit-ui/employee/pt/SearchChangePropertyApp" },
                 { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" },
                 ...(isARO ? [{ label: t("Property Freeze/Unfreeze"), link: "/digit-ui/employee/pt/freeze-property" }] : [])
             ],
