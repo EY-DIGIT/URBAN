@@ -14,17 +14,28 @@ const getTenants = (codes, tenants) => {
 };
 
 export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
+   console.log("appTenants", appTenants,stateCode);
   const ComponentProvider = Digit.Contexts.ComponentProvider;
   const { path } = useRouteMatch();
   const location = useLocation();
 
   const user = Digit.UserService.getUser();
-
+  useEffect(
+    () =>
+      userType === "employee" &&
+      Digit.LocalizationService.getLocale({
+        modules: ["rainmaker-pt"],
+        locale: Digit.StoreData.getCurrentLanguage(),
+        tenantId: stateCode,
+      }),
+    []
+  );
   if (!user || !user?.access_token || !user?.info) {
     return <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />;
   }
 
   const appRoutes = modules.map(({ code, tenants }, index) => {
+    console.log("code", code,tenants);
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
     return Module ? (
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
