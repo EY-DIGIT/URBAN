@@ -143,7 +143,7 @@ const { data: storeData } = Digit.Hooks.useStore.getInitData();
                 <table style={{ borderCollapse: "collapse", width: "100%" }}>
                     <thead style={backGround23}>
                         <tr style={backGround23}>
-                            <th style={headerStyle}>Application Number</th>
+                         
                             <th style={headerStyle}>Property ID</th>
                             <th style={headerStyle}>Owner Name</th>
                             <th style={headerStyle}>Application Type</th>
@@ -168,14 +168,14 @@ const { data: storeData } = Digit.Hooks.useStore.getInitData();
 
                                 return (
                                     <tr key={index} style={{ backgroundColor: "#fff", borderTop: "1px solid #eee" }}>
-                                        <td style={cellStyle}>{applicationNo}</td>
+                                      
                                         <td style={cellStyle}>
-                                            {/* <a
+                                            <a
                                                 href={`/digit-ui/employee/pt/applicationsearch/ChangePropertyApplicationDetails/${propertyId}`}
                                                 style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                             >
                                                 {propertyId}
-                                            </a> */}
+                                            </a>
                                         </td>
                                         <td style={cellStyle}>{ownerNames}</td>
                                         <td style={cellStyle}>{t(applicationType)}</td>

@@ -471,16 +471,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     <div>
                         <div className="search-grid">
                             {/* Application No */}
-                            <div className="form-field">
-                                <label className="form-label">Application Number</label>
-                                <input
-                                    className="form-input"
-                                    type="text"
-                                    value={formData.applicationNo}
-                                    onChange={(e) => handleInputChange('applicationNo', e.target.value)}
-                                    placeholder="Enter application number"
-                                />
-                            </div>
+                         
                   
 
                             {/* Property ID */}
@@ -513,41 +504,10 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                             </div>
 
                             {/* Application Status */}
-                            <div className="form-field">
-                                <label className="form-label"> Status</label>
-                                <select
-                                    className="form-select"
-                                    value={formData.status}
-                                    onChange={(e) => handleInputChange('status', e.target.value)}
-                                >
-                                    <option value="">Select Status</option>
-                                    <option value="ACTIVE">Active</option>
-                                    <option value="INACTIVE">Inactive</option>
-                                    <option value="INWORKFLOW">In Workflow</option>
-                                </select>
-                            </div>
+                          
 
                             {/* From Date */}
-                            <div className="form-field">
-                                <label className="form-label">From Date</label>
-                                <input
-                                    className="form-input"
-                                    type="date"
-                                    value={formData.fromDate}
-                                    onChange={(e) => handleInputChange('fromDate', e.target.value)}
-                                />
-                            </div>
-
-                            {/* To Date */}
-                            <div className="form-field">
-                                <label className="form-label">To Date</label>
-                                <input
-                                    className="form-input"
-                                    type="date"
-                                    value={formData.toDate}
-                                    onChange={(e) => handleInputChange('toDate', e.target.value)}
-                                />
-                            </div>
+                          
                         </div>
 
                         {/* Buttons */}
@@ -583,7 +543,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                 <table>
                                     <thead >
                                         <tr >
-                                            <th className="backGround23">Application Number</th>
+                                       
                                             <th className="backGround23">Property ID</th>
                                             <th className="backGround23">Owner Name</th>
                                             <th className="backGround23">Application Type</th>
@@ -606,14 +566,12 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>
                                                             <span className="link">
                                                                 <Link to={`/digit-ui/employee/pt/applicationsearch/ChangePropertyApplicationDetails/${result.propertyId}`}>
-                                                                    {result.acknowldgementNumber || result.applicationNo}
+                                                                      {result?.propertyId || result?.uniqueId}
                                                                 </Link>
                                                                 {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
                                                         </td>
-                                                        <td>
-                                                            {/* {result.propertyId || result.uniqueId} */}
-                                                            </td>
+                                                      
                                                         <td>
                                                             {result.owners ?
                                                                 result.owners.map(o => o.name).join(", ") :
@@ -650,14 +608,12 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>
                                                             <span className="link">
                                                                 <Link to={`/digit-ui/employee/pt/applicationsearch/ChangePropertyApplicationDetails/${item.propertyId}`}>
-                                                                    {item.acknowldgementNumber || item.applicationNo}
+                                                                  {item?.propertyId || item?.uniqueId}
                                                                 </Link>
                                                                 {/* {item.acknowldgementNumber || item.applicationNo} */}
                                                             </span>
                                                         </td>
-                                                        <td>
-                                                            {/* {item.propertyId || item.uniqueId} */}
-                                                            </td>
+                                                     
                                                         <td>
                                                             {item.owners ?
                                                                 item.owners.map(o => o.name).join(", ") :
