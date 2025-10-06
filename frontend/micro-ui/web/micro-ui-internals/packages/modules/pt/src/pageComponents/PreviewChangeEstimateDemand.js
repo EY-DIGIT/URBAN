@@ -11,7 +11,6 @@ import DownloadPdfButton from "./DownloadPDF";
 const styles = {
     container: {
         padding: "20px",
-        // fontFamily: "Arial, sans-serif",
         fontSize: "14px",
     },
     row: {
