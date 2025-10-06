@@ -764,6 +764,23 @@ const getPropertyCategoryTypeList = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getSideMenuTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "SideMenu",
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const getMeterStatusTypeList = (tenantId) => ({
   moduleDetails: [
     {
@@ -1388,6 +1405,21 @@ const getPropertyCategoryType = (MdmsRes) => {
   //return MdmsRes;
 };
 
+const getSideMenuType = (MdmsRes) => {
+  console.log("DDDDDDDDD+=",MdmsRes)
+
+//  return MdmsRes["common-masters"].SideMenu
+ 
+//  return MdmsRes["common-masters"].SideMenu.filter((SideMenu) => SideMenu.active).map((SideMenuDetails) => {
+//     return {
+//       ...SideMenuDetails,
+//       i18nKey: `PT_COMMON_RELATIONSHIP_${SideMenuDetails.code}`,
+//     };
+//   });
+  return MdmsRes;
+};
+
+
 const TLGenderType = (MdmsRes) => {
   MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((genders) => {
     return {
@@ -1579,6 +1611,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getSalutationsHindiType(MdmsRes)
       case "PropertyCategory":
         return getPropertyCategoryType(MdmsRes)
+        case "SideMenu":
+        return getSideMenuType(MdmsRes)
     case "Relationship":
       return getRelationshipType(MdmsRes)
     case "TLGendertype":
@@ -1881,6 +1915,9 @@ export const MdmsService = {
   },
    getPropertyCategoryType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyCategoryTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+  getSideMenuType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getSideMenuTypeList(tenantId, moduleCode, type), moduleCode);
   },
 
   getRelationshipType: (tenantId, moduleCode, type) => {
