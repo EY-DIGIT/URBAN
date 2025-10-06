@@ -216,7 +216,9 @@ function ApplicationDetailsContentVerifier({
   // const stateId = Digit.ULBService.getStateId();
     const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
     const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
-      const { data: RoadFactors, isLoading:{} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
+    const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {}; 
+    const { data: EssentialTax = {}, isLoadingOe } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "EssentialTax") || {};
+    const { data: RoadFactors, isLoading:{} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
   const RoadFactorList = (RoadFactors?.PropertyTax?.RoadFactor || []).map((item) => ({
     code: item.code,
     name: item.name, // Show year like "2024-25"
@@ -242,7 +244,35 @@ function ApplicationDetailsContentVerifier({
       code: item.code,
       name: t(item.name)
     }));
-  
+
+    // Fix the data path - OwnerType data is directly in the array, not nested
+    const ownerTypeOptions = (Array.isArray(OwnerType) ? OwnerType : OwnerType?.PropertyTax?.OwnerType || []).map(item => ({
+      code: item.code,
+      name: item.name 
+    }));
+    
+    const getOwnerTypeDisplay = (code) => {
+      const mdmsMatch = ownerTypeOptions.find(option => option.code === code);
+      if (mdmsMatch) return mdmsMatch.name;
+      
+      return code || "N/A";
+    };
+    const displayOwnerType = getOwnerTypeDisplay(owner?.ownerType);
+
+    // Fix the data path - EssentialTax data is directly in the array, not nested
+    const essentialTaxOptions = (Array.isArray(EssentialTax) ? EssentialTax : EssentialTax?.PropertyTax?.EssentialTax || []).map(item => ({
+      code: item.code,
+      name: item.name
+    }));
+
+    const getEssentialTaxDisplay = (code) => {
+      const mdmsMatch = essentialTaxOptions.find(option => option.code === code);
+      if (mdmsMatch) return mdmsMatch.name;
+
+      return code || "N/A";
+    };
+    const displayEssentialTax = getEssentialTaxDisplay(application?.essentialTax);
+
     const[showFather,setShowFather]=useState("");
     // console.log("DROPDOWNOPTION==",formErrors)
     const propertyCategoryOptions=(PropertyCategory || []).map((item)=>({
@@ -634,17 +664,31 @@ function ApplicationDetailsContentVerifier({
             {/* <div style={styles.sectionTitle}>Other Details</div> */}
           </div>
           <div style={styles.grid}>
-            <div style={styles.flex30} >
-              {/* Exemption Dropdown */}
+            {/* <div style={styles.flex30} >
               <label style={styles.label}>Exemption Applicable.</label>
               <select style={styles.input} value={owner?.ownerType} disabled>
                 <option>{owner?.ownerType}</option>
               </select>
+            </div> */}
+            <div style={styles.flex30} >
+              {/* Exemption Dropdown */}
+              <label style={styles.label}>Exemption Applicable.</label>
+              <select style={styles.input} value={displayOwnerType} disabled>
+                <option>{displayOwnerType}</option>
+              </select>
             </div>
-            <div style={styles.flex30}>
+
+            {/* <div style={styles.flex30}>
               <label style={styles.label}>Essential Tax</label>
               <input style={styles.input} value={application?.essentialTax} disabled readOnly />
+            </div> */}
+            <div style={styles.flex30}>
+              <label style={styles.label}>Essential Tax</label>
+              <select style={styles.input} value={displayEssentialTax} disabled>
+                <option>{displayEssentialTax}</option>
+              </select>
             </div>
+
             <div style={styles.flex30}>
               {/* <label style={styles.label}>Essential Tax</label> */}
               {/* <input style={styles.input} value={application?.essentialTax} readOnly /> */}
