@@ -403,25 +403,25 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
             <tr>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("Usage Type")}</th>
+              }}>{t("Usage Type")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th  style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("Usage Factor")}</th>
+              }}>{t("Usage Factor")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th  style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("Floor Number")}</th>
+              }}>{t("Floor Number")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("Type of Construction")}</th>
+              }}>{t("Type of Construction")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("Area (Sq feet)")}</th>
+              }}>{t("Area (Sq feet)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("From Year")}</th>
+              }}>{t("From Year")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
-              }}>{t("To Year")}</th>
+              }}>{t("To Year")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               <th style={{
                 ...styles.tableHeader,fontFamily: "Inter, sans-serif",fontWeight: 600,fontSize: "12px",lineHeight: "130%",letterSpacing: "0",fontStyle: "normal",
               }}>{t("Action")}</th>
