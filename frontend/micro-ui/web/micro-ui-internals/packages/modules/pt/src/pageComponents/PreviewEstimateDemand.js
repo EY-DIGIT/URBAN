@@ -387,7 +387,7 @@ const PreviewEstimateDemand = () => {
                         <table style={styles.table}>
                             <thead>
                                 <tr>
-                                    {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount%", "TPV"].map((h) => (
+                                    {["Year", "Usage Type", "Usage Factor", "Floor Number", "Construction Type", "Area (Sq feet)", "Rate", "ALV", "Maintenance Discount", "TPV"].map((h) => (
                                         <th key={h} style={styles.th}>{h}</th>
                                     ))}
                                 </tr>
@@ -404,7 +404,7 @@ const PreviewEstimateDemand = () => {
                                             <td style={styles.td}>{floor?.i18nKey}</td>
                                             <td style={styles.td}>{item.constructionType}</td>
                                             <td style={styles.td}>{item.area}</td>
-                                            <td style={styles.td}>{Math.round(item.factor)}</td>
+                                            <td style={styles.td}>₹ {Math.round(item.factor)}</td>
                                             <td style={styles.td}>₹ {Math.round(item.alv)}</td>
                                             <td style={styles.td}>₹ {Math.round(item?.discount)}</td>
                                             <td style={styles.td}>₹ {Math.round(item?.tpv)}</td>

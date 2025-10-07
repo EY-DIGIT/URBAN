@@ -101,10 +101,10 @@ const PTinboxTable = () => {
     const [offset, setOffset] = useState(0);
     const { t } = useTranslation();
     const limit = 10;
-    
-const { data: storeData } = Digit.Hooks.useStore.getInitData();
-  const { stateInfo } = storeData || {};
-  console.log("Sate Info=",stateInfo)
+
+    const { data: storeData } = Digit.Hooks.useStore.getInitData();
+    const { stateInfo } = storeData || {};
+    console.log("Sate Info=", stateInfo)
 
     const tenantId = Digit.ULBService.getCurrentTenantId();
 
@@ -170,24 +170,34 @@ const { data: storeData } = Digit.Hooks.useStore.getInitData();
                                     <tr key={index} style={{ backgroundColor: "#fff", borderTop: "1px solid #eee" }}>
                                         <td style={cellStyle}>{applicationNo}</td>
                                         <td style={cellStyle}>
-                                            {/* <a
-                                                href={`/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`}
-                                                style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
-                                            >
-                                                {propertyId}
-                                            </a> */}
+
+                                            {status === "ACTIVE" ? (
+                                                <a
+                                                    href={`/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`}
+                                                    style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                                >
+                                                    {propertyId}
+                                                </a>
+                                            ) : (
+                                                "--"
+                                            )}
                                         </td>
                                         <td style={cellStyle}>{ownerNames}</td>
                                         <td style={cellStyle}>{t(applicationType)}</td>
                                         <td style={cellStyle}>  <span className={`status-badge status-${(status || '').toLowerCase().replace(/\s+/g, '')}`}>
-                                            {t(status && `WF_PT_${status}`) || status || "NA"}
+                                            {/* {t(status && `WF_PT_${status}`) || status || "NA"} */}
+                                            {status === "ACTIVE"
+                                                ? "Approved"
+                                                : status === "INWORKFLOW"
+                                                    ? "In Progress"
+                                                    : t(status && `WF_PT_${status}`) || status || "--"}
                                         </span></td>
-                                         <td style={cellStyle}>
+                                        <td style={cellStyle}>
                                             <a
                                                 href={`/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`}
                                                 style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                             >
-                                                <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px",height:"30px" }} />
+                                                <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px", height: "30px" }} />
                                             </a>
                                         </td>
                                     </tr>
@@ -261,15 +271,15 @@ const headerStyle = {
     textAlign: "left",
     fontWeight: "600",
     fontSize: "14px",
-    color: "rgba(40, 40, 40, 1)" ,
+    color: "rgba(40, 40, 40, 1)",
     borderBottom: "1px solid #ddd",
     background: "rgba(107, 19, 63, 0.3)",
     // background: "yellow",
     // backgroundColor:"rgba(107, 19, 63, 0.8)"
-    
-    
+
+
 };
-const backGround23={
+const backGround23 = {
     //  background: rgba(107, 19, 63, 0.3),
     //  color:black,
 };

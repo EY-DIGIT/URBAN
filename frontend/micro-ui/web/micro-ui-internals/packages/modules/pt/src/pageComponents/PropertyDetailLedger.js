@@ -128,7 +128,7 @@ const PropertyDetailLedger = () => {
                     <td style={styles.td}>{item.floorNo}</td>
                     <td style={styles.td}>{item.constructionType}</td>
                     <td style={styles.td}>{item.area}</td>
-                    <td style={styles.td}>{item.factor}</td>
+                    <td style={styles.td}>₹ {item.factor}</td>
                     <td style={styles.td}>₹ {item.alv}</td>
                     <td style={styles.td}>₹ {item?.discount}</td>
                     <td style={styles.td}>₹ {item?.tpv}</td>

@@ -613,6 +613,16 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         </td>
                                                         <td>
                                                             {/* {result.propertyId || result.uniqueId} */}
+                                                              {result.status === "ACTIVE" ? (
+                                                <a
+                                                    href={`/digit-ui/employee/pt/applicationsearch/application-details/${result?.propertyId}`}
+                                                    style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                                >
+                                                    {result?.propertyId}
+                                                </a>
+                                            ) : (
+                                                "--"
+                                            )}
                                                             </td>
                                                         <td>
                                                             {result.owners ?
@@ -622,7 +632,15 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>{result.creationReason || result.applicationType}</td>
                                                         <td>
                                                             <span className={`status-badge status-${(result.status || '').toLowerCase().replace(/\s+/g, '')}`}>
-                                                                {result.status}
+                                                                {/* {result.status} */}
+                                                                {result?.status === "ACTIVE"
+  ? "Approved"
+  : result?.status === "INWORKFLOW"
+  ? "In Progress"
+  : result?.status === "INACTIVE"
+  ? "Rejected"
+  : t(result?.status && `WF_PT_${result?.status}`) || result?.status || "--"}
+
                                                             </span>
                                                         </td>
                                                        <td>
@@ -657,6 +675,16 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         </td>
                                                         <td>
                                                             {/* {item.propertyId || item.uniqueId} */}
+                                                            {item.status === "ACTIVE" ? (
+                                                <a
+                                                    href={`/digit-ui/employee/pt/applicationsearch/application-details/${item?.propertyId}`}
+                                                    style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                                >
+                                                    {item?.propertyId}
+                                                </a>
+                                            ) : (
+                                                "--"
+                                            )}
                                                             </td>
                                                         <td>
                                                             {item.owners ?
@@ -666,7 +694,15 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         <td>{item.creationReason || item.applicationType}</td>
                                                         <td>
                                                             <span className={`status-badge status-${(item.status || '').toLowerCase().replace(/\s+/g, '')}`}>
-                                                                {t(item.status && `WF_PT_${item.status}`) || item.status || "NA"}
+                                                                {/* {t(item.status && `WF_PT_${item.status}`) || item.status || "NA"} */}
+                                                                {item?.status === "ACTIVE"
+  ? "Approved"
+  : item?.status === "INWORKFLOW"
+  ? "In Progress"
+  : item?.status === "INACTIVE"
+  ? "Rejected"
+  : t(item?.status && `WF_PT_${item?.status}`) || item?.status || "--"}
+
                                                             </span>
                                                         </td>
                                                         <td>

@@ -822,7 +822,7 @@ const PropertyForm = () => {
                                         <td style={styles.td}>{item.constructionType}</td>
                                         <td style={styles.td}>{item.area}</td>
                                        
-                                        <td style={styles.td}>{Math.round(item.factor)}</td>
+                                        <td style={styles.td}>₹ {Math.round(item.factor)}</td>
                                         <td style={styles.td}>₹ {Math.round(item.alv)}</td>
                                         <td style={styles.td}>₹ {Math.round(item?.discount)}</td>
                                         <td style={styles.td}>₹ {Math.round(item?.tpv)}</td>
