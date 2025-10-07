@@ -566,13 +566,13 @@ function ApplicationDetailsContentVerifier({
               <table style={{ borderCollapse: "collapse", marginTop: "8px", border: "1px solid #ccc" }}>
                 <thead style={{ background: "#f0f0f0", height: "40px"}}>
                   <tr>
-                    <th style={{ ...styles.labelTable }}>Usage Type</th>
-                    <th style={{ ...styles.labelTable }}>Usage Factor</th>
-                    <th style={{ ...styles.labelTable }}>Floor Number</th>
-                    <th style={{ ...styles.labelTable }}>Type of Construction</th>
-                    <th style={{ ...styles.labelTable }}>Area (Sq feet)</th>
-                    <th style={{ ...styles.labelTable }}>From Year</th>
-                    <th style={{ ...styles.labelTable }}>To Year</th>
+                    <th style={{ ...styles.labelTable }}>Usage Type<span className="mandatory" style={styles.mandatory}>*</span></th>
+                    <th style={{ ...styles.labelTable }}>Usage Factor<span className="mandatory" style={styles.mandatory}>*</span></th>
+                    <th style={{ ...styles.labelTable }}>Floor Number<span className="mandatory" style={styles.mandatory}>*</span></th>
+                    <th style={{ ...styles.labelTable }}>Type of Construction<span className="mandatory" style={styles.mandatory}>*</span></th>
+                    <th style={{ ...styles.labelTable }}>Area (Sq feet)<span className="mandatory" style={styles.mandatory}>*</span></th>
+                    <th style={{ ...styles.labelTable }}>From Year<span className="mandatory" style={styles.mandatory}>*</span></th>
+                    <th style={{ ...styles.labelTable }}>To Year<span className="mandatory" style={styles.mandatory}>*</span></th>
                   </tr>
                 </thead>
                 <tbody>
