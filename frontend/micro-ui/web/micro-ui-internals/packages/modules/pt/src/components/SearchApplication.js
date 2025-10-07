@@ -455,7 +455,10 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     background: #fff3cd;
                     color: #856404;
                 }
-
+.status-save {
+                    background: #fff3cd;
+                    color: #856404;
+                }
                  .backGround23 {
      background: rgba(107, 19, 63, 0.3);
      color:black;
@@ -629,12 +632,19 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                                 result.owners.map(o => o.name).join(", ") :
                                                                 result.ownerName}
                                                         </td>
-                                                        <td>{result.creationReason || result.applicationType}</td>
+                                                        <td>
+  {result.creationReason === "CREATE" || result.applicationType === "CREATE"
+    ? t("PT_NEW_PROPERTY")
+    : t(result.creationReason || result.applicationType)}
+</td>
+
                                                         <td>
                                                             <span className={`status-badge status-${(result.status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                                                 {/* {result.status} */}
                                                                 {result?.status === "ACTIVE"
   ? "Approved"
+  :result?.status === "SAVE"
+  ? "In Progress"
   : result?.status === "INWORKFLOW"
   ? "In Progress"
   : result?.status === "INACTIVE"
@@ -691,12 +701,19 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                                 item.owners.map(o => o.name).join(", ") :
                                                                 item.ownerName}
                                                         </td>
-                                                        <td>{item.creationReason || item.applicationType}</td>
+                                                       <td>
+  {item.creationReason === "CREATE" || item.applicationType === "CREATE"
+    ? t("PT_NEW_PROPERTY")
+    : t(item.creationReason || item.applicationType)}
+</td>
+
                                                         <td>
                                                             <span className={`status-badge status-${(item.status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                                                 {/* {t(item.status && `WF_PT_${item.status}`) || item.status || "NA"} */}
                                                                 {item?.status === "ACTIVE"
   ? "Approved"
+  :item?.status === "SAVE"
+  ? "In Progress"
   : item?.status === "INWORKFLOW"
   ? "In Progress"
   : item?.status === "INACTIVE"

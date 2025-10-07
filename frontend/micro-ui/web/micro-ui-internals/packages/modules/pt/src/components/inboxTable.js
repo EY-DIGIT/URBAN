@@ -183,7 +183,10 @@ const PTinboxTable = () => {
                                             )}
                                         </td>
                                         <td style={cellStyle}>{ownerNames}</td>
-                                        <td style={cellStyle}>{t(applicationType)}</td>
+                                        <td style={cellStyle}>
+                                            {t(applicationType) === "CREATE" ? "New Property" : t(applicationType)}
+                                        </td>
+
                                         <td style={cellStyle}>  <span className={`status-badge status-${(status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                             {/* {t(status && `WF_PT_${status}`) || status || "NA"} */}
                                             {status === "ACTIVE"
