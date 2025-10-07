@@ -417,9 +417,23 @@ const PropertyManagement = ({ applications = [] }) => {
     return owners.map(owner => owner.name).join(", ");
   };
 
-  const formatStatus = (status) => {
-    return status ? t(`PT_COMMON_${status}`) : "N/A";
-  };
+ const formatStatus = (status) => {
+  if (!status) return "N/A";
+
+  switch (status.toUpperCase()) {
+    case "ACTIVE":
+      return "Approved";
+    case "SAVE":
+      return "In Progress";
+    case "INWORKFLOW":
+      return "In Progress";
+    case "INACTIVE":
+      return "Rejected";
+    default:
+      return t(`PT_COMMON_${status}`) || status; // fallback to translation
+  }
+};
+
 
   if (isLoadingEstimate || paymentsLoading) {
     return <Loader />;
