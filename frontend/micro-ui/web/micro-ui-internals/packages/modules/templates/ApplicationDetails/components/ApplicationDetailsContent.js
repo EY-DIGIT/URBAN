@@ -1347,8 +1347,8 @@ const ApplicationDetailsContent = ({
 }) => {
 
   // console.log("applicationDetailsapplicationDetails===",applicationDetails);
-  console.log("applicationDataapplicationData===",applicationData);
-    console.log("applicationDataapplicationDataapplicationDataapplicationData===",applicationData?.address?.locality?.children[0]?.name);
+  console.log("applicationDataapplicationData===", applicationData);
+  console.log("applicationDataapplicationDataapplicationDataapplicationData===", applicationData?.address?.locality?.children[0]?.name);
 
   const [advancePayment, setAdvancePayment] = useState(0);
   const [manualAmount, setManualAmount] = useState("");
@@ -1357,6 +1357,7 @@ const ApplicationDetailsContent = ({
   const [remarks, setRemarks] = useState("");
   const [showAmount, setShowAmount] = useState(0);
   const [amountHalfOFFull, setAmontHalfOFfull] = useState(0);
+  const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [defaultAmount, setDefaultAmount] = useState(0)
   const stateId = Digit.ULBService.getStateId();
 
@@ -1503,7 +1504,7 @@ const ApplicationDetailsContent = ({
           return;
         }
         if (enteredAmount >= totalAmount) {
-            alert("⚠️ Payment amount must be less than 100% of total due.");
+          alert("⚠️ Payment amount must be less than 100% of total due.");
           return;
         }
 
@@ -1539,6 +1540,7 @@ const ApplicationDetailsContent = ({
       // ✅ Invalidate cache & show confirmation
       const receiptNumber = response?.Payments?.[0]?.paymentDetails?.[0]?.receiptNumber;
       setReceiptNumber(receiptNumber);
+      setShowPaymentConfirmation(false)
       setShowConfirmation(true);
       fetchBill();
       setFormErrors("");
@@ -1695,6 +1697,7 @@ const ApplicationDetailsContent = ({
 
       setShowAmount(totalAmountPaid);
       setReceiptNumber(receiptNumber);
+      setShowPaymentConfirmation(false)
       setShowConfirmation(true);
       fetchBill();
       setFormErrors("");
@@ -1715,7 +1718,17 @@ const ApplicationDetailsContent = ({
       setIsLoader(false);
     }
   };
+  const handlePaymentConfirm = () => {
+    if (!remarks.trim()) {
+      setFormErrors("Remarks are required.");
 
+      return;
+    }
+    setShowPaymentConfirmation(true)
+  }
+  const handlePaymentCancel = () => {
+    setShowPaymentConfirmation(false)
+  }
 
 
   const fetchBill = async () => {
@@ -1764,20 +1777,20 @@ const ApplicationDetailsContent = ({
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = Digit.ULBService.getStateId();
     const payments = await Digit.PaymentService.getReciept(tenantId, businessService, { receiptNumbers: receiptNumber });
-    console.log("PAYMENTS=",payments)
+    console.log("PAYMENTS=", payments)
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
     if (!payments.Payments[0]?.fileStoreId) {
       const paymentsWithCalculation = payments.Payments.map(payment => ({
         ...payment,
         Calculation: estimateData?.Calculation?.[0] || {},
-        plotArea:applicationData?.landArea,
-        isCheque:selectedMode==="Cheque"?1:0,
-        chequeDetails:chequeDetails,
+        plotArea: applicationData?.landArea,
+        isCheque: selectedMode === "Cheque" ? 1 : 0,
+        chequeDetails: chequeDetails,
         ward: applicationData?.address?.ward,
-         zone: applicationData?.address?.zone,
-         rateZone: applicationData?.address?.locality?.children[0]?.name,
-         address: applicationData?.address?.doorNo+" ,"+applicationData?.address?.street+"  ,"+applicationData?.address?.locality?.name+"  ,"+applicationData?.address?.pincode
+        zone: applicationData?.address?.zone,
+        rateZone: applicationData?.address?.locality?.children[0]?.name,
+        address: applicationData?.address?.doorNo + " ," + applicationData?.address?.street + "  ," + applicationData?.address?.locality?.name + "  ," + applicationData?.address?.pincode
       }));
       response = await Digit.PaymentService.generatePdf(state, { Payments: paymentsWithCalculation }, generatePdfKey);
     }
@@ -2339,6 +2352,55 @@ const ApplicationDetailsContent = ({
               </button>
             </div>
           </div>)}
+        {showPaymentConfirmation && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.confirmationModal}>
+              <div style={styles.confirmationHeader}>
+                <h3 style={styles.confirmationTitle}>Confirm Payment</h3>
+              </div>
+
+              <div style={styles.confirmationBody}>
+                <div style={styles.amountSection}>
+                  <div style={styles.amountLabel}>Payment Amount:</div>
+                  <div style={styles.amountValue}>
+                    ₹{paymentType === "full" ? amountHalfOFFull : manualAmount}
+                  </div>
+                </div>
+
+                <div style={styles.paymentTypeSection}>
+                  <div style={styles.paymentTypeLabel}>Payment Type:</div>
+                  <div style={styles.paymentTypeValue}>
+                    {paymentType === "full" ? "Full Payment" : "Partial Payment"}
+                  </div>
+                </div>
+
+                <div style={styles.paymentModeSection}>
+                  <div style={styles.paymentModeLabel}>Payment Mode:</div>
+                  <div style={styles.paymentModeValue}>{selectedMode}</div>
+                </div>
+
+                <div style={styles.confirmationMessage}>
+                  Are you sure you want to proceed with this payment?
+                </div>
+              </div>
+
+              <div style={styles.confirmationActions}>
+                <button
+                  style={styles.cancelButton}
+                  onClick={handlePaymentCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  style={styles.confirmButton}
+                  onClick={paymentType === "full" ? handlePayment : handlePaymentPartial}
+                >
+                  Yes, Proceed
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <div style={{ marginTop: "20px" }}>
           <div style={{ ...styles.label, marginLeft: "10px" }}>
             Remarks <span style={{ color: "red" }}>*</span>
@@ -2360,7 +2422,7 @@ const ApplicationDetailsContent = ({
                 backgroundColor: billFetch?.totalAmount === 0 ? "#ccc" : styles.paymentButton.backgroundColor,
                 cursor: billFetch?.totalAmount === 0 ? "not-allowed" : "pointer"
               }}
-              onClick={() => handlePayment()}
+              onClick={() => handlePaymentConfirm()}
               disabled={billFetch?.totalAmount === 0}
             >
               Collect Payment
@@ -2373,7 +2435,7 @@ const ApplicationDetailsContent = ({
                 backgroundColor: billFetch?.totalAmount === 0 ? "#ccc" : styles.paymentButton.backgroundColor,
                 cursor: billFetch?.totalAmount === 0 ? "not-allowed" : "pointer"
               }}
-              onClick={() => handlePaymentPartial()}
+              onClick={() => handlePaymentConfirm()}
               disabled={billFetch?.totalAmount === 0}
             >
               Collect Payment
@@ -2652,6 +2714,115 @@ const styles = {
     background: "#D2D2D280",
     border: "0.5px solid #D2D2D280",
     color: "black"
-  }
+  },
+
+
+
+
+
+  confirmationModal: {
+    backgroundColor: "white",
+    borderRadius: "8px",
+    padding: "20px",
+    width: "400px",
+    maxWidth: "90%",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  },
+
+  confirmationHeader: {
+    borderBottom: "1px solid #e1e1e1",
+    paddingBottom: "10px",
+    marginBottom: "15px",
+  },
+
+  confirmationTitle: {
+    margin: 0,
+    color: "#333",
+    fontSize: "18px",
+  },
+
+  confirmationBody: {
+    marginBottom: "20px",
+  },
+
+  amountSection: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "10px",
+    padding: "8px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "4px",
+  },
+
+  amountLabel: {
+    fontWeight: "bold",
+    color: "#555",
+  },
+
+  amountValue: {
+    fontWeight: "bold",
+    color: "#6b133f",
+    fontSize: "16px",
+  },
+
+  paymentTypeSection: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "10px",
+    padding: "8px",
+  },
+
+  paymentTypeLabel: {
+    fontWeight: "bold",
+    color: "#555",
+  },
+
+  paymentTypeValue: {
+    color: "#333",
+  },
+
+  paymentModeSection: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "15px",
+    padding: "8px",
+  },
+
+  paymentModeLabel: {
+    fontWeight: "bold",
+    color: "#555",
+  },
+
+  paymentModeValue: {
+    color: "#333",
+  },
+
+  confirmationMessage: {
+    textAlign: "center",
+    color: "#666",
+    fontSize: "14px",
+    marginTop: "15px",
+  },
+
+  confirmationActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "10px",
+  },
+
+
+
+  confirmButton: {
+    padding: "8px 16px",
+    backgroundColor: "#6b133f",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+  },
+
 };
 
