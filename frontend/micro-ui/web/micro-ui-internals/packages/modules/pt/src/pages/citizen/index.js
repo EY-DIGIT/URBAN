@@ -44,6 +44,18 @@ const App = () => {
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
 
+  const stateCode = Digit.ULBService.getStateId();
+
+  useEffect(
+    () =>
+      Digit.LocalizationService.getLocale({
+        modules: ["rainmaker-pt"],
+        locale: Digit.StoreData.getCurrentLanguage(),
+        tenantId: stateCode,
+      }),
+    []
+  );
+
   return (
     <span className={"pt-citizen"}>
       <Switch>
