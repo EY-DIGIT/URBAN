@@ -26,7 +26,7 @@ const SearchApp = ({ path }) => {
     let payload = Object.keys(data).filter(k => data[k]).reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
     if (Object.entries(payload).length > 0 && !payload.acknowledgementIds && !payload.creationReason && !payload.fromDate && !payload.mobileNumber && !payload.propertyIds && !payload.status && !payload.toDate)
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-    else if (Object.entries(payload).length > 0 && (payload.creationReason || payload.status) && (!payload.acknowledgementIds && !payload.fromDate && !payload.mobileNumber && !payload.propertyIds && !payload.toDate))
+    else if (Object.entries(payload).length > 0 && (payload.creationReason || !payload.status) && (!payload.acknowledgementIds && !payload.fromDate && !payload.mobileNumber && !payload.propertyIds && !payload.toDate))
       setShowToast({ warning: true, label: "ERR_PROVIDE_MORE_PARAM_WITH_TYPE_STATUS" });
     else if (Object.entries(payload).length > 0 && (payload.fromDate && !payload.toDate) || (!payload.fromDate && payload.toDate))
       setShowToast({ warning: true, label: "ERR_PROVIDE_BOTH_FORM_TO_DATE" });

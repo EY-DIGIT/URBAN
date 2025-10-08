@@ -176,10 +176,16 @@ const EmployeeHome = ({ modules }) => {
   const accessToken = user?.access_token;
   const refreshToken = user?.refresh_token;
   const roles = user?.info?.roles?.map(role => role.code) || [];
+  
+  const stateId = Digit.ULBService.getStateId();
 
-  // const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
-    console.log("stateInfo==",stateInfo);
-    console.log("uiHomePage==",uiHomePage);
+  const { data: SideMenu } = Digit.Hooks.pt.useSideMenuMDMS(stateId, "common-masters", "SideMenu");
+  console.log("SideMenu==",SideMenu);
+    // console.log("stateInfo==",stateInfo);
+    // console.log("uiHomePage==",uiHomePage);
+  const indexName=    localStorage.getItem("nameIndex");
+  console.log("ABCDFGHBHABH=",indexName)
+
 
   // Define all favorites
   const allFavorites = [
@@ -219,45 +225,47 @@ const EmployeeHome = ({ modules }) => {
     return true;
   });
 
-      const services = [
-        {
-            title: t("PROPERTY"),
-            icon: "property_1",
-            dropdownOptions: [
-                { label: t("NAMANTRAN"), link: "/namantran" },
-                { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
-                { label: t("CHANGEINPROPERTY"), link: "/digit-ui/employee/pt/SearchChangePropertyApp" },
-                { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" },
-                ...(isARO ? [{ label: t("Property Freeze/Unfreeze"), link: "/digit-ui/employee/pt/freeze-property" }] : [])
-            ],
-            citizenLink: "",
-            isExternal: false
-        },
-        {
-            title: t("RENTAL"),
-            icon: "rental_1",
-            dropdownOptions: [
-                // { label: "View Rentals", link: "dashboard/marriage" },
-                // { label: "Add New Rental", link: "/add-rental" },
-                // { label: "Rental History", link: "/rental-history" },
-                // { label: "Payment Status", link: "/payment-status" }
-            ],
-            citizenLink: "dashboard/rental",
-            isExternal: true
-        },
-        {
-            title: t("WATER"),
-            icon: "water_1",
-            dropdownOptions: [
-                { label: t("WATERBILL"), link: "/water-bill" },
-                { label: t("USAGEHISTORY"), link: "/usage-history" },
-                { label: t("CONNECTIONREQUEST"), link: "/connection-request" },
-                { label: t("COMPLAINT"), link: "/complaint" }
-            ],
-            citizenLink: "",
-            isExternal: false
-        }
-    ];
+  // old menu list
+
+    //   const services = [
+    //     {
+    //         title: t("PROPERTY"),
+    //         icon: "property_1",
+    //         dropdownOptions: [
+    //             { label: t("NAMANTRAN"), link: "/namantran" },
+    //             { label: t("CASHDESK"), link: "/digit-ui/employee/pt/search" },
+    //             { label: t("CHANGEINPROPERTY"), link: "/digit-ui/employee/pt/SearchChangePropertyApp" },
+    //             { label: t("NEW_PROPERTY_APPLICATION"), link: "/digit-ui/employee/pt/PropertyLandingPage" },
+    //             ...(isARO ? [{ label: t("Property Freeze/Unfreeze"), link: "/digit-ui/employee/pt/freeze-property" }] : [])
+    //         ],
+    //         citizenLink: "",
+    //         isExternal: false
+    //     },
+    //     {
+    //         title: t("RENTAL"),
+    //         icon: "rental_1",
+    //         dropdownOptions: [
+    //             // { label: "View Rentals", link: "dashboard/marriage" },
+    //             // { label: "Add New Rental", link: "/add-rental" },
+    //             // { label: "Rental History", link: "/rental-history" },
+    //             // { label: "Payment Status", link: "/payment-status" }
+    //         ],
+    //         citizenLink: "dashboard/rental",
+    //         isExternal: true
+    //     },
+    //     {
+    //         title: t("WATER"),
+    //         icon: "water_1",
+    //         dropdownOptions: [
+    //             { label: t("WATERBILL"), link: "/water-bill" },
+    //             { label: t("USAGEHISTORY"), link: "/usage-history" },
+    //             { label: t("CONNECTIONREQUEST"), link: "/connection-request" },
+    //             { label: t("COMPLAINT"), link: "/complaint" }
+    //         ],
+    //         citizenLink: "",
+    //         isExternal: false
+    //     }
+    // ];
 
     const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -277,6 +285,260 @@ const EmployeeHome = ({ modules }) => {
 
   console.log("module", modules)
   if (window.Digit.SessionStorage.get("PT_CREATE_EMP_TRADE_NEW_FORM")) window.Digit.SessionStorage.set("PT_CREATE_EMP_TRADE_NEW_FORM", {});
+
+
+// new code and menu list
+
+    const SideMenuData=  {
+  "HOME": {
+    "SIDE_MENU": {
+      "Revenue Service": {
+        "metadata": {
+          "ROLE": [
+            "SUPERUSER",
+            "employee",
+            "BILL_COLLECTOR_RENTAL",
+            "ARO_RENTAL",
+            "DC_RENTAL",
+            "Bill_Collector_Rental"
+          ],
+          "Icon": "revenue",
+          "URL":{"employee":"/digit-ui/employee",
+            "citizen":"/digit-ui/citizen"
+          } ,
+          "other_data": "Additional metadata for revenue services",
+          "metadata": "Metadata for revenue"
+        },
+        "SUB_MENU": {
+          "Property": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "employee",
+                "BILL_COLLECTOR_RENTAL",
+                "ARO_RENTAL",
+                "DC_RENTAL",
+                "Bill_Collector_Rental",
+              
+              ],
+              "Icon": "property_1",
+              "URL": "/revenue/property",
+              "other_data": "Property related services",
+              "matadata": "Property metadata"
+            },
+            "SUB_MENU": {
+              "Namantran": {
+                "Name": "Namantran",
+                "ROLE": [
+                  "billcollector",
+                  "ARO"
+                ],
+                "URL": "/namantran",
+                "Icon": "namantranIcon"
+              },
+              "cashDesk": {
+                "Name": "CashDesk",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/search",
+                "Icon": "cashDesk"
+              },
+              "change_in_property": {
+                "Name": "Change in property",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/SearchChangePropertyApp",
+                "Icon": "changeIcon"
+              },
+              "New_Property": {
+                "Name": "New Property",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/PropertyLandingPage",
+                "Icon": "newPropertyIcon"
+              }
+            }
+          },
+          "Rental": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "EMPLOYEE",
+                "BILL_COLLECTOR_RENTAL",
+                "ARO_RENTAL",
+                "DC_RENTAL",
+                "Bill_Collector_Rental",
+                "CITIZEN"
+              ],
+              "Icon": "rental_1",
+              "URL": "",
+              "other_data": "Rental services",
+              "matadata": "Rental metadata"
+            }
+          },
+          "Water": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "EMPLOYEE",
+                "WS_CLERK",
+                "WS_APPROVER",
+                "WS_FIELD_INSPECTOR",
+                "WS_DOC_VERIFIER",
+                "WS_CEMP",
+                "CITIZEN"
+              ],
+              "Icon": "water_1",
+              "URL": "",
+              "other_data": "Water services",
+              "matadata": "Water metadata"
+            }
+          }
+        }
+      },
+      "Citizen Service": {
+        "metadata": {
+          "ROLE": [
+            "citizen",
+            "SUPERUSER",
+            "FSM_CREATOR_EMP",
+            "FSM_EDITOR_EMP",
+            "FSM_VIEW_EMP",
+            "FSM_ADMIN",
+            "FSM_DSO",
+            "FSM_EMP_FSTPO",
+            "FSM_COLLECTOR"
+          ],
+          "Icon": "citizen",
+          "URL":{ "employee":"/digit-ui/employee/pt/citizen-services",
+            "citizen":"/digit-ui/citizen/pt/citizen-services"
+
+          },
+          "other_data": "Citizen related requests",
+          "metadata": "Citizen metadata"
+        },
+        "SUB_MENU": {
+          "Marriage": {
+            "metadata": {
+              "ROLE": [
+                 "citizen",
+                "REGISTRAR"
+              ],
+              "Icon": "marriage_icon",
+              "URL": "dashboard/marriage",
+              "other_data": "Marriage registration",
+              "metadata": "Marriage metadata"
+            }
+          },
+          "Request for Funeral van": {
+            "metadata": {
+              "ROLE": [
+                  "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "funeral_van_icon",
+              "URL": "service/6",
+              "other_data": "Funeral van request",
+              "metadata": "Funeral metadata"
+            }
+          },
+          "Request for Water Tanker": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "WS_CLERK",
+                "WS_APPROVER",
+                "WS_FIELD_INSPECTOR",
+                "WS_DOC_VERIFIER",
+                "WS_CEMP"
+              ],
+              "Icon": "water_tanker_icon",
+              "URL": "service/5",
+              "other_data": "Water tanker request",
+              "metadata": "Tanker metadata"
+            }
+          },
+          "Request for Litter Connection": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "SW_CLERK",
+                "SW_APPROVER",
+                "SW_FIELD_INSPECTOR",
+                "SW_DOC_VERIFIER",
+                "SW_CEMP"
+              ],
+              "Icon": "litter_collection_icon",
+              "URL": "service/18",
+              "other_data": "Litter connection request",
+              "metadata": "Litter metadata"
+            }
+          },
+          "Request for Debris Collection": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "debris_icon",
+              "URL": "service/19",
+              "other_data": "Debris collection request",
+              "metadata": "Debris metadata"
+            }
+          },
+          "Request for Auditorium Public": {
+            "metadata": {
+              "Name": "Request for Auditorium Public",
+              "ROLE": [
+                "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "amusement_icon",
+              "URL": "service/20",
+              "other_data": "Auditorium public request",
+              "metadata": "Auditorium metadata"
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+
+
+const revenueSubMenu = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")]?.SUB_MENU || {};
+
+const services = Object.entries(revenueSubMenu).map(([key, value]) => {
+  const meta = value.metadata || {};
+  const subMenu = value.SUB_MENU || {};
+
+  return {
+    title: key,
+    icon: meta.Icon || "",
+    dropdownOptions: Object.entries(subMenu).map(([subKey, subValue]) => ({
+      label: subValue.Name || subKey,
+      link: subValue.URL ,
+    })),
+    citizenLink: meta.URL || "",
+    isExternal: false,
+  };
+});
 
   return (
     <div
@@ -340,7 +602,27 @@ const EmployeeHome = ({ modules }) => {
         <div className="content-area" style={{ padding: isMobile ? "10px" : "0px", marginTop: isMobile ? "0px" : "40px" }}>
           <div className="content-header" style={{ flexDirection: isMobile ? "column" : "row", justifyContent: "space-between", alignItems: isMobile ? "flex-start" : "center", marginBottom: "20px", gap: isMobile ? "10px" : "0" }}>
             <h1 className="main-title" style={styles.mainTitle}>{t("SIDEMENU_REVENUE_SERVICES")}</h1>
+
             <div style={styles.servicesGrid}>
+  {services.map((service, index) => (
+    <ServiceCard
+      key={index}
+      title={service.title}
+      icon={service.icon}
+      dropdownOptions={service.dropdownOptions}
+      isDropdownOpen={openDropdown === index}
+      onToggle={handleDropdownToggle}
+      cardIndex={index}
+      citizenLink={service.citizenLink}
+      isExternal={service.isExternal}
+    />
+  ))}
+</div>
+
+
+  {/* this div is old code */}
+
+            {/* <div style={styles.servicesGrid}>
                 {services.map((service, index) => (
                     <ServiceCard
                         key={index}
@@ -354,7 +636,10 @@ const EmployeeHome = ({ modules }) => {
                         isExternal={service.isExternal}
                     />
                 ))}
-            </div>            {/* <div
+            </div>  */}
+
+
+                       {/* <div
               className="filter"
               style={{
                 backgroundColor: "white",
