@@ -560,7 +560,7 @@ function ApplicationDetailsContentVerifier({
           <div >
             <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
               <label style={{ ...styles.label, marginRight: "16px", minWidth: "120px" }}>Property Type</label>
-              {/* <input style={styles.input} value={application?.propertyType || "Prefilled"} readOnly /> */}
+              {/* <input style={styles.input} value={application?.propertyType || "Prefilled"} readOnly/> */}
             </div>
             <div style={{ overflowX: "auto", maxWidth: "100%" }}>
               <table style={{ borderCollapse: "collapse", marginTop: "8px", border: "1px solid #ccc" }}>
