@@ -340,77 +340,81 @@ const PropertyManagement = ({ applications = [] }) => {
   };
 
   // Duplicate Receipt handler - using pre-fetched payment data
-  const handleDuplicateReceipt = async (application) => {
-    setIsLoadingEstimate(true);
-    try {
-      // Find payments for this specific property
-      const propertyPayments = paymentsData?.Payments?.filter(payment => 
-        payment.paymentDetails?.some(detail => detail.bill?.consumerCode === application.propertyId)
-      );
+  // const handleDuplicateReceipt = async (application) => {
+  //   setIsLoadingEstimate(true);
+  //   try {
+  //     // Find payments for this specific property
+  //     const propertyPayments = paymentsData?.Payments?.filter(payment => 
+  //       payment.paymentDetails?.some(detail => detail.bill?.consumerCode === application.propertyId)
+  //     );
 
-      if (!propertyPayments || propertyPayments.length === 0) {
-        alert("No payment receipts found for this property.");
-        setIsLoadingEstimate(false);
-        return;
-      }
+  //     if (!propertyPayments || propertyPayments.length === 0) {
+  //       alert("No payment receipts found for this property.");
+  //       setIsLoadingEstimate(false);
+  //       return;
+  //     }
 
-      // Get the most recent payment
-      const latestPayment = propertyPayments[0];
-      const receiptNumber = latestPayment?.paymentDetails?.[0]?.receiptNumber;
+  //     // Get the most recent payment
+  //     const latestPayment = propertyPayments[0];
+  //     const receiptNumber = latestPayment?.paymentDetails?.[0]?.receiptNumber;
 
-      if (!receiptNumber) {
-        alert("Receipt number not found in payment records.");
-        setIsLoadingEstimate(false);
-        return;
-      }
+  //     if (!receiptNumber) {
+  //       alert("Receipt number not found in payment records.");
+  //       setIsLoadingEstimate(false);
+  //       return;
+  //     }
 
-      // Fetch estimate data
-      const estimateData = await fetchEstimateData(application);
+  //     // Fetch estimate data
+  //     const estimateData = await fetchEstimateData(application);
 
-      const currentTenantId = Digit.ULBService.getCurrentTenantId();
-      const state = Digit.ULBService.getStateId();
+  //     const currentTenantId = Digit.ULBService.getCurrentTenantId();
+  //     const state = Digit.ULBService.getStateId();
 
-      // Fetch the receipt
-      const payments = await Digit.PaymentService.getReciept(
-        currentTenantId,
-        "PT",
-        { receiptNumbers: receiptNumber }
-      );
+  //     // Fetch the receipt
+  //     const payments = await Digit.PaymentService.getReciept(
+  //       currentTenantId,
+  //       "PT",
+  //       { receiptNumbers: receiptNumber }
+  //     );
 
-      let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
+  //     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
-      if (!payments.Payments[0]?.fileStoreId) {
-        // Generate PDF with calculation and property details
-        const paymentsWithCalculation = payments.Payments.map(payment => ({
-          ...payment,
-          Calculation: estimateData?.Calculation?.[0] || {},
-          plotArea: application?.landArea,
-          ward: application?.address?.ward,
-          zone: application?.address?.zone,
-          rateZone: application?.address?.locality?.children?.[0]?.name,
-          address: `${application?.address?.doorNo}, ${application?.address?.street}, ${application?.address?.locality?.name}, ${application?.address?.pincode}`
-        }));
-        response = await Digit.PaymentService.generatePdf(
-          state,
-          { Payments: paymentsWithCalculation },
-          generatePdfKey
-        );
-      }
+  //     if (!payments.Payments[0]?.fileStoreId) {
+  //       // Generate PDF with calculation and property details
+  //       const paymentsWithCalculation = payments.Payments.map(payment => ({
+  //         ...payment,
+  //         Calculation: estimateData?.Calculation?.[0] || {},
+  //         plotArea: application?.landArea,
+  //         ward: application?.address?.ward,
+  //         zone: application?.address?.zone,
+  //         rateZone: application?.address?.locality?.children?.[0]?.name,
+  //         address: `${application?.address?.doorNo}, ${application?.address?.street}, ${application?.address?.locality?.name}, ${application?.address?.pincode}`
+  //       }));
+  //       response = await Digit.PaymentService.generatePdf(
+  //         state,
+  //         { Payments: paymentsWithCalculation },
+  //         generatePdfKey
+  //       );
+  //     }
 
-      // Print/download the receipt
-      const fileStore = await Digit.PaymentService.printReciept(
-        state,
-        { fileStoreIds: response.filestoreIds[0] }
-      );
-      window.open(fileStore[response.filestoreIds[0]], "_blank");
+  //     // Print/download the receipt
+  //     const fileStore = await Digit.PaymentService.printReciept(
+  //       state,
+  //       { fileStoreIds: response.filestoreIds[0] }
+  //     );
+  //     window.open(fileStore[response.filestoreIds[0]], "_blank");
 
-    } catch (error) {
-      console.error("Error generating duplicate receipt:", error);
-      alert("Failed to generate duplicate receipt. Please try again.");
-    } finally {
-      setIsLoadingEstimate(false);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error generating duplicate receipt:", error);
+  //     alert("Failed to generate duplicate receipt. Please try again.");
+  //   } finally {
+  //     setIsLoadingEstimate(false);
+  //   }
+  // };
+
+const handleDuplicateReceipt = (application) => {
+  history.push(`/digit-ui/citizen/pt/TransactionList/${application.propertyId}`);
+};
 
   const formatOwnerNames = (owners) => {
     if (!owners || owners.length === 0) return "N/A";

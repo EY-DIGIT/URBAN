@@ -146,6 +146,8 @@ import SuccessPage from "./pages/citizen/Create/SuccessPage"
 import TrackApplication from "./pages/citizen/TrackApplication/TrackApplication"
 import PTFreezeProperty from "./components/FreezeProperty"
 
+import TransactionList from "./pages/citizen/Transactions/TransactionList";
+
 
 const componentsToRegister = {
   AssessmentDetailsSection,
@@ -274,6 +276,7 @@ const componentsToRegister = {
   SuccessPage,
   TrackApplication,
   PTFreezeProperty,
+  TransactionList,
 };
 
 const addComponentsToRegistry = () => {

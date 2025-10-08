@@ -41,6 +41,8 @@ const App = () => {
   const DemandNote = Digit?.ComponentRegistryService?.getComponent("DemandNote");
   const DetailLedgerPage = Digit?.ComponentRegistryService?.getComponent("DetailLedgerPage");
 
+  const TransactionList = Digit?.ComponentRegistryService?.getComponent("TransactionList");
+
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
 
@@ -90,6 +92,8 @@ const App = () => {
           <PrivateRoute path={`${path}/PropertyLedger`} component={PropertyLedger} />
           <PrivateRoute path={`${path}/DemandNote`} component={DemandNote} />
           <PrivateRoute path={`${path}/DetailLedgerPage`} component={DetailLedgerPage} />
+
+          <PrivateRoute path={`${path}/TransactionList/:propertyId`} component={TransactionList} />
 
         </AppContainer>
       </Switch>
