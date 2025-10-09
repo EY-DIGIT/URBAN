@@ -1,5 +1,5 @@
 import { AppContainer, BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, {useEffect} from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { shouldHideBackButton } from "../../utils";
 import Search from "../employee/Search";
@@ -41,8 +41,22 @@ const App = () => {
   const DemandNote = Digit?.ComponentRegistryService?.getComponent("DemandNote");
   const DetailLedgerPage = Digit?.ComponentRegistryService?.getComponent("DetailLedgerPage");
 
+  const TransactionList = Digit?.ComponentRegistryService?.getComponent("TransactionList");
+
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
+
+  const stateCode = Digit.ULBService.getStateId();
+
+  useEffect(
+    () =>
+      Digit.LocalizationService.getLocale({
+        modules: ["rainmaker-pt"],
+        locale: Digit.StoreData.getCurrentLanguage(),
+        tenantId: stateCode,
+      }),
+    []
+  );
 
   return (
     <span className={"pt-citizen"}>
@@ -78,6 +92,8 @@ const App = () => {
           <PrivateRoute path={`${path}/PropertyLedger`} component={PropertyLedger} />
           <PrivateRoute path={`${path}/DemandNote`} component={DemandNote} />
           <PrivateRoute path={`${path}/DetailLedgerPage`} component={DetailLedgerPage} />
+
+          <PrivateRoute path={`${path}/TransactionList/:propertyId`} component={TransactionList} />
 
         </AppContainer>
       </Switch>

@@ -153,45 +153,47 @@ const CitizenServicesCards = () => {
     const accessToken = user?.access_token;
     const refreshToken = user?.refresh_token;
 
+    // old menu code
+
     // Card data configuration
-    const cardData = [
-        {
-            id: 'marriage',
-            icon: "marriage_icon",
-            title: t("MARRIAGE"),
-            link: 'dashboard/marriage'
-        },
-        {
-            id: 'funeralVan',
-            icon: "funeral_van_icon",
-            title: t("REQUEST_FOR_FUNERAL_VAN"),
-            link: 'service/6'
-        },
-        {
-            id: 'waterTanker',
-            icon: "water_tanker_icon",
-            title: t("REQUEST_FOR_WATER_TANKER"),
-            link: 'service/5'
-        },
-        {
-            id: 'litterCollection',
-            icon: "litter_collection_icon",
-            title: t("REQUEST_FOR_LITTER_COLLECTION"),
-            link: 'service/18'
-        },
-        {
-            id: 'debrisCollection',
-            icon: "debris_icon",
-            title: t("REQUEST_FOR_DEBRIS_COLLECTION"),
-            link: 'service/19'
-        },
-        {
-            id: 'amusementPlaces',
-            icon: "amusement_icon",
-            title: t("REQUEST_FOR_AUDITORIUM") + t("PUBLIC_AMUSEMENT_PLACES"),
-            link: 'service/20'
-        },
-    ];
+    // const cardData = [
+    //     {
+    //         id: 'marriage',
+    //         icon: "marriage_icon",
+    //         title: t("MARRIAGE"),
+    //         link: 'dashboard/marriage'
+    //     },
+    //     {
+    //         id: 'funeralVan',
+    //         icon: "funeral_van_icon",
+    //         title: t("REQUEST_FOR_FUNERAL_VAN"),
+    //         link: 'service/6'
+    //     },
+    //     {
+    //         id: 'waterTanker',
+    //         icon: "water_tanker_icon",
+    //         title: t("REQUEST_FOR_WATER_TANKER"),
+    //         link: 'service/5'
+    //     },
+    //     {
+    //         id: 'litterCollection',
+    //         icon: "litter_collection_icon",
+    //         title: t("REQUEST_FOR_LITTER_COLLECTION"),
+    //         link: 'service/18'
+    //     },
+    //     {
+    //         id: 'debrisCollection',
+    //         icon: "debris_icon",
+    //         title: t("REQUEST_FOR_DEBRIS_COLLECTION"),
+    //         link: 'service/19'
+    //     },
+    //     {
+    //         id: 'amusementPlaces',
+    //         icon: "amusement_icon",
+    //         title: t("REQUEST_FOR_AUDITORIUM") + t("PUBLIC_AMUSEMENT_PLACES"),
+    //         link: 'service/20'
+    //     },
+    // ];
 
     const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
     console.log("stateInfo==", stateInfo);
@@ -208,6 +210,249 @@ const CitizenServicesCards = () => {
             paddingLeft: "20px",
         },
     }
+
+// added new code from here
+
+        const SideMenuData=  {
+  "HOME": {
+    "SIDE_MENU": {
+      "Revenue Service": {
+        "metadata": {
+          "ROLE": [
+            "SUPERUSER",
+            "employee",
+            "BILL_COLLECTOR_RENTAL",
+            "ARO_RENTAL",
+            "DC_RENTAL",
+            "Bill_Collector_Rental"
+          ],
+          "Icon": "revenueIcon",
+          "URL": "/revenue-service",
+          "other_data": "Additional metadata for revenue services",
+          "metadata": "Metadata for revenue"
+        },
+        "SUB_MENU": {
+          "Property": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "employee",
+                "BILL_COLLECTOR_RENTAL",
+                "ARO_RENTAL",
+                "DC_RENTAL",
+                "Bill_Collector_Rental",
+              
+              ],
+              "Icon": "property_1",
+              "URL": "/revenue/property",
+              "other_data": "Property related services",
+              "matadata": "Property metadata"
+            },
+            "SUB_MENU": {
+              "Namantran": {
+                "Name": "Namantran",
+                "ROLE": [
+                  "billcollector",
+                  "ARO"
+                ],
+                "URL": "/namantran",
+                "Icon": "namantranIcon"
+              },
+              "cashDesk": {
+                "Name": "CashDesk",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/search",
+                "Icon": "cashDesk"
+              },
+              "change_in_property": {
+                "Name": "Change in property",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/change-property",
+                "Icon": "changeIcon"
+              },
+              "New_Property": {
+                "Name": "New Property",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/PropertyLandingPage",
+                "Icon": "newPropertyIcon"
+              }
+            }
+          },
+          "Rental": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "EMPLOYEE",
+                "BILL_COLLECTOR_RENTAL",
+                "ARO_RENTAL",
+                "DC_RENTAL",
+                "Bill_Collector_Rental",
+                "CITIZEN"
+              ],
+              "Icon": "rental_1",
+              "URL": "",
+              "other_data": "Rental services",
+              "matadata": "Rental metadata"
+            }
+          },
+          "Water": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "EMPLOYEE",
+                "WS_CLERK",
+                "WS_APPROVER",
+                "WS_FIELD_INSPECTOR",
+                "WS_DOC_VERIFIER",
+                "WS_CEMP",
+                "CITIZEN"
+              ],
+              "Icon": "water_1",
+              "URL": "",
+              "other_data": "Water services",
+              "matadata": "Water metadata"
+            }
+          }
+        }
+      },
+      "Citizen Service": {
+        "metadata": {
+          "ROLE": [
+            "citizen",
+            "SUPERUSER",
+            "FSM_CREATOR_EMP",
+            "FSM_EDITOR_EMP",
+            "FSM_VIEW_EMP",
+            "FSM_ADMIN",
+            "FSM_DSO",
+            "FSM_EMP_FSTPO",
+            "FSM_COLLECTOR"
+          ],
+          "Icon": "citizenIcon",
+          "URL": "/citizen-service",
+          "other_data": "Citizen related requests",
+          "metadata": "Citizen metadata"
+        },
+        "SUB_MENU": {
+          "Marriage": {
+            "metadata": {
+              "ROLE": [
+                 "citizen",
+                "REGISTRAR"
+              ],
+              "Icon": "marriage_icon",
+              "URL": "dashboard/marriage",
+              "other_data": "Marriage registration",
+              "metadata": "Marriage metadata"
+            }
+          },
+          "Request for Funeral van": {
+            "metadata": {
+              "ROLE": [
+                  "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "funeral_van_icon",
+              "URL": "service/6",
+              "other_data": "Funeral van request",
+              "metadata": "Funeral metadata"
+            }
+          },
+          "Request for Water Tanker": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "WS_CLERK",
+                "WS_APPROVER",
+                "WS_FIELD_INSPECTOR",
+                "WS_DOC_VERIFIER",
+                "WS_CEMP"
+              ],
+              "Icon": "water_tanker_icon",
+              "URL": "service/5",
+              "other_data": "Water tanker request",
+              "metadata": "Tanker metadata"
+            }
+          },
+          "Request for Litter Connection": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "SW_CLERK",
+                "SW_APPROVER",
+                "SW_FIELD_INSPECTOR",
+                "SW_DOC_VERIFIER",
+                "SW_CEMP"
+              ],
+              "Icon": "litter_collection_icon",
+              "URL": "service/18",
+              "other_data": "Litter connection request",
+              "metadata": "Litter metadata"
+            }
+          },
+          "Request for Debris Collection": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "debris_icon",
+              "URL": "service/19",
+              "other_data": "Debris collection request",
+              "metadata": "Debris metadata"
+            }
+          },
+          "Request for Auditorium Public": {
+            "metadata": {
+              "Name": "Request for Auditorium Public",
+              "ROLE": [
+                "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "amusement_icon",
+              "URL": "service/20",
+              "other_data": "Auditorium public request",
+              "metadata": "Auditorium metadata"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+const citizenSubMenu = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")]?.SUB_MENU || {};
+
+
+const cardData = Object.entries(citizenSubMenu).map(([key, value]) => {
+  const meta = value.metadata || {};
+  return {
+    id: key.replace(/\s+/g, '_').toLowerCase(),
+    icon: meta.Icon || "",
+    title: key,
+    link: meta.URL || "#",
+  };
+});
+
 
     return (
         <div style={{

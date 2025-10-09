@@ -223,26 +223,306 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
       }
     });
 
-  const newMenuItems = [
-    {
-      title: t("SIDEMENU_HOME"),
-      link: "/digit-ui/citizen/home",
-      icon: "home_selected_1",
-      selectedIcon: "home_selected"
-    },
-    {
-      title: t("SIDEMENU_REVENUE_SERVICES"),
-      link: "/digit-ui/citizen",
-      icon: "revenue",
-      selectedIcon: "revenue_selected"
-    },
-    {
-      title: t("SIDEMENU_CITIZEN_SERVICES"),
-      link: "/digit-ui/citizen/pt/citizen-services",
-      icon: "citizen",
-      selectedIcon: "citizen_selected"
+    // old code menu item
+
+  // const newMenuItems = [
+  //   {
+  //     title: t("SIDEMENU_HOME"),
+  //     link: "/digit-ui/citizen/home",
+  //     icon: "home_selected_1",
+  //     selectedIcon: "home_selected"
+  //   },
+  //   {
+  //     title: t("SIDEMENU_REVENUE_SERVICES"),
+  //     link: "/digit-ui/citizen",
+  //     icon: "revenue",
+  //     selectedIcon: "revenue_selected"
+  //   },
+  //   {
+  //     title: t("SIDEMENU_CITIZEN_SERVICES"),
+  //     link: "/digit-ui/citizen/pt/citizen-services",
+  //     icon: "citizen",
+  //     selectedIcon: "citizen_selected"
+  //   }
+  // ];
+
+
+  // new code added
+
+      const SideMenuData=  {
+  "HOME": {
+    "SIDE_MENU": {
+      "Revenue Service": {
+        "metadata": {
+          "ROLE": [
+            "SUPERUSER",
+            "employee",
+            "BILL_COLLECTOR_RENTAL",
+            "ARO_RENTAL",
+            "DC_RENTAL",
+            "Bill_Collector_Rental"
+          ],
+          "Icon": "revenue",
+          "URL":{"employee":"/digit-ui/employee",
+            "citizen":"/digit-ui/citizen"
+          } ,
+          "other_data": "Additional metadata for revenue services",
+          "metadata": "Metadata for revenue"
+        },
+        "SUB_MENU": {
+          "Property": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "employee",
+                "BILL_COLLECTOR_RENTAL",
+                "ARO_RENTAL",
+                "DC_RENTAL",
+                "Bill_Collector_Rental"
+              
+              ],
+              "Icon": "property_1",
+              "URL": "/revenue/property",
+              "other_data": "Property related services",
+              "matadata": "Property metadata"
+            },
+            "SUB_MENU": {
+              "Namantran": {
+                "Name": "Namantran",
+                "ROLE": [
+                  "billcollector",
+                  "ARO"
+                ],
+                "URL": "/namantran",
+                "Icon": "namantranIcon"
+              },
+              "cashDesk": {
+                "Name": "CashDesk",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/search",
+                "Icon": "cashDesk"
+              },
+              "change_in_property": {
+                "Name": "Change in property",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/change-property",
+                "Icon": "changeIcon"
+              },
+              "New_Property": {
+                "Name": "New Property",
+                "ROLE": [
+                  "billcollector"
+                ],
+                "URL": "/digit-ui/employee/pt/PropertyLandingPage",
+                "Icon": "newPropertyIcon"
+              }
+            }
+          },
+          "Rental": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "EMPLOYEE",
+                "BILL_COLLECTOR_RENTAL",
+                "ARO_RENTAL",
+                "DC_RENTAL",
+                "Bill_Collector_Rental",
+                "CITIZEN"
+              ],
+              "Icon": "rental_1",
+              "URL": "",
+              "other_data": "Rental services",
+              "matadata": "Rental metadata"
+            }
+          },
+          "Water": {
+            "metadata": {
+              "ROLE": [
+                "SUPERUSER",
+                "EMPLOYEE",
+                "WS_CLERK",
+                "WS_APPROVER",
+                "WS_FIELD_INSPECTOR",
+                "WS_DOC_VERIFIER",
+                "WS_CEMP",
+                "CITIZEN"
+              ],
+              "Icon": "water_1",
+              "URL": "",
+              "other_data": "Water services",
+              "matadata": "Water metadata"
+            }
+          }
+        }
+      },
+      "Citizen Service": {
+        "metadata": {
+          "ROLE": [
+            "citizen",
+            "SUPERUSER",
+            "FSM_CREATOR_EMP",
+            "FSM_EDITOR_EMP",
+            "FSM_VIEW_EMP",
+            "FSM_ADMIN",
+            "FSM_DSO",
+            "FSM_EMP_FSTPO",
+            "FSM_COLLECTOR"
+          ],
+          "Icon": "citizen",
+          "URL":{ "employee":"/digit-ui/employee/pt/citizen-services",
+            "citizen":"/digit-ui/citizen/pt/citizen-services"
+
+          },
+          "other_data": "Citizen related requests",
+          "metadata": "Citizen metadata"
+        },
+        "SUB_MENU": {
+          "Marriage": {
+            "metadata": {
+              "ROLE": [
+                 "citizen",
+                "REGISTRAR"
+              ],
+              "Icon": "marriage_icon",
+              "URL": "dashboard/marriage",
+              "other_data": "Marriage registration",
+              "metadata": "Marriage metadata"
+            }
+          },
+          "Request for Funeral van": {
+            "metadata": {
+              "ROLE": [
+                  "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "funeral_van_icon",
+              "URL": "service/6",
+              "other_data": "Funeral van request",
+              "metadata": "Funeral metadata"
+            }
+          },
+          "Request for Water Tanker": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "WS_CLERK",
+                "WS_APPROVER",
+                "WS_FIELD_INSPECTOR",
+                "WS_DOC_VERIFIER",
+                "WS_CEMP"
+              ],
+              "Icon": "water_tanker_icon",
+              "URL": "service/5",
+              "other_data": "Water tanker request",
+              "metadata": "Tanker metadata"
+            }
+          },
+          "Request for Litter Connection": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "SW_CLERK",
+                "SW_APPROVER",
+                "SW_FIELD_INSPECTOR",
+                "SW_DOC_VERIFIER",
+                "SW_CEMP"
+              ],
+              "Icon": "litter_collection_icon",
+              "URL": "service/18",
+              "other_data": "Litter connection request",
+              "metadata": "Litter metadata"
+            }
+          },
+          "Request for Debris Collection": {
+            "metadata": {
+              "ROLE": [
+                "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "debris_icon",
+              "URL": "service/19",
+              "other_data": "Debris collection request",
+              "metadata": "Debris metadata"
+            }
+          },
+          "Request for Auditorium Public": {
+            "metadata": {
+              "Name": "Request for Auditorium Public",
+              "ROLE": [
+                "citizen",
+                "FSM_CREATOR_EMP",
+                "FSM_EDITOR_EMP",
+                "FSM_ADMIN",
+                "FSM_DSO",
+                "FSM_EMP_FSTPO"
+              ],
+              "Icon": "amusement_icon",
+              "URL": "service/20",
+              "other_data": "Auditorium public request",
+              "metadata": "Auditorium metadata"
+            }
+          }
+        }
+      }
+
     }
-  ];
+  }
+}
+
+
+  const isActive = (link) => {
+    return pathname === link;
+  };
+
+const homeSideMenu = SideMenuData?.HOME?.SIDE_MENU || {};
+
+const filteredMenuKeys = ["Revenue Service", "Citizen Service"];
+
+const newMenuItems = [
+  {
+    id: "Revenue Service",
+    title: t("SIDEMENU_HOME"),
+    link: "/digit-ui/citizen/home",
+    icon: "home_selected_1",
+    selectedIcon: "home_selected",
+  },
+  ...Object.entries(homeSideMenu)
+    .filter(([key]) => filteredMenuKeys.includes(key))
+    .map(([key, value]) => {
+      const meta = value.metadata || {};
+    
+
+      return {
+        id: key,
+        title: key,
+        link: meta.URL.citizen||"", 
+        icon: meta.Icon || "",
+        selectedIcon: meta.Icon ? `${meta.Icon}_selected` : "",
+        subMenu: value.SUB_MENU || null,
+      };
+    }),
+];
+
+const handleClick = (id) => {
+
+  localStorage.setItem("nameIndex", id);
+
+};
+// useEffect(()=>{
+//   handleClick(newMenuItems[0]?.id);
+// },[])
 
   // Custom sidebar styles
   const sidebarStyles = {
@@ -304,15 +584,15 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
     }
   };
 
-  const isActive = (link) => {
-    return pathname === link;
-  };
 
   return (
     <React.Fragment>
       <div style={sidebarStyles.container}>
         <div style={sidebarStyles.menuContainer}>
-          {newMenuItems?.map((item, index) => {
+
+          {/* old code */}
+
+          {/* {newMenuItems?.map((item, index) => {
             const active = isActive(item.link);
             return (
               <Link
@@ -339,7 +619,43 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
                 {item.title}
               </Link>
             );
-          })}
+          })} */}
+
+            {newMenuItems.map((item) => {
+              const active = isActive(item.link);
+          
+              return (
+                <div key={item.id}  onClick={() => handleClick(item.id)}>
+                  <Link
+                    to={item.link}
+                   
+                    style={{
+                      ...sidebarStyles.menuItem,
+                      ...(active ? sidebarStyles.menuItemActive : {}),
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!active) Object.assign(e.target.style, sidebarStyles.menuItemHover);
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) e.target.style.backgroundColor = "transparent";
+                    }}
+                  >
+                    <div style={sidebarStyles.iconContainer}>
+                      <span>
+                        <img
+                          src={stateInfo?.uiImageAssets[active ? item.selectedIcon : item.icon]}
+                          alt={item.id}
+                        />
+                      </span>
+                    </div>
+                    {item.title}
+                  </Link>
+          
+             
+                </div>
+              );
+            })}
+          
         </div>
       </div>
       {showDialog && (
