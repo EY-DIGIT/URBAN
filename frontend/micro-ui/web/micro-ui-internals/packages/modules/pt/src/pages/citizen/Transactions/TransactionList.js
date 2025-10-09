@@ -301,7 +301,7 @@ const TransactionList = () => {
         <h1 style={styles.heading}>List Of Transactions</h1>
       </div>
 
-      {property && (
+      {/* {property && (
         <div style={styles.propertyInfo}>
           <div style={styles.infoRow}>
             <div style={styles.infoItem}>
@@ -318,7 +318,7 @@ const TransactionList = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       
       <div style={styles.tableWrapper}>
         <table style={styles.table}>
