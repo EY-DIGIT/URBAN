@@ -115,7 +115,7 @@ const PropertyCardsLanding = () => {
                                 {
                                     label: t("TRACK_APPLICATION"),
                                     image: "file_search",
-                                    url: "/digit-ui/citizen/pt/property/citizen-search",
+                                    url: "/digit-ui/citizen/pt/property/trackApplication",
                                 },
                                 {
                                     label: t("PAY"),
