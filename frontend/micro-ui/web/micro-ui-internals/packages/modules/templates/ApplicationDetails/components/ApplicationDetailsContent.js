@@ -1367,6 +1367,12 @@ const ApplicationDetailsContent = ({
     accountHolder: "",
     bankName: "",
   });
+  const [bankTransferDetails, setBankTransferDetails] = useState({
+    paymentDate: "",
+    referenceNumber: "",
+    accountHolder: "",
+    bankName: "",
+  });
   const [posDetails, setPosDetails] = useState({
     referenceNumber: "",
     edcBankName: "",
@@ -1466,10 +1472,6 @@ const ApplicationDetailsContent = ({
     const consumerCode = applicationData?.propertyId;
     const selectedPaymentMode = selectedMode;
 
-    if (!remarks.trim()) {
-      setFormErrors("Remarks are required.");
-      return;
-    }
     setIsLoader(true);
     try {
       // ✅ Fetch fresh bill before processing
@@ -1530,6 +1532,28 @@ const ApplicationDetailsContent = ({
           paymentMode: selectedPaymentMode,
           payerName: bill?.payerName || "Default User",
           paidBy: "OWNER",
+          ...(selectedPaymentMode === "NEFT" || selectedPaymentMode === "RTGS"
+            ? {
+              instrumentDate: bankTransferDetails?.paymentDate
+                ? new Date(bankTransferDetails.paymentDate).getTime()
+                : new Date().getTime(),
+              instrumentNumber:
+                bankTransferDetails?.referenceNumber || Date.now().toString(),
+              accountHolderName:
+                bankTransferDetails?.accountHolder || "Unknown User",
+              bankName: bankTransferDetails?.bankName || "N/A",
+            }
+            : {}),
+          ...(selectedPaymentMode === "Cheque"
+            ? {
+              instrumentDate: chequeDetails?.issueDate
+                ? new Date(chequeDetails.issueDate).getTime()
+                : new Date().getTime(),
+              instrumentNumber: chequeDetails?.chequeNumber || Date.now().toString(),
+              chequeDrawerName: chequeDetails?.accountHolder || "Unknown User",
+              bankName: chequeDetails?.bankName || "N/A",
+            }
+            : {}),
         }
       };
 
@@ -1624,12 +1648,6 @@ const ApplicationDetailsContent = ({
     const consumerCode = applicationData?.propertyId;
     const selectedPaymentMode = selectedMode; // e.g. "CARD" | "CASH" | "CHEQUE"
 
-    if (!remarks.trim()) {
-      setFormErrors("Remarks are required.");
-
-      return;
-    }
-
     setIsLoader(true);
 
     try {
@@ -1676,8 +1694,28 @@ const ApplicationDetailsContent = ({
 
           // Instrument details – can be filled dynamically from POS SDK
           transactionNumber: Date.now().toString(), // Example: unique TXN ID
-          instrumentNumber: Date.now().toString(), // Example placeholder
-          instrumentDate: new Date().getTime(),
+          ...(selectedPaymentMode === "NEFT" || selectedPaymentMode === "RTGS"
+            ? {
+              instrumentDate: bankTransferDetails?.paymentDate
+                ? new Date(bankTransferDetails.paymentDate).getTime()
+                : new Date().getTime(),
+              instrumentNumber:
+                bankTransferDetails?.referenceNumber || Date.now().toString(),
+              accountHolderName:
+                bankTransferDetails?.accountHolder || "Unknown User",
+              bankName: bankTransferDetails?.bankName || "N/A",
+            }
+            : {}),
+          ...(selectedPaymentMode === "Cheque"
+            ? {
+              instrumentDate: chequeDetails?.issueDate
+                ? new Date(chequeDetails.issueDate).getTime()
+                : new Date().getTime(),
+              instrumentNumber: chequeDetails?.chequeNumber || Date.now().toString(),
+              chequeDrawerName: chequeDetails?.accountHolder || "Unknown User",
+              bankName: chequeDetails?.bankName || "N/A",
+            }
+            : {}),
         }
       };
       console.log("💡 Receipt Request:", receiptRequest);
@@ -1724,6 +1762,34 @@ const ApplicationDetailsContent = ({
 
       return;
     }
+     if (selectedMode === "NEFT" || selectedMode === "RTGS") {
+    if (
+      !bankTransferDetails?.paymentDate ||
+      !bankTransferDetails?.referenceNumber ||
+      !bankTransferDetails?.accountHolder ||
+      !bankTransferDetails?.bankName
+    ) {
+      setFormErrors(
+        "For NEFT/RTGS, Payment Date, Reference Number, Account Holder, and Bank Name are required."
+      );
+      return;
+    }
+  }
+
+  // CHEQUE validation
+  if (selectedMode === "Cheque") {
+    if (
+      !chequeDetails?.issueDate ||
+      !chequeDetails?.chequeNumber ||
+      !chequeDetails?.accountHolder ||
+      !chequeDetails?.bankName
+    ) {
+      setFormErrors(
+        "For Cheque, Cheque Date, Cheque Number, Cheque Drawer Name, and Bank Name are required."
+      );
+      return;
+    }
+  }
     setShowPaymentConfirmation(true)
   }
   const handlePaymentCancel = () => {
@@ -2243,6 +2309,81 @@ const ApplicationDetailsContent = ({
 
           </div>
         )}
+        {selectedModes.includes("NEFT") || selectedModes.includes("RTGS") ? (
+          <div style={styles.inputGroup}>
+            <div style={styles.inputField}>
+              <label style={styles.label}>
+                Payment Date <span style={styles.required}>*</span>
+              </label>
+              <input
+                type="date"
+                style={styles.input}
+                value={bankTransferDetails.paymentDate}
+                onChange={(e) =>
+                  setBankTransferDetails({
+                    ...bankTransferDetails,
+                    paymentDate: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <div style={styles.inputField}>
+              <label style={styles.label}>
+                Reference Number <span style={styles.required}>*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Reference Number"
+                style={styles.input}
+                value={bankTransferDetails.referenceNumber}
+                onChange={(e) =>
+                  setBankTransferDetails({
+                    ...bankTransferDetails,
+                    referenceNumber: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <div style={styles.inputField}>
+              <label style={styles.label}>
+                Account Holder Name <span style={styles.required}>*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Account Holder Name"
+                style={styles.input}
+                value={bankTransferDetails.accountHolder}
+                onChange={(e) =>
+                  setBankTransferDetails({
+                    ...bankTransferDetails,
+                    accountHolder: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <div style={styles.inputField}>
+              <label style={styles.label}>
+                Bank Name <span style={styles.required}>*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Bank Name"
+                style={styles.input}
+                value={bankTransferDetails.bankName}
+                onChange={(e) =>
+                  setBankTransferDetails({
+                    ...bankTransferDetails,
+                    bankName: e.target.value,
+                  })
+                }
+              />
+            </div>
+          </div>
+        ) : null}
+
         {selectedModes.includes("POS") && (
           <div style={styles.inputGroup}>
             <div style={styles.inputField}>
