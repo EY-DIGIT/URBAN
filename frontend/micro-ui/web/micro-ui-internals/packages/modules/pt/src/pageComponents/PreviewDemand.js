@@ -79,7 +79,8 @@ const styles = {
         width: "100%",
         boxSizing: "border-box",
         maxWidth: "100%",
-        backgroundColor: "#F2F2F2",
+        // backgroundColor: "#F2F2F2",
+         background:"rgba(210, 210, 210, 0.5)",
         '@media (max-width: 630px)': {
             padding: "8px",
             fontSize: "13px",

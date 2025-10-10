@@ -186,7 +186,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     font-size: 14px;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
                     transition: all 0.3s ease;
-                    background: #F7F7F7;
+                    // background: #F7F7F7;
+                    background:rgba(210, 210, 210, 0.5);
                 }
                 
                 .form-input:focus {
@@ -234,7 +235,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     border-radius: 6px;
                     font-size: 14px;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
-                    background: #F7F7F7;
+                    // background: #F7F7F7;
+                    background:rgba(210, 210, 210, 0.5);
                     cursor: pointer;
                     transition: all 0.3s ease;
                 }
@@ -254,7 +256,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                     border-radius: 4px;
                     font-size: 14px;
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
-                    background: #F7F7F7;
+                    // background: #F7F7F7;
+                       background:rgba(210, 210, 210, 0.5);
                     cursor: pointer;
                 }
                 

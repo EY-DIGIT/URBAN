@@ -322,7 +322,8 @@ console.log("Colony====",colonies);
           font-size: 14px;
           font-family: 'Poppins', sans-serif;
           transition: all 0.3s ease;
-          background:rgb(241, 241, 241);        }
+             background:rgba(210, 210, 210, 0.5);
+          // background:rgb(241, 241, 241);        }
         
         .form-input:focus {
           outline: none;
@@ -348,7 +349,8 @@ console.log("Colony====",colonies);
           display: flex;
           align-items: center;
           padding: 0 12px;
-          background: #f0f0f0;
+          // background: #f0f0f0;
+             background:rgba(210, 210, 210, 0.5);
           border: 1px solid #d6d5d4;
           border-right: none;
           border-radius: 6px 0 0 6px;

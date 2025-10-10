@@ -140,9 +140,9 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
         }}
       >
         <img
-          src={stateInfo?.uiImageAssets?.madhyaPradeshStateEmblemLogo}
-          alt="MP Logo"
-          style={{ height: "40px", width: "auto" }}
+          src={stateInfo?.uiImageAssets?.indoreMunicipalCorporationLogo}
+          alt="MP Log"
+          style={{ height: "50px", width: "auto" }}
         />
         <div>
           <div style={{ fontSize: "16px", fontWeight: "bold" }}>मध्य प्रदेश सरकार</div>

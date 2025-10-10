@@ -41,7 +41,9 @@ const styles = {
         borderRadius: "6px",
         padding: "6px 10px",
         fontSize: "14px",
-        width: "300px"
+        width: "300px",
+         background:"rgba(210, 210, 210, 0.5)",
+
 
     },
     inputs: {
@@ -51,6 +53,7 @@ const styles = {
         padding: "6px 10px",
         fontSize: "14px",
         width: "300px",
+         background:"rgba(210, 210, 210, 0.5)",
     },
     label: {
         // fontFamily: "Poppins",

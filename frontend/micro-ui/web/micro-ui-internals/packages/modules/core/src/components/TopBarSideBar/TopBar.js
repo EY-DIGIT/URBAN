@@ -540,9 +540,9 @@ console.log("STATE INFO=",stateInfo, userOptions)
           }}
         >
           <img
-            src={stateInfo?.uiImageAssets?.madhyaPradeshStateEmblemLogo}
+            src={stateInfo?.uiImageAssets?.indoreMunicipalCorporationLogo}
             alt="MP Logo"
-            style={{ height: "40px", width: "auto" }}
+            style={{ height: "50px", width: "auto" }}
           />
           <div>
             <div style={{ fontSize: "16px", fontWeight: "bold" }}>मध्य प्रदेश सरकार</div>

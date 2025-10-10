@@ -2713,7 +2713,8 @@ const styles = {
     fontSize: "14px",
     fontFamily: "'Poppins', sans-serif",
     transition: "all 0.3s ease",
-    background: "rgb(241, 241, 241)",
+    // background: "rgb(241, 241, 241)",
+       background:"rgba(210, 210, 210, 0.5)",
   },
 
 
@@ -2725,7 +2726,8 @@ const styles = {
     fontSize: "14px",
     fontFamily: "'Poppins', sans-serif",
     transition: "all 0.3s ease",
-    background: "rgb(241, 241, 241)",
+    // background: "rgb(241, 241, 241)",
+       background:"rgba(210, 210, 210, 0.5)",
 
   },
 

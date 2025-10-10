@@ -392,8 +392,8 @@ const EmployeeHome = ({ modules }) => {
                 "citizen"
               ],
               "Icon": "rental_1",
-              "URL": {"citizen":"dashboard/rental",
-                "employee":""
+              "URL": {"citizen":"https://citizenservicesdev.eydemoapp.in/dashboard/rental",
+                "employee":"https://citizenservicesdev.eydemoapp.in/dashboard/rental"
               },
               "other_data": "Rental services",
               "matadata": "Rental metadata"
