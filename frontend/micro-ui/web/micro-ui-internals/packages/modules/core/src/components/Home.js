@@ -169,6 +169,15 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 
 const EmployeeHome = ({ modules }) => {
   const { t } = useTranslation();
+
+  
+// if (!sessionStorage.getItem("reloaded")) {
+//   sessionStorage.setItem("reloaded", "true");
+//   window.location.reload();
+// }
+
+
+
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
     const { data: commonFields, isLoadings } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -184,7 +193,7 @@ const EmployeeHome = ({ modules }) => {
     // console.log("stateInfo==",stateInfo);
     // console.log("uiHomePage==",uiHomePage);
   const indexName=    localStorage.getItem("nameIndex");
-  console.log("ABCDFGHBHABH=",indexName)
+  console.log("indexName==",indexName)
 
 
   // Define all favorites
@@ -289,7 +298,7 @@ const EmployeeHome = ({ modules }) => {
 
 // new code and menu list
 
-    const SideMenuData=  {
+        const SideMenuData=  {
   "HOME": {
     "SIDE_MENU": {
       "Revenue Service": {
@@ -300,7 +309,8 @@ const EmployeeHome = ({ modules }) => {
             "BILL_COLLECTOR_RENTAL",
             "ARO_RENTAL",
             "DC_RENTAL",
-            "Bill_Collector_Rental"
+            "Bill_Collector_Rental",
+            "citizen"
           ],
           "Icon": "revenue",
           "URL":{"employee":"/digit-ui/employee",
@@ -319,10 +329,14 @@ const EmployeeHome = ({ modules }) => {
                 "ARO_RENTAL",
                 "DC_RENTAL",
                 "Bill_Collector_Rental",
+                "citizen"
               
               ],
               "Icon": "property_1",
-              "URL": "/revenue/property",
+              "URL": { "employee":"/revenue/property",
+                "citizen":"/digit-ui/citizen/pt/property/Actions"
+
+              },
               "other_data": "Property related services",
               "matadata": "Property metadata"
             },
@@ -331,7 +345,8 @@ const EmployeeHome = ({ modules }) => {
                 "Name": "Namantran",
                 "ROLE": [
                   "billcollector",
-                  "ARO"
+                  "ARO",
+                  "employee"
                 ],
                 "URL": "/namantran",
                 "Icon": "namantranIcon"
@@ -339,7 +354,8 @@ const EmployeeHome = ({ modules }) => {
               "cashDesk": {
                 "Name": "CashDesk",
                 "ROLE": [
-                  "billcollector"
+                 
+                  "employee"
                 ],
                 "URL": "/digit-ui/employee/pt/search",
                 "Icon": "cashDesk"
@@ -347,7 +363,9 @@ const EmployeeHome = ({ modules }) => {
               "change_in_property": {
                 "Name": "Change in property",
                 "ROLE": [
-                  "billcollector"
+                  "billcollector",
+                  "employee"
+                  
                 ],
                 "URL": "/digit-ui/employee/pt/SearchChangePropertyApp",
                 "Icon": "changeIcon"
@@ -366,36 +384,42 @@ const EmployeeHome = ({ modules }) => {
             "metadata": {
               "ROLE": [
                 "SUPERUSER",
-                "EMPLOYEE",
+                "employee",
                 "BILL_COLLECTOR_RENTAL",
                 "ARO_RENTAL",
                 "DC_RENTAL",
                 "Bill_Collector_Rental",
-                "CITIZEN"
+                "citizen"
               ],
               "Icon": "rental_1",
-              "URL": "",
+              "URL": {"citizen":"dashboard/rental",
+                "employee":""
+              },
               "other_data": "Rental services",
               "matadata": "Rental metadata"
-            }
+            },
+             "SUB_MENU": {}
           },
           "Water": {
             "metadata": {
               "ROLE": [
                 "SUPERUSER",
-                "EMPLOYEE",
+                "employee",
                 "WS_CLERK",
                 "WS_APPROVER",
                 "WS_FIELD_INSPECTOR",
                 "WS_DOC_VERIFIER",
                 "WS_CEMP",
-                "CITIZEN"
+                "citizen"
               ],
               "Icon": "water_1",
-              "URL": "",
+              "URL":{"employee": "",
+                "citizen":"/digit-ui/citizen/ws-home"
+              },
               "other_data": "Water services",
               "matadata": "Water metadata"
-            }
+            },
+             "SUB_MENU": {}
           }
         }
       },
@@ -522,23 +546,69 @@ const EmployeeHome = ({ modules }) => {
 }
 
 
+const [services,setServices]=useState();
+useEffect(()=>{
+
 const revenueSubMenu = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")]?.SUB_MENU || {};
 
-const services = Object.entries(revenueSubMenu).map(([key, value]) => {
+const abc = Object.entries(revenueSubMenu).map(([key, value]) => {
   const meta = value.metadata || {};
   const subMenu = value.SUB_MENU || {};
+
+     let dropdownOptions= Object.entries(subMenu).map(([subKey, subValue]) => ({
+      label: subValue.Name || subKey,
+      link: subValue.URL ,
+    }));
+      if (key.toLowerCase() === "property" && isARO) {
+    dropdownOptions.push({
+      label: "Property Freeze/Unfreeze",
+      link: "/digit-ui/employee/pt/freeze-property",
+    });
+  }
+
+    
 
   return {
     title: key,
     icon: meta.Icon || "",
-    dropdownOptions: Object.entries(subMenu).map(([subKey, subValue]) => ({
-      label: subValue.Name || subKey,
-      link: subValue.URL ,
-    })),
-    citizenLink: meta.URL || "",
+    dropdownOptions,
+    citizenLink: meta.URL.employee || "",
     isExternal: false,
   };
 });
+
+setServices(abc);
+
+},[localStorage.getItem("nameIndex")])
+
+
+// const revenueSubMenu = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")]?.SUB_MENU || {};
+
+// const services = Object.entries(revenueSubMenu).map(([key, value]) => {
+//   const meta = value.metadata || {};
+//   const subMenu = value.SUB_MENU || {};
+
+//      let dropdownOptions= Object.entries(subMenu).map(([subKey, subValue]) => ({
+//       label: subValue.Name || subKey,
+//       link: subValue.URL ,
+//     }));
+//       if (key.toLowerCase() === "property" && isARO) {
+//     dropdownOptions.push({
+//       label: "Property Freeze/Unfreeze",
+//       link: "/digit-ui/employee/pt/freeze-property",
+//     });
+//   }
+
+    
+
+//   return {
+//     title: key,
+//     icon: meta.Icon || "",
+//     dropdownOptions,
+//     citizenLink: meta.URL.employee || "",
+//     isExternal: false,
+//   };
+// });
 
   return (
     <div
@@ -604,19 +674,19 @@ const services = Object.entries(revenueSubMenu).map(([key, value]) => {
             <h1 className="main-title" style={styles.mainTitle}>{t("SIDEMENU_REVENUE_SERVICES")}</h1>
 
             <div style={styles.servicesGrid}>
-  {services.map((service, index) => (
+  {services?.map((service, index) => (
     <ServiceCard
       key={index}
-      title={service.title}
-      icon={service.icon}
-      dropdownOptions={service.dropdownOptions}
+      title={service?.title}
+      icon={service?.icon}
+      dropdownOptions={service?.dropdownOptions}
       isDropdownOpen={openDropdown === index}
       onToggle={handleDropdownToggle}
       cardIndex={index}
-      citizenLink={service.citizenLink}
-      isExternal={service.isExternal}
+      citizenLink={service?.citizenLink}
+      isExternal={service?.isExternal}
     />
-  ))}
+  ))} 
 </div>
 
 
