@@ -5,8 +5,10 @@ import { useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 
 export const SuccessfulPayment = (props)=>{
-  
-  if(localStorage.getItem("BillPaymentEnabled")!=="true"){
+  const queryParams = new URLSearchParams(window.location.search);
+  const hasTransactionId = queryParams.get("eg_pg_txnid");
+  if(!hasTransactionId && localStorage.getItem("BillPaymentEnabled")!=="true"){
+  // if(localStorage.getItem("BillPaymentEnabled")!=="true"){
     window.history.forward();
    return null;
  }

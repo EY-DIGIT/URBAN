@@ -137,6 +137,7 @@ const PaymentForm = ({ paymentRules, businessService = "PT" }) => {
         };
 
         try {
+            localStorage.setItem("BillPaymentEnabled", "true");
             const data = await Digit.PaymentService.createCitizenReciept(billDetails?.tenantId, filterData);
             const redirectUrl = data?.Transaction?.redirectUrl;
             window.location = redirectUrl;
