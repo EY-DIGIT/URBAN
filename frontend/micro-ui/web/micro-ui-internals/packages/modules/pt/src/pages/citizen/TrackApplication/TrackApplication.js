@@ -198,7 +198,7 @@ const TrackApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit, d
                     font-family: 'Poppins', 'Segoe UI', sans-serif;
                     font-weight: 600;
                     font-size: 32px;
-                    color: #6b133f;
+                    color: #6B133F66;
                     margin: 0;
                 }
                 

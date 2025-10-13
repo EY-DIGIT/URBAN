@@ -121,7 +121,7 @@ const PropertyManagement = ({ applications = [] }) => {
     },
     tableHeader: {
       backgroundColor: "#6B133F66",
-      color: "white"
+      color: "black"
     },
     tableHeaderCell: {
       padding: "12px",

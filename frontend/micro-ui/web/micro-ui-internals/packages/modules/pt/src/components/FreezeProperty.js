@@ -76,7 +76,7 @@ const PTFreezeProperty = () => {
     }, [currentPage]);
 
     return (
-        <div style={{ background: "#f5f5f5", minHeight: "100vh", padding: "40px 20px" }}>
+        <div>
             <style>{`
         * {
           box-sizing: border-box;
