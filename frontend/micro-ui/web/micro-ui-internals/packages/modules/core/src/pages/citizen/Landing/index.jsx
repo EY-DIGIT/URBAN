@@ -303,8 +303,8 @@ const ServiceCard = ({
 
         if (getUserType() === "citizen" || title === "Rental") {       
             if (isExternal) {
-              console.log("SEE WEBSITE LINK=",`${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`)
-                // window.location.href = `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+              // console.log("SEE WEBSITE LINK=",`${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`)
+                window.location.href = `${baseURL}${citizenLink}?accessToken=${accessToken}&refreshToken=${refreshToken}`;
             } else {
                 window.location.href = citizenLink
             }
