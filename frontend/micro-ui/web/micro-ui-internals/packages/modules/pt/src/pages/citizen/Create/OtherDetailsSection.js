@@ -74,7 +74,7 @@ console.log("MDMS EssentialTax Raw =====", EssentialTax);
     <div>
 
       {/* Other Details Heading */}
-      <div style={styles.assessmentStyle}>{t("Other Details")}</div>
+      <div style={styles.assessmentStyle}>{t("Other Details") + " " + t("TO_BE_FILLED_BY_IMC")}</div>
 
       {/* Property Info */}
       {/* <div style={styles.formSection}> */}

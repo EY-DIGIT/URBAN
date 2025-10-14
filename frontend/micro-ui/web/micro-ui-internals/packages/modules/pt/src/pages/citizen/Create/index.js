@@ -1494,7 +1494,7 @@ const CreateProperty = () => {
             />
           </div>
           <div style={userData === "citizen" ? { ...styles.card, pointerEvents: "none", opacity: "0.4" } : styles.card}>
-            <div style={styles.assessmentStyle}>{t("ASSESSMENT_DETAILS")}{`TO_BE_FILLED_BY_IMC`}</div>
+            <div style={styles.assessmentStyle}>{t("ASSESSMENT_DETAILS") + " " + t("TO_BE_FILLED_BY_IMC")}</div>
             <AssessmentDetailsSection
               t={t}
               assessmentDetails={assessmentDetails}
@@ -1505,7 +1505,7 @@ const CreateProperty = () => {
             />
           </div>
           <div style={userData === "citizen" ? { ...styles.card, pointerEvents: "none", opacity: "0.4" } : styles.card}>
-            <div style={styles.assessmentStyle}>{t("PROPERTY_DETAILS")}{`TO_BE_FILLED_BY_IMC`}</div>
+            <div style={styles.assessmentStyle}>{t("PROPERTY_DETAILS") + " " + t("TO_BE_FILLED_BY_IMC")}</div>
             <PropertyDetailsTableSection
               t={t}
               unit={unit}
