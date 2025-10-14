@@ -580,7 +580,7 @@ const EmployeeHome = ({ modules }) => {
     // });
 
 
-    const revenueService = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")];
+    const revenueService = SideMenuData?.HOME?.SIDE_MENU?.["Revenue Service"];
     const abc = Object.entries(revenueService?.SUB_MENU || {})
       .filter(([_, value]) => value?.metadata?.ROLE?.includes("employee"))
       .map(([key, value]) => {
@@ -613,7 +613,7 @@ const EmployeeHome = ({ modules }) => {
       });
     setServices(abc);
 
-  }, [localStorage.getItem("nameIndex")])
+  }, [])
 
 
   // const revenueSubMenu = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")]?.SUB_MENU || {};
