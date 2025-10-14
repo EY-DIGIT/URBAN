@@ -83,11 +83,6 @@ const SearchProperty = ({ onSelect }) => {
   const onPropertySearch = () => {
     const { propertyIds, mobileNumber } = formValue;
 
-    if (!propertyIds && !mobileNumber) {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-      return;
-    }
-
     if (mobileNumber && !/^[6-9]\d{9}$/.test(mobileNumber)) {
       setShowToast({ warning: true, label: "ERR_PT_INVALID_MOBILE" });
       return;

@@ -47,6 +47,9 @@ const TrackApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit, d
         return 'N/A';
     };
 
+    const getApplicationType = (item) =>{
+        return item.creationReason === "CREATE" ? t("PT_NEW_PROPERTY") : item.creationReason;
+    }
     // Function to format address
     const getAddress = (address) => {
         if (!address) return 'N/A';
@@ -535,7 +538,7 @@ const TrackApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit, d
                                             <th>Property ID</th>
                                             <th>Address</th>
                                             <th>Owner Name</th>
-                                            <th>Father Name</th>
+                                            <th>Application Type</th>
                                             <th>Mobile Number</th>
                                             <th>Status</th>
                                         </tr>
@@ -564,7 +567,7 @@ const TrackApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit, d
                                                             item.owners.map(o => o.name).filter(Boolean).join(", ") :
                                                             'N/A'}
                                                     </td>
-                                                    <td>{getFatherName(item)}</td>
+                                                    <td>{getApplicationType(item)}</td>
                                                     <td>{getOwnerMobile(item)}</td>
                                                     <td>
                                                         <span className={`status-badge status-${(item.status || '').toLowerCase().replace(/\s+/g, '')}`}>
