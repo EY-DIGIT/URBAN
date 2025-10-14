@@ -555,12 +555,12 @@ const TrackApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit, d
                                                 <tr key={index}>
                                                     <td>
                                                         <span className="link">
-                                                            <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${item.propertyId}`}>
+                                                            {/* <Link to={`/digit-ui/employee/pt/applicationsearch/application-details/${item.propertyId}`}> */}
                                                                 {item.acknowldgementNumber || item.applicationNo || 'N/A'}
-                                                            </Link>
+                                                            {/* </Link> */}
                                                         </span>
                                                     </td>
-                                                    <td>{item.propertyId || 'N/A'}</td>
+                                                    <td>{getStatusText(t(item.status && `WF_PT_${item.status}`) || item.status) == "ACTIVE" ? item.propertyId : " - "}</td>
                                                     <td>{getAddress(item.address)}</td>
                                                     <td>
                                                         {item.owners ?

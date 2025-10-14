@@ -43,9 +43,9 @@ const TransactionList = () => {
 
   const styles = {
     container: {
-      padding: '40px',
-      backgroundColor: '#f5f5f5',
-      minHeight: '100vh',
+      // padding: '40px',
+      // backgroundColor: '#f5f5f5',
+      // minHeight: '100vh',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     },
     header: {
@@ -198,7 +198,7 @@ const TransactionList = () => {
     setIsDownloading(payment.id);
     try {
       const receiptNumber = payment?.paymentDetails?.[0]?.receiptNumber;
-      
+
       if (!receiptNumber) {
         alert("Receipt number not found.");
         setIsDownloading(null);
@@ -227,7 +227,7 @@ const TransactionList = () => {
           rateZone: property?.address?.locality?.children?.[0]?.name,
           address: `${property?.address?.doorNo}, ${property?.address?.street}, ${property?.address?.locality?.name}, ${property?.address?.pincode}`
         }));
-        
+
         response = await Digit.PaymentService.generatePdf(
           state,
           { Payments: paymentsWithDetails },
@@ -319,7 +319,7 @@ const TransactionList = () => {
           </div>
         </div>
       )} */}
-      
+
       <div style={styles.tableWrapper}>
         <table style={styles.table}>
           <thead>
@@ -337,8 +337,8 @@ const TransactionList = () => {
           <tbody>
             {currentPayments.length > 0 ? (
               currentPayments.map((payment, index) => (
-                <tr 
-                  key={payment.id || index} 
+                <tr
+                  key={payment.id || index}
                   style={styles.dataRow}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
@@ -362,7 +362,7 @@ const TransactionList = () => {
                     </span>
                   </td>
                   <td style={styles.dataCell}>
-                    <button 
+                    <button
                       style={{
                         ...styles.downloadButton,
                         ...(isDownloading === payment.id ? styles.downloadButtonDisabled : {})
@@ -380,9 +380,7 @@ const TransactionList = () => {
                         }
                       }}
                     >
-                      {/* <Download size={16} /> */}
-                      <button>Download</button>
-                      {isDownloading === payment.id ? 'Downloading...' : 'Download'}
+                      <button>{isDownloading === payment.id ? 'Downloading...' : 'Download'}</button>
                     </button>
                   </td>
                 </tr>
@@ -396,10 +394,10 @@ const TransactionList = () => {
             )}
           </tbody>
         </table>
-        
+
         {payments.length > 0 && (
           <div style={styles.pagination}>
-            <button 
+            <button
               style={{
                 ...styles.paginationButton,
                 ...(currentPage === 1 ? styles.paginationButtonDisabled : {})
@@ -410,7 +408,7 @@ const TransactionList = () => {
               Previous
             </button>
             <span style={styles.pageInfo}>Page {currentPage} of {totalPages}</span>
-            <button 
+            <button
               style={{
                 ...styles.paginationButton,
                 ...(currentPage === totalPages ? styles.paginationButtonDisabled : {})
