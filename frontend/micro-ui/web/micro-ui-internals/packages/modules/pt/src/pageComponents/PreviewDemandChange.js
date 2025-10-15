@@ -624,7 +624,10 @@ const PreviewDemandChange = () => {
                 },
                 channel: "CFC_COUNTER",
                 creationReason: "UPDATE",
-                source: "MUNICIPAL_RECORDS"
+                source: "MUNICIPAL_RECORDS",
+                applicationStatus: "UPDATE",
+                AlternateUpdated: false,
+                isOldDataEncryptionRequest: false,
             },
             // RequestInfo: {
             //     apiId: "Rainmaker",
