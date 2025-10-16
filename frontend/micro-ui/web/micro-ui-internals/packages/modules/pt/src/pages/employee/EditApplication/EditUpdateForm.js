@@ -138,6 +138,8 @@ const EditUpdateForm = ({ applicationData }) => {
         error,
     } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
+    console.log("propertyDetails==",propertyDetails);
+
 
     const handleEstimate = (newPropertyId, property) => {
         const toYear =
@@ -240,7 +242,7 @@ const EditUpdateForm = ({ applicationData }) => {
                     isCorrespondenceAddress: correspondenceAddress,
                     mobileNumber: owner.mobile || "",
                     emailId: owner.email || "",
-                    ownerType: propertyDetails.exemption.code,
+                    ownerType: propertyDetails.exemption.code || propertyDetails.exemption,
                     permanentAddress:
                         addressDetails.address || "",
                     relationship: owner.relationship || "FATHER",
