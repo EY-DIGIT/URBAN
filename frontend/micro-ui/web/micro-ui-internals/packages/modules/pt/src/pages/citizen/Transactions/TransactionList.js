@@ -104,12 +104,16 @@ const TransactionList = () => {
     tableWrapper: {
       backgroundColor: '#ffffff',
       borderRadius: '12px',
-      overflow: 'hidden',
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+      overflowX: 'auto',        
+      overflowY: 'hidden',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+      width: '100%',
+      WebkitOverflowScrolling: 'touch'
     },
     table: {
       width: '100%',
-      borderCollapse: 'collapse'
+      borderCollapse: 'collapse',
+      minWidth: '900px',
     },
     headerRow: {
       backgroundColor: '#b49baa',
@@ -130,7 +134,18 @@ const TransactionList = () => {
     dataCell: {
       padding: '20px',
       fontSize: '14px',
-      color: '#333333'
+      color: '#333333',
+      whiteSpace: 'nowrap',   
+      verticalAlign: 'middle'     
+    },
+    headerCell: {
+      padding: '16px 20px',
+      textAlign: 'left',
+      fontSize: '14px',
+      fontWeight: '600',
+      color: '#2d2d2d',
+      borderBottom: 'none',
+      whiteSpace: 'nowrap'    
     },
     downloadButton: {
       backgroundColor: '#6B133F',
@@ -193,6 +208,26 @@ const TransactionList = () => {
       color: '#6B133F'
     }
   };
+
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+    @media (max-width: 768px) {
+      table {
+        font-size: 12px;
+      }
+      th, td {
+        padding: 10px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+    }
+  `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
 
   const handleDownloadReceipt = async (payment) => {
     setIsDownloading(payment.id);
@@ -289,36 +324,8 @@ const TransactionList = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        {/* <button 
-          style={styles.backButton}
-          onClick={() => history.goBack()}
-          onMouseOver={(e) => e.target.style.backgroundColor = '#8a1a5a'}
-          onMouseOut={(e) => e.target.style.backgroundColor = '#6B133F'}
-        >
-          <ArrowLeft size={18} />
-          Back
-        </button> */}
         <h1 style={styles.heading}>List Of Transactions</h1>
       </div>
-
-      {/* {property && (
-        <div style={styles.propertyInfo}>
-          <div style={styles.infoRow}>
-            <div style={styles.infoItem}>
-              <div style={styles.infoLabel}>Property ID</div>
-              <div style={styles.infoValue}>{propertyId}</div>
-            </div>
-            <div style={styles.infoItem}>
-              <div style={styles.infoLabel}>Owner Name</div>
-              <div style={styles.infoValue}>{getOwnerName()}</div>
-            </div>
-            <div style={styles.infoItem}>
-              <div style={styles.infoLabel}>Total Receipts</div>
-              <div style={styles.infoValue}>{payments.length}</div>
-            </div>
-          </div>
-        </div>
-      )} */}
 
       <div style={styles.tableWrapper}>
         <table style={styles.table}>

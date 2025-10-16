@@ -233,8 +233,8 @@ const SelectMobileNumber = ({ t, onSelect, showRegisterLink, mobileNumber, onMob
   const [isCCFEnabled, setisCCFEnabled] = useState(false);
   const [mdmsConfig, setMdmsConfig] = useState("");
   const { isLoading, data } = Digit.Hooks.useCustomMDMS(Digit.ULBService.getStateId(), "common-masters", [{ name: "CitizenConsentForm" }]);
-const { data: { stateInfo, uiHomePage } = {} } = Digit.Hooks.useStore.getInitData();
-console.log("AAAAAAAAAAA",stateInfo)
+  const { data: { stateInfo, uiHomePage } = {} } = Digit.Hooks.useStore.getInitData();
+  console.log("AAAAAAAAAAA", stateInfo, config)
   useEffect(() => {
     if (data?.["common-masters"]?.CitizenConsentForm?.[0]?.isCitizenConsentFormEnabled) {
       setisCCFEnabled(data?.["common-masters"]?.CitizenConsentForm?.[0]);
@@ -312,29 +312,47 @@ console.log("AAAAAAAAAAA",stateInfo)
         </div>
 
         <div className="right-section">
-          <h3 className="welcome-text" ><b style={{fontSize:"20px"}}>Welcome to</b>  </h3>
-          <h2 className="portal-title "> <b style={{fontSize:"20px"}}>e-Indore Municipal Corporation (e-IMC)</b>  </h2>
+          <h3 className="welcome-text" ><b style={{ fontSize: "20px" }}>Welcome to</b>  </h3>
+          <h2 className="portal-title "> <b style={{ fontSize: "20px" }}>e-Indore Municipal Corporation (e-IMC)</b>  </h2>
 
-          
-          <div style={{display:"flex",justifyContent:"center",marginTop:"10px"}}><div style={{width:"161px",height:"5px",display:"flex",backgroundColor:"#6B133F",alignItems:"center"}}> </div></div>
-       
-          <p className="portal-title"  style={{marginTop:"10px"}}><b style={{fontSize:"20px"}}>  IMC Citizen</b></p>
-          <div className="citizen-form-step" style={{textAlign:"center"}}>
- <FormStep 
-            isDisabled={checkDisbaled()}
-            onSelect={onSelect}
-            config={config}
-            t={t}
-            componentInFront="+91"
-            onChange={onMobileChange}
-            value={mobileNumber}
-         
-          >
-          </FormStep>
+
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}><div style={{ width: "161px", height: "5px", display: "flex", backgroundColor: "#6B133F", alignItems: "center" }}> </div></div>
+
+          <p className="portal-title" style={{ marginTop: "10px" }}><b style={{ fontSize: "20px" }}>  IMC Citizen</b></p>
+          <div className="citizen-form-step" style={{ textAlign: "center" }}>
+            <FormStep
+              isDisabled={checkDisbaled()}
+              onSelect={onSelect}
+              // config={config}
+              config={{
+                "texts": {
+                  "nextText": "Next",
+                  "submitBarLabel": "Get OTP"
+                },
+                "inputs": [
+                  {
+                    "type": "text",
+                    "name": "mobileNumber",
+                    // "error": "ERR_HRMS_INVALID_MOB_NO",
+                    "validation": {
+                      "required": false,
+                      // "minLength": 10,
+                      // "maxLength": 10
+                    }
+                  }
+                ]
+              }}
+              t={t}
+              componentInFront="+91"
+              onChange={onMobileChange}
+              value={mobileNumber}
+
+            >
+            </FormStep>
 
           </div>
-         
-      
+
+
         </div>
       </div>
     </div>
