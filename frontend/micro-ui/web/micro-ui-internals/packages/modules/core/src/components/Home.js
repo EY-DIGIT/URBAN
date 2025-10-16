@@ -186,6 +186,14 @@ const EmployeeHome = ({ modules }) => {
   const refreshToken = user?.refresh_token;
   const roles = user?.info?.roles?.map(role => role.code) || [];
 
+  console.log("USER===",user?.info?.roles);
+  const hasGRO = user?.info?.roles.some(role => role.code === 'GRO');
+  const PGR_LME = user?.info?.roles.some(role => role.code === 'PGR_LME');
+  const BND_CEMP = user?.info?.roles.some(role => role.code === 'BND_CEMP');
+  console.log("BIRTH==",BND_CEMP);
+
+
+
   const stateId = Digit.ULBService.getStateId();
 
   const { data: SideMenu } = Digit.Hooks.pt.useSideMenuMDMS(stateId, "common-masters", "SideMenu");
@@ -425,6 +433,132 @@ const EmployeeHome = ({ modules }) => {
                 "matadata": "Water metadata"
               },
               "SUB_MENU": {}
+            },
+            "Complaint": {
+              "metadata": {
+                "ROLE": [
+                  "SUPERUSER",
+                  "employee",
+                  "WS_CLERK",
+                  "WS_APPROVER",
+                  "WS_FIELD_INSPECTOR",
+                  "WS_DOC_VERIFIER",
+                  "WS_CEMP",
+                  "citizen"
+                ],
+                "Icon": "water_1",
+                "URL": {
+                  "employee": "",
+                  "citizen": "/digit-ui/citizen/pgr-home"
+                },
+                "other_data": "Water services",
+                "matadata": "Water metadata"
+              },
+              "SUB_MENU": {
+                "searchApplication": {
+                  "Name": "Search Application",
+                  "ROLE": [
+                    "billcollector",
+                    "ARO",
+                    "employee"
+                  ],
+                  "URL": "/digit-ui/employee/pgr/inbox",
+                  "Icon": "namantranIcon"
+                },
+                "newComplaint": {
+                  "Name": "New Complaint",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/digit-ui/employee/pgr/complaint/create",
+                  "Icon": "cashDesk"
+                }
+              }
+            },
+            "Birth": {
+              "metadata": {
+                "ROLE": [
+                  "SUPERUSER",
+                  "employee",
+                  "WS_CLERK",
+                  "WS_APPROVER",
+                  "WS_FIELD_INSPECTOR",
+                  "WS_DOC_VERIFIER",
+                  "WS_CEMP",
+                  "citizen"
+                ],
+                "Icon": "water_1",
+                "URL": {
+                  "employee": "",
+                  "citizen": "/citizen/birth-citizen/home"
+                },
+                "other_data": "Water services",
+                "matadata": "Water metadata"
+              },
+              "SUB_MENU": {
+                "birthNewRegistration": {
+                  "Name": "Birth New Registration",
+                  "ROLE": [
+                    "billcollector",
+                    "ARO",
+                    "employee"
+                  ],
+                  "URL": "/employee/birth-employee/newRegistration ",
+                  "Icon": "namantranIcon"
+                },
+                "searchBirthCertificate": {
+                  "Name": "Search Birth Certificate",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/employee/birth-common/getCertificate",
+                  "Icon": "cashDesk"
+                }
+              }
+            },
+            "Death": {
+              "metadata": {
+                "ROLE": [
+                  "SUPERUSER",
+                  "employee",
+                  "WS_CLERK",
+                  "WS_APPROVER",
+                  "WS_FIELD_INSPECTOR",
+                  "WS_DOC_VERIFIER",
+                  "WS_CEMP",
+                  "citizen"
+                ],
+                "Icon": "water_1",
+                "URL": {
+                  "employee": "",
+                  "citizen": "/citizen/death-citizen/home"
+                },
+                "other_data": "Water services",
+                "matadata": "Water metadata"
+              },
+              "SUB_MENU": {
+                "deathNewRegistration": {
+                  "Name": "Death New Registration",
+                  "ROLE": [
+                    "billcollector",
+                    "ARO",
+                    "employee"
+                  ],
+                  "URL": "/employee/death-employee/newRegistration",
+                  "Icon": "namantranIcon"
+                },
+                "searchDeathCertificate": {
+                  "Name": "Search Death Certificate",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/employee/death-common/getCertificate",
+                  "Icon": "cashDesk"
+                }
+              }
             }
           }
         },
@@ -555,63 +689,91 @@ const EmployeeHome = ({ modules }) => {
   const [services, setServices] = useState();
   useEffect(() => {
 
-    // const revenueSubMenu = SideMenuData?.HOME?.SIDE_MENU?.[localStorage.getItem("nameIndex")]?.SUB_MENU || {};
-    // const abc = Object.entries(revenueSubMenu).map(([key, value]) => {
-    //   const meta = value.metadata || {};
-    //   const subMenu = value.SUB_MENU || {};
-    //      let dropdownOptions= Object.entries(subMenu).map(([subKey, subValue]) =>
-    //        ({
-    //       label: subValue.Name || subKey,
-    //       link: subValue.URL ,
-    //     }));
-    //       if (key.toLowerCase() === "property" && isARO) {
-    //     dropdownOptions.push({
-    //       label: "Property Freeze/Unfreeze",
-    //       link: "/digit-ui/employee/pt/freeze-property",
-    //     });
-    //   }
-    //   return {
-    //     title: key,
-    //     icon: meta.Icon || "",
-    //     dropdownOptions,
-    //     citizenLink: meta.URL.employee || "",
-    //     isExternal: key==="Rental"?true: false,
-    //   };
-    // });
+   
 
 
     const revenueService = SideMenuData?.HOME?.SIDE_MENU?.["Revenue Service"];
-    const abc = Object.entries(revenueService?.SUB_MENU || {})
-      .filter(([_, value]) => value?.metadata?.ROLE?.includes("employee"))
-      .map(([key, value]) => {
+const abc = Object.entries(revenueService?.SUB_MENU || {})
+  .filter(([key, value]) => {   
+    const hasEmployeeRole = value?.metadata?.ROLE?.includes("employee");
+    if ( (key.toLowerCase() === "complaint" && !(hasGRO || PGR_LME) ) ||  ((key.toLowerCase() === "birth" || key.toLowerCase() === "death")&& !BND_CEMP ) ) {
+      return false;
+    }
+  
 
-
-        let subMenus = Object.entries(value?.SUB_MENU || {})
-          .filter(([_, subValue]) => subValue?.ROLE?.includes("employee"))
-          .map(([subKey, subValue]) => (
-            {
-              label: subValue?.Name || subKey,
-              link: subValue?.URL,
-              icon: subValue?.Icon
-            }));
-
-        if (key.toLowerCase() === "property" && isARO) {
-          subMenus.push({
-            label: "Property Freeze/Unfreeze",
-            link: "/digit-ui/employee/pt/freeze-property",
-            icon: "abc"
-          });
+    return hasEmployeeRole;
+  })
+  .map(([key, value]) => {
+    let subMenus = Object.entries(value?.SUB_MENU || {})
+      .filter(([key, subValue]) =>{ 
+        const subCheck=subValue?.ROLE?.includes("employee") ;
+        if(key.toLowerCase()==="newcomplaint" && PGR_LME){
+          return false;
         }
 
-        return {
-          title: key,
-          icon: value?.metadata?.Icon,
-          dropdownOptions: subMenus,
-          citizenLink: value?.metadata?.URL.citizen,
-          isExternal: key === "Rental" ? true : false
-        };
+        return subCheck;
+      })
+      .map(([subKey, subValue]) => ({
+        label: subValue?.Name || subKey,
+        link: subValue?.URL,
+        icon: subValue?.Icon
+      }));
+
+    if (key.toLowerCase() === "property" && isARO) {
+      subMenus.push({
+        label: "Property Freeze/Unfreeze",
+        link: "/digit-ui/employee/pt/freeze-property",
+        icon: "abc"
       });
-    setServices(abc);
+    }
+
+    return {
+      title: key,
+      icon: value?.metadata?.Icon,
+      dropdownOptions: subMenus,
+      citizenLink: value?.metadata?.URL.citizen,
+      isExternal: key === "Rental"
+    };
+  });
+
+setServices(abc);
+
+
+
+
+
+    // const revenueService = SideMenuData?.HOME?.SIDE_MENU?.["Revenue Service"];
+    // const abc = Object.entries(revenueService?.SUB_MENU || {})
+    //   .filter(([_, value]) => value?.metadata?.ROLE?.includes("employee"))
+    //   .map(([key, value]) => {
+
+
+    //     let subMenus = Object.entries(value?.SUB_MENU || {})
+    //       .filter(([_, subValue]) => subValue?.ROLE?.includes("employee"))
+    //       .map(([subKey, subValue]) => (
+    //         {
+    //           label: subValue?.Name || subKey,
+    //           link: subValue?.URL,
+    //           icon: subValue?.Icon
+    //         }));
+
+    //     if (key.toLowerCase() === "property" && isARO) {
+    //       subMenus.push({
+    //         label: "Property Freeze/Unfreeze",
+    //         link: "/digit-ui/employee/pt/freeze-property",
+    //         icon: "abc"
+    //       });
+    //     }
+
+    //     return {
+    //       title: key,
+    //       icon: value?.metadata?.Icon,
+    //       dropdownOptions: subMenus,
+    //       citizenLink: value?.metadata?.URL.citizen,
+    //       isExternal: key === "Rental" ? true : false
+    //     };
+    //   });
+    // setServices(abc);
 
   }, [])
 

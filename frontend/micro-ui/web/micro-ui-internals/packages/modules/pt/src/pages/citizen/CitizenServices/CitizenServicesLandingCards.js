@@ -341,6 +341,132 @@ const CitizenServicesCards = () => {
                 "matadata": "Water metadata"
               },
               "SUB_MENU": {}
+            },
+            "Complaint": {
+              "metadata": {
+                "ROLE": [
+                  "SUPERUSER",
+                  "employee",
+                  "WS_CLERK",
+                  "WS_APPROVER",
+                  "WS_FIELD_INSPECTOR",
+                  "WS_DOC_VERIFIER",
+                  "WS_CEMP",
+                  "citizen"
+                ],
+                "Icon": "water_1",
+                "URL": {
+                  "employee": "",
+                  "citizen": "/digit-ui/citizen/pgr-home"
+                },
+                "other_data": "Water services",
+                "matadata": "Water metadata"
+              },
+              "SUB_MENU": {
+                "searchApplication": {
+                  "Name": "Search Application",
+                  "ROLE": [
+                    "billcollector",
+                    "ARO",
+                    "employee"
+                  ],
+                  "URL": "/digit-ui/employee/pgr/inbox",
+                  "Icon": "namantranIcon"
+                },
+                "newComplaint": {
+                  "Name": "New Complaint",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/digit-ui/employee/pgr/complaint/create",
+                  "Icon": "cashDesk"
+                }
+              }
+            },
+            "Birth": {
+              "metadata": {
+                "ROLE": [
+                  "SUPERUSER",
+                  "employee",
+                  "WS_CLERK",
+                  "WS_APPROVER",
+                  "WS_FIELD_INSPECTOR",
+                  "WS_DOC_VERIFIER",
+                  "WS_CEMP",
+                  "citizen"
+                ],
+                "Icon": "water_1",
+                "URL": {
+                  "employee": "",
+                  "citizen": "/citizen/birth-citizen/home"
+                },
+                "other_data": "Water services",
+                "matadata": "Water metadata"
+              },
+              "SUB_MENU": {
+                "birthNewRegistration": {
+                  "Name": "Birth New Registration",
+                  "ROLE": [
+                    "billcollector",
+                    "ARO",
+                    "employee"
+                  ],
+                  "URL": "/employee/birth-employee/newRegistration ",
+                  "Icon": "namantranIcon"
+                },
+                "searchBirthCertificate": {
+                  "Name": "Search Birth Certificate",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/employee/birth-common/getCertificate",
+                  "Icon": "cashDesk"
+                }
+              }
+            },
+            "Death": {
+              "metadata": {
+                "ROLE": [
+                  "SUPERUSER",
+                  "employee",
+                  "WS_CLERK",
+                  "WS_APPROVER",
+                  "WS_FIELD_INSPECTOR",
+                  "WS_DOC_VERIFIER",
+                  "WS_CEMP",
+                  "citizen"
+                ],
+                "Icon": "water_1",
+                "URL": {
+                  "employee": "",
+                  "citizen": "/citizen/death-citizen/home"
+                },
+                "other_data": "Water services",
+                "matadata": "Water metadata"
+              },
+              "SUB_MENU": {
+                "deathNewRegistration": {
+                  "Name": "Death New Registration",
+                  "ROLE": [
+                    "billcollector",
+                    "ARO",
+                    "employee"
+                  ],
+                  "URL": "/employee/death-employee/newRegistration",
+                  "Icon": "namantranIcon"
+                },
+                "searchDeathCertificate": {
+                  "Name": "Search Death Certificate",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/employee/death-common/getCertificate",
+                  "Icon": "cashDesk"
+                }
+              }
             }
           }
         },

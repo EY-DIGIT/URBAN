@@ -140,6 +140,7 @@ const Successful = (props) => {
   const user_type = Digit.SessionStorage.get("userType");
 
   const onClose = props?.props?.onClose || (() => {});
+  const getUserType = () => Digit.UserService.getType();
 
 
   return (
@@ -179,7 +180,20 @@ const Successful = (props) => {
 
       <div style={{marginTop:"2rem"}}></div>
 
-      <button onClick={() => history.push("/digit-ui/employee")} style={styles.successButton}>
+      <button
+      
+      // onClick={() => history.push("/digit-ui/employee")}
+
+       onClick={() => {
+    const userType = Digit.UserService?.getType(); 
+    if (userType === "employee") {
+      history.push("/digit-ui/employee");
+    } else {
+      history.push("/digit-ui/citizen");
+    }
+  }}
+      
+      style={styles.successButton}>
         {t("Home")}
       </button>
     </div>
