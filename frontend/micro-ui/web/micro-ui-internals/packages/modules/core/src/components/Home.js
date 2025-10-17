@@ -707,7 +707,7 @@ const abc = Object.entries(revenueService?.SUB_MENU || {})
     let subMenus = Object.entries(value?.SUB_MENU || {})
       .filter(([key, subValue]) =>{ 
         const subCheck=subValue?.ROLE?.includes("employee") ;
-        if(key.toLowerCase()==="newcomplaint" && PGR_LME){
+        if( (key.toLowerCase()==="newcomplaint" && PGR_LME) || (key.toLowerCase()==="change_in_property" && !isARO)  ){
           return false;
         }
 
