@@ -234,6 +234,7 @@ const InputFieldNew = ({ label, value }) => (
     </div>
 );
 const PropertyForm = () => {
+    const stateId = Digit.ULBService.getStateId();
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const history = useHistory();
     let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
@@ -248,7 +249,23 @@ const PropertyForm = () => {
     const ownersDetail = proOwnerDetail?.owners || [];
     const address = proOwnerDetail?.address || {};
 
-    const stateId = Digit.ULBService.getStateId();
+    const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
+  const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
+  useEffect(() => {
+    if (OwnerType?.length) {
+      const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
+
+      if (filteredItems.length) {
+        const options = filteredItems.map((item) => ({
+          code: item.code,
+          name: item.name,
+        }));
+        setOwnerTypeOptions(options);
+      }
+    }
+  }, [isLoadingO, OwnerType]);
+
+    
 
     const [floorList, setFloorList] = useState([]);
     const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
@@ -384,7 +401,10 @@ const PropertyForm = () => {
                             </div>
                             <div style={styles.row}>
                                 <InputField label="Email ID" value={owner?.emailId || "N/A"} />
-                                <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
+                                <InputField label="Exemption" 
+                                // value={owner?.ownerType || "N/A"}
+                                      value= {  ownerTypeOptions.find(item => item.code === owner?.ownerType)?.name || "N/A"} 
+                                 />
                                 <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                             </div>
                         </React.Fragment>

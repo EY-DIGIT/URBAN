@@ -1346,6 +1346,24 @@ const ApplicationDetailsContent = ({
   isInfoLabel = false
 }) => {
 
+    
+  const stateId = Digit.ULBService.getStateId();
+  const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
+    const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
+  useEffect(() => {
+    if (OwnerType?.length) {
+      const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
+
+      if (filteredItems.length) {
+        const options = filteredItems.map((item) => ({
+          code: item.code,
+          name: item.name,
+        }));
+        setOwnerTypeOptions(options);
+      }
+    }
+  }, [isLoadingO, OwnerType]);
+
   // console.log("applicationDetailsapplicationDetails===",applicationDetails);
   console.log("applicationDataapplicationData===", applicationData);
   console.log("applicationDataapplicationDataapplicationDataapplicationData===", applicationData?.address?.locality?.children[0]?.name);
@@ -1359,7 +1377,7 @@ const ApplicationDetailsContent = ({
   const [amountHalfOFFull, setAmontHalfOFfull] = useState(0);
   const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [defaultAmount, setDefaultAmount] = useState(0)
-  const stateId = Digit.ULBService.getStateId();
+
 
   const [chequeDetails, setChequeDetails] = useState({
     issueDate: "",
@@ -1993,7 +2011,7 @@ const ApplicationDetailsContent = ({
             <input
               type="text"
               readOnly
-              value={applicationData?.owners?.[0]?.ownerType === "BPL" ? "BPL" : applicationData?.owners?.[0]?.ownerType||"N/A"}
+              value={applicationData?.owners?.[0]?.ownerType === "BPL" ? "BPL" :    ownerTypeOptions.find(item => item.code === applicationData?.owners?.[0]?.ownerType)?.name ||"N/A"}
               style={styles.input}
             />
           </div>

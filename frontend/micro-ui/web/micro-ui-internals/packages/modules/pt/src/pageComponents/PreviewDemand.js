@@ -353,14 +353,15 @@ const InputFieldBlank = () => (
 );
 
 const PropertyForm = () => {
+      const stateId = Digit.ULBService.getStateId();
     const { data: commonFields, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "PropertyTax", "CommonFieldsConfig");
+    const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
     const history = useHistory();
-    const stateId = Digit.ULBService.getStateId();
     const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
     const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_SUCCESS_DATA", {});
     
  
-
+    const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [acknowledgmentNumber, setAcknowledgmentNumber] = useState("");
@@ -380,6 +381,8 @@ const PropertyForm = () => {
 
     const [floorList, setFloorList] = useState([]);
     const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
+
+
     useEffect(() => {
         setMutationHappened(false);
         clearSuccessData();
@@ -406,6 +409,22 @@ const PropertyForm = () => {
 
     setFloorList(mappedFloors);
   }, [isLoadingF, FloorAll]);
+
+    useEffect(() => {
+    if (OwnerType?.length) {
+      const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
+
+      if (filteredItems.length) {
+        const options = filteredItems.map((item) => ({
+          code: item.code,
+          name: item.name,
+        }));
+        setOwnerTypeOptions(options);
+      }
+    }
+  }, [isLoadingO, OwnerType]);
+console.log("ownerTypeOptions===",ownerTypeOptions);
+
 
 
   const [boundaryData, setBoundaryData] = useState(null);
@@ -792,7 +811,9 @@ const PropertyForm = () => {
                                     label="Email ID"
                                     value={owner?.emailId || "N/A"}
                                 />
-                                <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
+                                <InputField label="Exemption"
+                                //  value={owner?.ownerType || "N/A"}
+                                value= {  ownerTypeOptions.find(item => item.code === owner?.ownerType)?.name || "N/A"} />
                                 <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                             </div>
                         </React.Fragment>
