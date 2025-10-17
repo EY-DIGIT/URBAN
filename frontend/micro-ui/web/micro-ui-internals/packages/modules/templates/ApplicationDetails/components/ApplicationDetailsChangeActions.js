@@ -278,21 +278,12 @@ const EditApplication = (action) => {
           </button>
         </ActionBar>
       )} */}
-        {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (
+      
         <ActionBar style={{...ActionBarStyle, position: "relative", boxShadow: "none"}}>
-          {/* <button
-            style={{ color: "#FFFFFF", fontSize: "18px" }}
-            className={"submit-bar"}
-            name={actions?.[0]?.action}
-            value={actions?.[0]?.action}
-            onClick={(e) => { onActionSelect(actions?.[0] || {}) }}>
-            {t(`${forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}_${actions?.[0]?.action}`)}
-          </button> */}
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }} ref={menuRef}>
           <SubmitBar  label={t("PREVIEW")} onSubmit={() => handlePreviewChangeProperty()} />
             </div>
         </ActionBar>
-      )}
     </React.Fragment>
   );
 }
