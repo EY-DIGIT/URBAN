@@ -1642,11 +1642,13 @@ const ApplicationDetailsContent = ({
   //     setFormErrors("");
   //   }
   // };
+   console.log("Application====",applicationData);
 
   const handlePayment = async () => {
     const tenantId = billData?.tenantId || "pg.citya";
     const consumerCode = applicationData?.propertyId;
     const selectedPaymentMode = selectedMode; // e.g. "CARD" | "CASH" | "CHEQUE"
+   
 
     setIsLoader(true);
 
@@ -1991,7 +1993,7 @@ const ApplicationDetailsContent = ({
             <input
               type="text"
               readOnly
-              value={applicationData?.owners?.[0]?.ownerType === "BPL" ? "BPL" : "N/A"}
+              value={applicationData?.owners?.[0]?.ownerType === "BPL" ? "BPL" : applicationData?.owners?.[0]?.ownerType||"N/A"}
               style={styles.input}
             />
           </div>
