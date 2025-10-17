@@ -152,44 +152,73 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   };
 
   const handleMobileChange = (event) => {
-    const { value } = event.target;
+    // const { value } = event.target;
+    // setParmas({ ...params, mobileNumber: value });
+
+      const value = event.target.value.replace(/\D/g, ""); // digits only
+  if (value.length <= 10) {
     setParmas({ ...params, mobileNumber: value });
+  }
   };
 
   const selectMobileNumber = async (mobileNumber) => {
-    setCanSubmitNo(false);
-    setParmas({ ...params, ...mobileNumber });
-    const data = {
-      ...mobileNumber,
-      tenantId: stateCode,
-      userType: getUserType(),
-    };
-    if (isUserRegistered) {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
-      if (!err) {
-        setCanSubmitNo(true);
-        history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
-        return;
-      } else {
-        setCanSubmitNo(true);
-        if (!(location.state && location.state.role === "FSM_DSO")) {
-          history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams), data: data });
-        }
-      }
-      if (location.state?.role) {
-        setCanSubmitNo(true);
-        setError(location.state?.role === "FSM_DSO" ? t("ES_ERROR_DSO_LOGIN") : "User not registered.");
-      }
-    } else {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-      if (!err) {
-        setCanSubmitNo(true);
-        history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
-        return;
-      }
-      setCanSubmitNo(true);
-    }
+  setCanSubmitNo(false);
+  setParmas({ ...params, ...mobileNumber });
+
+  const data = {
+    ...mobileNumber,
+    tenantId: stateCode,
+    userType: getUserType(),
   };
+
+  if (isUserRegistered) {
+    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+    console.log("RES:", res, "ERR:", err);
+    setCanSubmitNo(true);
+
+    if (!err) {
+      history.replace(`${path}/otp`, {
+        from: getFromLocation(location.state, searchParams),
+        role: location.state?.role,
+      });
+      return;
+    }
+
+    const errData = err?.response?.data;
+    const errMsg =
+      errData?.Errors?.[0]?.message ||
+      errData?.error_description ||
+      err.message ||
+      "";
+
+    const isUserNotRegistered =
+      errMsg.toLowerCase().includes("user not found") ||
+      errMsg.toLowerCase().includes("not registered");
+
+    if (isUserNotRegistered && !(location.state && location.state.role === "FSM_DSO")) {
+      history.push(`/digit-ui/citizen/register/name`, {
+        from: getFromLocation(location.state, searchParams),
+        data: data,
+      });
+      return;
+    }
+
+    setError(t("LOGIN_OTP_FAILED") || "OTP Login Failed");
+    console.error("OTP sending failed:", errMsg);
+    return;
+  } else {
+    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+    setCanSubmitNo(true);
+
+    if (!err) {
+      history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+      return;
+    }
+
+    setError(t("CS_REGISTER_OTP_FAILED"));
+  }
+};
+
 
   const selectName = async (name) => {
     const data = {

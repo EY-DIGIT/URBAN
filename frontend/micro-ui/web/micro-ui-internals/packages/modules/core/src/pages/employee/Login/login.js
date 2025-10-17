@@ -89,6 +89,15 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
     history.push("/digit-ui/employee/user/forgot-password");
   };
 
+    useEffect(() => {
+      if (Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") {
+        history.replace("/digit-ui/employee");
+      }
+      else if (Digit.UserService?.getUser()?.info?.type === "CITIZEN") {
+        history.replace("/digit-ui/citizen");
+      }
+    }, []);
+
   const [userId, password] = propsConfig.inputs;
   const config = [
     {

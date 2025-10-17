@@ -792,7 +792,7 @@ const PropertyForm = () => {
                                     label="Email ID"
                                     value={owner?.emailId || "N/A"}
                                 />
-                                <InputField label="git" value={owner?.ownerType || "N/A"} />
+                                <InputField label="Exemption" value={owner?.ownerType || "N/A"} />
                                 <InputField label="Date" value={owner?.createdDate ? new Date(owner.createdDate).toLocaleDateString("en-GB") : "N/A"} />
                             </div>
                         </React.Fragment>
