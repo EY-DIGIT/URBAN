@@ -1346,10 +1346,10 @@ const ApplicationDetailsContent = ({
   isInfoLabel = false
 }) => {
 
-    
+
   const stateId = Digit.ULBService.getStateId();
   const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
-    const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
+  const [ownerTypeOptions, setOwnerTypeOptions] = useState([]);
   useEffect(() => {
     if (OwnerType?.length) {
       const filteredItems = OwnerType.filter((item) => item.fromFY === "2025-26");
@@ -1530,6 +1530,10 @@ const ApplicationDetailsContent = ({
 
         amountToPay = enteredAmount;
       }
+      const paymentModeMap = {
+        RTGS: "OFFLINE_RTGS",
+        NEFT: "OFFLINE_NEFT",
+      };
 
       // ✅ Construct receipt request
       const receiptRequest = {
@@ -1547,7 +1551,7 @@ const ApplicationDetailsContent = ({
           tenantId,
           // totalDue: totalAmount,
           totalAmountPaid: amountToPay,
-          paymentMode: selectedPaymentMode,
+          paymentMode: paymentModeMap[selectedPaymentMode] || selectedPaymentMode,
           payerName: bill?.payerName || "Default User",
           paidBy: "OWNER",
           ...(selectedPaymentMode === "NEFT" || selectedPaymentMode === "RTGS"
@@ -1660,13 +1664,13 @@ const ApplicationDetailsContent = ({
   //     setFormErrors("");
   //   }
   // };
-   console.log("Application====",applicationData);
+  console.log("Application====", applicationData);
 
   const handlePayment = async () => {
     const tenantId = billData?.tenantId || "pg.citya";
     const consumerCode = applicationData?.propertyId;
     const selectedPaymentMode = selectedMode; // e.g. "CARD" | "CASH" | "CHEQUE"
-   
+
 
     setIsLoader(true);
 
@@ -1690,7 +1694,10 @@ const ApplicationDetailsContent = ({
 
       const totalAmount =
         (parseFloat(bill.totalAmount) || 0) + (parseFloat(advancePayment) || 0);
-
+      const paymentModeMap = {
+        RTGS: "OFFLINE_RTGS",
+        NEFT: "OFFLINE_NEFT",
+      };
 
       // ✅ Construct dynamic receipt request
       const receiptRequest = {
@@ -1708,7 +1715,7 @@ const ApplicationDetailsContent = ({
           tenantId: bill?.tenantId || tenantId,
           totalDue: bill?.totalAmount,
           totalAmountPaid: totalAmount,
-          paymentMode: selectedPaymentMode,
+          paymentMode: paymentModeMap[selectedPaymentMode] || selectedPaymentMode,
           payerName: bill?.payerName || "Unknown User",
           paidBy: "OWNER",
 
@@ -1782,34 +1789,34 @@ const ApplicationDetailsContent = ({
 
       return;
     }
-     if (selectedMode === "NEFT" || selectedMode === "RTGS") {
-    if (
-      !bankTransferDetails?.paymentDate ||
-      !bankTransferDetails?.referenceNumber ||
-      !bankTransferDetails?.accountHolder ||
-      !bankTransferDetails?.bankName
-    ) {
-      setFormErrors(
-        "For NEFT/RTGS, Payment Date, Reference Number, Account Holder, and Bank Name are required."
-      );
-      return;
+    if (selectedMode === "NEFT" || selectedMode === "RTGS") {
+      if (
+        !bankTransferDetails?.paymentDate ||
+        !bankTransferDetails?.referenceNumber ||
+        !bankTransferDetails?.accountHolder ||
+        !bankTransferDetails?.bankName
+      ) {
+        setFormErrors(
+          "For NEFT/RTGS, Payment Date, Reference Number, Account Holder, and Bank Name are required."
+        );
+        return;
+      }
     }
-  }
 
-  // CHEQUE validation
-  if (selectedMode === "Cheque") {
-    if (
-      !chequeDetails?.issueDate ||
-      !chequeDetails?.chequeNumber ||
-      !chequeDetails?.accountHolder ||
-      !chequeDetails?.bankName
-    ) {
-      setFormErrors(
-        "For Cheque, Cheque Date, Cheque Number, Cheque Drawer Name, and Bank Name are required."
-      );
-      return;
+    // CHEQUE validation
+    if (selectedMode === "Cheque") {
+      if (
+        !chequeDetails?.issueDate ||
+        !chequeDetails?.chequeNumber ||
+        !chequeDetails?.accountHolder ||
+        !chequeDetails?.bankName
+      ) {
+        setFormErrors(
+          "For Cheque, Cheque Date, Cheque Number, Cheque Drawer Name, and Bank Name are required."
+        );
+        return;
+      }
     }
-  }
     setShowPaymentConfirmation(true)
   }
   const handlePaymentCancel = () => {
@@ -2011,7 +2018,7 @@ const ApplicationDetailsContent = ({
             <input
               type="text"
               readOnly
-              value={applicationData?.owners?.[0]?.ownerType === "BPL" ? "BPL" :    ownerTypeOptions.find(item => item.code === applicationData?.owners?.[0]?.ownerType)?.name ||"N/A"}
+              value={applicationData?.owners?.[0]?.ownerType === "BPL" ? "BPL" : ownerTypeOptions.find(item => item.code === applicationData?.owners?.[0]?.ownerType)?.name || "N/A"}
               style={styles.input}
             />
           </div>
@@ -2734,7 +2741,7 @@ const styles = {
     fontFamily: "'Poppins', sans-serif",
     transition: "all 0.3s ease",
     // background: "rgb(241, 241, 241)",
-       background:"rgba(210, 210, 210, 0.5)",
+    background: "rgba(210, 210, 210, 0.5)",
   },
 
 
@@ -2747,7 +2754,7 @@ const styles = {
     fontFamily: "'Poppins', sans-serif",
     transition: "all 0.3s ease",
     // background: "rgb(241, 241, 241)",
-       background:"rgba(210, 210, 210, 0.5)",
+    background: "rgba(210, 210, 210, 0.5)",
 
   },
 
