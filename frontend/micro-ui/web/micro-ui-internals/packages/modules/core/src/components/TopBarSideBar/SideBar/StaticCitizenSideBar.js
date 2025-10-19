@@ -301,7 +301,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
                     "ARO",
                     "employee"
                   ],
-                  "URL": "/namantran",
+                  "URL": "/digit-ui/employee/pt/NamantranSearchApp",
                   "Icon": "namantranIcon"
                 },
                 "cashDesk": {

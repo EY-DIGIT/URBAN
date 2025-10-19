@@ -89,6 +89,7 @@ import ApplicationDetails from "./pages/employee/ApplicationDetails";
 import ChangePropertyApplicationDetails from "./pages/employee/ChangePropertyApplicationDetails";
 import SuccessAppication from "./pages/employee/SuccessAppication";
 import PropertyDetails from "./pages/employee/PropertyDetails";
+import PropertyNamantran from "./pages/employee/NamantranDetails";
 import AssessmentDetails from "./pages/employee/AssessmentDetails";
 import EditApplication from "./pages/employee/EditApplication";
 import EditUpdateIndex from "./pages/employee/EditApplication/EditUpdateIndex";
@@ -231,6 +232,7 @@ const componentsToRegister = {
   ChangePropertyApplicationDetails: ChangePropertyApplicationDetails,
   SuccessAppication:SuccessAppication,
   PTPropertyDetails: PropertyDetails,
+  PropertyNamantran:PropertyNamantran,
   PTAssessmentDetails: AssessmentDetails,
   PTEditApplication: EditApplication,
   EditUpdateIndex:EditUpdateIndex,

@@ -350,7 +350,7 @@ const StaticEmployeeSideBar = ({ linkData, islinkDataLoading }) => {
                   "billcollector",
                   "ARO"
                 ],
-                "URL": "/namantran",
+                "URL": "/digit-ui/employee/pt/NamantranSearchApp",
                 "Icon": "namantranIcon"
               },
               "cashDesk": {
