@@ -7,7 +7,7 @@ import { Loader, Card } from "@egovernments/digit-ui-react-components";
 import ActionModal from "./Modal";
 
 import { useHistory, useParams } from "react-router-dom";
-import ApplicationDetailsContentVerifier from "./components/ApplicationDetailsContentVerifier";
+import ApplicationDetailsContentVerifier from "./components/ApplicationDetailsContentNamantran";
 // import ApplicationDetailsContent from "./components/ApplicationDetailsContent";
 import ApplicationDetailsToast from "./components/ApplicationDetailsToast";
 import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBarNamantran";

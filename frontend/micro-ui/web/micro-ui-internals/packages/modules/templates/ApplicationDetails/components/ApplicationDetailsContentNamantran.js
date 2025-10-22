@@ -11,6 +11,7 @@ import {
   Loader,
   Row,
   StatusTable,
+  Dropdown
 } from "@egovernments/digit-ui-react-components";
 import { values } from "lodash";
 import React, { Fragment, useEffect } from "react";
@@ -77,17 +78,17 @@ function ApplicationDetailsContentVerifier({
 
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
 
-    
+
       // let showBill=applicationData?.channel === "CFC_COUNTER" ? "Bill Collector" :  applicationData?.channel;
-   
+
       const caption = {
         date: checkpoint?.auditDetails?.created,
         // // source: ""
         // source: showBill || "",
- 
-         source: applicationData?.channel || ""
+
+        source: applicationData?.channel || ""
       };
-     
+
       return <TLCaption data={caption} />;
     } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
       //From BE side assigneeMobileNumber is masked/unmasked with connectionHoldersMobileNumber and not assigneeMobileNumber
@@ -144,7 +145,7 @@ function ApplicationDetailsContentVerifier({
 
 
 
-  
+
 
   const getRowStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
@@ -214,74 +215,74 @@ function ApplicationDetailsContentVerifier({
   const stateId = Digit.ULBService.getStateId();
 
   // const stateId = Digit.ULBService.getStateId();
-    const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
-    const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
-    const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {}; 
-    const { data: EssentialTax = {}, isLoadingOe } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "EssentialTax") || {};
-    const { data: RoadFactors, isLoading:{} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
+  const { data: SubOwnerShipCategoryOb, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "SubOwnerShipCategory");
+  const { data: OwnerShipCategoryOb, isLoading: ownerShipCatLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerShipCategory");
+  const { data: OwnerType = {}, isLoadingO } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "OwnerType") || {};
+  const { data: EssentialTax = {}, isLoadingOe } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "EssentialTax") || {};
+  const { data: RoadFactors, isLoading: { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
   const RoadFactorList = (RoadFactors?.PropertyTax?.RoadFactor || []).map((item) => ({
     code: item.code,
     name: item.name, // Show year like "2024-25"
   }));
-  
-    const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
-    const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
-    const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
-    const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
-   
-   
-  
-   
-    const salutationOptions = (Menu || []).map((item) => ({
-      code: item.code,
-      name: t(item.name), // Use i18nKey for translation
-    }));
+
+  const { data: Menu } = Digit.Hooks.pt.useSalutationsMDMS(stateId, "common-masters", "Salutations");
+  const { data: MenuHindi } = Digit.Hooks.pt.useSalutationsHindiMDMS(stateId, "common-masters", "SalutationsHindi");
+  const { data: Relationship } = Digit.Hooks.pt.useRelationshipMDMS(stateId, "common-masters", "Relationship");
+  const { data: PropertyCategory } = Digit.Hooks.pt.usePropertyCategoryMDMS(stateId, "common-masters", "PropertyCategory");
+
+
+
+
+  const salutationOptions = (Menu || []).map((item) => ({
+    code: item.code,
+    name: t(item.name), // Use i18nKey for translation
+  }));
   const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
-      code: item.code,
-      name: t(item.name), // Use i18nKey for translation
-    }));
-    const dropdownOptions = (Array.isArray(OwnerShipCategoryOb) ? OwnerShipCategoryOb : []).map(item => ({
-      code: item.code,
-      name: t(item.name)
-    }));
+    code: item.code,
+    name: t(item.name), // Use i18nKey for translation
+  }));
+  const dropdownOptions = (Array.isArray(OwnerShipCategoryOb) ? OwnerShipCategoryOb : []).map(item => ({
+    code: item.code,
+    name: t(item.name)
+  }));
 
-    // Fix the data path - OwnerType data is directly in the array, not nested
-    const ownerTypeOptions = (Array.isArray(OwnerType) ? OwnerType : OwnerType?.PropertyTax?.OwnerType || []).map(item => ({
-      code: item.code,
-      name: item.name 
-    }));
-    
-    const getOwnerTypeDisplay = (code) => {
-      const mdmsMatch = ownerTypeOptions.find(option => option.code === code);
-      if (mdmsMatch) return mdmsMatch.name;
-      
-      return code || "N/A";
-    };
-    const displayOwnerType = getOwnerTypeDisplay(owner?.ownerType);
+  // Fix the data path - OwnerType data is directly in the array, not nested
+  const ownerTypeOptions = (Array.isArray(OwnerType) ? OwnerType : OwnerType?.PropertyTax?.OwnerType || []).map(item => ({
+    code: item.code,
+    name: item.name
+  }));
 
-    // Fix the data path - EssentialTax data is directly in the array, not nested
-    const essentialTaxOptions = (Array.isArray(EssentialTax) ? EssentialTax : EssentialTax?.PropertyTax?.EssentialTax || []).map(item => ({
-      code: item.code,
-      name: item.name
-    }));
+  const getOwnerTypeDisplay = (code) => {
+    const mdmsMatch = ownerTypeOptions.find(option => option.code === code);
+    if (mdmsMatch) return mdmsMatch.name;
 
-    const getEssentialTaxDisplay = (code) => {
-      const mdmsMatch = essentialTaxOptions.find(option => option.code === code);
-      if (mdmsMatch) return mdmsMatch.name;
+    return code || "N/A";
+  };
+  const displayOwnerType = getOwnerTypeDisplay(owner?.ownerType);
 
-      return code || "N/A";
-    };
-    const displayEssentialTax = getEssentialTaxDisplay(application?.essentialTax);
+  // Fix the data path - EssentialTax data is directly in the array, not nested
+  const essentialTaxOptions = (Array.isArray(EssentialTax) ? EssentialTax : EssentialTax?.PropertyTax?.EssentialTax || []).map(item => ({
+    code: item.code,
+    name: item.name
+  }));
 
-    const[showFather,setShowFather]=useState("");
-    // console.log("DROPDOWNOPTION==",formErrors)
-    const propertyCategoryOptions=(PropertyCategory || []).map((item)=>({
-  
-      code:item.code,
-      name:t(item.name),
-    }))
-  
-     console.log("propertyCategoryOptions==",RoadFactorList);
+  const getEssentialTaxDisplay = (code) => {
+    const mdmsMatch = essentialTaxOptions.find(option => option.code === code);
+    if (mdmsMatch) return mdmsMatch.name;
+
+    return code || "N/A";
+  };
+  const displayEssentialTax = getEssentialTaxDisplay(application?.essentialTax);
+
+  const [showFather, setShowFather] = useState("");
+  // console.log("DROPDOWNOPTION==",formErrors)
+  const propertyCategoryOptions = (PropertyCategory || []).map((item) => ({
+
+    code: item.code,
+    name: t(item.name),
+  }))
+
+  console.log("propertyCategoryOptions==", RoadFactorList);
 
 
 
@@ -291,7 +292,7 @@ function ApplicationDetailsContentVerifier({
   const [wards, setWards] = useState([]);
   const [colonies, setColonies] = useState([]);
   const [rateZones, setRateZones] = useState([]);
-        useEffect(() => {
+  useEffect(() => {
     (async () => {
       try {
         const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -320,31 +321,31 @@ function ApplicationDetailsContentVerifier({
 
 
 
-   const [floorList, setFloorList] = useState([]);
-      const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
-        useEffect(() => {
-      if (isLoadingF) return;
-  
-      const floors = FloorAll?.PropertyTax?.Floor || [];
-  
-      const mappedFloors = floors
-        .filter(floor => floor?.code && floor?.active)
-        .map(floor => ({
-          i18nKey: floor.name,
-          code: floor.code,
-        }))
-        .sort((a, b) => {
-          const getSortValue = (val) => {
-            const num = parseInt(val, 10);
-            return isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
-          };
-          return getSortValue(b.code) - getSortValue(a.code);
-        });
-  
-      setFloorList(mappedFloors);
-    }, [isLoadingF, FloorAll]);
+  const [floorList, setFloorList] = useState([]);
+  const { data: FloorAll = {}, isLoadingF } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
+  useEffect(() => {
+    if (isLoadingF) return;
 
-  
+    const floors = FloorAll?.PropertyTax?.Floor || [];
+
+    const mappedFloors = floors
+      .filter(floor => floor?.code && floor?.active)
+      .map(floor => ({
+        i18nKey: floor.name,
+        code: floor.code,
+      }))
+      .sort((a, b) => {
+        const getSortValue = (val) => {
+          const num = parseInt(val, 10);
+          return isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
+        };
+        return getSortValue(b.code) - getSortValue(a.code);
+      });
+
+    setFloorList(mappedFloors);
+  }, [isLoadingF, FloorAll]);
+
+
 
   const getFullAddress = (address) => {
     if (!address) return "";
@@ -392,26 +393,72 @@ function ApplicationDetailsContentVerifier({
 
   const items = [
     {
+title:<div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Namantaran Application</h3></div>,
+content:<div>
+      <div className="form-section" style={styles.formSection}>
+
+        {/* Name with Title */}
+
+        <div style={styles.flex30}>
+          <div style={styles.poppinsLabel}>
+            {t("Namantaran Purpose")} <span className="mandatory" style={styles.mandatory}>*</span>
+          </div>
+          <Dropdown
+            style={styles.widthInput}
+            t={t}
+            // option={propertyCategoryOptions}
+
+            // selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
+            // select={propertyCategoryInputChange}
+            optionKey="name"
+            placeholder={t("Select")}
+            disable={true}
+          />
+        
+        </div>
+
+    
+        <div style={styles.flex30}>
+          <div style={styles.poppinsLabel}>
+            {t("Property ID")}
+          </div>
+          <TextInput
+             value={applicationData?.propertyId}
+            // onChange={handleRestryIdChange}
+            style={styles.widthInput}
+
+          />
+
+        </div>
+        <div style={styles.flex30}></div>
+      </div>
+   
+
+    
+    </div>
+    },
+   
+    {
       title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Ownership Details</h3></div>,
       content:
         <div >
           {/* <div style={styles.sectionTitle}>Ownership Details</div> */}
           <div style={styles.grid}>
-             <div style={styles.flex30}>
+            <div style={styles.flex30}>
               <label style={styles.label}>Property Category<span style={{ color: "red" }}>*</span></label>
-              <input style={styles.input}   value={propertyCategoryOptions.find((f) => f.code === application?.propertyCategory)?.name || "N/A" } disabled readOnly />
+              <input style={styles.input} value={propertyCategoryOptions.find((f) => f.code === application?.propertyCategory)?.name || "N/A"} disabled readOnly />
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>Ownership Type<span style={{ color: "red" }}>*</span></label>
-              <input style={styles.input}  value={dropdownOptions.find((f) => f.code === application?.ownershipCategory)?.name || "N/A" }  disabled readOnly />
+              <input style={styles.input} value={dropdownOptions.find((f) => f.code === application?.ownershipCategory)?.name || "N/A"} disabled readOnly />
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>POA Registration Number</label>
               <input style={styles.input} value={application?.registryId} disabled readOnly />
             </div>
             {/* <div style={styles.flex30}> */}
-              {/* <label style={styles.label}>POA Registration Number</label> */}
-              {/* <TextInput style={styles.widthInput} value={application?.registryId} readOnly /> */}
+            {/* <label style={styles.label}>POA Registration Number</label> */}
+            {/* <TextInput style={styles.widthInput} value={application?.registryId} readOnly /> */}
             {/* </div> */}
           </div>
           {(application?.owners || []).map((owner, index) => (
@@ -460,7 +507,7 @@ function ApplicationDetailsContentVerifier({
                     />
                   </div>
                 </div>
-                 <div style={styles.flex30}>
+                <div style={styles.flex30}>
                   <label style={styles.label}>Relationship</label>
                   <input style={styles.input} value={owner.relationship} disabled readOnly />
                 </div>
@@ -470,7 +517,7 @@ function ApplicationDetailsContentVerifier({
                 </div>
 
 
-               
+
                 <div style={styles.flex30}>
                   <label style={styles.label}>Email ID</label>
                   <input style={styles.input} value={owner.emailId} disabled readOnly />
@@ -485,16 +532,16 @@ function ApplicationDetailsContentVerifier({
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Aadhar No.<span style={{ color: "red" }}>*</span></label>
-                 
-                   <input style={styles.input}
-                                    label="Aadhaar ID"
-                                    value={
-                                        owner?.aadhaarNumber
-                                            ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
-                                            : "N/A"
-                                    }
-                                    disabled readOnly
-                                />
+
+                  <input style={styles.input}
+                    label="Aadhaar ID"
+                    value={
+                      owner?.aadhaarNumber
+                        ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                        : "N/A"
+                    }
+                    disabled readOnly
+                  />
                 </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Samagra ID <span style={{ color: "red" }}>*</span></label>
@@ -514,11 +561,11 @@ function ApplicationDetailsContentVerifier({
             <div style={styles.flex30}><label style={styles.label}>Door/House No.<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.doorNo} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Address<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.street} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Pincode<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.pincode || ""} disabled readOnly /></div>
-             <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input}    value={zones.find((f) => f.code === address?.zone)?.name || "N/A" } disabled readOnly /></div>
-             <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={zones.find((f) => f.code === address?.zone)?.name || "N/A"} disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Ward<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.ward} disabled readOnly /></div>
             <div style={styles.flex30}><label style={styles.label}>Colony<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={address?.locality?.name} disabled readOnly /></div>
-            
-           
+
+
           </div>
         </div>
     },
@@ -546,7 +593,7 @@ function ApplicationDetailsContentVerifier({
           {/* <div style={styles.sectionTitle}>Assessment Details</div> */}
           <div style={styles.grid}>
             <div style={styles.flex30}><label style={styles.label}>Rate Zone<span style={{ color: "red" }}>*</span></label><input style={styles.input} value={additionalDetailsT?.unit?.[0]?.rateZone} disabled readOnly /></div>
-            <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={RoadFactorList.find((f) => f.code === additionalDetailsT?.unit?.[0]?.roadFactor)?.name || "N/A" } disabled readOnly /></div>
+            <div style={styles.flex30}><label style={styles.label}>Road Factor <span style={{ color: "red" }}>*</span></label><input style={styles.input} value={RoadFactorList.find((f) => f.code === additionalDetailsT?.unit?.[0]?.roadFactor)?.name || "N/A"} disabled readOnly /></div>
             {/* <div><label style={styles.label}>Old Property ID</label><input style={styles.input} value={application?.oldPropertyId || ""} readOnly /></div> */}
             <div style={styles.flex30}><label style={styles.label}>Plot Area (sq.ft)</label><input style={styles.input} value={application?.landArea} disabled readOnly /></div>
           </div>
@@ -564,7 +611,7 @@ function ApplicationDetailsContentVerifier({
             </div>
             <div style={{ overflowX: "auto", maxWidth: "100%" }}>
               <table style={{ borderCollapse: "collapse", marginTop: "8px", border: "1px solid #ccc" }}>
-                <thead style={{ background: "#f0f0f0", height: "40px"}}>
+                <thead style={{ background: "#f0f0f0", height: "40px" }}>
                   <tr>
                     <th style={{ ...styles.labelTable }}>Usage Type<span className="mandatory" style={styles.mandatory}>*</span></th>
                     <th style={{ ...styles.labelTable }}>Usage Factor<span className="mandatory" style={styles.mandatory}>*</span></th>
@@ -578,76 +625,76 @@ function ApplicationDetailsContentVerifier({
                 <tbody>
                   {(application?.units || []).map((unit, index) => {
 
-                     const floor = floorList.find(f => f.code === unit?.floorNo.toString());
-                     console.log("FLOOR KYA AAYA=",floor);
+                    const floor = floorList.find(f => f.code === unit?.floorNo.toString());
+                    console.log("FLOOR KYA AAYA=", floor);
 
-                 return (
-                    <tr key={index}>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <select
-                          value={unit?.usageCategory || ""}
-                          disabled
-                          style={{ border: "none", background: "none", width: "100%" }}
-                        >
-                          <option value={unit?.usageCategory || ""}>{unit?.usageCategory || ""}</option>
-                        </select>
-                      </td>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <select
-                          value={unit?.occupancyType || ""}
-                          disabled
-                          style={{ border: "none", background: "none", width: "100%" }}
-                        >
-                          <option value={unit?.occupancyType || ""}>{unit?.occupancyType || ""}</option>
-                        </select>
-                      </td>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <select
-                          value={unit?.floorNo?.toString() || ""}
-                          disabled
-                          style={{ border: "none", background: "none", width: "100%" }}
-                        >
-                          <option value={floor?.i18nKey || ""}>{floor?.i18nKey || ""}</option>
-                        </select>
-                      </td>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <select
-                          value={unit?.constructionDetail?.constructionType || ""}
-                          disabled
-                          style={{ border: "none", background: "none", width: "100%" }}
-                        >
-                          <option value={unit?.constructionDetail?.constructionType || ""}>{unit?.constructionDetail?.constructionType || ""}</option>
-                          {/* Add more options if needed */}
-                        </select>
-                      </td>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <input
-                          style={{ border: "none", background: "none" }}
-                          value={unit?.constructionDetail?.builtUpArea || ""}
-                          readOnly
-                        />
-                      </td>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <select
-                          disabled
-                          style={{ border: "none", background: "none", width: "100%" }}
-                          value={unit.fromYear || ""}
-                        >
-                          <option value={unit?.fromYear}>{unit?.fromYear}</option>
-                        </select>
-                      </td>
-                      <td style={{ padding: "8px", border: "1px solid #ccc" }}>
-                        <select
-                          disabled
-                          style={{ border: "none", background: "none", width: "100%" }}
-                          value={unit.toYear || ""}
-                        >
-                          <option value={unit?.toYear}>{unit?.toYear}</option>
-                        </select>
-                      </td>
-                    </tr>
-                  )
-                }
+                    return (
+                      <tr key={index}>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <select
+                            value={unit?.usageCategory || ""}
+                            disabled
+                            style={{ border: "none", background: "none", width: "100%" }}
+                          >
+                            <option value={unit?.usageCategory || ""}>{unit?.usageCategory || ""}</option>
+                          </select>
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <select
+                            value={unit?.occupancyType || ""}
+                            disabled
+                            style={{ border: "none", background: "none", width: "100%" }}
+                          >
+                            <option value={unit?.occupancyType || ""}>{unit?.occupancyType || ""}</option>
+                          </select>
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <select
+                            value={unit?.floorNo?.toString() || ""}
+                            disabled
+                            style={{ border: "none", background: "none", width: "100%" }}
+                          >
+                            <option value={floor?.i18nKey || ""}>{floor?.i18nKey || ""}</option>
+                          </select>
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <select
+                            value={unit?.constructionDetail?.constructionType || ""}
+                            disabled
+                            style={{ border: "none", background: "none", width: "100%" }}
+                          >
+                            <option value={unit?.constructionDetail?.constructionType || ""}>{unit?.constructionDetail?.constructionType || ""}</option>
+                            {/* Add more options if needed */}
+                          </select>
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <input
+                            style={{ border: "none", background: "none" }}
+                            value={unit?.constructionDetail?.builtUpArea || ""}
+                            readOnly
+                          />
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <select
+                            disabled
+                            style={{ border: "none", background: "none", width: "100%" }}
+                            value={unit.fromYear || ""}
+                          >
+                            <option value={unit?.fromYear}>{unit?.fromYear}</option>
+                          </select>
+                        </td>
+                        <td style={{ padding: "8px", border: "1px solid #ccc" }}>
+                          <select
+                            disabled
+                            style={{ border: "none", background: "none", width: "100%" }}
+                            value={unit.toYear || ""}
+                          >
+                            <option value={unit?.toYear}>{unit?.toYear}</option>
+                          </select>
+                        </td>
+                      </tr>
+                    )
+                  }
                   )}
                 </tbody>
               </table>
@@ -729,6 +776,114 @@ function ApplicationDetailsContentVerifier({
         />
       // </div>
     },
+     {
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Fee Details</h3></div>,
+      content: <div style={{ marginTop: "1rem", borderRadius: '10px' }}>
+        {/* <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+              <label style={styles.poppinsLabel}>Property Type</label>
+            </div> */}
+        <div style={{ overflowX: "auto", maxWidth: "100%", ...styles.formSection }}>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th style={{
+                  ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
+                }}>{t("Namantran Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                <th style={{
+                  ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
+                }}>{t("Rajwad Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                <th style={{
+                  ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
+                }}>{t("Advertisement (Vigyapan) Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* {unit.map((unit, index) => ( */}
+              <tr >
+
+                <td style={styles.tableCell}>
+                  <select
+                    style={{
+                      ...styles.select, appearance: "auto",
+                      WebkitAppearance: "auto",
+                      MozAppearance: "auto",
+                    }}
+                    disabled={true}
+                  // value={unit.usageType}
+                  // onChange={(e) => handleUnitChange(index, "usageType", e.target.value)}
+                  >
+                    <option value="" disabled>{t("Select")}</option>
+                    {/* {usageTypes.map((item) => (
+                            <option key={item.code} value={item.code}>
+                              {t(item.i18nKey)}
+                            </option>
+                          ))} */}
+                  </select>
+                </td>
+
+                <td style={styles.tableCell}>
+                  <select
+                    disabled={true}
+                    style={{
+                      ...styles.select, appearance: "auto",
+                      WebkitAppearance: "auto",
+                      MozAppearance: "auto",
+                    }}
+                  // value={unit.usageFactor}
+                  // onChange={(e) => handleUnitChange(index, "usageFactor", e.target.value)}
+                  >
+                    <option value="" disabled>{t("Select")}</option>
+                    {/* {occupancyTypes.map((item) => (
+                            <option key={item.code} value={item.code}>
+                              {t(item.i18nKey)}
+                            </option>
+                          ))} */}
+                  </select>
+                </td>
+
+                <td style={styles.tableCell}>
+                  <select
+                    disabled={true}
+                    style={{
+                      ...styles.select, appearance: "auto",
+                      WebkitAppearance: "auto",
+                      MozAppearance: "auto",
+                    }}
+                  // value={unit.floorNo}
+                  // onChange={(e) => handleUnitChange(index, "floorNo", e.target.value)}
+                  >
+                    <option value="" disabled>{t("Select")}</option>
+                    {/* {floorList.map((floor) => (
+                            <option key={floor.code} value={floor.code}>
+                              {t(floor.i18nKey)}
+                            </option>
+                          ))} */}
+                  </select>
+                </td>
+
+              </tr>
+              {/* ))} */}
+            </tbody>
+          </table>
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>
+              {t("Total Fees (₹)")}
+            </div>
+            <TextInput
+              //  value={propertyId}
+              // onChange={handleRestryIdChange}
+              style={styles.widthInput}
+
+            />
+
+          </div>
+          <div style={styles.flex30}></div>
+          <div style={styles.flex30}></div>
+        </div>
+
+
+      </div>
+    },
     {
       title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Self Declaration</h3></div>,
       content:
@@ -762,17 +917,17 @@ function ApplicationDetailsContentVerifier({
               {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
               {!workflowDetails?.isLoading && !isDataLoading && (
                 <Fragment>
-                 
-                    {applicationDetails?.applicationDetails?.map((detail, index) => (
-                <div key={index}>
- 
- 
- 
- 
-                  {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
- 
-                </div>
-              ))}
+
+                  {applicationDetails?.applicationDetails?.map((detail, index) => (
+                    <div key={index}>
+
+
+
+
+                      {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
+
+                    </div>
+                  ))}
 
 
 
@@ -1237,6 +1392,38 @@ function ApplicationDetailsContentVerifier({
 }
 
 const styles = {
+   formSection: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "1rem"
+  },
+  flex30: {
+    flex: "1 1 30%"
+  },
+    table: {
+    borderCollapse: "separate",   // important
+    borderSpacing: 0,             // remove gaps
+    borderRadius: "5px",
+    overflow: "hidden", 
+  },
+  tableHeader: {
+    textAlign: "left",
+    padding: "8px",
+    border: "1px solid black",
+    background: "#6B133F4D",
+    color: "#282828",
+    width: "240px",
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: "12px",
+    lineHeight: "130%",
+    letterSpacing: "0%"
+  },
+  tableCell: {
+    padding: "8px",
+    border: "1px solid black",
+    width: "200px"
+  },
   poppinsLabels: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: 400,
@@ -1350,6 +1537,15 @@ const styles = {
   //   background: "#7575754D",
   //   // padding: "6px"
   // },
+   poppinsLabel: {
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight: 400,
+    fontSize: '14px',
+    lineHeight: '22px',
+    letterSpacing: '0',
+    color: '#282828',
+    width: "200px"
+  },
   widthInput: {
     width: "100%",
     height: "35px",
