@@ -10,6 +10,10 @@ import EmployeeApp from "./pages/employee";
 import WSServiceName from "./pageComponents/WSServiceName";
 import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
 import WSDocsRequired from "./pageComponents/WSDocsRequired";
+import WaterLandingPage from "./pageComponents/WaterLandingPage";
+import PreviewDemand from "./pageComponents/PreviewDemand";
+import PreviewEstimateDemand from "./pageComponents/PreviewEstimateDemand";
+import SearchApplicationView from "./pages/employee/SeachApplication/SearchApplication" ;
 import WSDocumentDetails from "./pageComponents/WSDocumentDetails";
 import WSSewerageConnectionDetails from "./pageComponents/WSSewerageConnectionDetails";
 import WSPlumberPreference from "./pageComponents/WSPlumberPreference";
@@ -45,6 +49,9 @@ import SWCard from "./components/SWCard";
 import BillIAmendMentInbox from "./components/BillIAmendMentInbox";
 
 //Citizen Components
+import WaterCardsLanding from "./pages/citizen/WaterCardsLanding/WaterCardsLanding";
+import SearchWaterComponent from "./pages/citizen/SearchWater";
+import SearchEmpWaterComponent from "./pages/employee/SearchWater";
 import WSCreate from "./pages/citizen/WSCreate";
 import WSDisconnection from "./pages/citizen/WSDisconnection";
 import SearchConnectionComponent from "./pages/citizen/SearchConnection";
@@ -67,13 +74,14 @@ import WNSMyBillsComponent from "./pages/citizen/WnSMyBills";
 import ApplicationBillAmendment from "./pages/employee/ApplicationBillAmendment";
 import RequiredDocuments from "./pages/employee/RequiredDocuments";
 import NewApplication from "./pages/employee/NewApplication" ;
-import ApplicationDetails from "./pages/employee/ApplicationDetails";
+import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import GetConnectionDetails from "./pages/employee/connectionDetails/connectionDetails";
 import ActivateConnection from "./pages/employee/ActivateConnection";
 import ApplicationDetailsBillAmendment from "./pages/employee/ApplicationDetailsBillAmendment";
 import Search from "./pages/employee/search";
 import SearchWater from "./pages/employee/SearchWater";
 import WSEditApplication from "./pages/employee/EditApplication";
+import SuccessAppication from "./pages/employee/SuccessAppication";
 import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./pages/employee/ModifyApplication";
 import EditModifyApplication from "./pages/employee/EditModifyApplication";
@@ -153,6 +161,11 @@ const componentsToRegister = {
   WSServiceName,
   WSWaterConnectionDetails,
   WSDocsRequired,
+  WaterLandingPage,
+  PreviewDemand,
+  PreviewEstimateDemand,
+  SearchApplicationView,
+  
   WSDocumentDetails,
   WSSewerageConnectionDetails,
   WSPlumberPreference,
@@ -189,6 +202,9 @@ const componentsToRegister = {
 
   //Citizen Components
   WSCreate: WSCreate,
+  WaterCardsLanding:WaterCardsLanding,
+  WSSearchWaterComponent: SearchWaterComponent,
+  WSEmpSearchWaterComponent:SearchEmpWaterComponent,
   WSDisconnection: WSDisconnection,
   WSSearchConnectionComponent: SearchConnectionComponent,
   WSSearchResultsComponent: SearchResultsComponent,
@@ -217,6 +233,7 @@ const componentsToRegister = {
   WSSearch: Search,
   WSSearchWater: SearchWater,
   WSEditApplication: WSEditApplication,
+  SuccessAppication:SuccessAppication,
   WSConsumptionDetails: ConsumptionDetails,
   WSModifyApplication: ModifyApplication,
   WSEditModifyApplication: EditModifyApplication,

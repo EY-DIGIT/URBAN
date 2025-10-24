@@ -205,8 +205,12 @@ export const getPattern = (type) => {
     case "consumerNo":
       return /^[a-zA-Z0-9/-]*$/i;
     case "AadharNo":
-      //return /^\d{4}\s\d{4}\s\d{4}$/;
-      return /^([0-9]){12}$/;
+      return /^(?!.*(?:012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210))(?!.*(\d)\1{3})[2-9]\d{11}$/;
+      //return /^([0-9]){12}$/;
+      case "VOTERID":
+      return /^([a-zA-Z]){3}([0-9]){7}$/;
+      case "DRIVINGLICENSE":  
+      return /^MP(?:[\s\-]?)(\d{2})(?:[\s\-]?)(\d{4})(?:[\s\-]?)(\d{7})$/;
     case "ChequeNo":
       return /^(?!0{6})[0-9]{6}$/;
     case "Comments":
@@ -1521,4 +1525,45 @@ export const ifUserRoleExists = (role) => {
   if (roleCodes.indexOf(role) > -1) {
     return true;
   } else return false;
+};
+
+//function isValidAadhar(number) {
+  export const isValidAadhar = (number) => {
+  // Step 1: Basic regex check for format
+  const basicRegex = /^[2-9]\d{11}$/;
+  if (!basicRegex.test(number)) {
+    return false; // Fails if not a 12-digit number starting with 2-9
+  }
+
+  // Step 2: Check for sequential patterns (e.g., 1234, 4567, 7890)
+  for (let i = 0; i < number.length - 2; i++) {
+    const digit1 = parseInt(number[i]);
+    const digit2 = parseInt(number[i + 1]);
+    const digit3 = parseInt(number[i + 2]);
+    if (digit2 === digit1 + 1 && digit3 === digit1 + 2) {
+      return false; // Fails if ascending sequence of 3+ digits found
+    }
+    if (digit2 === digit1 - 1 && digit3 === digit1 - 2) {
+      return false; // Fails if descending sequence of 3+ digits found
+    }
+  }
+
+  // Step 3: Check for repeating digit patterns (e.g., 222, 555)
+  for (let i = 0; i < number.length - 2; i++) {
+    if (number[i] === number[i + 1] && number[i] === number[i + 2]) {
+      return false; // Fails if 3+ repeating digits found
+    }
+  }
+
+  return true;
+}
+
+export const alphabeticalSortFunctionForTenantsBasedOnName = (firstEl, secondEl) => {
+  if (firstEl.name.toUpperCase() < secondEl.name.toUpperCase()) {
+    return -1;
+  }
+  if (firstEl.name.toUpperCase() > secondEl.name.toUpperCase()) {
+    return 1;
+  }
+  return 0;
 };
