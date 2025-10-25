@@ -148,9 +148,12 @@ import TrackApplication from "./pages/citizen/TrackApplication/TrackApplication"
 import PTFreezeProperty from "./components/FreezeProperty"
 
 import TransactionList from "./pages/citizen/Transactions/TransactionList";
-
+import OriginalDetails from "./pages/employee/OriginalDetails/OriginalDetails";
+import CalculateFees from "./pages/employee/Feedetails";
 
 const componentsToRegister = {
+  OriginalDetails,
+  CalculateFees,
   AssessmentDetailsSection,
   AddressSection,
   AttachmentsSection,

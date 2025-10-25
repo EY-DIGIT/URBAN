@@ -169,6 +169,8 @@ const EmployeeApp = ({ path, url, userType }) => {
   const PTPropertyTaxForm = Digit?.ComponentRegistryService?.getComponent("PropertyTaxForm");
   const PreviewDemand = Digit?.ComponentRegistryService?.getComponent("PreviewDemand");
   const PreviewDemandChange = Digit?.ComponentRegistryService?.getComponent("PreviewDemandChange");
+  const OriginalDetails = Digit?.ComponentRegistryService?.getComponent("OriginalDetails");
+
 
   const PreviewView = Digit?.ComponentRegistryService?.getComponent("PreviewView");
   const PreviewEstimateDemand = Digit?.ComponentRegistryService?.getComponent("PreviewEstimateDemand");
@@ -195,6 +197,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const DocsRequired = Digit?.ComponentRegistryService?.getComponent("PTDocsRequired");
   const CitizenServicesCards = Digit?.ComponentRegistryService?.getComponent("CitizenServicesCards");
   const PTFreezeProperty = Digit?.ComponentRegistryService?.getComponent("PTFreezeProperty");
+  const CalculateFees = Digit?.ComponentRegistryService?.getComponent("CalculateFees");
 
 
   const isRes = window.location.href.includes("pt/response");
@@ -227,7 +230,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/PreviewDemand`} component={PreviewDemand} />
+          <PrivateRoute path={`${path}/CalculateFees`} component={CalculateFees} />
+          
           <PrivateRoute path={`${path}/PreviewDemandChange`} component={PreviewDemandChange} />
+          <PrivateRoute path={`${path}/OriginalDetails`} component={OriginalDetails} />
 
           <PrivateRoute path={`${path}/PreviewView`} component={PreviewView} />
           <PrivateRoute path={`${path}/PreviewEstimateDemand`} component={PreviewEstimateDemand} />
@@ -245,7 +251,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/property-details/:id`} component={() => <PropertyDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/PropertyNamantran/:id`} component={() => <PropertyNamantran parentRoute={path} />} />
-          
+
           <PrivateRoute path={`${path}/applicationsearch/application-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/applicationsearch/ChangePropertyApplicationDetails/:id`} component={() => <ChangePropertyApplicationDetails parentRoute={path} />} />
 

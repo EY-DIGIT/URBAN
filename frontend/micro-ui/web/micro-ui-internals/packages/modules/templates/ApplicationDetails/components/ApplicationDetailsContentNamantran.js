@@ -393,51 +393,51 @@ function ApplicationDetailsContentVerifier({
 
   const items = [
     {
-title:<div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Namantaran Application</h3></div>,
-content:<div>
-      <div className="form-section" style={styles.formSection}>
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Namantaran Application</h3></div>,
+      content: <div>
+        <div className="form-section" style={styles.formSection}>
 
-        {/* Name with Title */}
+          {/* Name with Title */}
 
-        <div style={styles.flex30}>
-          <div style={styles.poppinsLabel}>
-            {t("Namantaran Purpose")} <span className="mandatory" style={styles.mandatory}>*</span>
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>
+              {t("Namantaran Purpose")} <span className="mandatory" style={styles.mandatory}>*</span>
+            </div>
+            <Dropdown
+              style={styles.widthInput}
+              t={t}
+              // option={propertyCategoryOptions}
+
+              // selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
+              // select={propertyCategoryInputChange}
+              optionKey="name"
+              placeholder={t("Select")}
+              disable={true}
+            />
+
           </div>
-          <Dropdown
-            style={styles.widthInput}
-            t={t}
-            // option={propertyCategoryOptions}
 
-            // selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
-            // select={propertyCategoryInputChange}
-            optionKey="name"
-            placeholder={t("Select")}
-            disable={true}
-          />
-        
+
+          <div style={styles.flex30}>
+            <div style={styles.poppinsLabel}>
+              {t("Property ID")}
+            </div>
+            <TextInput
+              value={applicationData?.propertyId}
+              // onChange={handleRestryIdChange}
+              style={styles.widthInput}
+
+            />
+
+          </div>
+          <div style={styles.flex30}></div>
         </div>
 
-    
-        <div style={styles.flex30}>
-          <div style={styles.poppinsLabel}>
-            {t("Property ID")}
-          </div>
-          <TextInput
-             value={applicationData?.propertyId}
-            // onChange={handleRestryIdChange}
-            style={styles.widthInput}
 
-          />
 
-        </div>
-        <div style={styles.flex30}></div>
       </div>
-   
-
-    
-    </div>
     },
-   
+
     {
       title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Ownership Details</h3></div>,
       content:
@@ -776,7 +776,7 @@ content:<div>
         />
       // </div>
     },
-     {
+    {
       title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Fee Details</h3></div>,
       content: <div style={{ marginTop: "1rem", borderRadius: '10px' }}>
         {/* <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
@@ -795,6 +795,9 @@ content:<div>
                 <th style={{
                   ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
                 }}>{t("Advertisement (Vigyapan) Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                <th style={{
+                  ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
+                }}>{t("Actions")}<span className="mandatory" style={styles.mandatory}>*</span></th>
               </tr>
             </thead>
             <tbody>
@@ -859,6 +862,9 @@ content:<div>
                             </option>
                           ))} */}
                   </select>
+                </td>
+                <td style={styles.tableCell}>
+                  <a href="/digit-ui/employee/pt/CalculateFees">View</a>
                 </td>
 
               </tr>
@@ -996,7 +1002,7 @@ content:<div>
   return (
     <div >
       {/* For UM-4418 changes */}
-
+<div style={styles.assessmentStyleRight}><a href="/digit-ui/employee/pt/OriginalDetails" ><u>Original Property Owner Details</u></a></div>
       <div>
         {/* <div>
           <label style={styles.sectionTitle}>Select Property ULB/ Year of Assessment</label>
@@ -1392,7 +1398,21 @@ content:<div>
 }
 
 const styles = {
-   formSection: {
+  assessmentStyleRight: {
+        fontFamily: 'Poppins, Roboto, sans-serif',
+    // fontWeight: '600',
+    fontSize: '16px',
+    lineHeight: '1.5',
+    letterSpacing: '0.5px',
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#6b133f',
+    textDecorationThickness: '1px',
+    color: '#6b0f2a',
+    marginBottom: '20px',
+    wordSpacing: '2px',
+    textAlign: "right",
+  },
+  formSection: {
     display: "flex",
     flexWrap: "wrap",
     gap: "1rem"
@@ -1400,11 +1420,11 @@ const styles = {
   flex30: {
     flex: "1 1 30%"
   },
-    table: {
+  table: {
     borderCollapse: "separate",   // important
     borderSpacing: 0,             // remove gaps
     borderRadius: "5px",
-    overflow: "hidden", 
+    overflow: "hidden",
   },
   tableHeader: {
     textAlign: "left",
@@ -1537,7 +1557,7 @@ const styles = {
   //   background: "#7575754D",
   //   // padding: "6px"
   // },
-   poppinsLabel: {
+  poppinsLabel: {
     fontFamily: 'Poppins, sans-serif',
     fontWeight: 400,
     fontSize: '14px',

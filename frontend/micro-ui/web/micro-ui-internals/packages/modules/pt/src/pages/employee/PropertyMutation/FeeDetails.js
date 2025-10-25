@@ -24,6 +24,9 @@ const PropertyDetailsTableSection = ({ t, styles, applicationData }) => {
                             <th style={{
                                 ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
                             }}>{t("Advertisement (Vigyapan) Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                            <th style={{
+                                ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
+                            }}>{t("Action")}<span className="mandatory" style={styles.mandatory}>*</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,27 +92,30 @@ const PropertyDetailsTableSection = ({ t, styles, applicationData }) => {
                     ))} */}
                                 </select>
                             </td>
+                            <td style={styles.tableCell}>
+                                <a href="/digit-ui/employee/pt/CalculateFees">Edit</a>
+                            </td>
 
                         </tr>
                         {/* ))} */}
                     </tbody>
                 </table>
-                  <div style={styles.flex30}>
-                <div style={styles.poppinsLabel}>
-                    {t("Total Fees (₹)")}
+                <div style={styles.flex30}>
+                    <div style={styles.poppinsLabel}>
+                        {t("Total Fees (₹)")}
+                    </div>
+                    <TextInput
+                        //  value={propertyId}
+                        // onChange={handleRestryIdChange}
+                        style={styles.widthInput}
+
+                    />
+
                 </div>
-                <TextInput
-                    //  value={propertyId}
-                    // onChange={handleRestryIdChange}
-                    style={styles.widthInput}
-
-                />
-
+                <div style={styles.flex30}></div>
+                <div style={styles.flex30}></div>
             </div>
-            <div style={styles.flex30}></div>
-   <div style={styles.flex30}></div>
-            </div>
-          
+
 
         </div>
     );

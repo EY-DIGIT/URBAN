@@ -1265,8 +1265,8 @@ const EditUpdateForm = ({ applicationData }) => {
   return (
 
     <React.Fragment>
-      <div style={styles.assessmentStyles}></div>
-      {!showSuccessModal && (
+      <div style={styles.assessmentStyleRight}><a href="/digit-ui/employee/pt/OriginalDetails" ><u>Original Property Owner Details</u></a></div>
+    
         <div >
 
           {/* Attachments Section */}
@@ -1279,7 +1279,7 @@ const EditUpdateForm = ({ applicationData }) => {
           </div>
           <div style={styles.card}>
 
-            <div style={styles.assessmentStyle}>{t("Ownership Details")}</div>
+            <div style={styles.assessmentStyle}>{t("New Owner Details")}</div>
 
             <OwnershipDetailsSection
               t={t}
@@ -1401,7 +1401,7 @@ const EditUpdateForm = ({ applicationData }) => {
           </div>
 
         </div>
-      )}
+      
 
 
     </React.Fragment>
