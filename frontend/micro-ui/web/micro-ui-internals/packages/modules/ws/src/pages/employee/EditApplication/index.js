@@ -3,9 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useHistory } from "react-router-dom";
 import * as func from "../../../utils";
+import styles from "../../employee/NewApplication/IndexStyle"
 import _ from "lodash";
 import { newConfig as newConfigLocal } from "../../../config/wsCreateConfig";
 import { convertApplicationData, convertEditApplicationDetails } from "../../../utils";
+import OwnershipDetailsSection from "./OwnershipDetailsSection";
+import AddressSection from "./AddressSection";
+import waterFeeConnection from "./waterFeeConnection"
+import SelfDeclaration from "./SelfDeclaration"
 import cloneDeep from "lodash/cloneDeep";
 
 const EditApplication = () => {
@@ -20,7 +25,22 @@ const EditApplication = () => {
   const [config, setConfig] = useState({ head: "", body: [] });
   const [enabledLoader, setEnabledLoader] = useState(true);
   const [isAppDetailsPage, setIsAppDetailsPage] = useState(false);
-
+  const[owners, setowners] = useState([])
+  const[addressDetails, setaddressDetails] = useState({})
+   const [checkboxes, setCheckboxes] = useState({
+      mobileTower: false,
+      broadRoad: false,
+      advertisement: false,
+      seniorCitizenDiscount: false,
+      selfDeclaration: true,
+    });
+    const handleCheckboxChange = (field) => {
+    setCheckboxes((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+  const[WaterConncetionDetails, setWaterConncetionDetails]=useState({})
   let tenantId = Digit.ULBService.getCurrentTenantId();
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
@@ -36,6 +56,23 @@ const EditApplication = () => {
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType,{privacy : Digit.Utils.getPrivacyObject() });
   details = applicationDetails;
+  console.log("applicationDetails",applicationDetails)
+  useEffect(() => {
+    if (applicationDetails?.applicationData?.connectionHolders) {
+      setowners(applicationDetails.applicationData.connectionHolders);
+      setaddressDetails(applicationDetails.applicationData.property.address);
+      setaddressDetails(
+        {
+          WaterConncetionDetails:{
+            UsesType:applicationDetails.applicationData.usageType,
+            usageSubType:applicationDetails.applicationData.usageSubType,
+            connectionType:applicationDetails?.applicationData?.connectionType ==="FLAT"?"Metered":"Non Metered" ,
+          }
+        }
+      );
+    }
+  }, [applicationDetails]);
+
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
@@ -149,13 +186,58 @@ const EditApplication = () => {
   if (enabledLoader || isConfigLoading) {
     return <Loader />;
   }
+    const handleSubmit = async () => {
+    }
 
   return (
     <React.Fragment>
       <div style={{ marginLeft: "15px" }}>
         <Header>{t(config.head)}</Header>
+        
       </div>
-      <FormComposer
+      <div style={styles.card}>
+      
+              <div style={styles.assessmentStyle}>{t("Connection Holader Details")}</div>
+              <OwnershipDetailsSection
+                        t={t}
+                        owners={owners}
+                        styles={styles}
+                      />
+              </div>
+              <div style={styles.card}>
+      
+              <div style={styles.assessmentStyle}>{t("Connection Address")}</div>
+              <AddressSection
+                        t={t}
+                        addressDetails={addressDetails}
+                        styles={styles}
+                      />
+              </div>
+              <div style={styles.card}>
+      
+              <div style={styles.assessmentStyle}>{t("Water Connection & Fee Details")}</div>
+              <waterFeeConnection
+                        t={t}
+                        addressDetails={addressDetails}
+                        styles={styles}
+                      />
+              </div>
+              <div style={styles.card}>
+        <SelfDeclaration
+          t={t}
+          checkboxes={checkboxes}
+          disabled={true}
+          handleCheckboxChange={handleCheckboxChange}
+          styles={styles}
+          //formErrors={formErrors} 
+          />       
+        <div style={styles.buttonContainer}>
+
+          <SubmitBar label={t("Preview")} onSubmit={handleSubmit} style={{ background: "#6b133f" }} />
+         
+        </div>
+      </div>
+      {/* <FormComposer
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
@@ -164,7 +246,7 @@ const EditApplication = () => {
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
         appData={appData}
-      ></FormComposer>
+      ></FormComposer> */}
       {showToast && <Toast error={showToast.key} label={t(showToast?.message)} warning={showToast?.warning} onClose={closeToast} />}
     </React.Fragment>
   );

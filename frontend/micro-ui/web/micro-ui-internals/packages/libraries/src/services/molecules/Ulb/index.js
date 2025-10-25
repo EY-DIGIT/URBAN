@@ -37,9 +37,13 @@ export const ULBService = {
       }
     }
     //TODO: fix tenant id from userinfo
-    const tenantId =
+    let tenantId =
       user?.info?.type === "EMPLOYEE" && user?.info?.tenantId ? user?.info?.tenantId : window?.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
-    return tenantId;
+   if(tenantId.indexOf(".")=== -1)
+  {
+  tenantId = `${tenantId}.indore`
+  }
+      return tenantId;
   },
   /**
    * Custom method to get current environment home / state tenant

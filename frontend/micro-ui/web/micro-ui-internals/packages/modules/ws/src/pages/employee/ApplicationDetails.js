@@ -42,6 +42,7 @@ const ApplicationDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   let filters = func.getQueryStringParams(location.search);
   const applicationNumber = filters?.applicationNumber;
+ // const applicationNumber = "WS_AP/1013/2025-26/000126";
   const serviceType = filters?.service;
   const menuRef = useRef();
 
@@ -79,12 +80,12 @@ const ApplicationDetails = () => {
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(
     t,
     tenantId,
-    applicationNumber,
+   applicationNumber,
     serviceType,
     userInfo,
     { privacy: Digit.Utils.getPrivacyObject() }
   );
-
+console.log("applicationDetails", applicationDetails)
   function checkforPrivacyenablement() {
     if (
       !isLoading &&
@@ -101,7 +102,8 @@ const ApplicationDetails = () => {
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
     id: applicationNumber,
-    moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+   // moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+    moduleCode:"NEWWATERCONNECTION",
     config: {
       enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
       privacy: Digit.Utils.getPrivacyObject(),
@@ -151,7 +153,7 @@ const ApplicationDetails = () => {
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
+  } = Digit.Hooks.ws.usewsupdatestatus(serviceType);
 
   const clearDataDetails = () => {
     clearSessionFormData();
@@ -451,7 +453,7 @@ const ApplicationDetails = () => {
         <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
           <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
 
-          {dowloadOptions && dowloadOptions.length > 0 && (
+          {/* {dowloadOptions && dowloadOptions.length > 0 && (
             <MultiLink
               className="multilinkWrapper employee-mulitlink-main-div"
               onHeadClick={() => setShowOptions(!showOptions)}
@@ -461,7 +463,7 @@ const ApplicationDetails = () => {
               optionsClassName={"employee-options-btn-className"}
               ref={menuRef}
             />
-          )}
+          )} */}
         </div>
 
         <ApplicationDetailsTemplate
