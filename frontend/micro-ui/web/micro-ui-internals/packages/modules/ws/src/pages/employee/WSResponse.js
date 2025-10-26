@@ -6,7 +6,6 @@ import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs"
 import { useHistory } from "react-router-dom";
 import * as func from "../../utils";
 
-
 const WSResponse = (props) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -16,13 +15,13 @@ const WSResponse = (props) => {
   const [sewerageApplicationData, setSewerageApplicationData] = useState({});
 
   const { isLoading: waterLoading, isError: waterError, data: waterApplicationDetails } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, filters?.applicationNumber, "WATER", { enabled: filters?.applicationNumber ? true : false });
-  const { isLoading: sewerageLoading, isError: sewerageError, data: sewerageApplicationDetails } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, filters?.applicationNumber1, "SEWERAGE", { enabled: filters?.applicationNumber1 ? true : false });
+ // const { isLoading: sewerageLoading, isError: sewerageError, data: sewerageApplicationDetails } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, filters?.applicationNumber1, "SEWERAGE", { enabled: filters?.applicationNumber1 ? true : false });
 
   useEffect(async () => {
     setWaterApplicationData(waterApplicationDetails);
-    setSewerageApplicationData(sewerageApplicationDetails);
+   // setSewerageApplicationData(sewerageApplicationDetails);
 
-  }, [waterApplicationDetails, sewerageApplicationDetails]);
+  }, [waterApplicationDetails]);//sewerageApplicationDetails
   
   const { data: oldDataWater } = Digit.Hooks.ws.useOldValue({
     tenantId,
@@ -32,17 +31,17 @@ const WSResponse = (props) => {
     enabled: waterApplicationData?.applicationData?.applicationType?.includes("MODIFY_") ? true : false
   });
 
-  const { data: oldDataSew } = Digit.Hooks.ws.useOldValue({
-    tenantId,
-    filters: { connectionNumber: sewerageApplicationData?.applicationData?.connectionNo, isConnectionSearch: true },
-    businessService: "SEWERAGE"
-  }, {
-    enabled: sewerageApplicationData?.applicationData?.applicationType?.includes("MODIFY_") ? true : false
-  });
+  // const { data: oldDataSew } = Digit.Hooks.ws.useOldValue({
+  //   tenantId,
+  //   filters: { connectionNumber: sewerageApplicationData?.applicationData?.connectionNo, isConnectionSearch: true },
+  //   businessService: "SEWERAGE"
+  // }, {
+  //   enabled: sewerageApplicationData?.applicationData?.applicationType?.includes("MODIFY_") ? true : false
+  // });
 
   const oldApplicationWater =  oldDataWater?.WaterConnection?.[oldDataWater?.WaterConnection?.length - 1] 
 
-  const oldApplicationSew = oldDataSew?.SewerageConnections?.[oldDataSew?.SewerageConnections?.length - 1] 
+  //const oldApplicationSew = oldDataSew?.SewerageConnections?.[oldDataSew?.SewerageConnections?.length - 1] 
 
 
   const handleAckPdfDownloadWater = async () => {
@@ -62,11 +61,11 @@ const WSResponse = (props) => {
     const tenantInfo = sewerageApplicationData?.applicationData?.tenantId;
     let result = sewerageApplicationData?.applicationData;
 
-    if (sewerageApplicationData?.applicationData?.applicationType?.includes("MODIFY_")) {
-      const PDFdata = getModifyPDFData({ ...oldDataSew?.SewerageConnections?.[0] }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationSew)
-      PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
-      return
-    }
+    // if (sewerageApplicationData?.applicationData?.applicationType?.includes("MODIFY_")) {
+    //   const PDFdata = getModifyPDFData({ ...oldDataSew?.SewerageConnections?.[0] }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationSew)
+    //   PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
+    //   return
+    // }
     const PDFdata = getPDFData({ ...result }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t);
     PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
   }
@@ -94,20 +93,12 @@ const WSResponse = (props) => {
   return (
     <div>
       <Card>
-        <Banner
-          message={t("WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL")}
-          applicationNumber={filters?.applicationNumber}
-          applicationNumberOne={filters?.applicationNumber1}
-          info={filters?.applicationNumber ? t("WS_WATER_APPLICATION_NUMBER_LABEL") : ""}
-          infoOne={filters?.applicationNumber1 ? t("WS_SEWERAGE_APPLICATION_NUMBER_LABEL") : ""}
-          successful={true}
-          style={{ padding: "10px" }}
-          headerStyles={{ fontSize: "32px" }}
-          infoOneStyles={{ paddingTop: "20px" }}
-        />
-        <CardText style={{ paddingBottom: "10px", marginBottom: "10px" }}>{t("WS_MESSAGE_SUB_DESCRIPTION_LABEL")}</CardText>
-        <div style={{ display: "flex" }}>
-          {filters?.applicationNumber && <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginBottom: "10px", padding: "0px 8px" }} onClick={handleAckPdfDownloadWater}>
+        
+         {/* <div style={{ display: "flex",justifyContent: "end", }}>
+          
+          { filters?.applicationNumber && <div className="primary-label-btn d-grid" style={{ marginLeft: "unset", marginBottom: "10px", padding: "0px 8px" }} 
+           onClick={handleAckPdfDownloadWater}
+          >
             <svg width="20" height="23" viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M19.3334 8H14V0H6.00002V8H0.666687L10 17.3333L19.3334 8ZM0.666687 20V22.6667H19.3334V20H0.666687Z" fill="#6B133F" />
             </svg>
@@ -119,14 +110,27 @@ const WSResponse = (props) => {
             </svg>
             {t("WS_PRINT_SEWERAGE_APPLICATION_LABEL")}
           </div>}
-        </div>
-        <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
+        </div>  */}
+        <Banner
+          message={t("WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL")}
+          applicationNumber={filters?.applicationNumber}
+          applicationNumberOne={filters?.applicationNumber1}
+          info={filters?.applicationNumber ? t("WS_WATER_APPLICATION_NUMBER_LABEL") : ""}
+          infoOne={filters?.applicationNumber1 ? t("WS_SEWERAGE_APPLICATION_NUMBER_LABEL") : ""}
+          successful={true}
+          style={{ padding: "10px" }}
+          headerStyles={{ fontSize: "32px" }}
+          infoOneStyles={{ paddingTop: "20px" }}
+        />
+        {/* <CardText style={{ paddingBottom: "10px", marginBottom: "10px" }}>{t("WS_MESSAGE_SUB_DESCRIPTION_LABEL")}</CardText>*/}
+       
+        {/* <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
           <SubmitBar
             label={t("CORE_COMMON_GO_TO_HOME")}
             onSubmit={onSubmit}
             style={{ margin: "10px 10px 0px 0px" }}
           />
-        </ActionBar>
+        </ActionBar> */}
       </Card>
     </div>
   );

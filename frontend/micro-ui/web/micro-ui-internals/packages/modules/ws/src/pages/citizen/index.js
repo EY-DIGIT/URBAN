@@ -20,7 +20,9 @@ const App = ({ path }) => {
     }
     return goBacktoFromProperty;
   };
-
+ const WaterCardsLanding = Digit?.ComponentRegistryService?.getComponent("WaterCardsLanding");
+ const SearchWaterComponent = Digit?.ComponentRegistryService?.getComponent("WSSearchWaterComponent");
+ const WSApplicationDetails = Digit?.ComponentRegistryService?.getComponent("WSApplicationDetails");
   const WSCreate = Digit?.ComponentRegistryService?.getComponent("WSCreate");
   const WSDisconnection = Digit?.ComponentRegistryService?.getComponent("WSDisconnection");
   const WSSearchConnectionComponent = Digit?.ComponentRegistryService?.getComponent("WSSearchConnectionComponent");
@@ -41,6 +43,9 @@ const App = ({ path }) => {
           {t("CS_COMMON_BACK")}
         </BackButton>}
         <Switch>
+          <PrivateRoute path={`${path}/water/Actions`} component={WaterCardsLanding}></PrivateRoute>
+          <Route path={`${path}/water/citizen-search`} component={SearchWaterComponent} />
+          <PrivateRoute path={`${path}/application-details`} component={WSApplicationDetails} />
           <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
           <PrivateRoute path={`${path}/disconnect-application`} component={WSDisconnection} />
           <PrivateRoute path={`${path}/disconnect-acknowledge`} component={WSDisconnectAcknowledgement} />
