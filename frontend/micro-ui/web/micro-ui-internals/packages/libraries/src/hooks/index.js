@@ -108,6 +108,8 @@ import useSalutationsHindiMDMS from "./pt/useSalutationsHindiMDMS";
 import useRelationshipMDMS from "./pt/useRelationshipMDMS"
 import usePropertyCategoryMDMS from "./pt/usePropertyCategoryMDMS";
 import useSideMenuMDMS from "./pt/useSideMenuMDMS";
+import useReasonForTransferMDMS from "./pt/useReasonForTransferMDMS";
+import useNamantaranTypeMDMS from "./pt/useNamantaranTypeMDMS";
 
 import usePTGenderMDMS from "./pt/usePTGenderMDMS";
 import useMyPropertyPayments from "./pt/useMyPropertyPayments";
@@ -339,6 +341,8 @@ const pt = {
   useSalutationsHindiMDMS,
   useRelationshipMDMS,
   usePropertyCategoryMDMS,
+  useReasonForTransferMDMS,
+  useNamantaranTypeMDMS,
   useSideMenuMDMS,
   usePTGenderMDMS,
   useMyPropertyPayments,

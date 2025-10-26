@@ -138,6 +138,8 @@ import DemandNote from "./pageComponents/DemandNote";
 
 import PropertyCardsLanding from "./pages/citizen/PropertyCardsLanding/PropertyCardsLanding";
 import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
+import SearchApplication from "./pages/citizen/Namantaran/SearchApplication/SearchApplication";
+import NamantaranApplication from "./pages/citizen/Namantaran/NamantaranApplication";
 
 //Citizen Services
 import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenServicesLandingCards"
@@ -271,6 +273,8 @@ const componentsToRegister = {
   PTSelectWard,
   PropertAddressLayout,
   PropertyCardsLanding,
+  SearchApplication,
+  NamantaranApplication,
   PaymentForm,
   CitizenServicesCards,
   SuccessPage,

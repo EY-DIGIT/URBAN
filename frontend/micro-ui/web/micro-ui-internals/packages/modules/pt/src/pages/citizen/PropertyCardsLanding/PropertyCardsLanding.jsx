@@ -127,6 +127,16 @@ const PropertyCardsLanding = () => {
                                     image: "my_properties",
                                     url: "/digit-ui/citizen/pt/property/my-properties",
                                 },
+                                 {
+                                    label: "Namantaran Application",
+                                    image: "new_application",
+                                    url: "/digit-ui/citizen/pt/namantaran/search",
+                                },
+                                 {
+                                    label: t("PAY"),
+                                    image: "inr",
+                                    url: "/digit-ui/citizen/pt/property/citizen-search",
+                                },
                             ].map((action, index) => (
                                 <div
                                     key={index}
