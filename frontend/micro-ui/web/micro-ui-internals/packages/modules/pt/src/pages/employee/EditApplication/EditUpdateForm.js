@@ -242,7 +242,7 @@ const EditUpdateForm = ({ applicationData }) => {
                     isCorrespondenceAddress: correspondenceAddress,
                     mobileNumber: owner.mobile || "",
                     emailId: owner.email || "",
-                    ownerType: propertyDetails.exemption.code || propertyDetails.exemption,
+                    ownerType: propertyDetails.exemption.code || null,
                     permanentAddress:
                         addressDetails.address || "",
                     relationship: owner.relationship || "FATHER",
@@ -443,7 +443,7 @@ const EditUpdateForm = ({ applicationData }) => {
                     isCorrespondenceAddress: correspondenceAddress,
                     mobileNumber: owner.mobile,
                     emailId: owner.email,
-                    ownerType: propertyDetails.exemption.code,
+                    ownerType: propertyDetails.exemption.code || null,
                     roles: applicationData?.owners?.[index]?.roles || [],
                     permanentAddress:
                         addressDetails.address,
@@ -1179,7 +1179,7 @@ const EditUpdateForm = ({ applicationData }) => {
             setPropertyDetails({
                 propertyType: applicationData.propertyType || "",
                 roomsArea: applicationData.landArea || "",     // or superBuiltUpArea / builtUpArea depending on requirement
-                exemption: applicationData.owners?.[0].ownerType || "",
+                exemption: applicationData.owners?.[0].ownerType || null,
                 essentialTax: applicationData.essentialTax || ""
             });
         }

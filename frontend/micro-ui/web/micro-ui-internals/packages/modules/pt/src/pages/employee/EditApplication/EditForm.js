@@ -965,7 +965,7 @@ const EditUpdateForm = ({ applicationData }) => {
             setPropertyDetails({
                 propertyType: applicationData.propertyType || "",
                 roomsArea: applicationData.landArea || "",     // or superBuiltUpArea / builtUpArea depending on requirement
-                exemption: applicationData.owners?.[0].ownerType || "",
+                exemption: applicationData.owners?.[0].ownerType || null,
                 essentialTax: applicationData.essentialTax || ""
             });
         }
