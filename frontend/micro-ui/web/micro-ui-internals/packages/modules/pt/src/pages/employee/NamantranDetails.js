@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails/namantranIndex";
 import OwnerHistory from "./PropertyMutation/ownerHistory";
+import MutationApplicationDetails from "./MutationApplicatinDetails";
 
 const Close = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -54,6 +55,13 @@ const PropertyDetails = () => {
         data.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
     }
   );
+   const {
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.pt.useApplicationActions(tenantId);
   const mutation = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
 
   const { data: UpdateNumberConfig } = Digit.Hooks.useCommonMDMS(Digit.ULBService.getStateId(), "PropertyTax", ["UpdateNumber"], {
@@ -258,6 +266,17 @@ const PropertyDetails = () => {
     return <Loader />;
   }
   const UpdatePropertyNumberComponent = Digit?.ComponentRegistryService?.getComponent("EmployeeUpdateOwnerNumber");
+  
+  if (applicationDetails?.applicationData?.creationReason === "MUTATION") {
+    return (
+      <MutationApplicationDetails
+        propertyId={applicationNumber}
+        acknowledgementIds={appDetailsToShow?.applicationData?.acknowldgementNumber}
+        workflowDetails={workflowDetails}
+        mutate={mutate}
+      />
+    )
+  }
   return (
     <div>
       <Header>{t("PT_PROPERTY_INFORMATION")}</Header>

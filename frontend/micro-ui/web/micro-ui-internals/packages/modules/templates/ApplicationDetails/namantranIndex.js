@@ -142,91 +142,121 @@ const ApplicationDetails = (props) => {
 
   //   });
   // }
-  const submitAction = async (data, nocData = false, isOBPS = {}) => {
-    setIsEnableLoader(true);
-    if (typeof data?.customFunctionToExecute === "function") {
-      data?.customFunctionToExecute({ ...data });
-    }
-    if (nocData !== false && nocMutation) {
-      const nocPrmomises = nocData?.map((noc) => {
-        return nocMutation?.mutateAsync(noc);
-      });
-      try {
-        setIsEnableLoader(true);
-        const values = await Promise.all(nocPrmomises);
-        values &&
-          values.map((ob) => {
-            Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-          });
-      } catch (err) {
-        setIsEnableLoader(false);
-        let errorValue = err?.response?.data?.Errors?.[0]?.code
-          ? t(err?.response?.data?.Errors?.[0]?.code)
-          : err?.response?.data?.Errors?.[0]?.message || err;
-        closeModal();
-        setShowToast({ key: "error", error: { message: errorValue } });
-        setTimeout(closeToast, 5000);
-        return;
-      }
-    }
-    if (mutate) {
+const submitAction = async (data, nocData = false, isOBPS = {}) => {
+  console.log("🟢 submitAction called with:", { data, nocData, isOBPS });
+  debugger;
+
+  setIsEnableLoader(true);
+
+  if (typeof data?.customFunctionToExecute === "function") {
+    console.log("⚙️ Executing custom function...");
+    debugger;
+    data?.customFunctionToExecute({ ...data });
+  }
+
+  if (nocData !== false && nocMutation) {
+    console.log("📡 Starting NOC mutation calls...");
+    debugger;
+    const nocPrmomises = nocData?.map((noc) => {
+      console.log("➡️ Mutating NOC:", noc);
+      return nocMutation?.mutateAsync(noc);
+    });
+    try {
       setIsEnableLoader(true);
-      mutate(data, {
-        onError: (error, variables) => {
-          setIsEnableLoader(false);
-          setShowToast({ key: "error", error });
-          setTimeout(closeToast, 5000);
-        },
-        onSuccess: (data, variables) => {
-          sessionStorage.removeItem("WS_SESSION_APPLICATION_DETAILS");
-          setIsEnableLoader(false);
-          if (isOBPS?.bpa) {
-            data.selectedAction = selectedAction;
-            history.replace(`/digit-ui/employee/obps/response`, { data: data });
-          }
-          if (isOBPS?.isStakeholder) {
-            data.selectedAction = selectedAction;
-            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
-          }
-          if (isOBPS?.isNoc) {
-            history.push(`/digit-ui/employee/noc/response`, { data: data });
-          }
-          if (data?.Amendments?.length > 0) {
-            //RAIN-6981 instead just show a toast here with appropriate message
-            //show toast here and return 
-            //history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data?.Amendments?.[0] })
-
-            if (variables?.AmendmentUpdate?.workflow?.action.includes("SEND_BACK")) {
-              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_SEND_BACK_UPDATE_SUCCESS") })
-            } else if (variables?.AmendmentUpdate?.workflow?.action.includes("RE-SUBMIT")) {
-              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_RE_SUBMIT_UPDATE_SUCCESS") })
-            } else if (variables?.AmendmentUpdate?.workflow?.action.includes("APPROVE")) {
-              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_APPROVE_UPDATE_SUCCESS") })
-
-            }
-            else if (variables?.AmendmentUpdate?.workflow?.action.includes("REJECT")) {
-              setShowToast({ key: "success", label: t("ES_MODIFYWSCONNECTION_REJECT_UPDATE_SUCCESS") })
-            }
-            return
-          }
-          // setShowToast({ key: "success", action: selectedAction });
-                
-                  history.push({
-            pathname: `/digit-ui/employee/pt/success-applications/${applicationNumber}`, // 👈 send via query params
-            state: {data} // 👈 also send via state if needed
+      const values = await Promise.all(nocPrmomises);
+      console.log("✅ NOC mutation responses:", values);
+      values &&
+        values.map((ob) => {
+          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
         });
-          clearDataDetails && setTimeout(clearDataDetails, 3000);
-          setTimeout(closeToast, 5000);
-          queryClient.clear();
-          queryClient.refetchQueries("APPLICATION_SEARCH");
-          //push false status when reject
-
-        },
-      });
+    } catch (err) {
+      console.error("❌ NOC mutation failed:", err);
+      debugger;
+      setIsEnableLoader(false);
+      let errorValue = err?.response?.data?.Errors?.[0]?.code
+        ? t(err?.response?.data?.Errors?.[0]?.code)
+        : err?.response?.data?.Errors?.[0]?.message || err;
+      closeModal();
+      setShowToast({ key: "error", error: { message: errorValue } });
+      setTimeout(closeToast, 5000);
+      return;
     }
+  }
 
-    closeModal();
-  };
+  if (mutate) {
+    console.log("🚀 Starting main mutation...");
+    debugger;
+    setIsEnableLoader(true);
+    mutate(data, {
+      onError: (error, variables) => {
+        console.error("❌ Mutation error:", { error, variables });
+        debugger;
+        setIsEnableLoader(false);
+        setShowToast({ key: "error", error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        console.log("✅ Mutation success:", { data, variables });
+        debugger;
+        sessionStorage.removeItem("WS_SESSION_APPLICATION_DETAILS");
+        setIsEnableLoader(false);
+
+        if (isOBPS?.bpa) {
+          console.log("➡️ Redirecting to OBPS BPA response...");
+          debugger;
+          data.selectedAction = selectedAction;
+          history.replace(`/digit-ui/employee/obps/response`, { data: data });
+        }
+
+        if (isOBPS?.isStakeholder) {
+          console.log("➡️ Redirecting to OBPS Stakeholder response...");
+          debugger;
+          data.selectedAction = selectedAction;
+          history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
+        }
+
+        if (isOBPS?.isNoc) {
+          console.log("➡️ Redirecting to NOC response...");
+          debugger;
+          history.push(`/digit-ui/employee/noc/response`, { data: data });
+        }
+
+        if (data?.Amendments?.length > 0) {
+          console.log("📝 Amendment found:", data?.Amendments);
+          debugger;
+
+          if (variables?.AmendmentUpdate?.workflow?.action.includes("SEND_BACK")) {
+            setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_SEND_BACK_UPDATE_SUCCESS") });
+          } else if (variables?.AmendmentUpdate?.workflow?.action.includes("RE-SUBMIT")) {
+            setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_RE_SUBMIT_UPDATE_SUCCESS") });
+          } else if (variables?.AmendmentUpdate?.workflow?.action.includes("APPROVE")) {
+            setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_APPROVE_UPDATE_SUCCESS") });
+          } else if (variables?.AmendmentUpdate?.workflow?.action.includes("REJECT")) {
+            setShowToast({ key: "success", label: t("ES_MODIFYWSCONNECTION_REJECT_UPDATE_SUCCESS") });
+          }
+          return;
+        }
+
+        console.log("➡️ Redirecting to PT success page with applicationNumber:", applicationNumber);
+        debugger;
+        history.push({
+          pathname: `/digit-ui/employee/pt/success-applications/${applicationNumber}`,
+          state: { data },
+        });
+
+        clearDataDetails && setTimeout(clearDataDetails, 3000);
+        setTimeout(closeToast, 5000);
+        queryClient.clear();
+        queryClient.refetchQueries("APPLICATION_SEARCH");
+      },
+    });
+  }
+
+  console.log("🧹 Closing modal after submitAction.");
+  debugger;
+  closeModal();
+};
+
 
 
   if (isLoading || isEnableLoader) {

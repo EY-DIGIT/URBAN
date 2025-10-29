@@ -47,6 +47,7 @@ function ApplicationDetailsContentVerifier({
   workflowDetails,
   isDataLoading,
   applicationData,
+  billAmount,
   businessService,
   timelineStatusPrefix,
   showTimeLine = true,
@@ -805,23 +806,7 @@ function ApplicationDetailsContentVerifier({
               <tr >
 
                 <td style={styles.tableCell}>
-                  <select
-                    style={{
-                      ...styles.select, appearance: "auto",
-                      WebkitAppearance: "auto",
-                      MozAppearance: "auto",
-                    }}
-                    disabled={true}
-                  // value={unit.usageType}
-                  // onChange={(e) => handleUnitChange(index, "usageType", e.target.value)}
-                  >
-                    <option value="" disabled>{t("Select")}</option>
-                    {/* {usageTypes.map((item) => (
-                            <option key={item.code} value={item.code}>
-                              {t(item.i18nKey)}
-                            </option>
-                          ))} */}
-                  </select>
+                 {billAmount}
                 </td>
 
                 <td style={styles.tableCell}>
@@ -911,80 +896,80 @@ function ApplicationDetailsContentVerifier({
           <LocationDetails latLong={address?.geoLocation} />
         </div>
     },
-    {
-      title: <div ><CardSectionHeader style={{ color: "#6B133F" }}>
-        {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-      </CardSectionHeader></div>,
-      content:
-        <div style={styles.card}>
-          {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
-            <React.Fragment>
-              {/* <BreakLine /> */}
-              {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
-              {!workflowDetails?.isLoading && !isDataLoading && (
-                <Fragment>
+    // {
+    //   title: <div ><CardSectionHeader style={{ color: "#6B133F" }}>
+    //     {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+    //   </CardSectionHeader></div>,
+    //   content:
+    //     <div style={styles.card}>
+    //       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (
+    //         <React.Fragment>
+    //           {/* <BreakLine /> */}
+    //           {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
+    //           {!workflowDetails?.isLoading && !isDataLoading && (
+    //             <Fragment>
 
-                  {applicationDetails?.applicationDetails?.map((detail, index) => (
-                    <div key={index}>
-
-
-
-
-                      {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
-
-                    </div>
-                  ))}
+    //               {applicationDetails?.applicationDetails?.map((detail, index) => (
+    //                 <div key={index}>
 
 
 
-                  {/* <CardSectionHeader style={{ ...styles.sectionTitle, marginBottom: "16px", marginTop: "32px" }}>
-                  {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
-                </CardSectionHeader> */}
-                  {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
-                    <CheckPoint
-                      isCompleted={true}
-                      label={t(`${timelineStatusPrefix}${workflowDetails?.data?.timeline[0]?.state}`)}
-                      customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0])}
-                    />
-                  ) : (
-                    <ConnectingCheckPoints>
-                      {workflowDetails?.data?.timeline &&
-                        workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
-                          let timelineStatusPostfix = "";
-                          if (window.location.href.includes("/obps/")) {
-                            if (workflowDetails?.data?.timeline[index - 1]?.state?.includes("BACK_FROM") || workflowDetails?.data?.timeline[index - 1]?.state?.includes("SEND_TO_CITIZEN"))
-                              timelineStatusPostfix = `_NOT_DONE`
-                            else if (checkpoint?.performedAction === "SEND_TO_ARCHITECT")
-                              timelineStatusPostfix = `_BY_ARCHITECT_DONE`
-                            else
-                              timelineStatusPostfix = index == 0 ? "" : `_DONE`;
-                          }
 
-                          return (
-                            <React.Fragment key={index}>
-                              <CheckPoint
-                                keyValue={index}
-                                isCompleted={index === 0}
-                                info={checkpoint.comment}
-                                label={t(
-                                  `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]
-                                  }${timelineStatusPostfix}`
-                                )}
-                                customChild={getTimelineCaptions(checkpoint, index)}
-                              />
-                            </React.Fragment>
-                          );
-                        })}
-                    </ConnectingCheckPoints>
-                  )}
-                </Fragment>
-              )}
-            </React.Fragment>
-          )}
-        </div>
+    //                   {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
+
+    //                 </div>
+    //               ))}
 
 
-    }
+
+    //               {/* <CardSectionHeader style={{ ...styles.sectionTitle, marginBottom: "16px", marginTop: "32px" }}>
+    //               {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
+    //             </CardSectionHeader> */}
+    //               {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+    //                 <CheckPoint
+    //                   isCompleted={true}
+    //                   label={t(`${timelineStatusPrefix}${workflowDetails?.data?.timeline[0]?.state}`)}
+    //                   customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0])}
+    //                 />
+    //               ) : (
+    //                 <ConnectingCheckPoints>
+    //                   {workflowDetails?.data?.timeline &&
+    //                     workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
+    //                       let timelineStatusPostfix = "";
+    //                       if (window.location.href.includes("/obps/")) {
+    //                         if (workflowDetails?.data?.timeline[index - 1]?.state?.includes("BACK_FROM") || workflowDetails?.data?.timeline[index - 1]?.state?.includes("SEND_TO_CITIZEN"))
+    //                           timelineStatusPostfix = `_NOT_DONE`
+    //                         else if (checkpoint?.performedAction === "SEND_TO_ARCHITECT")
+    //                           timelineStatusPostfix = `_BY_ARCHITECT_DONE`
+    //                         else
+    //                           timelineStatusPostfix = index == 0 ? "" : `_DONE`;
+    //                       }
+
+    //                       return (
+    //                         <React.Fragment key={index}>
+    //                           <CheckPoint
+    //                             keyValue={index}
+    //                             isCompleted={index === 0}
+    //                             info={checkpoint.comment}
+    //                             label={t(
+    //                               `${timelineStatusPrefix}${checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]
+    //                               }${timelineStatusPostfix}`
+    //                             )}
+    //                             customChild={getTimelineCaptions(checkpoint, index)}
+    //                           />
+    //                         </React.Fragment>
+    //                       );
+    //                     })}
+    //                 </ConnectingCheckPoints>
+    //               )}
+    //             </Fragment>
+    //           )}
+    //         </React.Fragment>
+    //       )}
+    //     </div>
+
+
+    // }
   ];
 
   const onToggle = (idx) => {

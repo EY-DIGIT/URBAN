@@ -311,7 +311,7 @@ const EditUpdateForm = ({ applicationData }) => {
     error,
   } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
-
+console.log("applicationData in edit form",applicationData);
   const handleEstimate = (newPropertyId, property) => {
     const toYear =
       Array.isArray(unit) && unit.length > 0 ? unit[0].toYear : null;
@@ -371,209 +371,131 @@ const EditUpdateForm = ({ applicationData }) => {
 
   const handleSubmitUpdateChange = async () => {
 
+   
     const payload = {
-      Property: {
-        updateIMC: true,
-        id: applicationData?.id,
-        registryId: applicationData?.registryId || "",
-        propertyId: applicationData?.propertyId || "",
-        accountId: applicationData?.accountId || "",
-        acknowldgementNumber: applicationData?.acknowldgementNumber || "",
-        status: applicationData?.status,
-        tenantId: userInfo1?.tenantId,
-        oldPropertyId: assessmentDetails.oldPropertyId || null,
-        essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
-        address: {
-          city: "indore",
-          locality: {
-            code: addressDetails.colony?.code || "SUN02",
-            name: addressDetails.colony?.name || "map with zone",
-            latitude: longLat.lat,
-            longitude: longLat.long,
-          },
-          geoLocation: {
-            latitude: longLat.lat || applicationData?.address?.geoLocation?.latitude,
-            longitude: longLat.long || applicationData?.address?.geoLocation?.longitude,
-          },
-          zone: addressDetails.zone?.code || "SUN02",
-          street: addressDetails.address || "main",
-          doorNo: addressDetails.doorNo || "23",
-          pincode: addressDetails.pincode || "",
-          ward: addressDetails.ward?.code || "1",
-          documents: [],
-        },
+      Property:applicationData
+      //  {
+      //   updateIMC: false,
+      //   id: applicationData?.id,
+      //   registryId: applicationData?.registryId || "",
+      //   propertyId: applicationData?.propertyId || "",
+      //   accountId: applicationData?.accountId || "",
+      //   acknowldgementNumber: applicationData?.acknowldgementNumber || "",
+      //   status: applicationData?.status,
+      //   tenantId: userInfo1?.tenantId,
+      //   oldPropertyId: assessmentDetails.oldPropertyId || null,
+      //   essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
 
-        ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
-        propertyCategory: propertyCategoryInput,
+      //   // Missing fields from comparison
+      //   surveyId: null,
+      //   linkedProperties: null,
+      //   isFreeze: null,
+      //   propertyCategory: null,
+      //   AlternatUpdated: false,
 
-        owners: owners.map((owner, index) => ({
-          salutation: owner.title || "mr",
-          title: "title",
-          name: owner.name || `Owner ${index + 1}`,
-          salutationHindi: owner.hindiTitle,
-          hindiName: owner.hindiName || "",
-          fatherOrHusbandName: owner.fatherHusbandName || "UnitTest",
-          gender: "MALE",
-          aadhaarNumber: owner.aadhaar || "",
-          altContactNumber: owner.altNumber || "",
-          isCorrespondenceAddress: correspondenceAddress,
-          mobileNumber: owner.mobile || "",
-          emailId: owner.email || "",
-          ownerType: propertyDetails.exemption.code,
-          permanentAddress:
-            addressDetails.address || "",
-          relationship: owner.relationship || "FATHER",
-          samagraId: owner.samagraID,
-          documents: [
-            {
-              documentType: "Proof of Identity",
-              fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
-              documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
-            },
-            documents?.sellersRegistry && {
+      //   address: applicationData?.address,
 
-              documentType: "Others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
-            },
-            {
-              documentType: "Proof of Ownership",
-              fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
-              documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
-            },
-            {
-              documentType: "Property Photograph",
-              fileStoreId: capturedPhoto || null,
-              documentUid: capturedPhoto || null,
-            },
-            ...Object.keys(documents)
-              .filter(key => key.startsWith("others_"))
-              .map(key => ({
-                documentType: "Others",  // 👈 these will go separately
-                fileStoreId:
-                  documents[key]?.fileStoreId ||
-                  applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-                documentUid:
-                  documents[key]?.documentUid ||
-                  applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
-              })),
-          ].filter(Boolean),
-        })),
+      //   ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+      //   propertyCategory: propertyCategoryInput,
 
-        institution: null,
+      //   owners: applicationData?.owners,
 
-        documents: [
-          {
-            documentType: "Proof of Identity",
-            fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
-            documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
-          },
-          documents?.sellersRegistry && {
+      //   institution: null,
 
-            documentType: "Others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
-          },
-          {
-            documentType: "Proof of Ownership",
-            fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
-            documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
-          },
-          {
-            documentType: "Property Photograph",
-            fileStoreId: capturedPhoto || null,
-            documentUid: capturedPhoto || null,
-          },
-          ...Object.keys(documents)
-            .filter(key => key.startsWith("others_"))
-            .map(key => ({
-              documentType: "Others",  // 👈 these will go separately
-              fileStoreId:
-                documents[key]?.fileStoreId ||
-                applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-              documentUid:
-                documents[key]?.documentUid ||
-                applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
-            })),
-        ].filter(Boolean),
+      //   documents: [
+      //     {
+      //       id: applicationData.documents?.find(d => d.documentType === "Proof of Identity")?.id, // Missing
+      //       documentType: "Proof of Identity",
+      //       fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+      //       documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+      //       auditDetails: null, // Missing
+      //       status: "ACTIVE" // Missing
+      //     },
+      //     documents?.sellersRegistry && {
+      //       id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
+      //       documentType: "Others",
+      //       fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+      //       documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+      //       auditDetails: null, // Missing
+      //       status: "ACTIVE" // Missing
+      //     },
+      //     {
+      //       id: applicationData.documents?.find(d => d.documentType === "Proof of Ownership")?.id, // Missing
+      //       documentType: "Proof of Ownership",
+      //       fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+      //       documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+      //       auditDetails: null, // Missing
+      //       status: "ACTIVE" // Missing
+      //     },
+      //     {
+      //       id: applicationData.documents?.find(d => d.documentType === "Property Photograph")?.id, // Missing
+      //       documentType: "Property Photograph",
+      //       fileStoreId: capturedPhoto || null,
+      //       documentUid: capturedPhoto || null,
+      //       auditDetails: null, // Missing
+      //       status: "ACTIVE" // Missing
+      //     },
 
-        units: unit.map(unit => (
-          {
-            usageCategory: unit.usageType || "RESIDENTIAL",
-            usesCategoryMajor: unit.usageType || "RESIDENTIAL",
-            occupancyType: unit.usageFactor || "SELFOCCUPIED",
-            constructionDetail: {
-              builtUpArea: unit.area || "3000",
-              constructionType: unit.constructionType || null,
-            },
-            floorNo: parseInt(unit.floorNo) || 0,
-            rateZone: selectedRateZone ? selectedRateZone : rateZones?.[0]?.code || "",
-            roadFactor: assessmentDetails.roadFactor?.code || applicationData?.units[0]?.roadFactor,
-            fromYear: unit.fromYear,
-            toYear: unit.toYear,
-          })),
+      //     {
+      //       id: applicationData.documents?.find(d => d.documentType === "PATTACERTIFICATE")?.id, // Missing
+      //       documentType: "PATTACERTIFICATE",
+      //       fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+      //       documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+      //       auditDetails: null, // Missing
+      //       status: "ACTIVE" // Missing
+      //     },
+      //     ...Object.keys(documents)
+      //       .filter(key => key.startsWith("others_"))
+      //       .map(key => ({
+      //         id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
+      //         documentType: "Others",
+      //         fileStoreId: documents[key]?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+      //         documentUid: documents[key]?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+      //         auditDetails: null, // Missing
+      //         status: "ACTIVE" // Missing
+      //       })),
+      //   ].filter(Boolean),
 
+      //   units: applicationData?.units,
 
-        landArea: assessmentDetails.plotArea?.toString() || "3000",
-        propertyType: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
-        noOfFloors: unit.length || null,
-        superBuiltUpArea: null,
-        // usageCategory: unit.usageType || "RESIDENTIAL",
-        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
+      //   landArea: assessmentDetails.plotArea?.toString() || "3000",
+      //   // propertyType: propertyDetails.propertyType?.code || "BUILTUP",
+      //   propertyType: "BUILTUP",
+      //   noOfFloors: unit.length || null,
+      //   superBuiltUpArea: null,
+      //   usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
 
-        additionalDetails: {
-          inflammable: false,
-          heightAbove36Feet: false,
-          propertyType: {
-            i18nKey: "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY",
-            code: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
-          },
-          mobileTower: checkboxes.mobileTower || false,
-          bondRoad: checkboxes.broadRoad || false,
-          advertisement: checkboxes.advertisement || false,
-          builtUpArea: null,
-          noOfFloors: {
-            i18nKey: "PT_GROUND_FLOOR_OPTION",
-            code: 0,
-          },
-          noOofBasements: {
-            i18nKey: "PT_NO_BASEMENT_OPTION",
-            code: 0,
-          },
-          unit: unit.map(unit => (
-            {
-              usageCategory: unit.usageType || "RESIDENTIAL",
-              usesCategoryMajor: unit.usageType || "RESIDENTIAL",
-              occupancyType: unit.usageFactor || "SELFOCCUPIED",
-              constructionDetail: {
-                builtUpArea: unit.area || "3000",
-                constructionType: unit.constructionType || null,
-              },
-              floorNo: parseInt(unit.floorNo) || 0,
-              rateZone: selectedRateZone ? selectedRateZone : rateZones?.[0]?.code || "",
-              roadFactor: assessmentDetails.roadFactor?.code || applicationData?.units[0]?.roadFactor,
-              fromYear: unit.fromYear,
-              toYear: unit.toYear,
-            })),
-          basement1: null,
-          basement2: null,
-        },
+       
+      //   "additionalDetails": {
+      //     "documentNumber": "435345343",
+      //     "documentValue": "3000",
+      //     "documentDate": 1761350400000,
+      //     "isMutationInCourt": "NO",
+      //     "caseDetails": "",
+      //     "reasonForTransfer": "PATTACERTIFICATE",
+      //     "marketValue": 4000,
+      //     "isPropertyUnderGovtPossession": "NO"
+      //   },
+      //   workflow: {
+      //     action: "OPEN",
+      //     businessService: "PT.MUTATION",
+      //     moduleName: "PT",
+      //     tenantId: userInfo1?.tenantId,
+      //   },
 
-        workflow: {
-          action: "OPEN",
-          businessService: "PT.MUTATION",
-          moduleName: "PT",
-          tenantId: userInfo1?.tenantId,
-        },
+      //   channel: "CFC_COUNTER",
+      //   creationReason: "MUTATION",
+      //   source: "MUNICIPAL_RECORDS",
 
-        channel: "CFC_COUNTER",
-        creationReason: "MUTATION",
-        source: "MUNICIPAL_RECORDS",
-      }
-
+      //   // Missing auditDetails
+      //   auditDetails: {
+      //     createdBy: userInfo1?.uuid,
+      //     lastModifiedBy: userInfo1?.uuid,
+      //     createdTime: Date.now(),
+      //     lastModifiedTime: Date.now()
+      //   }
+      // }
     }
-
-
     history.replace("/digit-ui/employee/pt/response", { Property: payload.Property, key: "UPDATE", action: "SUBMIT" });
 
   };
@@ -1070,6 +992,26 @@ const EditUpdateForm = ({ applicationData }) => {
   useEffect(() => {
     if (!applicationData || applicationData.length === 0) return;
 
+    // const formattedUnits = applicationData?.units?.map((unit) => ({
+    //   usageType: unit && unit.usageCategory ? unit.usageCategory : "",
+    //   usageFactor: unit && unit.occupancyType ? unit.occupancyType : "", // Fill if needed
+    //   floorNo: unit && unit.floorNo ? unit.floorNo.toString() : "",
+    //   constructionType:
+    //     unit &&
+    //       unit.constructionDetail &&
+    //       unit.constructionDetail.constructionType
+    //       ? unit.constructionDetail.constructionType
+    //       : "",
+    //   area:
+    //     unit &&
+    //       unit.constructionDetail &&
+    //       unit.constructionDetail.builtUpArea
+    //       ? unit.constructionDetail.builtUpArea.toString()
+    //       : "",
+    //   fromYear: unit && unit.fromYear ? unit.fromYear : "",
+    //   toYear: unit && unit.toYear ? unit.toYear : "",
+    // }));
+
     const formattedUnits = applicationData?.units?.map((unit) => ({
       usageType: unit && unit.usageCategory ? unit.usageCategory : "",
       usageFactor: unit && unit.occupancyType ? unit.occupancyType : "", // Fill if needed
@@ -1088,8 +1030,15 @@ const EditUpdateForm = ({ applicationData }) => {
           : "",
       fromYear: unit && unit.fromYear ? unit.fromYear : "",
       toYear: unit && unit.toYear ? unit.toYear : "",
+      // Add missing unit fields
+      id: unit?.id || "",
+      active: unit?.active !== undefined ? unit.active : true,
+      unitType: unit?.unitType || "",
+      occupancyDate: unit?.occupancyDate || 0,
+      arv: unit?.arv || null,
+      rateZone: unit?.rateZone || "",
+      roadFactor: unit?.roadFactor || ""
     }));
-
     setUnit(formattedUnits);
     // if (applicationData?.documents) {
     const docMap = {
@@ -1266,142 +1215,142 @@ const EditUpdateForm = ({ applicationData }) => {
 
     <React.Fragment>
       <div style={styles.assessmentStyleRight}><a href="/digit-ui/employee/pt/OriginalDetails" ><u>Original Property Owner Details</u></a></div>
-    
-        <div >
 
-          {/* Attachments Section */}
+      <div >
 
-        
-          <div style={styles.card}>
+        {/* Attachments Section */}
 
-            <div style={styles.assessmentStyle}>{t("Namantran Application")}</div>
-            <NamantranApplication t={t} styles={styles} propertyId={applicationData?.propertyId} />
-          </div>
-          <div style={styles.card}>
 
-            <div style={styles.assessmentStyle}>{t("New Owner Details")}</div>
+        <div style={styles.card}>
 
-            <OwnershipDetailsSection
-              t={t}
-              ownershipType={ownershipType}
-              handleOwnershipTypeChange={handleOwnershipTypeChange}
-              handleRestryIdChange={handleRestryIdChange}
-              registryId={registryId}
-              owners={owners}
-              setOwners={setOwners}
-              addNewOwner={addNewOwner}
-              isJointStarted={isJointStarted}
-              styles={styles}
-              formErrors={formErrors}
-              handleOwnerAadhaarChange={handleOwnerAadhaarChange}
-              handleOwnerNameChange={handleOwnerNameChange}
-              handleOwnerContactChange={handleOwnerContactChange}
-              handleOwnerEmailChange={handleOwnerEmailChange}
-              propertyCategoryInput={propertyCategoryInput}
-              propertyCategoryInputChange={propertyCategoryInputChange}
-            />
-          </div>
+          <div style={styles.assessmentStyle}>{t("Namantran Application")}</div>
+          <NamantranApplication t={t} styles={styles} propertyId={applicationData?.propertyId} />
+        </div>
+        <div style={styles.card}>
 
-          <div style={styles.card}>
-            <div style={styles.assessmentStyle}>{t("Property Address")}</div>
-            <AddressSection
-              t={t}
-              addressDetails={addressDetails}
-              handleInputChange={handleInputChange}
-              handleDropdownChange={handleDropdownChange}
-              updateRateZone={updateRateZone}
-              styles={styles}
-              formErrors={formErrors}
-            />
-          </div>
-          <div style={styles.card}>
-            <CorrespondenceAddressSection
-              t={t}
-              correspondenceAddress={
-                isSameAsPropertyAddress
-                  ? formatFullAddress(addressDetails)
-                  : correspondenceAddress
-              }
-              handleCorrespondenceChange={handleCorrespondenceChange}
-              isSameAsPropertyAddress={isSameAsPropertyAddress}
-              handleSameAsPropertyToggle={handleSameAsPropertyToggle}
-              styles={styles}
-              formErrors={formErrors}
-              applicationData={applicationData}
-              setIsSameAsPropertyAddress={setIsSameAsPropertyAddress}
-            />
-          </div>
-          <div style={styles.card}>
-            <div style={styles.assessmentStyle}>{t("Assessment Details")}</div>
-            <AssessmentDetailsSection
-              t={t}
-              assessmentDetails={assessmentDetails}
-              handleAssessmentInputChange={handleAssessmentInputChange}
-              handleRoadFactorChange={handleRoadFactorChange}
-              styles={styles}
-              formErrors={formErrors}
-            />
-          </div>
+          <div style={styles.assessmentStyle}>{t("New Owner Details")}</div>
 
-          <div style={styles.card}>
-            <div style={styles.assessmentStyle}>{t("Property Details")}</div>
-            <PropertyDetailsTableSection
-              t={t}
-              unit={unit}
-              handleUnitChange={handleUnitChange}
-              addUnit={addUnit}
-              removeUnit={removeUnit}
-              styles={styles}
-              formErrors={formErrors}
-            />
+          <OwnershipDetailsSection
+            t={t}
+            ownershipType={ownershipType}
+            handleOwnershipTypeChange={handleOwnershipTypeChange}
+            handleRestryIdChange={handleRestryIdChange}
+            registryId={registryId}
+            owners={owners}
+            setOwners={setOwners}
+            addNewOwner={addNewOwner}
+            isJointStarted={isJointStarted}
+            styles={styles}
+            formErrors={formErrors}
+            handleOwnerAadhaarChange={handleOwnerAadhaarChange}
+            handleOwnerNameChange={handleOwnerNameChange}
+            handleOwnerContactChange={handleOwnerContactChange}
+            handleOwnerEmailChange={handleOwnerEmailChange}
+            propertyCategoryInput={propertyCategoryInput}
+            propertyCategoryInputChange={propertyCategoryInputChange}
+          />
+        </div>
 
-          </div>
-          <div style={styles.card}>
-            <OtherDetailsSection
-              t={t}
-              propertyDetails={propertyDetails}
-              handlePropertyDetailsChange={handlePropertyDetailsChange}
-              checkboxes={checkboxes}
-              handleCheckboxChange={handleCheckboxChange}
-              styles={styles}
-              formErrors={formErrors}
-              setSelectedRateZone={setSelectedRateZone}
-            />
-          </div>
-          <div style={styles.card}>
-            <AttachmentsSection
-              t={t}
-              handleFileChange={handleFileChange}
-              formErrors={formErrors}
-              documents={documents}
-              resetKey={fileResetKey}
-            />
-          </div>
-            <div style={styles.card}>
+        <div style={styles.card}>
+          <div style={styles.assessmentStyle}>{t("Property Address")}</div>
+          <AddressSection
+            t={t}
+            addressDetails={addressDetails}
+            handleInputChange={handleInputChange}
+            handleDropdownChange={handleDropdownChange}
+            updateRateZone={updateRateZone}
+            styles={styles}
+            formErrors={formErrors}
+          />
+        </div>
+        <div style={styles.card}>
+          <CorrespondenceAddressSection
+            t={t}
+            correspondenceAddress={
+              isSameAsPropertyAddress
+                ? formatFullAddress(addressDetails)
+                : correspondenceAddress
+            }
+            handleCorrespondenceChange={handleCorrespondenceChange}
+            isSameAsPropertyAddress={isSameAsPropertyAddress}
+            handleSameAsPropertyToggle={handleSameAsPropertyToggle}
+            styles={styles}
+            formErrors={formErrors}
+            applicationData={applicationData}
+            setIsSameAsPropertyAddress={setIsSameAsPropertyAddress}
+          />
+        </div>
+        <div style={styles.card}>
+          <div style={styles.assessmentStyle}>{t("Assessment Details")}</div>
+          <AssessmentDetailsSection
+            t={t}
+            assessmentDetails={assessmentDetails}
+            handleAssessmentInputChange={handleAssessmentInputChange}
+            handleRoadFactorChange={handleRoadFactorChange}
+            styles={styles}
+            formErrors={formErrors}
+          />
+        </div>
 
-            <div style={styles.assessmentStyle}>{t("Fee Details")}</div>
-            <FeeDetails t={t} styles={styles} applicationData={applicationData} />
-          </div>
-          <div style={styles.card}>
-            <LocationDetails handleLocationUpdate={handleLocationUpdate} handlePhotoCapture={handlePhotoCapture} applicationData={applicationData} formErrors={formErrors} />
-          </div>
-          <div style={styles.card}>
-            <SelfDeclaration
-              t={t}
-              checkboxes={checkboxes}
-              handleCheckboxChange={handleCheckboxChange}
-              styles={styles}
-              formErrors={formErrors} />
-
-            <div style={styles.buttonContainer}>
-
-              <SubmitBar label={t("Save")} onSubmit={handleSubmitUpdateChange} style={{ background: "#6b133f" }} />
-
-            </div>
-          </div>
+        <div style={styles.card}>
+          <div style={styles.assessmentStyle}>{t("Property Details")}</div>
+          <PropertyDetailsTableSection
+            t={t}
+            unit={unit}
+            handleUnitChange={handleUnitChange}
+            addUnit={addUnit}
+            removeUnit={removeUnit}
+            styles={styles}
+            formErrors={formErrors}
+          />
 
         </div>
-      
+        <div style={styles.card}>
+          <OtherDetailsSection
+            t={t}
+            propertyDetails={propertyDetails}
+            handlePropertyDetailsChange={handlePropertyDetailsChange}
+            checkboxes={checkboxes}
+            handleCheckboxChange={handleCheckboxChange}
+            styles={styles}
+            formErrors={formErrors}
+            setSelectedRateZone={setSelectedRateZone}
+          />
+        </div>
+        <div style={styles.card}>
+          <AttachmentsSection
+            t={t}
+            handleFileChange={handleFileChange}
+            formErrors={formErrors}
+            documents={documents}
+            resetKey={fileResetKey}
+          />
+        </div>
+        <div style={styles.card}>
+
+          <div style={styles.assessmentStyle}>{t("Fee Details")}</div>
+          <FeeDetails t={t} styles={styles} applicationData={applicationData} />
+        </div>
+        <div style={styles.card}>
+          <LocationDetails handleLocationUpdate={handleLocationUpdate} handlePhotoCapture={handlePhotoCapture} applicationData={applicationData} formErrors={formErrors} />
+        </div>
+        <div style={styles.card}>
+          <SelfDeclaration
+            t={t}
+            checkboxes={checkboxes}
+            handleCheckboxChange={handleCheckboxChange}
+            styles={styles}
+            formErrors={formErrors} />
+
+          <div style={styles.buttonContainer}>
+
+            <SubmitBar label={t("Save")} onSubmit={handleSubmitUpdateChange} style={{ background: "#6b133f" }} />
+
+          </div>
+        </div>
+
+      </div>
+
 
 
     </React.Fragment>
