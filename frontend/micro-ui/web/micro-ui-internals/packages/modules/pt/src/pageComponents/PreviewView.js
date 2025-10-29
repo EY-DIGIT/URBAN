@@ -341,7 +341,10 @@ const PropertyForm = () => {
         sessionStorage.setItem("flag", JSON.stringify(flag));
         window.location.href = `/digit-ui/employee/pt/applicationsearch/application-details/${propertyId}`;
     };
+   
  const handleGobackEdit = () => {
+   
+    localStorage.removeItem("hasRefreshed");
      const propertyId = proOwnerDetail?.propertyId;
         history.push({
             pathname: `/digit-ui/employee/pt/edit-update-application/${propertyId}`,

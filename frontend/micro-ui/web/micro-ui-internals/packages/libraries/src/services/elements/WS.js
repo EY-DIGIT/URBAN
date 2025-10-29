@@ -72,9 +72,43 @@ export const WSService = {
       auth: true,
     });
   },
-  wsCalculationEstimate: (details, businessService) =>
+  wsCalculationEstimate: (details, businessService = "WS") =>
     Request({
-      url: businessService === "WS" ? Urls.ws.ws_calculation_estimate : Urls.ws.sw_calculation_estimate,
+      url: businessService === "WS" ? Urls.ws.ws_calculation_estimate : Urls.ws.ws_calculation_estimate,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
+  wsUpdatestatus: (details, businessService = "WS") =>
+    Request({
+      url: businessService === "WS" ? Urls.ws.ws_updatestatus : Urls.ws.ws_updatestatus,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
+  WSPropertysearch: (details, businessService = "WS") =>
+    Request({
+      // url: businessService === "WS" ? Urls.ws.ws_calculation_estimate : Urls.ws.ws_calculation_estimate,
+      url: `${Urls.pt.fectch_property}?propertyIds=${details.propertyIds}&tenantId=${details.tenantId}`,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
+  swCalculationEstimate: (details, businessService = "WS") =>
+    Request({
+      url: Urls.ws.sw_calculation_estimate,
       data: details,
       useCache: false,
       setTimeParam: false,
@@ -130,7 +164,7 @@ export const WSService = {
       userService: true,
       params: { ...filters },
     }),
-  generateBillPdf: ({tenantId, filters}) =>
+  generateBillPdf: ({ tenantId, filters }) =>
     Request({
       url: Urls.ws.wns_generate_pdf,
       useCache: true,
@@ -142,14 +176,14 @@ export const WSService = {
     }),
   WSOpensearch: (data) =>
     Request({
-     url: Urls.ws.getSearchDetails,
-     useCache: false,
-     method: "POST",
-     auth: false ,
-     userService: false,
-     noRequestInfo: true,
-     data: data
-   }),
+      url: Urls.ws.getSearchDetails,
+      useCache: false,
+      method: "POST",
+      auth: false,
+      userService: false,
+      noRequestInfo: true,
+      data: data
+    }),
   wsCalculationApplyAdhoc: (details, businessService) =>
     Request({
       url: businessService === "WS" ? Urls.ws.water_applyAdhocTax : Urls.ws.sewerage_applyAdhocTax,

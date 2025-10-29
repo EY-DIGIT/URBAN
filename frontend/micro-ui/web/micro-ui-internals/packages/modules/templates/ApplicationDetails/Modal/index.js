@@ -8,6 +8,7 @@ import NOCActionModal from "./NOCActionModal";
 import WNSActionModal from "./WNSActionModal";
 
 const ActionModal = (props) => {
+  console.log(props)
   if (props?.businessService.includes("PT")) {
     return <PTActionModal {...props} />;
   }
@@ -29,7 +30,8 @@ const ActionModal = (props) => {
   }
 
   if (props?.moduleCode.includes("WS")) {
-    return <WNSActionModal {...props} />;
+     return <WNSActionModal {...props} />;
+    //return <PTActionModal {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };

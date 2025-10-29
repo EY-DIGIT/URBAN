@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
-
 import { Loader, Card } from "@egovernments/digit-ui-react-components";
-
 import ActionModal from "./Modal";
-
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsContentVerifier from "./components/ApplicationDetailsContentVerifier";
+import WSApplicationDetailsContentVerifier from "./components/WSApplicationDetailsContentVerifier "
 // import ApplicationDetailsContent from "./components/ApplicationDetailsContent";
 import ApplicationDetailsToast from "./components/ApplicationDetailsToast";
 import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBar";
+import ApplicationDetailsActionBarWs from "./components/ApplicationDetailsActionBarWs";
 import ApplicationDetailsWarningPopup from "./components/ApplicationDetailsWarningPopup";
 
 const ApplicationDetails = (props) => {
@@ -59,6 +58,7 @@ const ApplicationDetails = (props) => {
   }, [showToast]);
 
   function onActionSelect(action) {
+   
     if (action) {
       if (action?.isToast) {
         setShowToast({ key: "error", error: { message: action?.toastMessage } });
@@ -174,8 +174,12 @@ const ApplicationDetails = (props) => {
       mutate(data, {
         onError: (error, variables) => {
           setIsEnableLoader(false);
-          setShowToast({ key: "error", error });
+          setShowToast({ key: "error", error });          
           setTimeout(closeToast, 5000);
+          history.push({
+            pathname: `/digit-ui/employee/ws/success-applications/${applicationNumber}`, // 👈 send via query params
+            state: {data} // 👈 also send via state if needed
+        });
         },
         onSuccess: (data, variables) => {
           sessionStorage.removeItem("WS_SESSION_APPLICATION_DETAILS");
@@ -209,6 +213,14 @@ const ApplicationDetails = (props) => {
             }
             return
           }
+          if (isOBPS?.ws) {
+            applicationNumber = data?.WaterConnection?.[0]?.applicationNo;
+             history.push({
+            pathname: `/digit-ui/employee/ws/success-applications/${applicationNumber}`, // 👈 send via query params
+            state: {data} // 👈 also send via state if needed
+        });
+        return
+          }
           // setShowToast({ key: "success", action: selectedAction });
                 
                   history.push({
@@ -237,7 +249,8 @@ const ApplicationDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <div>
-          <ApplicationDetailsContentVerifier
+          {
+            moduleCode === "WS"?(<WSApplicationDetailsContentVerifier
             applicationDetails={applicationDetails}
             workflowDetails={workflowDetails}
             isDataLoading={isDataLoading}
@@ -249,7 +262,21 @@ const ApplicationDetails = (props) => {
             showTimeLine={showTimeLine}
             oldValue={oldValue}
             isInfoLabel={isInfoLabel}
-          />
+          />):(<ApplicationDetailsContentVerifier
+            applicationDetails={applicationDetails}
+            workflowDetails={workflowDetails}
+            isDataLoading={isDataLoading}
+            applicationData={applicationData}
+            businessService={businessService}
+            timelineStatusPrefix={timelineStatusPrefix}
+            statusAttribute={statusAttribute}
+            paymentsList={paymentsList}
+            showTimeLine={showTimeLine}
+            oldValue={oldValue}
+            isInfoLabel={isInfoLabel}
+          />)
+          }
+          
           {/* <ApplicationDetailsContent
             applicationDetails={applicationDetails}
             workflowDetails={workflowDetails}
@@ -279,6 +306,21 @@ const ApplicationDetails = (props) => {
               workflowDetails={workflowDetails}
               moduleCode={moduleCode}
             />
+            // <div style={styles.modalOverlay}>
+            //             <div style={styles.modalContent}>
+            //                 <p style={{ fontSize: "18px", fontWeight: "bold", color: "#6b133f", marginBottom: "30px" }}>
+            //                     Are you sure you want to submit this form?
+            //                 </p>
+            //                 <div style={styles.modalButtonContainer}>
+            //                     <button style={styles.modalButton} >
+            //                         Back
+            //                     </button>
+            //                     <button style={styles.modalButton}>
+            //                         Confirm
+            //                     </button>
+            //                 </div>
+            //             </div>
+            //         </div>
           ) : null}
           {isWarningPop ? (
             <ApplicationDetailsWarningPopup
@@ -290,7 +332,9 @@ const ApplicationDetails = (props) => {
             />
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />
-          <ApplicationDetailsActionBar
+           {
+            moduleCode === "WS"?
+          <ApplicationDetailsActionBarWs
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
             onActionSelect={onActionSelect}
@@ -301,6 +345,19 @@ const ApplicationDetails = (props) => {
             MenuStyle={MenuStyle}
             applicationData={applicationData}
           />
+          :
+           <ApplicationDetailsActionBar
+            workflowDetails={workflowDetails}
+            displayMenu={displayMenu}
+            onActionSelect={onActionSelect}
+            setDisplayMenu={setDisplayMenu}
+            businessService={businessService}
+            forcedActionPrefix={forcedActionPrefix}
+            ActionBarStyle={ActionBarStyle}
+            MenuStyle={MenuStyle}
+            applicationData={applicationData}
+          />
+           }
         </div>
       ) : (
         <Loader />

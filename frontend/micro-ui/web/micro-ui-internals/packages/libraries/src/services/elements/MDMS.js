@@ -763,6 +763,39 @@ const getPropertyCategoryTypeList = (tenantId, moduleCode, type) => ({
     ],
   },
 });
+const getReasonForTransferTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ReasonForTransfer",
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getNamantaranTypeTypeList = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "NamantaranType",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getSideMenuTypeList = (tenantId, moduleCode, type) => ({
   type,
@@ -1404,6 +1437,27 @@ const getPropertyCategoryType = (MdmsRes) => {
   });
   //return MdmsRes;
 };
+const getReasonForTransferType = (MdmsRes) => {
+  
+  return MdmsRes["PropertyTax"].ReasonForTransfer.filter((ReasonForTransfer) => ReasonForTransfer.active).map((ReasonForTransferDetails) => {
+    return {
+      ...ReasonForTransferDetails,
+      i18nKey: `PT_COMMON_RELATIONSHIP_${ReasonForTransferDetails.code}`,
+    };
+  });
+  // return MdmsRes;
+};
+
+const getNamantaranTypeType = (MdmsRes) => {
+  // console.log("DDDDDDDDDEEEEEEEEEE+=",MdmsRes)
+  return MdmsRes["PropertyTax"].NamantaranType.filter((NamantaranType) => NamantaranType.active).map((NamantaranTypeDetails) => {
+    return {
+      ...NamantaranTypeDetails,
+      i18nKey: `PT_COMMON_RELATIONSHIP_${NamantaranTypeDetails.code}`,
+    };
+  });
+  // return MdmsRes;
+};
 
 const getSideMenuType = (MdmsRes) => {
   console.log("DDDDDDDDD+=",MdmsRes)
@@ -1611,6 +1665,10 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getSalutationsHindiType(MdmsRes)
       case "PropertyCategory":
         return getPropertyCategoryType(MdmsRes)
+         case "ReasonForTransfer":
+        return getReasonForTransferType(MdmsRes)
+         case "NamantaranType":
+        return getNamantaranTypeType(MdmsRes)
         case "SideMenu":
         return getSideMenuType(MdmsRes)
     case "Relationship":
@@ -1915,6 +1973,14 @@ export const MdmsService = {
   },
    getPropertyCategoryType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyCategoryTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+     getReasonForTransferType: (tenantId, moduleCode, type) => {
+        console.log("SETPPPPP===22222222222222");
+    return MdmsService.getDataByCriteria(tenantId, getReasonForTransferTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+   getNamantaranTypeType: (tenantId, moduleCode, type) => {
+        console.log("SETPPPPP===22222222222222");
+    return MdmsService.getDataByCriteria(tenantId, getNamantaranTypeTypeList(tenantId, moduleCode, type), moduleCode);
   },
   getSideMenuType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getSideMenuTypeList(tenantId, moduleCode, type), moduleCode);

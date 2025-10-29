@@ -6,6 +6,8 @@ import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { PTMyPayments } from "./MyPayments";
 import PropertyCardsLanding from "./PropertyCardsLanding/PropertyCardsLanding";
+import SearchApplication from "./Namantaran/SearchApplication/SearchApplication";
+import NamantaranApplication from "./Namantaran/NamantaranApplication";
 
 const hideBackButtonConfig = [
   { screenPath: "property/new-application/acknowledgement" },
@@ -42,6 +44,10 @@ const App = () => {
   const DetailLedgerPage = Digit?.ComponentRegistryService?.getComponent("DetailLedgerPage");
 
   const TransactionList = Digit?.ComponentRegistryService?.getComponent("TransactionList");
+  const SearchApplication=Digit?.ComponentRegistryService?.getComponent("SearchApplication");
+  const NamantaranApplication=Digit?.ComponentRegistryService?.getComponent("NamantaranApplication");
+
+
 
   console.log("Digit.ComponentRegistryService.getComponent",
     Digit.ComponentRegistryService)
@@ -66,6 +72,8 @@ const App = () => {
           <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
           {/* <PrivateRoute path={`${path}/property/PreviewDemand`} component={PreviewDemand} /> */}
           <PrivateRoute path={`${path}/property/Actions`} component={PropertyCardsLanding}></PrivateRoute>
+          <PrivateRoute path={`${path}/namantaran/application`} component={NamantaranApplication}></PrivateRoute>
+          <PrivateRoute path={`${path}/namantaran/search`} component={SearchApplication}></PrivateRoute>
           <PrivateRoute path={`${path}/property/previewPayment/:consumerCode`} component={PaymentForm}></PrivateRoute>
 
           <PrivateRoute path={`${path}/property/edit-application`} component={EditProperty} />
