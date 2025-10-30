@@ -61,7 +61,7 @@ import WSAdditionalDetails from "./pages/citizen/WSMyApplications/additionalDeta
 import WSCitizenConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 import WSCitizenConsumptionDetails from "./pages/citizen/MyConnection/ConsumptionDetails";
 import WSMyPayments from "./pages/citizen/MyPayment";
-import WSCitizenEditApplication from "./pages/citizen/EditApplication";
+import WSCitizenEditApplication from "./pages/citizen/EditApplication_";
 import WSReSubmitDisconnectionApplication from "./pages/citizen/ReSubmitDisconnection";
 import WSCheckPage from "./pages/citizen/WSCreate/CheckPage";
 import WSMyConnections from "./pages/citizen/MyConnection";
@@ -69,7 +69,7 @@ import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
 import WSReSubmitDisconnectionCheckPage from "./pages/citizen/ReSubmitDisconnection/CheckPage"
 import WNSMyBillsComponent from "./pages/citizen/WnSMyBills";
-
+import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
 //Employee Components
 import ApplicationBillAmendment from "./pages/employee/ApplicationBillAmendment";
 import RequiredDocuments from "./pages/employee/RequiredDocuments";
@@ -78,7 +78,7 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import GetConnectionDetails from "./pages/employee/connectionDetails/connectionDetails";
 import ActivateConnection from "./pages/employee/ActivateConnection";
 import ApplicationDetailsBillAmendment from "./pages/employee/ApplicationDetailsBillAmendment";
-import Search from "./pages/employee/search";
+//import Search from "./pages/employee/search";
 import SearchWater from "./pages/employee/SearchWater";
 import WSEditApplication from "./pages/employee/EditApplication";
 import SuccessAppication from "./pages/employee/SuccessAppication";
@@ -88,11 +88,14 @@ import EditModifyApplication from "./pages/employee/EditModifyApplication";
 import DisconnectionApplication from "./pages/employee/DisconnectionApplication";
 import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
 import GetDisconnectionDetails from "./pages/employee/DisconnectionDetails";
-import ModifyApplicationDetails from "./pages/employee/ModifyApplicationDetails";
+import ModifyApplicationDetails from "./pages/employee/EditApplication";
 import EditDisconnectionApplication from "./pages/employee/EditDisconnectionApplication";
 import EditDisconnectionByConfig from "./pages/employee/EditDisconnectionApplication/EditDisconnectionByConfig";
 import ResubmitDisconnection from "./pages/employee/EditDisconnectionApplication/ResubmitDisconnection";
-
+//new page
+import WaterSearchForm from "./components/search/WaterSearchForm";
+import WaterSearchResults from "./components/search/WaterSearchResults";
+import WaterDetails from "./pages/employee/WaterDetails";
 
 
 const WSModule = ({ stateCode, userType, tenants }) => {
@@ -190,7 +193,10 @@ const componentsToRegister = {
   WSDisconnectionDocumentsForm,
   WSDisconnectAcknowledgement,
   WSDisconnectionAppDetails,
-
+PaymentForm,
+  WaterSearchForm,
+  WaterSearchResults,
+  WSPropertyDetails: WaterDetails,
   //Components
   WSInbox,
   BillAmendmentCard,
@@ -230,7 +236,7 @@ const componentsToRegister = {
   WSGetConnectionDetails: GetConnectionDetails,
   WSActivateConnection: ActivateConnection,
   WSApplicationDetailsBillAmendment: ApplicationDetailsBillAmendment,
-  WSSearch: Search,
+  //WSSearch: Search,
   WSSearchWater: SearchWater,
   WSEditApplication: WSEditApplication,
   SuccessAppication:SuccessAppication,

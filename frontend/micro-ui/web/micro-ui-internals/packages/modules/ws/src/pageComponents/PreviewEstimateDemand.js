@@ -309,26 +309,26 @@ const PreviewEstimateDemand = () => {
 
     console.log("Zones No=", zones)
 
-    // const handleConfirm = () => {
-    //     const flag = true;
-    //     const propertyId = applicationData?.propertyId;
-    //     history.push({
-    //         pathname: `applicationsearch/application-details/${propertyId}`, // 👈 send via query params
-    //         state: { propertyId, flag } // 👈 also send via state if needed
-    //     });
-    // };
     const handleConfirm = () => {
         const flag = true;
         const applicationNo = applicationData?.applicationNo;
-
-        sessionStorage.setItem("flag", JSON.stringify(flag));
-          window.location.href = `/digit-ui/employee/ws/application-details?applicationNumber=${applicationNo}`;
+        history.push({
+            pathname: `application-details/${applicationNo}`, // 👈 send via query params
+            state: { applicationNo, flag } // 👈 also send via state if needed
+        });
     };
+    // const handleConfirm = () => {
+    //     const flag = true;
+    //     const applicationNo = applicationData?.applicationNo;
+
+    //     sessionStorage.setItem("flag", JSON.stringify(flag));
+    //       window.location.href = `/digit-ui/employee/ws/application-details?applicationNumber=${applicationNo}`;
+    // };
 
     return (
         <div id="downloadable-component">
             <div style={{ position: "relative" }}>
-                <button style={styles.downloadBtn}><DownloadPdfButton targetId="downloadable-component" /></button>
+                {/* <button style={styles.downloadBtn}><DownloadPdfButton targetId="downloadable-component" /></button> */}
                 <div style={styles.cardD}>
                     <div style={styles.sectionHeaderDemand}>Demand</div>
 
