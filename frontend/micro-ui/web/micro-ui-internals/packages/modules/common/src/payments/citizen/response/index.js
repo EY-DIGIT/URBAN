@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
+//import { updateWSPaymentStatus } from "micro-ui-internals/packages/libraries/src/hooks/payment";
+
+
 
 export const SuccessfulPayment = (props)=>{
   const queryParams = new URLSearchParams(window.location.search);
@@ -23,7 +26,8 @@ export const SuccessfulPayment = (props)=>{
   const { eg_pg_txnid: egId, workflow: workflw, propertyId } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
-  const { businessService: business_service, consumerCode, tenantId } = useParams();
+  const { businessService: business_service, consumerCode } = useParams();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: bpaData = {}, isLoading: isBpaSearchLoading, isSuccess: isBpaSuccess, error: bpaerror } = Digit.Hooks.obps.useOBPSSearch(
     "", {}, tenantId, { applicationNo: consumerCode }, {}, {enabled:(window.location.href.includes("bpa") || window.location.href.includes("BPA"))}
   );
@@ -38,6 +42,48 @@ export const SuccessfulPayment = (props)=>{
     staleTime: Infinity,
     refetchOnWindowFocus: false,
   });
+  const {
+    isLoading: wsCalculationEstimateLoading,
+    data: wsCalculationEstimateData,
+    mutate: wsCalculationEstimateMutate,
+    errorws,
+  } = Digit.Hooks.ws.usewsCalculationEstimate(tenantId);
+ 
+
+if (data?.txnStatus === "SUCCESS" && business_service === "WS") {
+  console.log("Payment update successful:", data);
+}
+useEffect(() => {
+  if (data?.txnStatus === "SUCCESS" && business_service === "WS") {
+        (async () => {
+           try {
+         const response = await Digit.Hooks.updateWSPaymentStatus(
+          tenantId,
+          data?.applicationNo,
+          {
+            retry: false,
+            staleTime: Infinity,
+            refetchOnWindowFocus: false,
+            business_service
+          }
+        );
+        let config ={
+          retry: false,
+            staleTime: Infinity,
+            refetchOnWindowFocus: false,
+            business_service
+        }
+        
+      } catch (error) {
+        console.error("_updatestatus", error);
+      }
+    //
+        })();
+   
+  }
+}, [data?.txnStatus, business_service]);
+
+
 
   const { label } = Digit.Hooks.useApplicationsForBusinessServiceSearch({ businessService: business_service }, { enabled: false });
 
@@ -54,6 +100,7 @@ export const SuccessfulPayment = (props)=>{
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
       tenantId,
+      //"mp.indore",
       businessService: business_service,
       receiptNumbers: data?.payments?.Payments?.[0]?.paymentDetails[0].receiptNumber,
     },
@@ -130,6 +177,7 @@ export const SuccessfulPayment = (props)=>{
       </Card>
     );
   }
+  
 
   const paymentData = data?.payments?.Payments[0];
   const amount = reciept_data?.paymentDetails?.[0]?.totalAmountPaid;
@@ -200,6 +248,70 @@ const printReciept = async () => {
 
     // 2. Run calculation estimate first
     ptCalculationEstimateMutate(payload, {
+      onSuccess: async (estimateResponse) => {
+        setEstimateData(estimateResponse);
+
+        // 3. Fetch receipt using payment data
+    
+
+        let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
+
+        // 4. If receipt not already generated, generate with calculation
+        if (!paymentData?.fileStoreId) {
+          const paymentsWithCalculation = payments.Payments.map((payment) => ({
+            ...payment,
+            Calculation: estimateResponse?.Calculation?.[0] || {},
+          }));
+
+          response = await Digit.PaymentService.generatePdf(
+            state,
+            { Payments: paymentsWithCalculation },
+            generatePdfKey
+          );
+        }
+
+        // 5. Print receipt
+        const fileStore = await Digit.PaymentService.printReciept(state, {
+          fileStoreIds: response.filestoreIds[0],
+        });
+
+        if (fileStore && fileStore[response.filestoreIds[0]]) {
+          window.open(fileStore[response.filestoreIds[0]], "_blank");
+        }
+
+        setPrinting(false);
+      },
+      onError: (error) => {
+        console.error("Estimate error:", error);
+        alert("Estimate error: " + error.message);
+        setPrinting(false);
+      },
+    });
+  } catch (err) {
+    console.error("Print receipt error:", err);
+    setPrinting(false);
+  }
+};
+const printWaterReciept = async () => {
+  console.log("printReciept called");
+  if (printing) return;
+  setPrinting(true);
+
+  try {
+    const tenantId = paymentData?.tenantId;
+    const state = Digit.ULBService.getStateId();
+
+    // 1. Prepare payload
+    const payload = {
+      CalculationCriteria: [{
+        applicationNo: data?.applicationNo,
+        tenantId: tenantId,
+        // waterConnection:propertyData
+      }]
+    };
+
+    // 2. Run calculation estimate first
+    wsCalculationEstimateMutate(payload, {
       onSuccess: async (estimateResponse) => {
         setEstimateData(estimateResponse);
 
@@ -490,6 +602,11 @@ const printReciept = async () => {
             {t("CS_DOWNLOAD_RECEIPT")}
           </div>
       ) : null}
+      {/* {business_service?.includes("WS") ? (
+        <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }} onClick={printWaterReciept}>
+            {t("CS_DOWNLOAD_RECEIPT")}
+          </div>
+      ) : null} */}
       {!(business_service == "TL") || !(business_service?.includes("PT")) && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}
       {!(business_service == "TL") || !(business_service?.includes("PT")) && (
         <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
@@ -512,9 +629,11 @@ export const FailedPayment = (props) => {
 
   const getMessage = () => "Failure !";
   return (
+     <React.Fragment>
     <Card>
       <Banner message={getMessage()} complaintNumber={consumerCode} successful={false} />
       <CardText>{t("ES_COMMON_TRACK_COMPLAINT_TEXT")}</CardText>
     </Card>
+    </React.Fragment>
   );
 };

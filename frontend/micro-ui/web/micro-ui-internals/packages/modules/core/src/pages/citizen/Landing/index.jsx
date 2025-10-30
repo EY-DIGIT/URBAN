@@ -573,7 +573,7 @@ const RevenueServices = () => {
                 "Icon": "water_1",
                 "URL": {
                   "employee": "",
-                  "citizen": "/digit-ui/citizen/ws-home"
+                  "citizen": "/digit-ui/citizen/ws/water/Actions"
                 },
                 "other_data": "Water services",
                 "matadata": "Water metadata"

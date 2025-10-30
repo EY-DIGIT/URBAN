@@ -38,7 +38,7 @@ const WSApplicationDetails = () => {
     : window.location.href.substring(window.location.href.indexOf("WS_"));
   //const { acknowledgementIds } = useParams();
 
-  let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData };
+  let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData,mobileNumber:user?.info?.mobileNumber };
   const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch(
     { filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" },
     { filters: filter1, privacy: Digit.Utils.getPrivacyObject() }

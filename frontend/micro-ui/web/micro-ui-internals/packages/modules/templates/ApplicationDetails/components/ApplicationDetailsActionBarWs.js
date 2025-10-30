@@ -4,17 +4,17 @@ import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 import { useHistory, useLocation } from "react-router-dom";
 
-function ApplicationDetailsActionBarWs({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {}, applicationData }) {
+function ApplicationDetailsActionBarWs({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix, ActionBarStyle = {}, MenuStyle = {}, applicationData , ActionButton }) {
   console.log("ApplicationDetailsActionBar Props:", workflowDetails);
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
 
-  useEffect(() => {
-    const storedFlag = JSON.parse(sessionStorage.getItem("flag"));
-    if (storedFlag) {
-      setFlag(storedFlag);
-      sessionStorage.removeItem("flag"); // clear after reading once
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedFlag = JSON.parse(sessionStorage.getItem("flag"));
+  //   // if (storedFlag) {
+  //   //   setFlag(storedFlag);
+  //   //   sessionStorage.removeItem("flag"); // clear after reading once
+  //   // }
+  // }, []);
   const history = useHistory();
   const { t } = useTranslation();
   let user = Digit.UserService.getUser();
@@ -24,9 +24,12 @@ function ApplicationDetailsActionBarWs({ workflowDetails, displayMenu, onActionS
     const userInfo = userInfos ? JSON.parse(userInfos) : {};
     user = userInfo?.value;
   }
+   //const [isEmployee, setIsEmployee] = useState(true);
   const userRoles = user?.info?.roles?.map((e) => e.code);
   let isSingleButton = false;
   let isMenuBotton = false;
+ 
+ 
   let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
     return userRoles?.some((role) => e.roles?.includes(role)) || !e.roles;
   }) || workflowDetails?.data?.nextActions?.filter((e) => {
@@ -108,9 +111,11 @@ function ApplicationDetailsActionBarWs({ workflowDetails, displayMenu, onActionS
   // }
 const EditApplication = (action) => {
   history.push({
-    pathname: `/digit-ui/employee/pt/edit-update-application/${applicationData?.propertyId}`,
+   pathname: `/digit-ui/employee/ws/edit-application/${applicationData?.applicationNo}`,
+//pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationData?.applicationNo}`,
     state: { applicationData, action } // ✅ sending action too
   });
+   //window.location.href = `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationData?.applicationNo}`;
 };
   return (
     <React.Fragment>
@@ -156,13 +161,14 @@ const EditApplication = (action) => {
       </style>
 
 
-      {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
+      {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton &&  (
         <ActionBar style={{ ...ActionBarStyle, position: "relative", boxShadow: "none" }} className="forwardbutton" >
           {displayMenu && (workflowDetails?.data?.actionState?.nextActions || workflowDetails?.data?.nextActions) ? (
+           
             <Menu
              // localeKeyPrefix={forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}
              // localeKeyPrefix={forcedActionPrefix || `WF_`}
-              options={actions}
+              options={actions.filter(action => action.action !== "UPDATE")}
               optionKey={"action"}
               t={t}
               onSelect={onActionSelect}
@@ -191,7 +197,7 @@ const EditApplication = (action) => {
               )}
 
             {!actions?.some((act) => act?.action?.toUpperCase() === "FORWARD" ||
-                act?.action?.toUpperCase() === "UPDATE") && (
+                act?.action?.toUpperCase() === "UPDATE") &&  (
               <SubmitBar label={t("PREVIEW")} onSubmit={() => handlePreview()} />
             )}
             {flag && (
@@ -200,18 +206,7 @@ const EditApplication = (action) => {
           </div>
         </ActionBar>
       )}
-      {/* {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (
-        <ActionBar style={{ ...ActionBarStyle }}>
-          <button
-            style={{ color: "#FFFFFF", fontSize: "18px" }}
-            className={"submit-bar"}
-            name={actions?.[0]?.action}
-            value={actions?.[0]?.action}
-            onClick={(e) => { onActionSelect(actions?.[0] || {}) }}>
-            {t(`${forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}_${actions?.[0]?.action}`)}
-          </button>
-        </ActionBar>
-      )} */}
+      
     </React.Fragment>
   );
 }

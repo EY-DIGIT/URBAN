@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useHistory, Link } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import Popup from "../PaymentPopUp/PaymentPopUp"
-
+import { Styles} from "../../../utils/cssHelper";
+import  {toSentenceCase}  from "../../../utils/masterdataconvertHelper"
 const SearchWater = ({ onSelect }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -143,7 +144,7 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
 
   const proceedToPay = (property) => {
     // history.push(`/digit-ui/citizen/payment/my-bills/PT/${property.propertyId}`, { tenantId });
-    history.push(`/digit-ui/citizen/ws/property/previewPayment/${property.propertyId}`, { tenantId });
+    history.push(`/digit-ui/citizen/ws/water/previewPayment?consumerCode=${property.applicationNo}&businessService=WS`, { tenantId });
   };
 
   // Pagination logic
@@ -208,20 +209,20 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
         padding: "10px",
       }}
     >
-      <div style={containerStyle}>
-        <h4 style={headingStyle}>{t("SEARCH_WATER_APPLICATION")}</h4>
-        <div style={rowStyle}>
-          <div style={inputGroupWrapper}>
+      <div style={Styles.containerStyle}>
+        <h4 style={Styles.headingStyle}>{t("SEARCH_WATER_APPLICATION")}</h4>
+        <div style={Styles.rowStyle}>
+          <div style={Styles.inputGroupWrapper}>
             
             <div>
-              <label style={labelStyle}>
+              <label style={Styles.labelStyle}>
                 {t("WATER_APPLICATION")} <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="text"
                 id="applicationIdInput"
                 placeholder={t("Enter Application Number")}
-                style={inputStyle}
+                style={Styles.inputStyle}
                 //value={formValue?.propertyIds || ""}
                 // onChange={(e) =>
                 //   setFormValue((prev) => ({
@@ -236,13 +237,13 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
             {/* <div style={orStyle}>OR</div> */}
 
             <div>
-              <label style={labelStyle}>
+              <label style={Styles.labelStyle}>
                 {t("Mobile Number")} <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="text"
                 placeholder={t("Mobile Number")}
-                style={inputStyle}
+                style={Styles.inputStyle}
                 value={formValue?.mobileNumber || ""}
                 onChange={(e) =>
                   setFormValue((prev) => ({
@@ -255,13 +256,11 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
             </div>
           </div>
 
-          <div style={buttonGroupStyle}>
-            <button onClick={handleClear} style={clearButtonStyle}>
+          <div style={Styles.buttonGroupStyle}>
+            <button onClick={handleClear} style={Styles.clearButtonStyle}>
               {t("CITIZEN_CLEAR_BUTTON")}
             </button>
-            {/* <button onClick={onPropertySearch} style={findButtonStyle}>
-              {t("CITIZEN_FIND_BUTTON")}
-            </button> */}
+            
             <button
               onClick={() => {
                 const propertyId = document.getElementById("applicationIdInput").value; 
@@ -272,7 +271,7 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
                 }));
                 onPropertySearch();
               }}
-              style={findButtonStyle}
+              style={Styles.findButtonStyle}
             >
               {t("CITIZEN_FIND_BUTTON")}
             </button>
@@ -282,18 +281,19 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
 
       {/* Results Table */}
       {searchResults && searchResults.length > 0 && (
-        <div style={paymentSectionStyle}>
+        <div style={Styles.paymentSectionStyle}>
           {/* <h3 style={paymentHeadingStyle}>{t("PAYMENT")}</h3> */}
 
-          <table style={tableStyle}>
+          <table style={Styles.tableStyle}>
             <thead>
               <tr>
-                <th style={thStyle}>{t("APPLICATION_NUMBER")}</th>
-                <th style={thStyle}>{t("OWNER_NAME")}</th>
-                <th style={thStyle}>{t("MOBILE_NUMBER")}</th>
+                <th style={Styles.thStyle}>{t("APPLICATION_NUMBER")}</th>
+                <th style={Styles.thStyle}>{t("OWNER_NAME")}</th>
+                 <th style={Styles.thStyle}>{t("ConsumerNumber")}</th>
+                <th style={Styles.thStyle}>{t("MOBILE_NUMBER")}</th>
                 {/* <th style={thStyle}>{t("PAYMENT_AMOUNT")}</th> */}
-                <th style={thStyle}>{t("STATUS")}</th>
-                <th style={{ ...thStyle, textAlign: "center" }}>{t("ACTION")}</th>
+                <th style={Styles.thStyle}>{t("STATUS")}</th>
+                <th style={{ ...Styles.thStyle, textAlign: "center" }}>{t("ACTION")}</th>
               </tr>
             </thead>
             <tbody>
@@ -301,19 +301,34 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
                 const owner = property.owners?.[0] || {};
                 return (
                   <tr key={property.applicationNo}>
-                    <td style={tdStyle}>{property.applicationNo}</td>
-                    <td style={tdStyle}>{property.ConsumerName || "-"}</td>
-                    <td style={tdStyle}>{property.mobileNumber || "-"}</td>
-                    <td style={tdStyle}>
+                    <td style={Styles.tdStyle}>
+                      
+                      {/* {property.applicationNo} */}
+                       <span className="link">
+                                              <Link to={`/digit-ui/citizen/ws/application-details?applicationNumber=${property.applicationNo}`}>
+                                                {property.applicationNo}
+                                              </Link>
+                                            </span>
+                      
+                      </td>
+                    <td style={Styles.tdStyle}>{property.ConsumerName || "-"}</td>
+                     <td style={Styles.tdStyle}>{property.ConsumerNumber || "-"}</td>
+                     
+                    <td style={Styles.tdStyle}>{property.mobileNumber || "-"}</td>
+                    <td style={Styles.tdStyle}>
                       {/* ₹ {(property.due || 0).toLocaleString("en-IN")} */}
-                      {property.applicationStatus || "-"}
+                      <span style={property.applicationStatus ==="APPROVED"? Styles.statusActive:property.applicationStatus ==="REJECTED"? Styles.statusInactive:Styles.statusInWorkflow}>
+                      
+                      {toSentenceCase(property.applicationStatus) || "-"}
+                      </span>
                     </td>
-                    <td style={{ ...tdStyle, textAlign: "center" }}>
+                    <td style={{ ...Styles.tdStyle, textAlign: "center" }}>
                       <button
                         style={{
-                          ...payButtonStyle,
-                          opacity:property.applicationStatus !=="PENDING PAYMENT" ? 0.5:1,
-                          opacity:property.applicationStatus !=="PENDING PAYMENT"?"pointer" : "not-allowed",
+                          ...Styles.payButtonStyle,
+                          ...property.applicationStatus ==="PENDING PAYMENT" ? Styles.activePageButton:Styles.disabledButtonStyle
+                          // opacity:property.applicationStatus !=="PENDING PAYMENT" ? 0.5:1,
+                          // cursor:property.applicationStatus ==="PENDING PAYMENT"?"pointer" : "not-allowed",
                          // opacity: property.due === 0 || property.applicationStatus !=="PENDING PAYMENT" ||  !property?.due ? 0.5 : 1,
                          // cursor: property.due === 0 || property.applicationStatus !=="PENDING PAYMENT" ||  !property?.due ? "not-allowed" : "pointer"
                         }}
@@ -332,18 +347,18 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
 
           {/* Pagination Controls */}
           {totalPages > 1 && data && data.length>0 && (
-            <div style={paginationContainer}>
-              <div style={paginationInfo}>
+            <div style={Styles.paginationContainer}>
+              <div style={Styles.paginationInfo}>
                 Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, data.length)} of {data.length} results
               </div>
 
-              <div style={paginationControls}>
+              <div style={Styles.paginationControls}>
                 <button
                   onClick={handlePrevious}
                   disabled={currentPage === 1}
                   style={{
-                    ...paginationButton,
-                    ...(currentPage === 1 ? disabledButtonStyle : {})
+                    ...Styles.paginationButton,
+                    ...(currentPage === 1 ? Styles.disabledButtonStyle : {})
                   }}
                 >
                   Previous
@@ -351,14 +366,14 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
 
                 {getPageNumbers().map((number, index) => (
                   number === '...' ? (
-                    <span key={`dots-${index}`} style={paginationDots}>...</span>
+                    <span key={`dots-${index}`} style={Styles.paginationDots}>...</span>
                   ) : (
                     <button
                       key={number}
                       onClick={() => handlePageChange(number)}
                       style={{
-                        ...paginationButton,
-                        ...(currentPage === number ? activePageButton : {})
+                        ...Styles.paginationButton,
+                        ...(currentPage === number ? Styles.activePageButton : {})
                       }}
                     >
                       {number}
@@ -370,8 +385,8 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
                   onClick={handleNext}
                   disabled={currentPage === totalPages}
                   style={{
-                    ...paginationButton,
-                    ...(currentPage === totalPages ? disabledButtonStyle : {})
+                    ...Styles.paginationButton,
+                    ...(currentPage === totalPages ? Styles.disabledButtonStyle : {})
                   }}
                 >
                   Next
@@ -383,8 +398,8 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
       )}
 
       {/* No Results Message */}
-      {propertyDataLoading === false && data.length === 0 && (formValue.propertyIds || formValue.mobileNumber) && (
-        <div style={noResultsStyle}>
+      {propertyDataLoading === false && data && data.length === 0 && (formValue.propertyIds || formValue.mobileNumber) && (
+        <div style={Styles.noResultsStyle}>
           {t("CS_WS_NO_APPLICATION_FOUND")}
         </div>
       )}
@@ -410,200 +425,3 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
 };
 
 export default SearchWater;
-
-// -------------------------------------------
-// STYLES
-// -------------------------------------------
-const containerStyle = {
-  background: "#fff",
-  borderRadius: "10px",
-  padding: "20px 30px",
-  maxWidth: "1000px",
-  fontFamily: "sans-serif",
-};
-
-const headingStyle = {
-  margin: "0 0 24px 0",
-  fontFamily: "Barlow, sans-serif",
-  fontWeight: 600,
-  fontSize: "20px",
-  color: "#6B133F",
-};
-
-const rowStyle = {
-  display: "flex",
-  alignItems: "flex-end",
-  gap: "50px",
-  flexWrap: "wrap",
-};
-
-const inputGroupWrapper = {
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  flexWrap: "wrap",
-};
-
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontFamily: "Noto Sans, sans-serif",
-  fontWeight: 400,
-  fontSize: "14px",
-  color: "#505050",
-};
-
-const inputStyle = {
-  width: "300px",
-  padding: "10px 14px",
-  borderRadius: "4px",
-  border: "1px solid #D6D5D4",
-  backgroundColor: "#F7F7F7",
-  fontSize: "14px",
-  outline: "none",
-  transition: "all 0.2s",
-};
-
-const orStyle = {
-  fontWeight: "bold",
-  color: "#555",
-};
-
-const buttonGroupStyle = {
-  display: "flex",
-  gap: "12px",
-  marginTop: "20px",
-};
-
-const baseButtonStyle = {
-  padding: "8px 32px",
-  borderRadius: "4px",
-  fontSize: "14px",
-  fontWeight: 500,
-  cursor: "pointer",
-  transition: "all 0.2s",
-  border: "none",
-  minWidth: "80px",
-};
-
-const clearButtonStyle = {
-  ...baseButtonStyle,
-  backgroundColor: "#6B133F",
-  color: "#fff",
-};
-
-const findButtonStyle = {
-  ...baseButtonStyle,
-  backgroundColor: "#6B133F",
-  color: "#fff",
-};
-
-const paymentSectionStyle = {
-  marginTop: "32px",
-  padding: "0 20px"
-};
-
-const paymentHeadingStyle = {
-  margin: "0 0 16px 0",
-  fontFamily: "Barlow, sans-serif",
-  fontWeight: 600,
-  fontSize: "18px",
-  color: "#000",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
-  backgroundColor: "#fff",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  borderRadius: "8px",
-  overflow: "hidden",
-};
-
-const thStyle = {
-  backgroundColor: "#E8D4DE",
-  padding: "12px 16px",
-  textAlign: "left",
-  fontWeight: 500,
-  fontSize: "14px",
-  color: "#505050",
-  borderBottom: "1px solid #E0E0E0",
-};
-
-const tdStyle = {
-  padding: "12px 16px",
-  fontSize: "14px",
-  color: "#333",
-  borderBottom: "1px solid #F0F0F0",
-};
-
-const payButtonStyle = {
-  backgroundColor: "#fff",
-  border: "1px solid #6B133F",
-  color: "#6B133F",
-  padding: "6px 24px",
-  borderRadius: "20px",
-  cursor: "pointer",
-  fontSize: "14px",
-  fontWeight: 500,
-  transition: "all 0.2s",
-};
-
-const noResultsStyle = {
-  padding: "32px",
-  textAlign: "center",
-  backgroundColor: "#fff",
-  borderRadius: "8px",
-  color: "#666",
-};
-
-// Pagination styles
-const paginationContainer = {
-  marginTop: "20px",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  flexWrap: "wrap",
-  gap: "16px"
-};
-
-const paginationInfo = {
-  color: "#666",
-  fontSize: "14px",
-};
-
-const paginationControls = {
-  display: "flex",
-  alignItems: "center",
-  gap: "8px",
-};
-
-const paginationButton = {
-  padding: "6px 12px",
-  border: "1px solid #D6D5D4",
-  backgroundColor: "#fff",
-  color: "#333",
-  borderRadius: "4px",
-  cursor: "pointer",
-  fontSize: "14px",
-  transition: "all 0.2s",
-  minWidth: "32px",
-};
-
-const activePageButton = {
-  backgroundColor: "#6B133F",
-  color: "#fff",
-  border: "1px solid #6B133F", // ✅ shorthand replaces both border & borderColor
-};
-
-
-const disabledButtonStyle = {
-  opacity: 0.5,
-  cursor: "not-allowed",
-  backgroundColor: "#f5f5f5",
-};
-
-const paginationDots = {
-  padding: "0 8px",
-  color: "#666",
-};

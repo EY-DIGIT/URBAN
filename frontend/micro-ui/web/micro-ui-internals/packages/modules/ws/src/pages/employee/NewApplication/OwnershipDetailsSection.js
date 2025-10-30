@@ -212,7 +212,7 @@ const OwnershipDetailsSection = ({
              // selected={{ name: owner.gender }}
               selected={genderTypeOptions.find(opt => opt.code === owner.gender)}
               disabled={owner.gender?false:false}
-              select={(val) => updateOwner(index, "gender", val.name)}
+              select={(val) => updateOwner(index, "gender", val.code)}
               optionKey="name"
               placeholder={t("Select")}
               style={styles.widthInput}
@@ -297,7 +297,7 @@ const OwnershipDetailsSection = ({
 
 
                 if (val.code === "Not applicable") {
-                  updateOwner(index, "fatherHusbandName", "Not Applicable");
+                  updateOwner(index, "fatherOrHusbandName", "Not Applicable");
                 }
               }}
               optionKey="name"
@@ -316,19 +316,19 @@ const OwnershipDetailsSection = ({
             </div>
             <TextInput
               style={styles.widthInput}
-              value={owner.fatherHusbandName}
-              disabled={owner.fatherHusbandName === "Not applicable" ? false : false}
-              onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
+              value={owner.fatherOrHusbandName}
+              disabled={owner.fatherOrHusbandName === "Not applicable" ? false : false}
+              onChange={(e) => handleOwnerNameChange(index, "fatherOrHusbandName", e.target.value)}
               placeholder={t("Enter")}
               //disabled={owner.relationship === "Not applicable"}
             />
             {owner.relationship === "Not applicable" ?
-              "" : <div>  {formErrors[`owner-${index}-fatherHusbandName`] && (
-                <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+              "" : <div>  {formErrors[`owner-${index}-fatherOrHusbandName`] && (
+                <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherOrHusbandName`]}</p>
               )}</div>}
 
-            {/* {formErrors[`owner-${index}-fatherHusbandName`] && (
-              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherHusbandName`]}</p>
+            {/* {formErrors[`owner-${index}-fatherOrHusbandName`] && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-fatherOrHusbandName`]}</p>
             )} */}
 
 

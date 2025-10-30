@@ -9,6 +9,7 @@ import ActionModal from "./Modal";
 import { useHistory, useParams } from "react-router-dom";
 // import ApplicationDetailsContentVerifier from "./components/ApplicationDetailsContentVerifier";
 import ApplicationDetailsContent from "./components/ApplicationDetailsContent";
+import ApplicationDetailsWSContent from "./components/ApplicationDetailsWSContent"
 import ApplicationDetailsToast from "./components/ApplicationDetailsToast";
 import ApplicationDetailsActionBar from "./components/ApplicationDetailsActionBar";
 import ApplicationDetailsWarningPopup from "./components/ApplicationDetailsWarningPopup";
@@ -201,7 +202,9 @@ console.log("ApplicationDetails Props:", props);
             oldValue={oldValue}
             isInfoLabel={isInfoLabel}
           /> */}
-          <ApplicationDetailsContent
+                     {
+            businessService === "WS"?
+          <ApplicationDetailsWSContent
             applicationDetails={applicationDetails}
             workflowDetails={workflowDetails}
             isDataLoading={isDataLoading}
@@ -214,6 +217,20 @@ console.log("ApplicationDetails Props:", props);
             oldValue={oldValue}
             isInfoLabel={isInfoLabel}
           />
+          :
+                  <ApplicationDetailsContent
+            applicationDetails={applicationDetails}
+            workflowDetails={workflowDetails}
+            isDataLoading={isDataLoading}
+            applicationData={applicationData}
+            businessService={businessService}
+            timelineStatusPrefix={timelineStatusPrefix}
+            statusAttribute={statusAttribute}
+            paymentsList={paymentsList}
+            showTimeLine={showTimeLine}
+            oldValue={oldValue}
+            isInfoLabel={isInfoLabel}
+          />    }
           {showModal ? (
             <ActionModal
               t={t}
