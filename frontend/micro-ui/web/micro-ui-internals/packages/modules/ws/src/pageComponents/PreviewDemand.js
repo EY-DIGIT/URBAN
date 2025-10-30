@@ -375,10 +375,7 @@ const PreviewDemand = () => {
     {"taxHeadCode": "WS_MONTHLY_CHARGE", "estimateAmount": WaterConnection?.connectionCharges?.monthlyCharges||0, "category": "MONTHLY"},   
 ]
 //calculation["taxHeadEstimates"].extend(new_tax_heads)
-pushUniqueTaxHeads(calculation, new_tax_heads);
-
-    console.log("calculation", calculation);
-    console.log("proOwnerDetail", proOwnerDetail);
+//pushUniqueTaxHeads(calculation, new_tax_heads);
     useEffect(() => {
         setMutationHappened(false);
         clearSuccessData();
@@ -417,10 +414,10 @@ function pushUniqueTaxHeads(estimateData, newHeads) {
             state: {
                 generalDetails: {
                     id: WaterConnection.id,                    
-                    propertyId: proOwnerDetail.propertyId,
-                    oldPropertyId: proOwnerDetail.oldPropertyId,
-                    creationReason: proOwnerDetail.creationReason,
-                    propertyType: proOwnerDetail.propertyType,                 
+                    propertyId: proOwnerDetail.propertyId ||0,
+                    oldPropertyId: proOwnerDetail.oldPropertyId ||0,
+                    creationReason: proOwnerDetail.creationReason ||"default prop create",
+                    propertyType: proOwnerDetail.propertyType || proOwnerDetail.propertyCategory,                 
                    
                 }, 
                 WaterConnection:WaterConnection,  

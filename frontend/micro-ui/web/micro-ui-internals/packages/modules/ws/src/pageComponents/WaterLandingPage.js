@@ -291,14 +291,14 @@ const WSDocsRequired = () => {
     }
   };
 
-  // const userInfo = Digit.UserService.getUser();
+   const userInfo = Digit.UserService.getUser();
    const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
    console.log(stateInfo)
-  // const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
-  // const billCollectorRoles = ["PT_CEMP", "PT_FIELD_INSPECTOR"];
+   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+   const billCollectorRoles = ["IMCCOUNTER", "IMCCOUNTERUSER"];
   // const ARORoles = ["PT_APPROVER"];
 
-  // const isBillCollector = billCollectorRoles.some(role => userRoles.includes(role));
+   const isBillCollector = billCollectorRoles.some(role => userRoles.includes(role));
   // const isARO = ARORoles.some(role => userRoles.includes(role));
 
   
@@ -415,7 +415,7 @@ const WSDocsRequired = () => {
                 link: "/digit-ui/employee/ws/application-search",
               },
             ].map((card) => (
-              // (isBillCollector || card.text !== "New Property Application Form") &&
+               (isBillCollector || card.text !== t("NEWWATERAPPLICATIONFORM")) &&
               <div style={styles.actionCard} key={card.text}>
                 <span><img src={stateInfo?.uiImageAssets[card?.image]}/></span>
                 <p>

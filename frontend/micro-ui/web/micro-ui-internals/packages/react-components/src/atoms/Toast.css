@@ -1,0 +1,45 @@
+.toast-success {
+  transition: none;
+  opacity: 1;
+  max-height: 200px;
+  transform: translateY(0);
+  overflow: hidden;
+  animation: fadeIn 0.4s ease;
+  background: blue !important;
+}
+
+.toast-success.closing {
+  animation: closeToast 1.4s ease forwards;
+  -webkit-animation: closeToast 1.4s ease forwards;
+}
+
+@keyframes closeToast {
+  0% {
+    opacity: 1;
+    max-height: 200px;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 0.5;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-14px);
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

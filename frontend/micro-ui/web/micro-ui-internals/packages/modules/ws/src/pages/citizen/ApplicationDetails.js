@@ -41,9 +41,10 @@ const ApplicationDetails = () => {
   const isMobile = window.Digit.Utils.browser.isMobile();
   const [showOptions, setShowOptions] = useState(false);
   let filters = func.getQueryStringParams(location.search);
-  const applicationNumber = filters?.applicationNumber;
+  const applicationNumber = id ;// filters?.applicationNumber;
+  const mobileNumber = userInfo?.info?.mobileNumber
  // const applicationNumber = "WS_AP/1013/2025-26/000126";
-  const serviceType = filters?.service;
+  const serviceType = "WATER";//filters?.service;
   const menuRef = useRef();
 
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
@@ -85,7 +86,7 @@ const ApplicationDetails = () => {
     userInfo,
     { privacy: Digit.Utils.getPrivacyObject() }
   );
-
+console.log("applicationDetailsq", applicationDetails)
   function checkforPrivacyenablement() {
     if (
       !isLoading &&
@@ -450,10 +451,9 @@ const ApplicationDetails = () => {
   return (
     <Fragment>
       <div className={"employee-main-application-details"}>
-        <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
-          <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
-
-          {/* {dowloadOptions && dowloadOptions.length > 0 && (
+        {/* <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
+         
+          {dowloadOptions && dowloadOptions.length > 0 && (
             <MultiLink
               className="multilinkWrapper employee-mulitlink-main-div"
               onHeadClick={() => setShowOptions(!showOptions)}
@@ -463,8 +463,8 @@ const ApplicationDetails = () => {
               optionsClassName={"employee-options-btn-className"}
               ref={menuRef}
             />
-          )} */}
-        </div>
+          )}
+        </div> */}
 
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
@@ -475,6 +475,7 @@ const ApplicationDetails = () => {
           workflowDetails={workflowDetails}
           businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}
           moduleCode="WS"
+          ActionButton={false}
           showToast={showToast}
           setShowToast={setShowToast}
           closeToast={closeToast}
