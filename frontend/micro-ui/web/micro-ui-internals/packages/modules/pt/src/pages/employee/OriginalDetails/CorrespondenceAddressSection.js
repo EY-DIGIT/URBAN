@@ -1,11 +1,11 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 
 const CorrespondenceAddressSection = ({
   t,
-address,
+  address,
   styles
 }) => {
- const getFullAddress = (address) => {
+  const getFullAddress = (address) => {
     if (!address) return "";
     const { doorNo, street, locality, ward, zone, pincode } = address;
     return `${doorNo || ""} ${street || ""} ${locality?.name || ""} ${ward || ""} ${zone || ""} ${pincode || ""}`.trim();
@@ -17,7 +17,7 @@ address,
         <textarea
           style={styles.widthInputs}
           placeholder={t("Enter")}
-         value={getFullAddress(address)}
+          value={getFullAddress(address)}
           disabled
 
         />
@@ -25,9 +25,9 @@ address,
           <label style={styles.checkboxLabel}>
             <input
               type="checkbox"
-          checked
+              checked
               style={{ padding: "10px" }}
-               disabled={true}
+              disabled={true}
             />
             {"  "} {t("Same as property address")}
           </label>
