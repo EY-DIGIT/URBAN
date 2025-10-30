@@ -266,7 +266,7 @@ const CitizenServicesCards = () => {
                     "ARO",
                     "employee"
                   ],
-                  "URL": "/namantran",
+                  "URL": "/digit-ui/employee/pt/NamantranSearchApp",
                   "Icon": "namantranIcon"
                 },
                 "cashDesk": {

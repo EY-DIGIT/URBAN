@@ -230,7 +230,7 @@ const NewApplication = () => {
           isCorrespondenceAddress: correspondenceAddress,
           mobileNumber: owner.mobile,
           emailId: owner.email,
-          ownerType: propertyDetails.exemption.code,
+          ownerType: propertyDetails.exemption.code ? propertyDetails.exemption.code : null,
           permanentAddress:
             addressDetails.address,
           relationship: owner.relationship,
@@ -549,7 +549,7 @@ const NewApplication = () => {
           isCorrespondenceAddress: correspondenceAddress,
           mobileNumber: owner.mobile,
           emailId: owner.email,
-          ownerType: propertyDetails.exemption.code,
+          ownerType: propertyDetails.exemption.code ? propertyDetails.exemption.code : null,
           permanentAddress:
             addressDetails.address,
           relationship: owner.relationship,

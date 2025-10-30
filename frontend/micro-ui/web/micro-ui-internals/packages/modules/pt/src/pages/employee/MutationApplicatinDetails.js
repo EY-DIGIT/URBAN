@@ -5,15 +5,16 @@ import { useHistory } from "react-router-dom";
 import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 import PropertyDocument from "../../pageComponents/PropertyDocument";
 import PTWFApplicationTimeline from "../../pageComponents/PTWFApplicationTimeline";
-import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle,getMohallaLocale } from "../../utils";
-import ApplicationDetailsActionBar from "../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
+import { getCityLocale, getPropertyTypeLocale, propertyCardBodyStyle, getMohallaLocale } from "../../utils";
+import ApplicationDetailsActionBar from "../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBarNamantran";
 import ActionModal from "../../../../templates/ApplicationDetails/Modal";
 import { newConfigMutate } from "../../config/Mutate/config";
 import _ from "lodash";
 import get from "lodash/get";
 import { pdfDownloadLink } from "../../utils";
+import ApplicationDetailsContentVerifier from "../../../../templates/ApplicationDetails/components/ApplicationDetailsContentNamantran";
 
-const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDetails, mutate}) => {
+const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDetails, mutate }) => {
   const { t } = useTranslation();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
@@ -25,8 +26,8 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   const history = useHistory();
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
-    { filters: { acknowledgementIds },tenantId },
-    { filters: { acknowledgementIds },tenantId }
+    { filters: { acknowledgementIds }, tenantId },
+    { filters: { acknowledgementIds }, tenantId }
   );
   const [billAmount, setBillAmount] = useState(null);
   const [billStatus, setBillStatus] = useState(null);
@@ -44,7 +45,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     },
     {
       enabled: true,
-       // select: (d) =>
+      // select: (d) =>
       //   d.Properties.filter((e) => e.status === "ACTIVE")?.sort((a, b) => b.auditDetails.lastModifiedTime - a.auditDetails.lastModifiedTime),
       // select: (data) => data.Properties?.filter((e) => e.status === "ACTIVE")
     }
@@ -56,7 +57,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
       consumerCodes: acknowledgementIds,
       isEmployee: true,
     },
-    {enabled: acknowledgementIds?true:false}
+    { enabled: acknowledgementIds ? true : false }
   );
 
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
@@ -64,11 +65,11 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   const [selectedAction, setSelectedAction] = useState(null);
   const { isLoading: isLoadingApplicationDetails, isError: isErrorApplicationDetails, data: applicationDetails, error: errorApplicationDetails } = Digit.Hooks.pt.useApplicationDetail(t, tenantId, propertyId);
 
-  useEffect(async ()=>{
-    if(acknowledgementIds){
-      const res = await Digit.PaymentService.searchBill(tenantId, {Service: businessService, consumerCode: acknowledgementIds});
-      if(! res.Bill.length) {
-        const res1 = await Digit.PTService.ptCalculateMutation({Property: applicationDetails?.applicationData}, tenantId);
+  useEffect(async () => {
+    if (acknowledgementIds) {
+      const res = await Digit.PaymentService.searchBill(tenantId, { Service: businessService, consumerCode: acknowledgementIds });
+      if (!res.Bill.length) {
+        const res1 = await Digit.PTService.ptCalculateMutation({ Property: applicationDetails?.applicationData }, tenantId);
         setBillAmount(res1?.[acknowledgementIds]?.totalAmount || t("CS_NA"))
         setBillStatus(t(`PT_MUT_BILL_ACTIVE`))
       } else {
@@ -76,7 +77,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
         setBillStatus(t(`PT_MUT_BILL_${res?.Bill[0]?.status?.toUpperCase()}`))
       }
     }
-  },[tenantId, acknowledgementIds, businessService])
+  }, [tenantId, acknowledgementIds, businessService])
 
   useEffect(() => {
     showTransfererDetails();
@@ -126,7 +127,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
         setIsEnableLoader(false);
         let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
-        setShowToast({ key: "error", error: {message: errorValue}});
+        setShowToast({ key: "error", error: { message: errorValue } });
         setTimeout(closeToast, 5000);
         return;
       }
@@ -152,7 +153,11 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
           if (isOBPS?.isNoc) {
             history.push(`/digit-ui/employee/noc/response`, { data: data });
           }
-          setShowToast({ key: "success", action: selectedAction });
+          // setShowToast({ key: "success", action: selectedAction });
+          history.push({
+            pathname: `/digit-ui/employee/pt/success-applications/${acknowledgementIds}`, // 👈 send via query params
+            state: { data } // 👈 also send via state if needed
+          });
           setTimeout(closeToast, 5000);
           queryClient.clear();
           queryClient.refetchQueries("APPLICATION_SEARCH");
@@ -163,9 +168,9 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     closeModal();
   };
 
-  async function getRecieptSearch({tenantId,payments,...params}) {
+  async function getRecieptSearch({ tenantId, payments, ...params }) {
     let response = { filestoreIds: [payments?.fileStoreId] };
-      response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{...payments}] }, "consolidatedreceipt");
+    response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{ ...payments }] }, "consolidatedreceipt");
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
@@ -193,7 +198,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } 
+    }
 
     setSelectedAction(action);
     setDisplayMenu(false);
@@ -247,7 +252,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
 
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
-    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const propertyIndex = property.status == 'ACTIVE' ? 1 : 0;
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
     // Removed filter(property => property.status == 'ACTIVE') condition to match result in qa env
     // const previousActiveProperty = propertiesAudit.sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
@@ -272,12 +277,12 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     property,
     "institutionTemp", []
   );
-  
+
   let transferorInstitution = get(
     property,
     "institutionInit", []
-    );
-    
+  );
+
   let units = [];
   units = application?.units;
   units &&
@@ -309,7 +314,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     i = 0;
   flrno = units && units[0]?.floorNo;
 
- // const isPropertyTransfer = property?.creationReason && property.creationReason === "MUTATION" ? true : false;
+  // const isPropertyTransfer = property?.creationReason && property.creationReason === "MUTATION" ? true : false;
 
   const handleDownloadPdf = async () => {
     const applications = application || {};
@@ -319,7 +324,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   };
 
   let documentDate = t("CS_NA");
-  if(property?.additionalDetails?.documentDate) {
+  if (property?.additionalDetails?.documentDate) {
     const date = new Date(property?.additionalDetails?.documentDate);
     const month = Digit.Utils.date.monthNames[date.getMonth()];
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
@@ -337,16 +342,16 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
     label: t("MT_APPLICATION"),
     onClick: () => handleDownloadPdf()
   });
-  if(reciept_data && reciept_data?.Payments.length>0 && recieptDataLoading == false)
-  dowloadOptions.push({
-    label: t("MT_FEE_RECIEPT"),
-    onClick: () => getRecieptSearch({tenantId: reciept_data?.Payments[0]?.tenantId,payments: reciept_data?.Payments[0]})
-  });
-  if(data?.Properties?.[0]?.creationReason === "MUTATION" && data?.Properties?.[0]?.status === "ACTIVE")
-  dowloadOptions.push({
-    label: t("MT_CERTIFICATE"),
-    onClick: () => printCertificate()
-  });
+  if (reciept_data && reciept_data?.Payments.length > 0 && recieptDataLoading == false)
+    dowloadOptions.push({
+      label: t("MT_FEE_RECIEPT"),
+      onClick: () => getRecieptSearch({ tenantId: reciept_data?.Payments[0]?.tenantId, payments: reciept_data?.Payments[0] })
+    });
+  if (data?.Properties?.[0]?.creationReason === "MUTATION" && data?.Properties?.[0]?.status === "ACTIVE")
+    dowloadOptions.push({
+      label: t("MT_CERTIFICATE"),
+      onClick: () => printCertificate()
+    });
 
   const getCardSubHeadrStyles = () => {
     return { fontSize: "24px", fontWeight: "700", lineHeight: "28px", margin: "20px 0px" }
@@ -355,33 +360,33 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
   return (
     <React.Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto" }}>
-      <Header styles={{fontSize: "32px", marginLeft: "12px"}}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
-      <div>
+        <Header styles={{ fontSize: "32px", marginLeft: "12px" }}>{t("PT_MUTATION_APPLICATION_DETAILS")}</Header>
+        <div>
           <div>
-          {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
-          onHeadClick={() => setShowOptions(!showOptions)}
-          displayOptions={showOptions}
-          options={dowloadOptions}
-          className="multilinkWrapper"
-          style={{top:"90px"}}
-          />}
+            {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
+              onHeadClick={() => setShowOptions(!showOptions)}
+              displayOptions={showOptions}
+              options={dowloadOptions}
+              className="multilinkWrapper"
+              style={{ top: "90px" }}
+            />}
           </div>
         </div>
       </div>
-        <Card>
-           <StatusTable>
+      <Card>
+        {/* <StatusTable>
              <Row label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_SEARCHPROPERTY_TABEL_PTUID")} text={property?.propertyId} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_APPLICATION_CHANNEL_LABEL")} text={t(`ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${property?.channel}`)} />
              <Row label={t("PT_FEE_AMOUNT")} text={billAmount} textStyle={{ whiteSpace: "pre" }} />
              <Row label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
             
-          </StatusTable>
-                 <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
+          </StatusTable> */}
+        {/* <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
               <Row label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
               <Row label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
-              <Row label={t("PT_COMMON_LOCALITY_OR_MOHALLA")} text=/* {`${t(application?.address?.locality?.name)}` || t("CS_NA")} */{t(`${(property?.address?.locality?.area)}`) || t("CS_NA")} />
+             
               <Row label={t("PT_PROPERTY_ADDRESS_STREET_NAME")} text={property?.address?.street || t("CS_NA")} />
               <Row label={t("PT_DOOR_OR_HOUSE")} text={property?.address?.doorNo || t("CS_NA")} />
          
@@ -404,7 +409,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                         <Row label={t("Guardian Name")} text={owner?.fatherOrHusbandName || t("CS_NA")} />   
                         <Row label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
                         <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                        <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={ owner?.ownerType.toLowerCase() || t("CS_NA")} />
+
                         <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
                       </StatusTable>
                     </div>
@@ -458,7 +463,7 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                             <Row label={t("PT_FORM3_RELATIONSHIP")} text={t(owner?.relationship) || t("CS_NA")} />
                             <Row label={t("PT_MUTATION_AUTHORISED_EMAIL")}text={owner?.emailId || t("CS_NA")} />
                             <Row label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
-                            <Row label={t("PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY")} text={(owner?.ownerType).toLowerCase() || t("CS_NA")} />
+
                             <Row
                               label={t("PT_FORM3_OWNERSHIP_TYPE")}
                               text={`${property?.ownershipCategoryTemp ? t(`PT_OWNERSHIP_${property?.ownershipCategoryTemp}`) : t("CS_NA")}`}
@@ -496,34 +501,41 @@ const MutationApplicationDetails = ({ propertyId, acknowledgementIds, workflowDe
                 <Row text={t("PT_NO_DOCUMENTS_MSG")} />
               </StatusTable>
             )}
-          </div>
-          <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={'employee'} />
-          {showModal ? (
-            <ActionModal
-              t={t}
-              action={selectedAction}
-              tenantId={tenantId}
-              state={state}
-              id={acknowledgementIds}
-              applicationDetails={appDetailsToShow}
-              applicationData={appDetailsToShow?.applicationData}
-              closeModal={closeModal}
-              submitAction={submitAction}
-              actionData={workflowDetails?.data?.timeline}
-              businessService={businessService}
-              workflowDetails={workflowDetails}
-              moduleCode="PT"
-            />
-          ) : null}
-          <ApplicationDetailsActionBar
-            workflowDetails={workflowDetails}
-            displayMenu={displayMenu}
-            onActionSelect={onActionSelect}
-            setDisplayMenu={setDisplayMenu}
+          </div> */}
+        <ApplicationDetailsContentVerifier
+          applicationDetails={appDetailsToShow}
+          workflowDetails={workflowDetails}
+
+          applicationData={applicationDetails?.applicationData}
+          billAmount={billAmount}
+        />
+        <PTWFApplicationTimeline application={application} id={acknowledgementIds} userType={'employee'} />
+        {showModal ? (
+          <ActionModal
+            t={t}
+            action={selectedAction}
+            tenantId={tenantId}
+            state={state}
+            id={acknowledgementIds}
+            applicationDetails={appDetailsToShow}
+            applicationData={appDetailsToShow?.applicationData}
+            closeModal={closeModal}
+            submitAction={submitAction}
+            actionData={workflowDetails?.data?.timeline}
             businessService={businessService}
-            forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
+            workflowDetails={workflowDetails}
+            moduleCode="PT"
           />
-        </Card>
+        ) : null}
+        <ApplicationDetailsActionBar
+          workflowDetails={workflowDetails}
+          displayMenu={displayMenu}
+          onActionSelect={onActionSelect}
+          setDisplayMenu={setDisplayMenu}
+          businessService={businessService}
+          forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
+        />
+      </Card>
     </React.Fragment>
   );
 };

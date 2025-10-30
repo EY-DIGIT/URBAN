@@ -89,6 +89,7 @@ import ApplicationDetails from "./pages/employee/ApplicationDetails";
 import ChangePropertyApplicationDetails from "./pages/employee/ChangePropertyApplicationDetails";
 import SuccessAppication from "./pages/employee/SuccessAppication";
 import PropertyDetails from "./pages/employee/PropertyDetails";
+import PropertyNamantran from "./pages/employee/NamantranDetails";
 import AssessmentDetails from "./pages/employee/AssessmentDetails";
 import EditApplication from "./pages/employee/EditApplication";
 import EditUpdateIndex from "./pages/employee/EditApplication/EditUpdateIndex";
@@ -151,9 +152,12 @@ import TrackApplication from "./pages/citizen/TrackApplication/TrackApplication"
 import PTFreezeProperty from "./components/FreezeProperty"
 
 import TransactionList from "./pages/citizen/Transactions/TransactionList";
-
+import OriginalDetails from "./pages/employee/OriginalDetails/OriginalDetails";
+import CalculateFees from "./pages/employee/Feedetails";
 
 const componentsToRegister = {
+  OriginalDetails,
+  CalculateFees,
   AssessmentDetailsSection,
   AddressSection,
   AttachmentsSection,
@@ -235,6 +239,7 @@ const componentsToRegister = {
   ChangePropertyApplicationDetails: ChangePropertyApplicationDetails,
   SuccessAppication:SuccessAppication,
   PTPropertyDetails: PropertyDetails,
+  PropertyNamantran:PropertyNamantran,
   PTAssessmentDetails: AssessmentDetails,
   PTEditApplication: EditApplication,
   EditUpdateIndex:EditUpdateIndex,

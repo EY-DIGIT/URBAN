@@ -1,0 +1,201 @@
+
+import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+const PTinboxTable = () => {
+    const [offset, setOffset] = useState(0);
+    const { t } = useTranslation();
+    const limit = 10;
+
+    const { data: storeData } = Digit.Hooks.useStore.getInitData();
+    const { stateInfo } = storeData || {};
+    console.log("Sate Info=", stateInfo)
+
+    const tenantId = Digit.ULBService.getCurrentTenantId();
+
+    const inboxParams = useMemo(() => ({
+        tenantId,
+        ModuleCode: "PT",
+        filters: {
+            limit,
+            offset,
+            services: ["PT.CREATE", "PT.MUTATION", "PT.UPDATE"],
+        },
+        config: {
+            enabled: true,
+            select: (res) => res,
+        },
+    }), [offset]);
+
+    const { data, isLoading, isFetching } = Digit.Hooks.useNewInboxGeneralV2(inboxParams);
+
+    const results = data?.items || [];
+    const totalCount = data?.totalCount || 0;
+    const currentPage = Math.floor(offset / limit) + 1;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    const handlePrevious = () => {
+        if (offset >= limit) setOffset(offset - limit);
+    };
+
+    const handleNext = () => {
+        if (offset + limit < totalCount) setOffset(offset + limit);
+    };
+
+    return (
+        <React.Fragment>
+            <div style={{ border: "1px solid #ccc", borderRadius: "10px", overflow: "auto", marginTop: "20px", background: "white" }}>
+                <table style={{ borderCollapse: "collapse", width: "100%" }}>
+                    <thead style={backGround23}>
+                        <tr style={backGround23}>
+                            <th style={headerStyle}>Application Number</th>
+                            <th style={headerStyle}>Property ID</th>
+                            <th style={headerStyle}>Owner Name</th>
+                            <th style={headerStyle}>Application Type</th>
+                            <th style={headerStyle}>Status</th>
+                            <th style={headerStyle}>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {results.length > 0 ? (
+                            results.map((item, index) => {
+                                const bo = item?.businessObject || {};
+                                const pi = item?.ProcessInstance || {};
+
+                                const applicationNo = bo?.acknowldgementNumber || "N/A";
+                                const propertyId = bo?.propertyId || "N/A";
+                                const ownerNames = Array.isArray(bo?.owners)
+                                    ? bo.owners.map((o) => o.name || o.ownerName || "").join(", ")
+                                    : "N/A";
+
+                                const applicationType = pi?.businessService || "N/A";
+                                const status = pi?.state?.applicationStatus || "N/A";
+
+                                return (
+                                    <tr key={index} style={{ backgroundColor: "#fff", borderTop: "1px solid #eee" }}>
+                                        <td style={cellStyle}>{applicationNo}</td>
+                                        <td style={cellStyle}>
+
+                                            {status === "ACTIVE" ? (
+                                                <a
+                                                    href={`/digit-ui/employee/pt/PropertyNamantran/${propertyId}`}
+                                                    style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                                >
+                                                    {propertyId}
+                                                </a>
+                                            ) : (
+                                                "--"
+                                            )}
+                                        </td>
+                                        <td style={cellStyle}>{ownerNames}</td>
+                                        <td style={cellStyle}>
+                                            {t(applicationType) === "CREATE" ? "New Property" : t(applicationType)}
+                                        </td>
+
+                                        <td style={cellStyle}>  <span className={`status-badge status-${(status || '').toLowerCase().replace(/\s+/g, '')}`}>
+                                            {/* {t(status && `WF_PT_${status}`) || status || "NA"} */}
+                                            {status === "ACTIVE"
+                                                ? "Approved"
+                                                : status === "INWORKFLOW"
+                                                    ? "In Progress"
+                                                    : t(status && `WF_PT_${status}`) || status || "--"}
+                                        </span></td>
+                                        <td style={cellStyle}>
+                                            <a
+                                                href={`/digit-ui/employee/pt/PropertyNamantran/${propertyId}`}
+                                                style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                            >
+                                                <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px", height: "30px" }} />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan="5" style={{ textAlign: "center", padding: "12px", fontStyle: "italic" }}>
+                                    {isLoading || isFetching ? "Loading..." : "No data found"}
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "20px",
+                    marginTop: "20px",
+                    marginBottom: "10px",
+                    fontFamily: "sans-serif"
+                }}>
+                    <button
+                        onClick={handlePrevious}
+                        disabled={offset === 0}
+                        style={{
+                            padding: "8px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #ccc",
+                            backgroundColor: offset === 0 ? "#f0f0f0" : "#6B133F",
+                            color: offset === 0 ? "#999" : "#fff",
+                            cursor: offset === 0 ? "not-allowed" : "pointer",
+                            transition: "background-color 0.2s ease"
+                        }}
+                    >
+                        ◀ Previous
+                    </button>
+
+                    <span style={{ fontSize: "16px", fontWeight: "500", color: "#333" }}>
+                        Page {currentPage} of {totalPages}
+                    </span>
+
+                    <button
+                        onClick={handleNext}
+                        disabled={offset + limit >= totalCount}
+                        style={{
+                            padding: "8px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #ccc",
+                            backgroundColor: offset + limit >= totalCount ? "#f0f0f0" : "#6B133F",
+                            color: offset + limit >= totalCount ? "#999" : "#fff",
+                            cursor: offset + limit >= totalCount ? "not-allowed" : "pointer",
+                            transition: "background-color 0.2s ease"
+                        }}
+                    >
+                        Next ▶
+                    </button>
+                </div>
+            </div>
+
+            {/* Pagination controls */}
+
+
+        </React.Fragment>
+    );
+};
+
+const headerStyle = {
+    padding: "12px",
+    textAlign: "left",
+    fontWeight: "600",
+    fontSize: "14px",
+    color: "rgba(40, 40, 40, 1)",
+    borderBottom: "1px solid #ddd",
+    background: "rgba(107, 19, 63, 0.3)",
+    // background: "yellow",
+    // backgroundColor:"rgba(107, 19, 63, 0.8)"
+
+
+};
+const backGround23 = {
+    //  background: rgba(107, 19, 63, 0.3),
+    //  color:black,
+};
+
+const cellStyle = {
+    padding: "12px",
+    fontSize: "14px",
+    color: "#333",
+    borderBottom: "1px solid #f0f0f0",
+};
+
+export default PTinboxTable;

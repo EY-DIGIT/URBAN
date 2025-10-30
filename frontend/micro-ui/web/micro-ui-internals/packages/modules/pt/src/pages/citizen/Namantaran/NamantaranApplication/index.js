@@ -2098,10 +2098,11 @@ const NamantaranApplication = () => {
           mobileNumber: owner.mobile || "",
           emailId: owner.email || "",
           // ownerType: propertyDetails.exemption.code || propertyDetails.exemption,
-          ownerType:
-            typeof propertyDetails?.exemption === "object"
-              ? propertyDetails?.exemption?.code ?? null
-              : propertyDetails?.exemption ?? null,
+         ownerType: propertyDetails?.exemption?.code || propertyDetails?.exemption || null,
+          // ownerType:
+          //   typeof propertyDetails?.exemption === "object"
+          //     ? propertyDetails?.exemption?.code ?? null
+          //     : propertyDetails?.exemption ?? null,
           permanentAddress:
             addressDetails.address || "",
           relationship: owner.relationship || "FATHER",
