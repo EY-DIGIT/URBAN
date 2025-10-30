@@ -3,14 +3,14 @@ import { Dropdown, TextInput, SubmitBar } from "@egovernments/digit-ui-react-com
 
 const PropertyOwner2 = ({
   t,
-  ownershipType,
-  handleOwnershipTypeChange,
-  handleRestryIdChange,
-  registryId,
-  owners,
-  setOwners,
+  ownershipType2,
+  handleOwnershipTypeChange2,
+  handleRestryIdChange2,
+  registryId2,
+  owners2,
+  setOwners2,
   addNewOwner,
-  isJointStarted, styles, formErrors, handleOwnerAadhaarChange, handleOwnerNameChange, handleOwnerContactChange, handleOwnerEmailChange,propertyCategoryInput,propertyCategoryInputChange
+  isJointStarted, styles, formErrors, handleOwnerAadhaarChange2, handleOwnerNameChange2, handleOwnerContactChange2, handleOwnerEmailChange2,propertyCategoryInput2,propertyCategoryInputChange2
 }) => {
 
 
@@ -62,7 +62,7 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
   
   const updateOwner = (index, field, value) => {
     console.log("RELLLLL=",value)
-    const updated = [...owners];
+    const updated = [...owners2];
     updated[index][field] = value;
 
     if (field === "relationship") {
@@ -75,15 +75,15 @@ const salutationOptionsHindi = (MenuHindi || []).map((item) => ({
       updated[index]["samagraID"] = "";
     }
 
-    setOwners(updated);
+    setOwners2(updated);
   };
 
   const renderOwnerForm = (index) => {
-    const owner = owners[index];
+    const owner = owners2[index];
 
     const fixedAadhaar = "123412341234";
 if (owner.aadhaar !== fixedAadhaar) {
-  handleOwnerAadhaarChange(index, fixedAadhaar);
+  handleOwnerAadhaarChange2(index, fixedAadhaar);
 }
 
     return (
@@ -114,7 +114,7 @@ if (owner.aadhaar !== fixedAadhaar) {
                 style={styles.textBox}
                 placeholder={t("Enter")}
                 value={owner.name}
-                onChange={(e) => handleOwnerNameChange(index, "name", e.target.value)}
+                onChange={(e) => handleOwnerNameChange2(index, "name", e.target.value)}
               />
             </div>
             {/* ✅ CHANGE THIS: Use the dynamic key */}
@@ -141,7 +141,7 @@ if (owner.aadhaar !== fixedAadhaar) {
                 style={styles.textBox}
                 placeholder={t("यहाँ लिखें")}
                 value={owner.hindiName}
-                onChange={(e) => handleOwnerNameChange(index, "hindiName", e.target.value)}
+                onChange={(e) => handleOwnerNameChange2(index, "hindiName", e.target.value)}
               />
             </div>
             {/* ✅ CHANGE THIS: Use the dynamic key */}
@@ -212,7 +212,7 @@ if (owner.aadhaar !== fixedAadhaar) {
             <TextInput
               style={styles.widthInput}
               value={owner.fatherHusbandName}
-              onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
+              onChange={(e) => handleOwnerNameChange2(index, "fatherHusbandName", e.target.value)}
               placeholder={t("Enter")}
               disabled={owner.relationship === "Not applicable"}
             />
@@ -234,7 +234,7 @@ if (owner.aadhaar !== fixedAadhaar) {
             <div style={styles.poppinsLabel}>{t("Email ID")}</div>
             <TextInput
               value={owner.email}
-              onChange={(e) => handleOwnerEmailChange(index, e.target.value)}
+              onChange={(e) => handleOwnerEmailChange2(index, e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
             />
@@ -249,7 +249,7 @@ if (owner.aadhaar !== fixedAadhaar) {
             </div>
             <TextInput
               value={owner.mobile}
-              onChange={(e) => handleOwnerContactChange(index, "mobile", e.target.value)}
+              onChange={(e) => handleOwnerContactChange2(index, "mobile", e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
             />
@@ -263,7 +263,7 @@ if (owner.aadhaar !== fixedAadhaar) {
             <div style={styles.poppinsLabel}>{t("Alternative Number")}</div>
             <TextInput
               value={owner.altNumber}
-              onChange={(e) => handleOwnerContactChange(index, "altNumber", e.target.value)}
+              onChange={(e) => handleOwnerContactChange2(index, "altNumber", e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
             />
@@ -359,14 +359,14 @@ if (owner.aadhaar !== fixedAadhaar) {
             t={t}
             option={propertyCategoryOptions}
             
-            selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
-            select={propertyCategoryInputChange}
+            selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput2)}
+            select={propertyCategoryInputChange2}
             optionKey="name"
             placeholder={t("Select")}
           />
-          {formErrors?.propertyCategoryInput && (
+          {formErrors?.propertyCategoryInput2 && (
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
-              {formErrors.propertyCategoryInput}
+              {formErrors.propertyCategoryInput2}
             </p>
           )}
         </div>
@@ -380,14 +380,14 @@ if (owner.aadhaar !== fixedAadhaar) {
             t={t}
             option={dropdownOptions}
             // selected={"ownershipType"}
-            selected={dropdownOptions.find(opt => opt.code === ownershipType)}
-            select={handleOwnershipTypeChange}
+            selected={dropdownOptions.find(opt => opt.code === ownershipType2)}
+            select={handleOwnershipTypeChange2}
             optionKey="name"
             placeholder={t("Select")}
           />
-          {formErrors?.ownershipType && (
+          {formErrors?.ownershipType2 && (
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
-              {formErrors.ownershipType}
+              {formErrors.ownershipType2}
             </p>
           )}
         </div>
@@ -396,20 +396,20 @@ if (owner.aadhaar !== fixedAadhaar) {
             {t("POA Registration Number")}
           </div>
           <TextInput
-            value={registryId}
-            onChange={(e) => handleRestryIdChange(e.target.value)}
+            value={registryId2}
+            onChange={(e) => handleRestryIdChange2(e.target.value)}
             style={styles.widthInput}
 
           />
-          {formErrors?.registryId && (
-            <p style={{ color: "red", fontSize: "12px", marginTop: '-18px', marginBottom: '10px' }}>{formErrors.registryId}</p>
+          {formErrors?.registryId2 && (
+            <p style={{ color: "red", fontSize: "12px", marginTop: '-18px', marginBottom: '10px' }}>{formErrors.registryId2}</p>
           )}
         </div>
        
       </div>
-      {owners.map((_, index) => renderOwnerForm(index))}
+      {owners2.map((_, index) => renderOwnerForm(index))}
 
-      {ownershipType === "JOINTOWNER" && (
+      {ownershipType2 === "JOINTOWNER" && (
         <div style={{ textAlign: "right" }}>
           <SubmitBar label={t("Add New Owner")} onSubmit={addNewOwner} />
         </div>

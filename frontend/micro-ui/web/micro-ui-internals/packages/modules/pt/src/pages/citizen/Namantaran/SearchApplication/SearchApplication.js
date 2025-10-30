@@ -39,6 +39,20 @@ const SearchApplication = () => {
     // console.log("Nam==============", NamantaranType);
 
 
+    const[namantaranPurposeType,setNamantaranPurposeType]=useState()
+
+    
+   const namantaranPurposeTypeChange = (val) => {
+
+    setNamantaranPurposeType(val.code);
+
+    
+   
+
+ 
+  };
+
+
     const styles = {
         modalOverlay: {
             position: "fixed",
@@ -314,7 +328,7 @@ const SearchApplication = () => {
     };
 
     const applicationSeatch=()=>{
-        history.push(`/digit-ui/citizen/pt/namantaran/application`);
+        history.push(`/digit-ui/citizen/pt/namantaran/application/${propertyIdd}`);
     }
 
 
@@ -420,7 +434,9 @@ const SearchApplication = () => {
                     </div>
 
 
-                    {showNamantarantype ? <div style={inputGroupWrapper}>
+                    {showNamantarantype ?
+                    
+                    <div style={inputGroupWrapper}>
 
                         <div>
                             <label style={labelStyle}>
@@ -430,11 +446,18 @@ const SearchApplication = () => {
                                 t={t}
                                 option={NamantaranTypeList}
 
-                                select={NamantaranTypeList.code}
+                                select={namantaranPurposeTypeChange}
+                                 placeholder={t("Select")}
 
 
                                 optionKey="name"
-                                style={styles.widthInput}
+                                // style={styles.widthInput}
+                                style={{
+    ...styles.widthInput,     
+    border: "1px solid #ccc",  
+    borderRadius: "8px",       
+    padding: "6px 10px",       
+  }}
 
                             />
                         </div>

@@ -1759,6 +1759,7 @@ import AssessmentDetailsSection from "./AssessmentDetails";
 import PropertyDetailsTableSection from "./PropertyDetails";
 import NamantaranDetails from "./NamantaranDetails";
 import PropertyOwner2 from "./PropertyOwner2";
+import SuccessPage from "./SuccessPage";
 // import OwnershipDetailsSection from "./OwnershipDetailsSection";
 // import AddressSection from "./AddressSection";
 // import AssessmentDetailsSection from "./AssessmentDetailsSection";
@@ -1790,6 +1791,8 @@ const NamantaranApplication = () => {
 
 
   const tenantId2 = Digit.ULBService.getCurrentTenantId();
+   let { id: propertyIdd } = useParams();
+   console.log("propertyIddpropertyIdd===",propertyIdd);
 
   let { id: applicationNumber } = useParams();
   console.log("DATA APPLICATION=", applicationNumber)
@@ -1806,6 +1809,16 @@ const NamantaranApplication = () => {
   console.log("ApplicationData====", applicationData)
 
 
+
+    const [propertyIdData, setPropertyIdData] = useState();
+  useEffect(() => {
+    if (!applicationDetails?.applicationData) return;
+    setPropertyIdData(applicationDetails?.applicationData?.propertyId);
+
+  }, [applicationDetails]);
+  console.log("propertyIdData====", propertyIdData)
+
+
   const [proOwnerDetail, setProOwnerDetail] = useState(null);
   const [showPreviewButton, setShowPreviewButton] = useState(false);
   const [showAssessmentPop, setShowAssesmentPop] = useState(false);
@@ -1814,6 +1827,7 @@ const NamantaranApplication = () => {
   const [status, setStatus] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isJointStarted, setIsJointStarted] = useState(false); // NEW
+    const [isJointStarted2, setIsJointStarted2] = useState(false); 
   const [selectedAssessmentYear, setSelectedAssessmentYear] = useState(null);
   const [documents, setDocuments] = useState({
     photoId: null,
@@ -1845,9 +1859,29 @@ const NamantaranApplication = () => {
       noSamagra: false,
     }
   ]);
+   const [owners2, setOwners2] = useState([
+    {
+      title: "GFHGH",
+      name: "",
+      aadhaar: "",
+      hindiTitle: "",
+      hindiName: "",
+      fatherHusbandName: "",
+      relationship: "",
+      email: "",
+      altNumber: "",
+      mobile: "",
+      samagraID: "",
+      noSamagra: false,
+    }
+  ]);
   const [ownershipType, setOwnershipType] = useState(null);
+   const [ownershipType2, setOwnershipType2] = useState(null);
   const [propertyCategoryInput, setPropertyCategoryInput] = useState(null);
+    const [propertyCategoryInput2, setPropertyCategoryInput2] = useState(null);
+   const [namantaranPurposeInput, setNamantaranPurposeInput] = useState(null);
   const [registryId, setRegistryId] = useState("");
+   const [registryId2, setRegistryId2] = useState("");
   const [selectedRateZone, setSelectedRateZone] = useState("");
   const [addressDetails, setAddressDetails] = useState({
     doorNo: "",
@@ -1860,6 +1894,7 @@ const NamantaranApplication = () => {
   const [correspondenceAddress, setCorrespondenceAddress] = useState("");
   const [isSameAsPropertyAddress, setIsSameAsPropertyAddress] = useState(false);
   const [rateZones, setRateZones] = useState([])
+   const [isSuccess, setIsSuccess] = useState(false);
   const [assessmentDetails, setAssessmentDetails] = useState({
     rateZone: null, // Usually fetched
     roadFactor: null,
@@ -1909,6 +1944,13 @@ const NamantaranApplication = () => {
   const mutationUpdate = Digit.Hooks.pt.useUpdateContent(tenantId, true);
   const mutationUpdatesss = Digit.Hooks.pt.usePropertyAPI(tenantId, false);
   let tenantIdss = Digit.ULBService.getCurrentTenantId();
+
+  const mutationForUpdate = Digit.Hooks.pt.usePropertyAPI(
+    tenantId,
+    false // update
+  );
+
+  
 
   const {
     isLoading: ptCalculationEstimateLoading,
@@ -1968,12 +2010,19 @@ const NamantaranApplication = () => {
     });
   };
 
+
+
   const [isNewOwner, setIsNewOwner] = useState(false);
 
   const handleOwner = () => {
     // localStorage.setItem("HandleOwner", "true");
     setIsNewOwner(true); 
   };
+
+
+
+
+
 
   const { data: ReasonForTransferList } = Digit.Hooks.pt.useReasonForTransferMDMS(stateId, "PropertyTax", "ReasonForTransfer");
   const { data: NamantaranTypeList } = Digit.Hooks.pt.useNamantaranTypeMDMS(stateId, "PropertyTax", "NamantaranType");
@@ -1991,6 +2040,7 @@ const NamantaranApplication = () => {
 
 
 
+ 
 
   const handleSubmitUpdate = async () => {
 
@@ -2477,12 +2527,74 @@ const NamantaranApplication = () => {
     if (!ownershipType) {
       errors.ownershipType = "Ownership type is required.";
     }
+     if (!ownershipType2) {
+      errors.ownershipType2 = "Ownership type is required.";
+    }
     if (!propertyCategoryInput) {
       errors.propertyCategoryInput = "Property Category is required.";
+    }
+      if (!propertyCategoryInput2) {
+      errors.propertyCategoryInput2 = "Property Category is required.";
+    }
+     if (!namantaranPurposeInput) {
+      errors.namantaranPurposeInput = "Namantaran Purpose is required.";
     }
     if (registryId && !/^[a-zA-Z0-9]{19}$/.test(registryId)) {
       errors.registryId = "Registry ID must be exactly 19 alphanumeric characters.";
     }
+        if (registryId2 && !/^[a-zA-Z0-9]{19}$/.test(registryId2)) {
+      errors.registryId2 = "Registry ID must be exactly 19 alphanumeric characters.";
+    }
+
+
+   
+   owners2.forEach((owner, index) => {
+      // Owner Name
+      if (!owner.name || !/^[a-zA-Z\s]+$/.test(owner.name)) {
+        errors[`owner-${index}-name`] = "Owner name is required and must be alphabetic.";
+      }
+        if (!owner.hindiName) {
+        errors[`owner-${index}-hindiName`] = "यह फ़ील्ड अनिवार्य है।";
+      }
+      
+      // else if (!hindiNameRegex.test(owner.hindiName)) {
+      //   errors[`owner-${index}-hindiName`] = "कृपया मान्य हिंदी नाम दर्ज करें।";
+      // }
+
+      // Hindi Name
+      // if (!owner.hindiName || !/^[\u0900-\u097F\s]+$/.test(owner.hindiName)) {
+      //     errors[`owner-${index}-hindiName`] = "Hindi name is required and must be alphabetic.";
+      // }
+      // Father/Husband Name
+      if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
+        errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
+      }
+      // Relationship
+      if (!owner.relationship) {
+        errors[`owner-${index}-relationship`] = "Relationship is required.";
+      }
+      // Mobile Number
+      if (!owner.mobile || !/^\d{10}$/.test(owner.mobile)) {
+        errors[`owner-${index}-mobile`] = "Valid 10-digit mobile number is required.";
+      }
+      // Aadhaar
+      if (!owner.aadhaar || !isAadhaarValid(owner.aadhaar)) {
+        errors[`owner-${index}-aadhaar`] = "Valid 12-digit Aadhaar number is required.";
+      }
+      // Samagra ID (only if checkbox is not ticked)
+      // if (!owner.noSamagra && (!owner.samagraID || !/^\d+$/.test(owner.samagraID))) {
+      //     errors[`owner-${index}-samagraID`] = "Samagra ID is required and must be digits.";
+      // }
+      if (
+        !owner.noSamagra &&
+        (!owner.samagraID || !/^\d{8,9}$/.test(owner.samagraID))
+      ) {
+        console.log("STEP33");
+        errors[`owner-${index}-samagraID`] =
+          "Samagra ID is required and must be 8 or 9 digits.";
+      }
+
+    });
 
     // 3. Owners validation (Iterate over ALL owners)
     owners.forEach((owner, index) => {
@@ -2584,6 +2696,278 @@ const NamantaranApplication = () => {
 
 
 
+  const handleSubmitUpdateChange = async () => {
+ 
+ 
+    // const finalErrors = validateForm();
+    // setFormErrors(finalErrors);
+
+    // console.log("finalErrors==finalErrors==",finalErrors);
+
+    // if (Object.keys(finalErrors).length > 0) {
+    //   return;
+    // }
+ 
+    const payload = {
+      Property: {
+        updateIMC: false,
+        id: applicationData?.id,
+        registryId: applicationData?.registryId || "",
+        propertyId: applicationData?.propertyId || "",
+        accountId: applicationData?.accountId || "",
+        acknowldgementNumber: applicationData?.acknowldgementNumber || "",
+        status: applicationData?.status,
+        tenantId: "mp.indore",
+        oldPropertyId: assessmentDetails.oldPropertyId || null,
+        essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
+ 
+        // Missing fields from comparison
+        surveyId: null,
+        linkedProperties: null,
+        isFreeze: null,
+        propertyCategory: null,
+        AlternatUpdated: false,
+ 
+        address: applicationData?.address,
+ 
+        ownershipCategory: ownershipType || "INDIVIDUAL.SINGLEOWNER",
+        propertyCategory: propertyCategoryInput,
+ 
+        owners: [...(applicationData?.owners || []), 
+        
+         {
+          salutation: owners2[0].title || "mr",
+          title: "title",
+          // name: owners2[0].name || `Owner ${index + 1}`,
+           name: owners2[0].name || "",
+          salutationHindi: owners2[0].hindiTitle,
+          hindiName: owners2[0].hindiName || "",
+          fatherOrHusbandName: owners2[0].fatherHusbandName || "UnitTest",
+          gender: "MALE",
+          aadhaarNumber: owners2[0].aadhaar || "",
+          altContactNumber: owners2[0].altNumber || "",
+          isCorrespondenceAddress: correspondenceAddress,
+          mobileNumber: owners2[0].mobile || "",
+          emailId: owners2[0].email || "",
+          isPrimaryOwner:"true",
+          status:"ACTIVE",
+          // ownerType: propertyDetails.exemption.code || propertyDetails.exemption,
+          ownerType:
+            typeof propertyDetails?.exemption === "object"
+              ? propertyDetails?.exemption?.code ?? null
+              : propertyDetails?.exemption ?? null,
+          permanentAddress:
+            addressDetails.address || "",
+          relationship: owners2[0].relationship || "FATHER",
+          samagraId: owners2[0].samagraID,
+          documents: [
+            {
+              documentType: "Proof of Identity",
+              fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+              documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+            },
+            documents?.sellersRegistry && {
+
+              documentType: "Others",
+              fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+              documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
+            },
+            {
+              documentType: "Proof of Ownership",
+              fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+              documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+            },
+            {
+              documentType: "Property Photograph",
+              fileStoreId: capturedPhoto || null,
+              documentUid: capturedPhoto || null,
+            },
+            ...Object.keys(documents)
+              .filter(key => key.startsWith("others_"))
+              .map(key => ({
+                documentType: "Others",  // 👈 these will go separately
+                fileStoreId:
+                  documents[key]?.fileStoreId ||
+                  applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+                documentUid:
+                  documents[key]?.documentUid ||
+                  applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+              })),
+          ].filter(Boolean),
+        },
+      
+      ],
+ 
+        institution: null,
+ 
+        documents: [
+          {
+            id: applicationData.documents?.find(d => d.documentType === "Proof of Identity")?.id, // Missing
+            documentType: "Proof of Identity",
+            fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+            documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+            auditDetails: null, // Missing
+            status: "ACTIVE" // Missing
+          },
+          documents?.sellersRegistry && {
+            id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
+            documentType: "Others",
+            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+            auditDetails: null, // Missing
+            status: "ACTIVE" // Missing
+          },
+          {
+            id: applicationData.documents?.find(d => d.documentType === "Proof of Ownership")?.id, // Missing
+            documentType: "Proof of Ownership",
+            fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+            documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+            auditDetails: null, // Missing
+            status: "ACTIVE" // Missing
+          },
+          {
+            id: applicationData.documents?.find(d => d.documentType === "Property Photograph")?.id, // Missing
+            documentType: "Property Photograph",
+            fileStoreId: capturedPhoto || null,
+            documentUid: capturedPhoto || null,
+            auditDetails: null, // Missing
+            status: "ACTIVE" // Missing
+          },
+          // Missing document for PATTACERTIFICATE
+          {
+            "documentType": "PATTACERTIFICATE",
+            "fileStoreId": "fe78b468-c06c-4506-9035-b8b1188be481",
+            "documentUid": "fe78b468-c06c-4506-9035-b8b1188be481",
+            auditDetails: null,
+            status: "ACTIVE"
+          },
+          ...Object.keys(documents)
+            .filter(key => key.startsWith("others_"))
+            .map(key => ({
+              id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
+              documentType: "Others",
+              fileStoreId: documents[key]?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+              documentUid: documents[key]?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+              auditDetails: null, // Missing
+              status: "ACTIVE" // Missing
+            })),
+        ].filter(Boolean),
+ 
+        units: applicationData?.units,
+ 
+        landArea: assessmentDetails.plotArea?.toString() || "3000",
+        // propertyType: propertyDetails.propertyType?.code || "BUILTUP",
+        propertyType: "BUILTUP",
+        noOfFloors: unit.length || null,
+        superBuiltUpArea: null,
+        usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
+ 
+        // additionalDetails: {
+        //   // Missing mutation-specific details
+        //   documentNumber: assessmentDetails.documentNumber || "",
+        //   documentValue: assessmentDetails.documentValue || "",
+        //   documentDate: assessmentDetails.documentDate || null,
+        //   isMutationInCourt: assessmentDetails.isMutationInCourt || "NO",
+        //   caseDetails: assessmentDetails.caseDetails || "",
+        //   reasonForTransfer: assessmentDetails.reasonForTransfer || "",
+        //   marketValue: assessmentDetails.marketValue || "",
+        //   isPropertyUnderGovtPossession: assessmentDetails.isPropertyUnderGovtPossession || "NO",
+ 
+        //   // Existing details
+        //   inflammable: false,
+        //   heightAbove36Feet: false,
+        //   propertyType: {
+        //     i18nKey: "COMMON_PROPTYPE_BUILTUP_INDEPENDENTPROPERTY",
+        //     code: propertyDetails.propertyType?.code || "BUILTUP.INDEPENDENTPROPERTY",
+        //   },
+        //   mobileTower: checkboxes.mobileTower || false,
+        //   bondRoad: checkboxes.broadRoad || false,
+        //   advertisement: checkboxes.advertisement || false,
+        //   builtUpArea: null,
+        //   noOfFloors: {
+        //     i18nKey: "PT_GROUND_FLOOR_OPTION",
+        //     code: 0,
+        //   },
+        //   noOofBasements: {
+        //     i18nKey: "PT_NO_BASEMENT_OPTION",
+        //     code: 0,
+        //   },
+        //   unit: unit.map(unit => ({
+        //     usageCategory: unit.usageType || "RESIDENTIAL",
+        //     usesCategoryMajor: unit.usageType || "RESIDENTIAL",
+        //     occupancyType: unit.usageFactor || "SELFOCCUPIED",
+        //     constructionDetail: {
+        //       builtUpArea: unit.area || "3000",
+        //       constructionType: unit.constructionType || null,
+        //     },
+        //     floorNo: parseInt(unit.floorNo) || 0,
+        //     rateZone: selectedRateZone ? selectedRateZone : rateZones?.[0]?.code || "",
+        //     roadFactor: assessmentDetails.roadFactor?.code || applicationData?.units[0]?.roadFactor,
+        //     fromYear: unit.fromYear,
+        //     toYear: unit.toYear,
+        //   })),
+        //   basement1: null,
+        //   basement2: null,
+        // },
+
+
+        "additionalDetails": {
+          "documentNumber": "435345343",
+          "documentValue": "3000",
+          "documentDate": 1761350400000,
+          "isMutationInCourt": "NO",
+          "caseDetails": "",
+          "reasonForTransfer": "PATTACERTIFICATE",
+          "marketValue": 4000,
+          "isPropertyUnderGovtPossession": "NO"
+        },
+        workflow: {
+          action: "OPEN",
+          businessService: "PT.MUTATION",
+          moduleName: "PT",
+          // tenantId: userInfo1?.tenantId,
+          tenantId:"mp.indore"
+        },
+ 
+        channel: "CFC_COUNTER",
+        creationReason: "MUTATION",
+        source: "MUNICIPAL_RECORDS",
+ 
+        // Missing auditDetails
+        auditDetails: {
+          createdBy: userInfo1?.uuid,
+          lastModifiedBy: userInfo1?.uuid,
+          createdTime: Date.now(),
+          lastModifiedTime: Date.now()
+        }
+      }
+    }
+
+     mutationForUpdate.mutate(payload, {
+      onSuccess: (data) => {
+      console.log("CHeCK API CALL ",data)
+      // const [isSuccess, setIsSuccess] = useState(false);
+      setIsSuccess(true);
+      history.replace("/digit-ui/citizen/pt/namantaran/bannerResponse");   
+ 
+      },
+      onError: (error) => {
+          // history.replace("/digit-ui/citizen/pt/namantaran/bannerResponse");   
+        console.log("CHeCK API CALLllllllllllllllllllllll ",error)
+      },
+    });
+    
+    // history.replace("/digit-ui/citizen/pt/response", { Property: payload.Property, key: "UPDATE", action: "SUBMIT" });
+ 
+  };
+
+
+
+      const submitForm = () => {
+    console.log("SUBMIT FORM");
+    handleSubmitUpdateChange();
+  };
+
 
   const handleFileChange = async (key, file) => {
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
@@ -2643,6 +3027,32 @@ const NamantaranApplication = () => {
     }
   };
 
+  const handleOwnerEmailChange2 = (index, value) => {
+    const newOwners = [...owners2];
+    newOwners[index].email = value;
+    setOwners2(newOwners);
+
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-email`;
+
+    // A robust regex for email validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+    // Since Email is optional, only validate if a value is present
+    if (value && !emailRegex.test(value)) {
+      errors[fieldKey] = "Please enter a valid email address.";
+    } else {
+      // Clear the error if the input is valid or empty
+      delete errors[fieldKey];
+    }
+
+    setFormErrors(errors);
+  };
+
+
+  console.log("owners2===",owners2);
+
+
   const handleOwnerEmailChange = (index, value) => {
     const newOwners = [...owners];
     newOwners[index].email = value;
@@ -2666,6 +3076,40 @@ const NamantaranApplication = () => {
   };
 
   // Validation for Mobile number:
+  const handleOwnerContactChange2 = (index, field, value) => {
+    const newOwners = [...owners2];
+    newOwners[index][field] = value;
+    setOwners2(newOwners);
+
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-${field}`;
+
+    // Regex for exactly 10 digits
+    const mobileRegex = /^\d{10}$/;
+
+    // Mobile Number is mandatory, Alternative Number is not
+    if (field === "mobile") {
+      if (!value) {
+        errors[fieldKey] = "Mobile Number is required.";
+      } else if (!mobileRegex.test(value)) {
+        errors[fieldKey] = "Mobile Number must be 10 digits.";
+      } else {
+        delete errors[fieldKey];
+      }
+    } else if (field === "altNumber") {
+      // For alternative number, only validate if a value is entered
+      if (value && !mobileRegex.test(value)) {
+        errors[fieldKey] = "Alternative Number must be 10 digits.";
+      } else {
+        delete errors[fieldKey];
+      }
+    }
+
+    setFormErrors(errors);
+  };
+
+
+
   const handleOwnerContactChange = (index, field, value) => {
     const newOwners = [...owners];
     newOwners[index][field] = value;
@@ -2699,6 +3143,42 @@ const NamantaranApplication = () => {
   };
 
   // Validation for Name:
+
+  const handleOwnerNameChange2 = (index, field, value) => {
+    const newOwners = [...owners2];
+    newOwners[index][field] = value;
+    setOwners2(newOwners);
+
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-${field}`;
+
+    // Regular expressions for validation
+    const englishNameRegex = /^[a-zA-Z\s]+$/;
+    const hindiNameRegex = /^[\u0900-\u097F\s]+$/;
+
+    if (!value) {
+      errors[fieldKey] = "This field is required.";
+    } else {
+      // Check which field is being validated
+      if (field === "name" || field === "fatherHusbandName") {
+        if (!englishNameRegex.test(value)) {
+          errors[fieldKey] = "Only alphabetic characters are allowed.";
+        } else {
+          delete errors[fieldKey];
+        }
+      } else if (field === "hindiName") {
+        if (!hindiNameRegex.test(value)) {
+          // You can add logic here if you want to perform other actions,
+          // but no error will be set now.
+        } else {
+          delete errors[fieldKey];
+        }
+      }
+    }
+
+    setFormErrors(errors);
+  };
+
   const handleOwnerNameChange = (index, field, value) => {
     const newOwners = [...owners];
     newOwners[index][field] = value;
@@ -2734,6 +3214,26 @@ const NamantaranApplication = () => {
     setFormErrors(errors);
   };
   // Validation for Aadhar:
+
+    const handleOwnerAadhaarChange2 = (index, value) => {
+    const newOwners = [...owners2];
+    newOwners[index].aadhaar = value;
+    setOwners2(newOwners);
+
+    // Perform the new, robust Aadhaar validation here
+    const errors = { ...formErrors };
+    const fieldKey = `owner-${index}-aadhaar`; // Unique key for each owner
+
+    // ✅ USE THE NEW VALIDATION FUNCTION
+    if (!isAadhaarValid(value)) {
+      errors[fieldKey] = "Valid 12-digit Aadhaar number is required.";
+    } else {
+      // Clear the error if the input is valid
+      delete errors[fieldKey];
+    }
+    setFormErrors(errors);
+  };
+
   const handleOwnerAadhaarChange = (index, value) => {
     const newOwners = [...owners];
     newOwners[index].aadhaar = value;
@@ -3014,6 +3514,43 @@ const NamantaranApplication = () => {
 
 
 
+  console.log("namantaranPurposeInput===namantaranPurposeInput==",namantaranPurposeInput);
+
+   const namantaranPurposeInputChange = (val) => {
+
+    setNamantaranPurposeInput(val.code);
+
+    
+    setFormErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.namantaranPurposeInput;
+      return newErrors;
+    });
+
+ 
+  };
+
+    const propertyCategoryInputChange2 = (val) => {
+
+    setPropertyCategoryInput2(val.code);
+
+    // 🟢 Clear error live when user selects value
+    setFormErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors.propertyCategoryInput2;
+      return newErrors;
+    });
+
+    // ❗ Only reset if required. Don't reset if owners already exist.
+    // if (val.code === "INDIVIDUAL.SINGLEOWNER") {
+    //   setOwners((prev) => [prev[0]]); // keep first only
+    // } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
+    //   // Do nothing if owners already prefilled
+    //   if (owners.length === 0) {
+    //     setOwners([{}]); // fallback if empty
+    //   }
+    // }
+  };
 
   const propertyCategoryInputChange = (val) => {
 
@@ -3037,6 +3574,22 @@ const NamantaranApplication = () => {
     // }
   };
 
+
+  const handleOwnershipTypeChange2 = (val) => {
+
+    setOwnershipType2(val.code);
+
+    // ❗ Only reset if required. Don't reset if owners already exist.
+    if (val.code === "INDIVIDUAL.SINGLEOWNER") {
+      setOwners2((prev) => [prev[0]]); // keep first only
+    } else if (val.code === "INDIVIDUAL.MULTIPLEOWNERS") {
+      // Do nothing if owners already prefilled
+      if (owners2.length === 0) {
+        setOwners2([{}]); // fallback if empty
+      }
+    }
+  };
+
   const handleOwnershipTypeChange = (val) => {
 
     setOwnershipType(val.code);
@@ -3051,6 +3604,9 @@ const NamantaranApplication = () => {
       }
     }
   };
+    const handleRestryIdChange2 = (e) => {
+    setRegistryId2(e.target.value);
+  }
   const handleRestryIdChange = (e) => {
     setRegistryId(e.target.value);
   }
@@ -3115,6 +3671,10 @@ const NamantaranApplication = () => {
   const addNewOwner = () => {
     setOwners([...owners, {}]); // Add a new empty owner object
     setIsJointStarted(true);
+  };
+    const addNewOwner2 = () => {
+    setOwners2([...owners2, {}]); // Add a new empty owner object
+    setIsJointStarted2(true);
   };
   const handleCheckboxChange = (field) => {
     setCheckboxes((prev) => ({
@@ -3181,6 +3741,9 @@ const NamantaranApplication = () => {
 
               styles={styles}
               formErrors={formErrors}
+              namantaranPurposeInput={namantaranPurposeInput}
+              namantaranPurposeInputChange={namantaranPurposeInputChange}
+              propertyIdData={propertyIdData}
             />
           </div>
 
@@ -3193,22 +3756,22 @@ const NamantaranApplication = () => {
 
               <PropertyOwner2
                 t={t}
-                ownershipType={ownershipType}
-                handleOwnershipTypeChange={handleOwnershipTypeChange}
-                handleRestryIdChange={handleRestryIdChange}
-                registryId={registryId}
-                owners={owners}
-                setOwners={setOwners}
+                ownershipType2={ownershipType2}
+                handleOwnershipTypeChange2={handleOwnershipTypeChange2}
+                handleRestryIdChange2={handleRestryIdChange2}
+                registryId2={registryId2}
+                owners2={owners2}
+                setOwners2={setOwners2}
                 addNewOwner={addNewOwner}
                 isJointStarted={isJointStarted}
                 styles={styles}
                 formErrors={formErrors}
-                handleOwnerAadhaarChange={handleOwnerAadhaarChange}
-                handleOwnerNameChange={handleOwnerNameChange}
-                handleOwnerContactChange={handleOwnerContactChange}
-                handleOwnerEmailChange={handleOwnerEmailChange}
-                propertyCategoryInput={propertyCategoryInput}
-                propertyCategoryInputChange={propertyCategoryInputChange}
+                handleOwnerAadhaarChange2={handleOwnerAadhaarChange2}
+                handleOwnerNameChange2={handleOwnerNameChange2}
+                handleOwnerContactChange2={handleOwnerContactChange2}
+                handleOwnerEmailChange2={handleOwnerEmailChange2}
+                propertyCategoryInput2={propertyCategoryInput2}
+                propertyCategoryInputChange2={propertyCategoryInputChange2}
               />
 
 
@@ -3316,6 +3879,8 @@ const NamantaranApplication = () => {
               formErrors={formErrors}
               documents={documents}
               resetKey={fileResetKey}
+              submitForm={submitForm}
+               namantaranPurposeInput={namantaranPurposeInput}
             />
           </div> : <div></div>}
 

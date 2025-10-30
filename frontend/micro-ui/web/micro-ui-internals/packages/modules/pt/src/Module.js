@@ -140,6 +140,8 @@ import PropertyCardsLanding from "./pages/citizen/PropertyCardsLanding/PropertyC
 import PaymentForm from "./pages/citizen/PreviewPayment/PreviewPayment";
 import SearchApplication from "./pages/citizen/Namantaran/SearchApplication/SearchApplication";
 import NamantaranApplication from "./pages/citizen/Namantaran/NamantaranApplication";
+import SuccessPages from "./pages/citizen/Namantaran/NamantaranApplication/SuccessPage"
+import BannerResponse from "./pages/citizen/Namantaran/NamantaranApplication/BannerResponse";
 
 //Citizen Services
 import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenServicesLandingCards"
@@ -274,7 +276,9 @@ const componentsToRegister = {
   PropertAddressLayout,
   PropertyCardsLanding,
   SearchApplication,
+  BannerResponse,
   NamantaranApplication,
+  SuccessPages,
   PaymentForm,
   CitizenServicesCards,
   SuccessPage,

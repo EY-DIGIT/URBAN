@@ -18,6 +18,7 @@ const CorrespondenceAddressSection = ({
           value={correspondenceAddress}
           onChange={handleCorrespondenceChange}
           disabled={isSameAsPropertyAddress}
+          readOnly
         />
         <div style={styles.checkboxMargin}>
           <label style={styles.checkboxLabel}>
@@ -26,6 +27,7 @@ const CorrespondenceAddressSection = ({
               onChange={handleSameAsPropertyToggle}
               checked={isSameAsPropertyAddress}
               style={{ padding: "10px" }}
+              disabled
             />
             {"  "} {t("Same as property address")}
           </label>
