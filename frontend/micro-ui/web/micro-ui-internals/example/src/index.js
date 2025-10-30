@@ -23,6 +23,7 @@ import { initWSComponents } from "@egovernments/digit-ui-module-ws";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 import { initBillsComponents, BillsModule } from "@egovernments/digit-ui-module-bills";
+import { BirthModule, birthLinks, BirthLinks, BirthComponents } from "@egovernments/digit-ui-module-birth";
 
 // import {initCustomisationComponents} from "./customisations";
 
@@ -59,6 +60,7 @@ const enabledModules = [
   "Bills",
   "SW",
   "BillAmendment",
+  "Birth",
 ];
 
 const initTokens = (stateCode) => {
@@ -103,6 +105,9 @@ const initDigitUI = () => {
     HRMSModule,
     ReceiptsModule,
     BillsModule,
+    BirthModule,
+    BirthLinks,  // Component
+    ...BirthComponents
 
     // TLModule,
     // TLLinks,
@@ -146,5 +151,7 @@ const initDigitUI = () => {
 };
 
 initLibraries().then(() => {
+  window?.Digit.ModuleRegistryService?.register("Birth", BirthModule);
+  window?.Digit.LinkRegistryService?.registerLinks(birthLinks);
   initDigitUI();
 });

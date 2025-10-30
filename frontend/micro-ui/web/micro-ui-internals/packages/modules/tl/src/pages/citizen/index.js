@@ -23,6 +23,10 @@ const App = () => {
   const TLList = Digit?.ComponentRegistryService?.getComponent("TLList");
   const SearchTradeComponent = Digit?.ComponentRegistryService?.getComponent("TLSearchTradeComponent");
   const TLMyApplications = Digit?.ComponentRegistryService?.getComponent("TLMyApplications");
+  const TLActions = Digit?.ComponentRegistryService?.getComponent("TLActions");
+  const TLApplication = Digit?.ComponentRegistryService?.getComponent("TLApplication");
+  const SuccessModal = Digit?.ComponentRegistryService?.getComponent("SuccessModal");
+  const BirthSuccessModal = Digit?.ComponentRegistryService?.getComponent("BirthSuccessModal");
 
   const getBackPageNumber = () => {
     let goBacktoFromProperty = -1;
@@ -60,6 +64,10 @@ const App = () => {
           <PrivateRoute path={`${path}/tradelicence/application/:id/:tenantId`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/tradelicence/renewal-list`} component={TLList} />
           <PrivateRoute path={`${path}/tradelicence/trade-search`} component={SearchTradeComponent} />
+          <PrivateRoute path={`${path}/tradelicence/Actions`} component={TLActions} />
+          <PrivateRoute path={`${path}/tradelicence/tradelicense-application`} component={TLApplication} />
+          <PrivateRoute path={`${path}/tradelicence/tradelicense-success`} component={SuccessModal} />
+          <PrivateRoute path={`${path}/tradelicence/birthcertificate-success`} component={BirthSuccessModal} />
         </AppContainer>
       </Switch>
     </span>

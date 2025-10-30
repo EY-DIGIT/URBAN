@@ -22,6 +22,7 @@
     "@egovernments/digit-ui-module-tl": "1.7.40",
     "@egovernments/digit-ui-module-ws": "1.7.40",
     "@egovernments/digit-ui-module-bills": "1.7.40",
+    "@egovernments/digit-ui-module-birth": "1.7.40",
     "@egovernments/digit-ui-module-commonpt": "1.7.40",
     "@egovernments/digit-ui-module-hrms":"1.7.40",
     "@egovernments/digit-ui-module-core":"1.7.40",
