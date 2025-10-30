@@ -6,7 +6,7 @@ import { Dropdown, TextInput } from "@egovernments/digit-ui-react-components";
 
 const AddressSection = ({
   t,
-
+  address,
   styles,
 
 }) => {
@@ -29,11 +29,11 @@ const AddressSection = ({
         <TextInput
           style={styles.widthInput}
           name="doorNo"
-     
+          value={address?.doorNo}
           placeholder={t("Enter")}
           disable={true}
         />
-        
+
       </div>
 
       {/* Address */}
@@ -44,11 +44,11 @@ const AddressSection = ({
         <TextInput
           style={styles.widthInput}
           name="address"
-      
+          value={address?.street}
           placeholder={t("Enter")}
           disable={true}
         />
-        
+
       </div>
 
       {/* Pincode */}
@@ -59,63 +59,64 @@ const AddressSection = ({
         <TextInput
           style={styles.widthInput}
           name="pincode"
-      
+          value={address?.pincode || ""}
           placeholder={t("Enter")}
           disable={true}
         />
-       
+
       </div>
 
       {/* Zone Dropdown */}
-      <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>
-          {t("Zone")}<span className="mandatory" style={styles.mandatory}>*</span>
-        </div>
-        <Dropdown
-        disabled={true}
-          style={styles.widthInput}
-          t={t}
-      
-          optionKey="name"
-          placeholder={t("Select")}
-        />
-       
-      </div>
+    {/* Zone Dropdown */}
+<div style={styles.flex30}>
+  <div style={styles.poppinsLabel}>
+    {t("Zone")}<span className="mandatory" style={styles.mandatory}>*</span>
+  </div>
+  <Dropdown
+    t={t}
+    option={[{ code: address?.zone, name: address?.zone }]} // ✅ wrap in array
+    selected={{ code: address?.zone, name: address?.zone }} // ✅ correct prop
+    optionKey="name"
+    disable={true} // ✅ correct prop name (not disabled)
+    style={styles.widthInput}
+    placeholder={t("Select")}
+  />
+</div>
 
-      {/* Ward Dropdown */}
-      <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>
-          {t("Ward")}<span className="mandatory" style={styles.mandatory}>*</span>
-        </div>
-        <Dropdown
-          style={styles.widthInput}
-          t={t}
-     
-           disabled={true}
-       
-          optionKey="name"
-          placeholder={t("Select")}
-        />
-       
-      </div>
+{/* Ward Dropdown */}
+<div style={styles.flex30}>
+  <div style={styles.poppinsLabel}>
+    {t("Ward")}<span className="mandatory" style={styles.mandatory}>*</span>
+  </div>
+  <Dropdown
+    t={t}
+    option={[{ code: address?.ward, name: address?.ward }]}
+    selected={{ code: address?.ward, name: address?.ward }}
+    optionKey="name"
+    disable={true}
+    style={styles.widthInput}
+    placeholder={t("Select")}
+  />
+</div>
 
-      {/* Colony Dropdown */}
-      <div style={styles.flex30}>
-        <div style={styles.poppinsLabel}>
-          {t("Colony")}<span className="mandatory" style={styles.mandatory}>*</span>
-        </div>
-        <Dropdown
-          style={styles.widthInput}
-          t={t}
-     
-           disabled={true}
-          optionKey="name"
-          placeholder={t("Select")}
-        />
-        
-      </div>
+{/* Colony Dropdown */}
+<div style={styles.flex30}>
+  <div style={styles.poppinsLabel}>
+    {t("Colony")}<span className="mandatory" style={styles.mandatory}>*</span>
+  </div>
+  <Dropdown
+    t={t}
+    option={[{ code: address?.locality?.code, name: address?.locality?.name }]}
+    selected={{ code: address?.locality?.code, name: address?.locality?.name }}
+    optionKey="name"
+    disable={true}
+    style={styles.widthInput}
+    placeholder={t("Select")}
+  />
+</div>
 
-    
+
+
     </div>
   );
 };

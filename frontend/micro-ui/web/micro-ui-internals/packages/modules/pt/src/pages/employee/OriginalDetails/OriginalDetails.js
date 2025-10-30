@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import {
 
   SubmitBar,
@@ -23,10 +17,17 @@ import CorrespondenceAddressSection from "./CorrespondenceAddressSection";
 
 
 const OriginalDetails = () => {
-  const location = useLocation();
-  const { state } = useLocation();
-
   const { t } = useTranslation();
+  const location = useLocation();
+ const history = useHistory();
+  const {
+    generalDetails
+  } = location.state || {};
+
+  console.log("All Owners Data in OriginalDetails:", generalDetails);
+  // ✅ Filter only primary owners
+  const primaryOwners = generalDetails?.owners;
+  const address = generalDetails?.address || {};
 
   return (
 
@@ -40,8 +41,9 @@ const OriginalDetails = () => {
           <div style={styles.assessmentStyle}>{t("Original Owner Details")}</div>
 
           <OwnershipDetailsSection
+            generalDetails={generalDetails}
             t={t}
-
+            owners={primaryOwners}
             styles={styles}
 
           />
@@ -51,7 +53,7 @@ const OriginalDetails = () => {
           <div style={styles.assessmentStyle}>{t("Property Address")}</div>
           <AddressSection
             t={t}
-
+            address={address}
             styles={styles}
 
           />
@@ -59,7 +61,7 @@ const OriginalDetails = () => {
         <div style={styles.card}>
           <CorrespondenceAddressSection
             t={t}
-
+            address={address}
             styles={styles}
 
           />
@@ -68,7 +70,7 @@ const OriginalDetails = () => {
           <div style={styles.assessmentStyle}>{t("Assessment Details")}</div>
           <AssessmentDetailsSection
             t={t}
-
+application={generalDetails}
             styles={styles}
 
           />
@@ -78,7 +80,7 @@ const OriginalDetails = () => {
           <div style={styles.assessmentStyle}>{t("Property Details")}</div>
           <PropertyDetailsTableSection
             t={t}
-
+application={generalDetails}
             styles={styles}
 
           />
@@ -93,7 +95,7 @@ const OriginalDetails = () => {
 
           <div style={styles.buttonContainer}>
 
-            <SubmitBar label={t("Back")} style={{ background: "#6b133f" }} />
+            <SubmitBar label={t("Back")} onSubmit={() => history.goBack()}style={{ background: "#6b133f" }} />
 
           </div>
         </div>

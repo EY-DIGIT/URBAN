@@ -42,6 +42,7 @@ import AttachmentsSection from "./Verifier/Attachments";
 import AddressSection from "./Verifier/AddressSection";
 import { useState } from "react";
 import LocationDetails from "./LocationDetailss";
+import { useLocation, useHistory } from "react-router-dom";
 function ApplicationDetailsContentVerifier({
   applicationDetails,
   workflowDetails,
@@ -57,6 +58,7 @@ function ApplicationDetailsContentVerifier({
   isInfoLabel = false
 }) {
   const { t } = useTranslation();
+   const history = useHistory();
   console.log("workflowDetails", workflowDetails)
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
@@ -211,7 +213,7 @@ function ApplicationDetailsContentVerifier({
   const address = application?.address || {};
   const unitde = application?.units?.[0] || {};
   const documents = application?.documents || [];
-  console.log("application", additionalDetailsT)
+
   let userInfo1 = JSON.parse(localStorage.getItem("user-info"));
   const stateId = Digit.ULBService.getStateId();
 
@@ -404,16 +406,11 @@ function ApplicationDetailsContentVerifier({
             <div style={styles.poppinsLabel}>
               {t("Namantaran Purpose")} <span className="mandatory" style={styles.mandatory}>*</span>
             </div>
-            <Dropdown
+          <TextInput
+              value={t(additionalDetailsT?.reasonForTransfer)}
+              // onChange={handleRestryIdChange}
               style={styles.widthInput}
-              t={t}
-              // option={propertyCategoryOptions}
 
-              // selected={propertyCategoryOptions.find(opt => opt.code === propertyCategoryInput)}
-              // select={propertyCategoryInputChange}
-              optionKey="name"
-              placeholder={t("Select")}
-              disable={true}
             />
 
           </div>
@@ -462,95 +459,92 @@ function ApplicationDetailsContentVerifier({
             {/* <TextInput style={styles.widthInput} value={application?.registryId} readOnly /> */}
             {/* </div> */}
           </div>
-          {(application?.owners || []).map((owner, index) => (
-            <React.Fragment key={index}>
-              {(application?.owners?.length > 1) && (
+          {(application?.owners || [])
+            // ✅ Show only owners where isPrimaryOwner is NOT true
+            .filter((owner) => owner?.isPrimaryOwner !== true)
+            .map((owner, index) => (
+              <React.Fragment key={index}>
+                {(application?.owners?.length > 1) && (
+                  <label style={styles.label}>Owner {index + 1}</label>
+                )}
+                <div style={{ ...styles.grid, marginTop: "20px" }}>
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Owner Name<span style={{ color: "red" }}>*</span></label>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <select value={owner?.salutation} disabled style={styles.dropdown30}>
+                        <option>{owner?.salutation}</option>
+                      </select>
+                      <input
+                        style={styles.input}
+                        value={owner?.name || ""}
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                  </div>
 
-                <label style={styles.label}>Owner {index + 1}</label>
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Owner Name (हिंदी)<span style={{ color: "red" }}>*</span></label>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <select value={owner?.salutationHindi} disabled style={styles.dropdown30}>
+                        <option>{owner?.salutationHindi}</option>
+                      </select>
+                      <input
+                        style={styles.input}
+                        value={owner?.hindiName || ""}
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                  </div>
 
-              )}
-              <div style={{ ...styles.grid, marginTop: "20px" }}>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Owner Name<span style={{ color: "red" }}>*</span></label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <select
-                      value={owner?.salutation}
-                      disabled
-                      style={styles.dropdown30}
-                    >
-                      <option>{owner?.salutation}</option>
-                    </select>
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Relationship</label>
+                    <input style={styles.input} value={owner?.relationship || ""} disabled readOnly />
+                  </div>
+
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Father/Husband Name</label>
+                    <input style={styles.input} value={owner?.fatherOrHusbandName || ""} disabled readOnly />
+                  </div>
+
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Email ID</label>
+                    <input style={styles.input} value={owner?.emailId || ""} disabled readOnly />
+                  </div>
+
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Mobile No.<span style={{ color: "red" }}>*</span></label>
+                    <input style={styles.input} value={owner?.mobileNumber || ""} disabled readOnly />
+                  </div>
+
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Alternative Mobile No</label>
+                    <input style={styles.input} value={owner?.altContactNumber || ""} disabled readOnly />
+                  </div>
+
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Aadhar No.<span style={{ color: "red" }}>*</span></label>
                     <input
                       style={styles.input}
-                      value={owner?.name || ""}
+                      value={
+                        owner?.aadhaarNumber
+                          ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
+                          : "N/A"
+                      }
                       disabled
                       readOnly
                     />
                   </div>
-                </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Owner Name (हिंदी)<span style={{ color: "red" }}>*</span></label>
 
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <select
-                      value={owner?.salutation}
-                      disabled
-                      style={styles.dropdown30}
-                    >
-                      <option>{owner?.salutationHindi}</option>
-
-                    </select>
-                    <input
-                      style={styles.input}
-                      value={owner?.hindiName || ""}
-                      disabled
-                      readOnly
-                    />
+                  <div style={styles.flex30}>
+                    <label style={styles.label}>Samagra ID <span style={{ color: "red" }}>*</span></label>
+                    <input style={styles.input} value={owner?.samagraId || ""} disabled readOnly />
                   </div>
                 </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Relationship</label>
-                  <input style={styles.input} value={owner.relationship} disabled readOnly />
-                </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Father/Husband Name</label>
-                  <input style={styles.input} value={owner.fatherOrHusbandName} disabled readOnly />
-                </div>
+              </React.Fragment>
+            ))}
 
-
-
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Email ID</label>
-                  <input style={styles.input} value={owner.emailId} disabled readOnly />
-                </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Mobile No.<span style={{ color: "red" }}>*</span></label>
-                  <input style={styles.input} value={owner.mobileNumber} disabled readOnly />
-                </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Alternative Mobile No</label>
-                  <input style={styles.input} value={owner.altContactNumber || ""} disabled readOnly />
-                </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Aadhar No.<span style={{ color: "red" }}>*</span></label>
-
-                  <input style={styles.input}
-                    label="Aadhaar ID"
-                    value={
-                      owner?.aadhaarNumber
-                        ? owner.aadhaarNumber.replace(/\d(?=\d{4})/g, "X")
-                        : "N/A"
-                    }
-                    disabled readOnly
-                  />
-                </div>
-                <div style={styles.flex30}>
-                  <label style={styles.label}>Samagra ID <span style={{ color: "red" }}>*</span></label>
-                  <input style={styles.input} value={owner.samagraId} disabled readOnly />
-                </div>
-              </div>
-            </React.Fragment>
-          ))}
         </div>
     },
     {
@@ -806,7 +800,7 @@ function ApplicationDetailsContentVerifier({
               <tr >
 
                 <td style={styles.tableCell}>
-                 {billAmount}
+                  {billAmount}
                 </td>
 
                 <td style={styles.tableCell}>
@@ -983,11 +977,26 @@ function ApplicationDetailsContentVerifier({
       onToggle(idx);
     }
   };
-
+  const handleGobackEdit = () => {
+    history.push({
+      pathname: "/digit-ui/employee/pt/OriginalDetails",
+      state: {
+        generalDetails: application
+      },
+    });
+  };
   return (
     <div >
       {/* For UM-4418 changes */}
-<div style={styles.assessmentStyleRight}><a href="/digit-ui/employee/pt/OriginalDetails" ><u>Original Property Owner Details</u></a></div>
+      <div style={styles.assessmentStyleRight}>
+        <div onClick={handleGobackEdit}
+        style={{cursor:"pointer"}}
+        >
+          <u>
+          Original Property Owner Details
+          </u>
+        </div>
+      </div>
       <div>
         {/* <div>
           <label style={styles.sectionTitle}>Select Property ULB/ Year of Assessment</label>
@@ -1384,7 +1393,7 @@ function ApplicationDetailsContentVerifier({
 
 const styles = {
   assessmentStyleRight: {
-        fontFamily: 'Poppins, Roboto, sans-serif',
+    fontFamily: 'Poppins, Roboto, sans-serif',
     // fontWeight: '600',
     fontSize: '16px',
     lineHeight: '1.5',

@@ -23,19 +23,19 @@ import LocationDetails from "./LocationDetails";
 import SelfDeclaration from "./SelfDeclaration";
 
 const EditUpdateForm = ({ applicationData }) => {
-       useEffect(() => {
-    const hasRefreshed = localStorage.getItem("hasRefreshed");
-    if (!hasRefreshed) {
-      localStorage.setItem("hasRefreshed", "true");
-      window.location.reload(); 
-    }
-  }, []);
+    useEffect(() => {
+        const hasRefreshed = localStorage.getItem("hasRefreshed");
+        if (!hasRefreshed) {
+            localStorage.setItem("hasRefreshed", "true");
+            window.location.reload();
+        }
+    }, []);
     const location = useLocation();
     const { state } = useLocation();
     console.log("EditUpdateForm Props:", state);
     const { t } = useTranslation();
     const [isLoader, setIsLoader] = useState(false);
-    console.log("ApplicationData====",applicationData)
+    console.log("ApplicationData====", applicationData)
 
     const [proOwnerDetail, setProOwnerDetail] = useState(null);
     const [showPreviewButton, setShowPreviewButton] = useState(false);
@@ -58,7 +58,7 @@ const EditUpdateForm = ({ applicationData }) => {
     const [capturedPhoto, setCapturedPhoto] = useState(null);
     const [fileResetKey, setFileResetKey] = useState(0);
 
-   
+
 
     const [owners, setOwners] = useState([
         {
@@ -148,7 +148,7 @@ const EditUpdateForm = ({ applicationData }) => {
         error,
     } = Digit.Hooks.pt.usePtCalculationEstimate(tenantId);
 
-    console.log("propertyDetails==",propertyDetails);
+    console.log("propertyDetails==", propertyDetails);
 
 
     const handleEstimate = (newPropertyId, property) => {
@@ -216,10 +216,12 @@ const EditUpdateForm = ({ applicationData }) => {
                 tenantId: userInfo1?.tenantId,
                 oldPropertyId: assessmentDetails.oldPropertyId || null,
                 // essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
-    essentialTax:
-  typeof propertyDetails?.essentialTax === "object"
-    ? propertyDetails?.essentialTax?.code ?? null
-    : propertyDetails?.essentialTax ?? null ,
+                essentialTax:  propertyDetails?.essentialTax || null,
+
+                //     essentialTax:
+                //   typeof propertyDetails?.essentialTax === "object"
+                //     ? propertyDetails?.essentialTax?.code ?? null
+                //     : propertyDetails?.essentialTax ?? null ,
 
                 address: {
                     city: "indore",
@@ -257,7 +259,7 @@ const EditUpdateForm = ({ applicationData }) => {
                     isCorrespondenceAddress: correspondenceAddress,
                     mobileNumber: owner.mobile || "",
                     emailId: owner.email || "",
-                    ownerType: propertyDetails.exemption.code || null,
+                    ownerType: propertyDetails.exemption || null,
                     permanentAddress:
                         addressDetails.address || "",
                     relationship: owner.relationship || "FATHER",
@@ -417,7 +419,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 status: applicationData?.status,
                 tenantId: userInfo1?.tenantId,
                 oldPropertyId: assessmentDetails.oldPropertyId || null,
-                essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
+                essentialTax: propertyDetails.essentialTax || null,
                 address: {
                     city: "indore",
                     locality: {
@@ -458,7 +460,7 @@ const EditUpdateForm = ({ applicationData }) => {
                     isCorrespondenceAddress: correspondenceAddress,
                     mobileNumber: owner.mobile,
                     emailId: owner.email,
-                    ownerType: propertyDetails.exemption.code || null,
+                    ownerType: propertyDetails.exemption || null,
                     roles: applicationData?.owners?.[index]?.roles || [],
                     permanentAddress:
                         addressDetails.address,
@@ -1195,7 +1197,7 @@ const EditUpdateForm = ({ applicationData }) => {
                 propertyType: applicationData.propertyType || "",
                 roomsArea: applicationData.landArea || "",     // or superBuiltUpArea / builtUpArea depending on requirement
                 exemption: applicationData.owners?.[0].ownerType || null,
-                essentialTax: applicationData.essentialTax || ""
+                essentialTax: applicationData?.essentialTax?.code || null
             });
         }
         if (applicationData?.additionalDetails) {
