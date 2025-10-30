@@ -23,6 +23,7 @@ import { UserService } from "./services/elements/User";
 import { PTService } from "./services/elements/PT";
 import { WSService } from "./services/elements/WS";
 import { TLService } from "./services/elements/TL";
+import { DeathService } from "./services/elements/Death";
 import { Surveys } from "./services/elements/Surveys";
 import { MCollectService } from "./services/elements/MCollect";
 import { ReportsService } from "./services/elements/Reports";
@@ -51,6 +52,7 @@ import BillServices from "./services/elements/Bill";
 import { CFService } from "./services/elements/CF";
 
 import {CustomService} from "./services/elements/CustomService";
+import { set } from "lodash";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -74,6 +76,7 @@ const initLibraries = () => {
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
   setupLibraries("PTService", PTService);
+  setupLibraries("DeathService", DeathService);
   setupLibraries("CFService", CFService);
   setupLibraries("CustomService", CustomService);
   setupLibraries("TLService", TLService);
