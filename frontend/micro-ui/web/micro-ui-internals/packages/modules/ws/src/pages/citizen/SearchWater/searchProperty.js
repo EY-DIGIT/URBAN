@@ -305,7 +305,7 @@ const active = Object.values(data.FormattedData).filter(p => p.status === "Activ
                       
                       {/* {property.applicationNo} */}
                        <span className="link">
-                                              <Link to={`/digit-ui/citizen/ws/application-details?applicationNumber=${property.applicationNo}`}>
+                                              <Link to={`/digit-ui/citizen/ws/application-details/${property.applicationNo}`}>
                                                 {property.applicationNo}
                                               </Link>
                                             </span>
