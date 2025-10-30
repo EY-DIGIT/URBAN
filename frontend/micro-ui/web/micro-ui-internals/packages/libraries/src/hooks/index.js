@@ -8,6 +8,7 @@ import useAudit from "./core/useAudit";
 import {
   useFetchPayment,
   usePaymentUpdate,
+  updateWSPaymentStatus,
   useFetchCitizenBillsForBuissnessService,
   useFetchBillsForBuissnessService,
   useGetPaymentRulesForBusinessServices,
@@ -227,6 +228,7 @@ import usewsupdatestatus from "./ws/usewsupdatestatus";
 import usewsPropertySearch from "./ws/usewsPropertySearch";
 import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
+import useWSDetails from "./ws/useWSDetails"
 import useWSApplicationActions from "./ws/useApplicationActions";
 import useApplicationActionsBillAmendUpdate from "./ws/useApplicationActionsBillAmendUpdate";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
@@ -262,7 +264,7 @@ import useToCheckPrivacyEnablement from "./ws/useToCheckPrivacyEnablement";
 import useWSConfigMDMS from "./ws/useWSConfigMDMS";
 import useFeedBackSearch from "./useFeedBackSearch";
 import useBPAInboxV1 from "./obps/useBPAInboxV1";
-
+export * from "./payment";
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -487,6 +489,7 @@ const ws = {
   usewsupdatestatus,
   usewsPropertySearch,
   useWSDetailsPage,
+  useWSDetails,
   useWSApplicationActions,
   useApplicationActionsBillAmendUpdate,
   useWSConsumptionSearch,
@@ -520,6 +523,7 @@ const Hooks = {
   useQueryParams,
   useFetchPayment,
   usePaymentUpdate,
+  updateWSPaymentStatus,
   useFetchCitizenBillsForBuissnessService,
   useFetchBillsForBuissnessService,
   useGetPaymentRulesForBusinessServices,

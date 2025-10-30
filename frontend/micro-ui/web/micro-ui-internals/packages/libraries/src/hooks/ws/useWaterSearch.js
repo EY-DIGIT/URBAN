@@ -40,7 +40,8 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
           .filter((prop) => prop.propertyId === app?.propertyId)[0]
           ?.owners?.map((ow) => ow.name)
           .join(","),
-      Address: getAddress(properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.address, t),
+      Address: getAddress(properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.address || app?.property?.address, t),
+     // Address: getAddress(app?.propertyId?.address, t),
       ward: app?.property?.address?.ward,
       zone: app?.property?.address?.zone,
       locality: app?.property?.address?.locality?.name,
@@ -58,7 +59,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     }));
     data.forEach(app => {
       formattedData[app.applicationNo] = {
-        ConsumerNumber: app?.connectionNo,
+        ConsumerNumber: app?.ConsumerNumber,
         ConsumerName:app?.ConsumerName,
         applicationNo: app?.applicationNo,
         applicationStatus: app?.applicationStatus,
@@ -143,18 +144,18 @@ const useWaterSearch = ({ tenantId, filters = {}, BusinessService = "WS", t }, c
       await PTService.search({ tenantId, filters: propertyfilter, auth: filters?.locality ? false : true }),
     { ...config }
   );
+const billData = []
+  // const billData =  useQuery(
+  //   ["BILL_SEARCH", tenantId, consumercodes, BusinessService, config],
+  //   async () =>
+  //     await Digit.PaymentService.fetchBill(tenantId, {
+  //       businessService: BusinessService,
+  //       consumerCode: consumercodes.slice(0, -1),
+  //     }),
+  //   { ...config }
+  // );
 
-  const billData = useQuery(
-    ["BILL_SEARCH", tenantId, consumercodes, BusinessService, config],
-    async () =>
-      await Digit.PaymentService.fetchBill(tenantId, {
-        businessService: BusinessService,
-        consumerCode: consumercodes.slice(0, -1),
-      }),
-    { ...config }
-  );
-
-  const isLoading = response.isLoading || properties.isLoading || billData.isLoading;
+  const isLoading = response.isLoading || properties.isLoading //|| billData.isLoading;
 
   // ✅ Recompute when any data updates
   const data = !isLoading
@@ -163,8 +164,8 @@ const useWaterSearch = ({ tenantId, filters = {}, BusinessService = "WS", t }, c
 
   return {
     isLoading,
-    isSuccess: response.isSuccess && properties.isSuccess && billData.isSuccess,
-    isError: response.isError || properties.isError || billData.isError,
+    isSuccess: response.isSuccess && properties.isSuccess,//&& billData.isSuccess,
+    isError: response.isError || properties.isError, //|| billData.isError,
     data,
   };
 };

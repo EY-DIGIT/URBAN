@@ -12,35 +12,13 @@ import {
   Row,
   StatusTable,
 } from "@egovernments/digit-ui-react-components";
-import { values } from "lodash";
 import React, { Fragment, useEffect } from "react";
-import Accordion from "../../Accrodion";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import BPADocuments from "./BPADocuments";
-import InspectionReport from "./InspectionReport";
-import NOCDocuments from "./NOCDocuments";
-import PermissionCheck from "./PermissionCheck";
 import PropertyDocuments from "./PropertyDocumentTimeline";
-import PropertyEstimates from "./PropertyEstimates";
-import PropertyFloors from "./PropertyFloors";
-import PropertyOwners from "./PropertyOwners";
-import ScruntinyDetails from "./ScruntinyDetails";
-import SubOccupancyTable from "./SubOccupancyTable";
 import TLCaption from "./TLCaption";
-import TLTradeAccessories from "./TLTradeAccessories";
-import TLTradeUnits from "./TLTradeUnits";
-import WSAdditonalDetails from "./WSAdditonalDetails";
-import WSFeeEstimation from "./WSFeeEstimation";
-// import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
-import DocumentsPreview from "./DocumentsPreview";
-import InfoDetails from "./InfoDetails";
-import ViewBreakup from "./ViewBreakup";
-import OwnershipDetailsSection from "./Verifier/OwnershipDetailsSection";
 import AttachmentsSection from "./Verifier/Attachments";
-import AddressSection from "./Verifier/AddressSection";
 import { useState } from "react";
-import LocationDetails from "./LocationDetailss";
+import {decimalToFractionInch} from "../masterdataconvertHelper"
 function ApplicationDetailsContentVerifier({
   applicationDetails,
   workflowDetails,
@@ -52,7 +30,8 @@ function ApplicationDetailsContentVerifier({
   statusAttribute = "status",
   paymentsList,
   oldValue,
-  isInfoLabel = false
+  isInfoLabel = false,
+  ActionButton
 }) {
   const { t } = useTranslation();
   console.log("workflowDetails", workflowDetails)
@@ -416,6 +395,10 @@ function ApplicationDetailsContentVerifier({
                     />
                   </div>
                 </div>
+                                <div style={styles.flex30}>
+                  <label style={styles.label}>Gender</label>
+                  <input style={styles.input} value={owner.gender} disabled readOnly />
+                </div>
                 <div style={styles.flex30}>
                   <label style={styles.label}>Relationship</label>
                   <input style={styles.input} value={owner.relationship} disabled readOnly />
@@ -440,7 +423,15 @@ function ApplicationDetailsContentVerifier({
                   <input style={styles.input} value={owner.altContactNumber || ""} disabled readOnly />
                 </div>
                 <div style={styles.flex30}>
-                  <label style={styles.label}>Aadhar No.<span style={{ color: "red" }}>*</span></label>
+                  <label style={styles.label}>PhotoID</label>
+                  <input style={styles.input} value={
+                      owner?.identityType
+                        ? owner.identityType?.identityType.replace(/\d(?=\d{4})/g, "X")
+                        : "N/A"
+                    } disabled readOnly />
+                </div>
+                <div style={styles.flex30}>
+                  <label style={styles.label}>PhotoIDValue<span style={{ color: "red" }}>*</span></label>
 
                   <input style={styles.input}
                     label="Aadhaar ID"
@@ -503,7 +494,15 @@ function ApplicationDetailsContentVerifier({
             </div>
             <div style={styles.flex30}>
               <label style={styles.label}>Connection Size</label>
-              <input style={styles.input} value={application?.pipeSize} disabled readOnly />
+              <input style={styles.input} value={`${decimalToFractionInch(application?.pipeSize)} inch`} disabled readOnly />
+            </div>
+             <div style={styles.flex30}>
+              <label style={styles.label}>New Connection Charges</label>
+              <input style={styles.input} value={application?.connectionCharges?.newConnectionCharges} disabled readOnly />
+            </div>
+             <div style={styles.flex30}>
+              <label style={styles.label}>Monthly Charges</label>
+              <input style={styles.input} value={application?.connectionCharges?.monthlyCharges} disabled readOnly />
             </div>
           </div>
           {/* Checkboxes */}

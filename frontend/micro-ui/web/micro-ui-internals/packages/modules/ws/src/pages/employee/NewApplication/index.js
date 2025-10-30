@@ -78,7 +78,7 @@ const NewApplication = () => {
       aadhaar: "",
       hindiTitle: "",
       hindiName: "",
-      fatherHusbandName: "",
+      fatherOrHusbandName: "",
       relationship: "",
       email: "",
       alternatemobilenumber: "",
@@ -114,7 +114,9 @@ const NewApplication = () => {
   const [isOwner, setShowOwner] = useState(false);
   //let UlbOption = [];
   const [UlbOption, setUlbOption] = useState([]);
-
+const closeToast = () => {
+    setShowToast(null);
+  };
   const selectDDR = (e, data) => {
     const DDRsSelectedByUser = UlbOption.filter((ulb) => {
       return !!e.find((tenant) => {
@@ -134,7 +136,7 @@ const NewApplication = () => {
         // mobileNumber:element.mobileNumber,
         // alternatemobilenumber:element.alternatemobilenumber,
         // email:element.emailId,
-        // fatherHusbandName:element.fatherOrHusbandName,
+        // fatherOrHusbandName:element.fatherOrHusbandName,
         // relationship:element.relationship,
       };
     });
@@ -268,14 +270,18 @@ const NewApplication = () => {
           // WaterConnection.monthlyCharges = WaterConnectionP.monthlyCharges
           // setsearchReult(data.Properties)
           // updateIsOwner(true,data.Properties[0].owners);
+          const result = Array.isArray(searchReult) && searchReult.length > 0
+  ? searchReult[0]
+  : WaterConnection?.property;
           history.push({
             pathname: "/digit-ui/employee/ws/PreviewDemand",
-            state: { data, proOwnerDetail: (searchReult).length > 0 ? (searchReult[0]) : {}, WaterConnection: WaterConnection }
+            state: { data, proOwnerDetail: result, WaterConnection: WaterConnection }
             //state: { data, proOwnerDetail: propertyData, documents, waterDocuments, checkboxes, rateZones, owners, unit, assessmentDetails, assessmentDetails, propertyDetails, addressDetails, ownershipType, correspondenceAddress, isSameAsPropertyAddress }
           });
         }
         else {
           setShowToast({ warning: true, label: "No Records Found" });
+           setTimeout(closeToast, 5000);
         }
 
       },
@@ -323,9 +329,11 @@ const NewApplication = () => {
               ? { code: address.zone, name: address.zone }
               : null,
           });
+          setPropertyCategoryInput(data.Properties[0].propertyCategory)
         }
         else {
           setShowToast({ warning: true, label: "No Records Found" });
+           setTimeout(closeToast, 5000);
         }
 
       },
@@ -394,8 +402,8 @@ const NewApplication = () => {
 
       // Father/Husband Name
       if (owner.relationship !== "Not applicable") {
-        if (!owner.fatherHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherHusbandName)) {
-          errors[`owner-${index}-fatherHusbandName`] = "Father/Husband name is required and must be alphabetic.";
+        if (!owner.fatherOrHusbandName || !/^[a-zA-Z\s]+$/.test(owner.fatherOrHusbandName)) {
+          errors[`owner-${index}-fatherOrHusbandName`] = "Father/Husband name is required and must be alphabetic.";
         }
       }
       if (owner.relationship) {
@@ -444,6 +452,7 @@ const NewApplication = () => {
       if (WaterConncetionDetails.waterConnectionType === "COMMERCIAL" && WaterConncetionDetails.UsesType !== "COMMERCIAL") {
         // errors.UsesType  = "For Commercial Water Connection Type, Uses Type must be Commercial.";
         setShowToast({ warning: true, label: "For Commercial Water Connection Type, Uses Type must be Commercial." });
+         setTimeout(closeToast, 5000);
       }
     }
     if (!WaterConncetionDetails.connectionSize) {
@@ -458,6 +467,7 @@ const NewApplication = () => {
     if (WaterConncetionDetails && WaterConncetionDetails.connectionSize && WaterConncetionDetails.MonthlyCharge && WaterConncetionDetails.ConnectionCharge) {
       if (WaterConncetionDetails.connectionSize.code === "15" && (parseFloat(WaterConncetionDetails.ConnectionCharge) < 1000 || parseFloat(WaterConncetionDetails.MonthlyCharge) < 50)) {
         setShowToast({ warning: true, label: "For Connection Size 1/2, Connection Charge must be at least 1000 and Monthly Charge must be at least 50." });
+      setTimeout(closeToast, 5000);
       }
     }
 
@@ -492,6 +502,7 @@ const NewApplication = () => {
     if (Object.keys(finalErrors).length > 0) {
       console.log("❌ Form has validation errors → API not called");
       setShowToast({ warning: true, label: "please fill all required field" });
+       setTimeout(closeToast, 5000);
       return;
     }
 
@@ -513,55 +524,9 @@ const updatedProperty = propertyData
     }
   : null;
 
-    // if (propertyId === "Yes") {
-    //   setupdatedProperty({
-    //     ...searchReult[0],
-    //     documents: null,
-    //     owners: searchReult[0].owners?.map(owner => ({
-    //       ...owner,
-    //       documents: null
-    //     }))
-    //   })
+    
 
-    // }
-    // else {
-    //   setupdatedProperty({
-    //     propertyId: null,
-    //     tenantId: tenantId,
-    //     status: "ACTIVE",
-    //     address: {
-    //       locality:addressDetails.locality,
-    //       zone:addressDetails.zone.code,
-    //       ward:addressDetails.code,
-    //       pincode:addressDetails.pincode,
-    //       address:addressDetails.address,
-    //       doorNo:addressDetails.doorNo
-    //     },
-    //     propertyType: propertyCategoryInput,
-    //     owners: owners.map((owner, index) => ({
-    //       salutation: owner.title || "mr",
-    //       title: "title",
-    //       name: owner.name || `Owner ${index + 1}`,
-    //       isprimaryOwner: index === 0 ? true : false,
-    //       salutationHindi: owner.hindiTitle,
-    //       hindiName: owner.hindiName || "",
-    //       fatherOrHusbandName: owner.fatherHusbandName || "",
-    //       gender: "MALE",
-    //       aadhaarNumber: owner.aadhaar || "",
-    //       identityType: {
-    //         identityType: owner.PhotoID || "",
-    //         identityNumber: owner.PhotoIDValue || "",
-    //       },
-    //       altContactNumber: owner.alternatemobilenumber || "",
-    //       mobileNumber: owner.mobileNumber,
-    //       emailId: owner.email,
-    //       tenantId: tenantId
-    //     })),
-    //   })
-
-    // }
-
-    const payload = {
+    const basePayload = {
       waterConnection: {
         tenantId: tenantId,
         pipeSize: (WaterConncetionDetails?.connectionSize?.code),
@@ -574,6 +539,7 @@ const updatedProperty = propertyData
           newConnectionCharges: parseFloat(WaterConncetionDetails?.ConnectionCharge),
           monthlyCharges: parseFloat(WaterConncetionDetails?.MonthlyCharge),
           serviceCharges: 0,
+          tenantId:tenantId,
           otherCharges: 0
         },
         channel: "CITIZEN",
@@ -584,8 +550,8 @@ const updatedProperty = propertyData
           isprimaryOwner: index === 0 ? true : false,
           salutationHindi: owner.hindiTitle,
           hindiName: owner.hindiName || "",
-          fatherOrHusbandName: owner.fatherHusbandName || "",
-          gender: "MALE",
+          fatherOrHusbandName: owner.fatherOrHusbandName || "",
+           gender:owner.gender,
           aadhaarNumber: owner.aadhaar || "",
           identityType: {
             identityType: owner.PhotoID || "",
@@ -609,7 +575,51 @@ const updatedProperty = propertyData
         },
       }
     };
+    //
+  
+    if (propertyId === "No") {
+  const pickCode = obj => obj && obj.code ? obj.code : null;
 
+  const cleanProperty = {
+    propertyCategory: propertyCategoryInput || null,
+    address: {
+      doorNo: addressDetails?.doorNo || "",
+      address: addressDetails?.address || "",
+      pincode: addressDetails?.pincode || "",
+      locality: (addressDetails?.locality),
+      ward: pickCode(addressDetails?.ward),
+      zone: pickCode(addressDetails?.zone)
+    },
+    tenantId:tenantId,
+    status:"ACTIVE",
+    acknowldgementNumber:"",
+    owners:owners.map((owner, index) => ({
+          salutation: owner.title || "mr",
+          title: "title",
+          name: owner.name || `Owner ${index + 1}`,
+          isprimaryOwner: index === 0 ? true : false,
+          salutationHindi: owner.hindiTitle,
+          hindiName: owner.hindiName || "",
+          fatherOrHusbandName: owner.fatherOrHusbandName || "",
+          gender:owner.gender,
+          aadhaarNumber: owner.aadhaar || "",
+          identityType: {
+            identityType: owner.PhotoID || "",
+            identityNumber: owner.PhotoIDValue || "",
+          },
+          altContactNumber: owner.alternatemobilenumber || "",
+          mobileNumber: owner.mobileNumber,
+          emailId: owner.email,
+          tenantId: tenantId
+        })),
+  };
+
+  basePayload.waterConnection.Property = cleanProperty;
+}
+
+
+
+const payload = basePayload;
     setIsLoader(true);
     //PreviewDemand();
     mutation.mutate(payload, {
@@ -876,7 +886,7 @@ const updatedProperty = propertyData
       //aadhaar: owner.aadhaarNumber || "",
       hindiTitle: owner.salutationHindi || "",
       hindiName: owner.hindiName || "",
-      fatherHusbandName: owner.fatherOrHusbandName || "",
+      fatherOrHusbandName: owner.fatherOrHusbandName || "",
       relationship: owner.relationship || "",
       email: owner.emailId,
       alternatemobilenumber: owner.alternatemobilenumber || "",
@@ -1061,7 +1071,7 @@ const updatedProperty = propertyData
       errors[fieldKey] = "This field is required.";
     } else {
       // Check which field is being validated
-      if (field === "name" || field === "fatherHusbandName") {
+      if (field === "name" || field === "fatherOrHusbandName") {
         if (!englishNameRegex.test(value)) {
           errors[fieldKey] = "Please enter a valid English name.";
         } else {
@@ -1147,7 +1157,7 @@ const updatedProperty = propertyData
       aadhaar: "",
       hindiTitle: "",
       hindiName: "",
-      fatherHusbandName: "",
+      fatherOrHusbandName: "",
       relationship: "",
       email: "",
       alternatemobilenumber: "",
@@ -1211,6 +1221,7 @@ const updatedProperty = propertyData
           styles={styles}
           formErrors={formErrors}
           handlePropdata={handlePropdata}
+          closeToast={closeToast}
           generalDetails={generalDetails}
 
         />
@@ -1270,6 +1281,7 @@ const updatedProperty = propertyData
           updateRateZone={updateRateZone}
           styles={styles}
           formErrors={formErrors}
+          propertyId={propertyId}
           propertyCategoryInput={propertyCategoryInput}
           propertyCategoryInputChange={propertyCategoryInputChange}
           setFormErrors={setFormErrors}
@@ -1344,6 +1356,7 @@ const updatedProperty = propertyData
           {/* )} */}
         </div>
       </div>
+     
       {/* { (
         <PopUp>
           <div>PreviewEstimateDemand  </div>
@@ -1354,6 +1367,7 @@ const updatedProperty = propertyData
           error={showToast.error}
           warning={showToast.warning}
           label={t(showToast.label)}
+          duration={4500}
           isDleteBtn={"true"}
           onClose={() => {
             setShowToast(null);
