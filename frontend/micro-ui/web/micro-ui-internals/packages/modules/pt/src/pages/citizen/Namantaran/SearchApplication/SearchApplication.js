@@ -39,18 +39,18 @@ const SearchApplication = () => {
     // console.log("Nam==============", NamantaranType);
 
 
-    const[namantaranPurposeType,setNamantaranPurposeType]=useState()
+    const [namantaranPurposeType, setNamantaranPurposeType] = useState()
 
-    
-   const namantaranPurposeTypeChange = (val) => {
 
-    setNamantaranPurposeType(val.code);
+    const namantaranPurposeTypeChange = (val) => {
 
-    
-   
+        setNamantaranPurposeType(val.code);
 
- 
-  };
+
+
+
+
+    };
 
 
     const styles = {
@@ -307,7 +307,7 @@ const SearchApplication = () => {
         history.push(`/digit-ui/citizen/pt/property/previewPayment/${propertyIdd}`, { tenantId });
     };
     const handleClear = () => {
-
+setPropertyIdd();
         const propertyIdInput = document.getElementById("propertyIdInput");
 
     };
@@ -327,7 +327,7 @@ const SearchApplication = () => {
         // history.push(`/digit-ui/citizen/pt/namantaran/application`);
     };
 
-    const applicationSeatch=()=>{
+    const applicationSeatch = () => {
         history.push(`/digit-ui/citizen/pt/namantaran/application/${propertyIdd}`);
     }
 
@@ -363,6 +363,316 @@ const SearchApplication = () => {
 
     return (
         <div>
+
+            <style>{`
+        * {
+          box-sizing: border-box;
+        }
+        
+        .search-container {
+          // max-width: 1400px;
+          // margin: 0 auto;
+          // background-color: #000;
+        }
+        
+        .page-content-wrapper {
+          background: white;
+           border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+          // border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          padding: 20px;
+        }
+        
+        @media (max-width: 639px) {
+          .page-content-wrapper {
+            padding: 20px;
+          }
+        }
+        
+        .header-section {
+          margin-bottom: 30px;
+        }
+        
+        .main-title {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 600;
+          font-size: 20px;
+          color: #6b133f;
+          margin: 0 0 20px 0;
+          padding-bottom: 10px;
+        }
+        
+        .assessment-section {
+          margin-bottom: 30px;
+        }
+        
+        .assessment-grid {
+          display: grid;
+          gap: 20px;
+          margin-bottom: 30px;
+        }
+        
+        @media (min-width: 640px) {
+          .assessment-grid {
+            grid-template-columns: 300px;
+          }
+        }
+        
+        .section-title {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+          color: #6b133f;
+          margin: 30px 0 20px 0;
+          padding: 10px;
+          background: #f8f8f8;
+          border-left: 4px solid #6b133f;
+        }
+        
+        .form-grid {
+          display: grid;
+          gap: 24px;
+          width: 100%;
+        }
+        
+        @media (min-width: 1024px) {
+          .form-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+        
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .form-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        
+        @media (max-width: 639px) {
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        
+        .form-field {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+        
+        .form-label {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+          color: #282828;
+          margin-bottom: 8px;
+          display: block;
+        }
+        
+        .form-input {
+          width: 100%;
+          height: 40px;
+          padding: 0 12px;
+          // border: 1px solid #d6d5d4;
+          border-radius: 4px;
+          font-size: 14px;
+          font-family: 'Poppins', sans-serif;
+          transition: all 0.3s ease;
+             background:rgba(210, 210, 210, 0.5);
+          // background:rgb(241, 241, 241);        }
+        
+        .form-input:focus {
+          outline: none;
+          // border-color: #6b133f;
+          // box-shadow: 0 0 0 3px rgba(107, 19, 63, 0.1);
+        }
+        
+        .form-input::placeholder {
+          color: #999;
+        }
+        
+        .form-input:disabled {
+          background:rgb(212, 212, 212);
+          cursor: not-allowed;
+        }
+        
+        .mobile-input-wrapper {
+          display: flex;
+          width: 100%;
+        }
+        
+        .mobile-prefix {
+          display: flex;
+          align-items: center;
+          padding: 0 12px;
+          // background: #f0f0f0;
+             background:rgba(210, 210, 210, 0.5);
+          border: 1px solid #d6d5d4;
+          border-right: none;
+          border-radius: 6px 0 0 6px;
+          font-size: 14px;
+          color: #666;
+          white-space: nowrap;
+          font-family: 'Poppins', sans-serif;
+        }
+        
+        .mobile-input {
+          flex: 1;
+          border-radius: 0 6px 6px 0 !important;
+          min-width: 0;
+        }
+        
+        .button-container {
+          display: flex;
+          justify-content: flex-end;
+          gap: 16px;
+          padding-top: 8%;
+        }
+
+          @media (max-width: 1232px) {
+          .button-container {
+             display: flex;
+             justify-content: flex-end;
+             gap: 16px;
+             padding-top: 10%;
+          }
+        }
+        
+        @media (max-width: 639px) {
+          .button-container {
+            flex-direction: column-reverse;
+          }
+          
+          .button-container button {
+            width: 100%;
+          }
+        }
+        
+        .btn-clear {
+          min-width: 134px;
+          height: 45px;
+          padding: 0 24px;
+          border-radius: 19px;
+          color: #fff;
+          background: #6b133f;
+          font-size: 15px;
+          font-weight: 500;
+          font-family: 'Poppins', sans-serif;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .btn-clear:hover {
+          background: #6b133f;
+          transform: translateY(-1px);
+        }
+        
+        .btn-search {
+          min-width: 134px;
+          height: 45px;
+          padding: 0 24px;
+          border-radius: 19px;
+          border: none;
+          color: white;
+          background: #6b133f;
+          font-size: 15px;
+          font-weight: 500;
+          font-family: 'Poppins', sans-serif;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+        }
+        
+        .btn-search:hover {
+          background: #6b133f;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(107, 19, 63, 0.3);
+        }
+        
+        .error-message {
+          color: #d00000;
+          font-size: 12px;
+          margin-top: 4px;
+          font-family: 'Poppins', sans-serif;
+        }
+        
+        .submitted-data-section {
+          margin-top: 30px;
+          padding: 20px;
+          background: #f0f8ff;
+          border: 1px solid #6b133f;
+          border-radius: 8px;
+          animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .submitted-data-title {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 600;
+          font-size: 16px;
+          color: #6b133f;
+          margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .submitted-data-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 15px;
+        }
+        
+        .submitted-data-item {
+          padding: 10px;
+          background: white;
+          border-radius: 6px;
+          border-left: 3px solid #6b133f;
+        }
+        
+        .submitted-data-label {
+          font-family: 'Poppins', sans-serif;
+          font-size: 12px;
+          color: #666;
+          margin-bottom: 4px;
+        }
+        
+        .submitted-data-value {
+          font-family: 'Poppins', sans-serif;
+          font-size: 14px;
+          color: #282828;
+          font-weight: 500;
+        }
+        
+        .submitted-data-empty {
+          color: #999;
+          font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+          .main-title {
+            font-size: 18px;
+          }
+          
+          .section-title {
+            font-size: 14px;
+          }
+          
+          .submitted-data-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
 
             {showConfirmation && (
                 <div style={styles.modalOverlay}>
@@ -410,7 +720,7 @@ const SearchApplication = () => {
 
 
 
-            <div style={containerStyle}>
+            {/* <div style={containerStyle}>
                 <h4 style={headingStyle}>{t("SEARCH_PROPERTY")}</h4>
                 <div style={rowStyle}>
 
@@ -435,69 +745,41 @@ const SearchApplication = () => {
 
 
                     {showNamantarantype ?
-                    
-                    <div style={inputGroupWrapper}>
 
-                        <div>
-                            <label style={labelStyle}>
-                                {t("Select Namantaran Type")} <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <Dropdown
-                                t={t}
-                                option={NamantaranTypeList}
+                        <div style={inputGroupWrapper}>
 
-                                select={namantaranPurposeTypeChange}
-                                 placeholder={t("Select")}
+                            <div>
+                                <label style={labelStyle}>
+                                    {t("Select Namantaran Type")} <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <Dropdown
+                                    t={t}
+                                    option={NamantaranTypeList}
+
+                                    select={namantaranPurposeTypeChange}
+                                    placeholder={t("Select")}
 
 
-                                optionKey="name"
-                                // style={styles.widthInput}
-                                style={{
-    ...styles.widthInput,     
-    border: "1px solid #ccc",  
-    borderRadius: "8px",       
-    padding: "6px 10px",       
-  }}
+                                    optionKey="name"
+                                    // style={styles.widthInput}
+                                    style={{
+                                        ...styles.widthInput,
+                                        border: "1px solid #ccc",
+                                        borderRadius: "8px",
+                                        padding: "6px 10px",
+                                    }}
 
-                            />
+                                />
+                            </div>
                         </div>
-                    </div>
                         :
                         <div></div>}
 
 
 
 
-              
-                        {/* water and garbage id */}
-                    {/* <div style={inputGroupWrapper}>
 
-                        <div>
-                            <label style={labelStyle}>
-                                Water Consumer ID<span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                type="text"
-                                id="ConsumerIdInput"
-                                placeholder={t("Enter Consumer ID")}
-                                style={inputStyle}
-                            />
-                        </div>
-                    </div>
-                    <div style={inputGroupWrapper}>
-
-                        <div>
-                            <label style={labelStyle}>
-                                Garbage ID<span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input
-                                type="text"
-                                id="GarbageIdInput"
-                                placeholder={t("Enter Garbage ID")}
-                                style={inputStyle}
-                            />
-                        </div>
-                    </div> */}
+                 
 
                     <div style={buttonGroupStyle}>
                         <button onClick={handleClear} style={clearButtonStyle}>
@@ -537,10 +819,145 @@ const SearchApplication = () => {
                     }
 
                 </div>
-            </div> 
+            </div> */}
+
+
+            <div className="search-container">
+                <div className="page-content-wrapper">
+                    <div className="header-section">
+                        <h1 className="main-title">{t("SEARCH_PROPERTY")}</h1>
+                    </div>
+
+                    <div>
+                        <div className="form-grid">
+
+
+                            {/* Property ID */}
+                            <div className="form-field">
+                                <label className="form-label">   {t("PROPERTY_ID")} <span style={{ color: "red" }}>*</span></label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    id="propertyIdInput"
+                                    placeholder={t("Enter Property ID")}
+                                    style={inputStyle}
+                                    disabled={disabledPtID}
+
+                                />
+                            </div>
+
+                            {/* Old Property ID */}
+                            {/* <div className="form-field">
+                                <label className="form-label">Old Property ID</label>
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Enter old property ID"
+                                  {...register("oldPropertyId")}
+                                  onChange={(e) => {
+                                    setValue("oldPropertyId", e.target.value);
+                                  }}
+                                />
+                            </div> */}
+
+
+                            {showNamantarantype ?
+
+                                <div className="form-field">
+                                    <label className="form-label">  {t("Select Namantaran Type")} <span style={{ color: "red" }}>*</span></label>
+
+                                    <Dropdown
+                                        // style={styles.widthInput}
+                                        className="form-input"
+                                        t={t}
+                                        option={NamantaranTypeList}
+
+                                        select={namantaranPurposeTypeChange}
+                                        placeholder={t("Select")}
+
+
+                                        optionKey="name"
+                                    />
+
+
+                                </div>
+                                :
+                                <div></div>}
 
 
 
+
+
+
+                            <div className="form-field">
+                                <div className="button-container">
+                                    <button
+                                        type="button"
+                                        className="btn-clear"
+                                        onClick={handleClear}
+
+                                    >
+                                        {t("CITIZEN_CLEAR_BUTTON")}
+                                    </button>
+
+                                    {!showNamantarantype ?
+
+
+                                        <button
+                                            type="button"
+                                            className="btn-search"
+                                            onClick={() => {
+                                                const propertyId = document.getElementById("propertyIdInput").value;
+                                                handleSearch();
+                                                fetchBill(propertyId);
+                                            }
+                                            }
+
+                                        >
+                                            {t("CITIZEN_FIND_BUTTON")}
+                                        </button>
+                                        : <div></div>}
+
+                                    {showNamantarantype ?
+                                       
+
+
+                                            <button
+                                                type="button"
+                                                className="btn-search"
+                                                onClick={() => {
+                                                    const propertyId = document.getElementById("propertyIdInput").value;
+                                                    applicationSeatch();
+                                                }
+                                                }
+
+                                            >
+                                                {t("Confirm")}
+                                            </button>
+                                         :
+                                        <div></div>
+                                    }
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div className="form-field"></div>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
 
 
 

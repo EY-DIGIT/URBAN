@@ -133,6 +133,11 @@ const PropertyCardsLanding = () => {
                                     url: "/digit-ui/citizen/pt/namantaran/search",
                                 },
                                  {
+                                    label: "Track Namantaran",
+                                    image: "new_application",
+                                    url: "/digit-ui/citizen/pt/namantaran/trackApplicationNamantaran",
+                                },
+                                 {
                                     label: t("PAY"),
                                     image: "inr",
                                     url: "/digit-ui/citizen/pt/property/citizen-search",

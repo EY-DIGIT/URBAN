@@ -1830,10 +1830,18 @@ const NamantaranApplication = () => {
     const [isJointStarted2, setIsJointStarted2] = useState(false); 
   const [selectedAssessmentYear, setSelectedAssessmentYear] = useState(null);
   const [documents, setDocuments] = useState({
-    photoId: null,
-    ownershipDoc: null,
-    sellersRegistry: null
+    REGISTEREDDEED:null,
+AUTHORITYLETTER:null,
+REGISTEREDUNREGISTEREDWILL:null,
+DHARANADHIKAR:null,
+COURTORDER:null,
+    INHERITENCE:null,
+    // photoId: null,
+    // ownershipDoc: null,
+    // sellersRegistry: null
   });
+   console.log("documentsssssssssssssssssssss", documents);
+    console.log("documentsssssssssssssssssssss", documents.INHERITENCE);
   const [longLat, setLongLat] = useState({
     lat: null,
     long: null
@@ -1842,6 +1850,99 @@ const NamantaranApplication = () => {
   const [fileResetKey, setFileResetKey] = useState(0);
 
 
+
+  const buildDocumentPayload = (documentsState) => {
+    const payloadDocs = [];
+
+    // Add the known, non-dynamic documents first
+    // if (documentsState.photoId?.fileStoreId) {
+    //   payloadDocs.push({
+    //     documentType: "Proof of Identity",
+    //     fileStoreId: documentsState.photoId.fileStoreId,
+    //     documentUid: documentsState.photoId.documentUid,
+    //   });
+    // }
+
+    // if (documentsState.ownershipDoc?.fileStoreId) {
+    //   payloadDocs.push({
+    //     documentType: "Proof of Ownership",
+    //     fileStoreId: documentsState.ownershipDoc.fileStoreId,
+    //     documentUid: documentsState.ownershipDoc.documentUid,
+    //   });
+    // }
+
+    if (documentsState.REGISTEREDDEED?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "REGISTEREDDEED",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+         auditDetails: null, 
+            status: "ACTIVE",
+      });
+    }
+    if (documentsState.AUTHORITYLETTER?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "AUTHORITYLETTER",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+         auditDetails: null, 
+            status: "ACTIVE",
+      });
+    }
+    if (documentsState.REGISTEREDUNREGISTEREDWILL?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "REGISTEREDUNREGISTEREDWILL",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+         auditDetails: null, 
+            status: "ACTIVE",
+      });
+    }
+    if (documentsState.DHARANADHIKAR?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "DHARANADHIKAR",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+         auditDetails: null, 
+            status: "ACTIVE",
+      });
+    }
+    if (documentsState.COURTORDER?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "COURTORDER",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+         auditDetails: null, 
+            status: "ACTIVE",
+      });
+    }
+    if (documentsState.INHERITENCE?.fileStoreId) {
+      payloadDocs.push({
+        documentType: "INHERITENCE",
+        fileStoreId: documentsState.photoId.fileStoreId,
+        documentUid: documentsState.photoId.documentUid,
+         auditDetails: null, 
+          status: "ACTIVE",
+      });
+    }
+
+   
+    Object.keys(documentsState).forEach((key) => {
+      // ✅ CORRECTED LINE: Check for keys that start with "others_"
+      if (key.startsWith("others_") || key === "sellersRegistry") {
+        const doc = documentsState[key];
+        if (doc?.fileStoreId) {
+          payloadDocs.push({
+            documentType: key,
+            fileStoreId: doc.fileStoreId,
+            documentUid: doc.documentUid,
+          });
+        }
+      }
+    });
+
+    return payloadDocs;
+  };
 
   const [owners, setOwners] = useState([
     {
@@ -2517,12 +2618,12 @@ const NamantaranApplication = () => {
     const errors = {};
 
     // 1. Files validation
-    if (!documents.photoId?.fileStoreId) {
-      errors.photoId = "Proof of Identity is required.";
-    }
-    if (!documents.ownershipDoc?.fileStoreId) {
-      errors.ownershipDoc = "Proof of Ownership is required.";
-    }
+    // if (!documents.photoId?.fileStoreId) {
+    //   errors.photoId = "Proof of Identity is required.";
+    // }
+    // if (!documents.ownershipDoc?.fileStoreId) {
+    //   errors.ownershipDoc = "Proof of Ownership is required.";
+    // }
 
     // 2. Ownership Type & Registry ID
     if (!ownershipType) {
@@ -2700,14 +2801,18 @@ const NamantaranApplication = () => {
   const handleSubmitUpdateChange = async () => {
  
  
-    // const finalErrors = validateForm();
-    // setFormErrors(finalErrors);
+    const finalErrors = validateForm();
+    setFormErrors(finalErrors);
 
-    // console.log("finalErrors==finalErrors==",finalErrors);
+    console.log("finalErrors==finalErrors==",finalErrors);
 
-    // if (Object.keys(finalErrors).length > 0) {
-    //   return;
-    // }
+    if (Object.keys(finalErrors).length > 0) {
+      return;
+    }
+
+
+    const documentsToSubmit = buildDocumentPayload(documents);
+    console.log("documentsToSubmitdocumentsToSubmit======",documentsToSubmit)
  
     const payload = {
       Property: {
@@ -2720,7 +2825,7 @@ const NamantaranApplication = () => {
         status: applicationData?.status,
         tenantId: "mp.indore",
         oldPropertyId: assessmentDetails.oldPropertyId || null,
-        essentialTax: propertyDetails.essentialTax?.code || propertyDetails.essentialTax,
+        essentialTax: propertyDetails.essentialTax || null,
  
         // Missing fields from comparison
         surveyId: null,
@@ -2752,113 +2857,115 @@ const NamantaranApplication = () => {
           emailId: owners2[0].email || "",
           isPrimaryOwner:"true",
           status:"ACTIVE",
-          // ownerType: propertyDetails.exemption.code || propertyDetails.exemption,
-          ownerType:
-            typeof propertyDetails?.exemption === "object"
-              ? propertyDetails?.exemption?.code ?? null
-              : propertyDetails?.exemption ?? null,
+          ownerType:  propertyDetails.exemption || null,
+          // ownerType:
+          //   typeof propertyDetails?.exemption === "object"
+          //     ? propertyDetails?.exemption?.code ?? null
+          //     : propertyDetails?.exemption ?? null,
           permanentAddress:
             addressDetails.address || "",
           relationship: owners2[0].relationship || "FATHER",
           samagraId: owners2[0].samagraID,
-          documents: [
-            {
-              documentType: "Proof of Identity",
-              fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
-              documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
-            },
-            documents?.sellersRegistry && {
+          // documents: [
+          //   {
+          //     documentType: "Proof of Identity",
+          //     fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+          //     documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+          //   },
+          //   documents?.sellersRegistry && {
 
-              documentType: "Others",
-              fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-              documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
-            },
-            {
-              documentType: "Proof of Ownership",
-              fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
-              documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
-            },
-            {
-              documentType: "Property Photograph",
-              fileStoreId: capturedPhoto || null,
-              documentUid: capturedPhoto || null,
-            },
-            ...Object.keys(documents)
-              .filter(key => key.startsWith("others_"))
-              .map(key => ({
-                documentType: "Others",  // 👈 these will go separately
-                fileStoreId:
-                  documents[key]?.fileStoreId ||
-                  applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-                documentUid:
-                  documents[key]?.documentUid ||
-                  applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
-              })),
-          ].filter(Boolean),
+          //     documentType: "Others",
+          //     fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+          //     documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid
+          //   },
+          //   {
+          //     documentType: "Proof of Ownership",
+          //     fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+          //     documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+          //   },
+          //   {
+          //     documentType: "Property Photograph",
+          //     fileStoreId: capturedPhoto || null,
+          //     documentUid: capturedPhoto || null,
+          //   },
+          //   ...Object.keys(documents)
+          //     .filter(key => key.startsWith("others_"))
+          //     .map(key => ({
+          //       documentType: "Others",  // 👈 these will go separately
+          //       fileStoreId:
+          //         documents[key]?.fileStoreId ||
+          //         applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+          //       documentUid:
+          //         documents[key]?.documentUid ||
+          //         applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+          //     })),
+          // ].filter(Boolean),
+          documents:documentsToSubmit,
         },
       
       ],
  
         institution: null,
+        documents:documentsToSubmit,
  
-        documents: [
-          {
-            id: applicationData.documents?.find(d => d.documentType === "Proof of Identity")?.id, // Missing
-            documentType: "Proof of Identity",
-            fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
-            documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
-            auditDetails: null, // Missing
-            status: "ACTIVE" // Missing
-          },
-          documents?.sellersRegistry && {
-            id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
-            documentType: "Others",
-            fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-            documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
-            auditDetails: null, // Missing
-            status: "ACTIVE" // Missing
-          },
-          {
-            id: applicationData.documents?.find(d => d.documentType === "Proof of Ownership")?.id, // Missing
-            documentType: "Proof of Ownership",
-            fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
-            documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
-            auditDetails: null, // Missing
-            status: "ACTIVE" // Missing
-          },
-          {
-            id: applicationData.documents?.find(d => d.documentType === "Property Photograph")?.id, // Missing
-            documentType: "Property Photograph",
-            fileStoreId: capturedPhoto || null,
-            documentUid: capturedPhoto || null,
-            auditDetails: null, // Missing
-            status: "ACTIVE" // Missing
-          },
-          // Missing document for PATTACERTIFICATE
-          {
-            "documentType": "PATTACERTIFICATE",
-            "fileStoreId": "fe78b468-c06c-4506-9035-b8b1188be481",
-            "documentUid": "fe78b468-c06c-4506-9035-b8b1188be481",
-            auditDetails: null,
-            status: "ACTIVE"
-          },
-          ...Object.keys(documents)
-            .filter(key => key.startsWith("others_"))
-            .map(key => ({
-              id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
-              documentType: "Others",
-              fileStoreId: documents[key]?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
-              documentUid: documents[key]?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
-              auditDetails: null, // Missing
-              status: "ACTIVE" // Missing
-            })),
-        ].filter(Boolean),
+        // documents: [
+        //   {
+        //     id: applicationData.documents?.find(d => d.documentType === "Proof of Identity")?.id, // Missing
+        //     documentType: "Proof of Identity",
+        //     fileStoreId: documents.photoId?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.fileStoreId,
+        //     documentUid: documents.photoId?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Identity")?.documentUid,
+        //     auditDetails: null, // Missing
+        //     status: "ACTIVE" // Missing
+        //   },
+        //   documents?.sellersRegistry && {
+        //     id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
+        //     documentType: "Others",
+        //     fileStoreId: documents.sellersRegistry?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+        //     documentUid: documents.sellersRegistry?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+        //     auditDetails: null, // Missing
+        //     status: "ACTIVE" // Missing
+        //   },
+        //   {
+        //     id: applicationData.documents?.find(d => d.documentType === "Proof of Ownership")?.id, // Missing
+        //     documentType: "Proof of Ownership",
+        //     fileStoreId: documents.ownershipDoc?.fileStoreId || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.fileStoreId,
+        //     documentUid: documents.ownershipDoc?.documentUid || applicationData.documents.find(d => d.documentType === "Proof of Ownership")?.documentUid,
+        //     auditDetails: null, // Missing
+        //     status: "ACTIVE" // Missing
+        //   },
+        //   {
+        //     id: applicationData.documents?.find(d => d.documentType === "Property Photograph")?.id, // Missing
+        //     documentType: "Property Photograph",
+        //     fileStoreId: capturedPhoto || null,
+        //     documentUid: capturedPhoto || null,
+        //     auditDetails: null, // Missing
+        //     status: "ACTIVE" // Missing
+        //   },
+        //   // Missing document for PATTACERTIFICATE
+        //   {
+        //     "documentType": "PATTACERTIFICATE",
+        //     "fileStoreId": "fe78b468-c06c-4506-9035-b8b1188be481",
+        //     "documentUid": "fe78b468-c06c-4506-9035-b8b1188be481",
+        //     auditDetails: null,
+        //     status: "ACTIVE"
+        //   },
+        //   ...Object.keys(documents)
+        //     .filter(key => key.startsWith("others_"))
+        //     .map(key => ({
+        //       id: applicationData.documents?.find(d => d.documentType === "Others")?.id, // Missing
+        //       documentType: "Others",
+        //       fileStoreId: documents[key]?.fileStoreId || applicationData.documents.find(d => d.documentType === "Others")?.fileStoreId,
+        //       documentUid: documents[key]?.documentUid || applicationData.documents.find(d => d.documentType === "Others")?.documentUid,
+        //       auditDetails: null, // Missing
+        //       status: "ACTIVE" // Missing
+        //     })),
+        // ].filter(Boolean),
  
         units: applicationData?.units,
  
         landArea: assessmentDetails.plotArea?.toString() || "3000",
         // propertyType: propertyDetails.propertyType?.code || "BUILTUP",
-        propertyType: "BUILTUP",
+        propertyType: "BUILTUP.INDEPENDENTPROPERTY",
         noOfFloors: unit.length || null,
         superBuiltUpArea: null,
         usageCategory: unit.find(u => u.usageType) ? unit.find(u => u.usageType).usageType : "RESIDENTIAL",
@@ -2918,7 +3025,7 @@ const NamantaranApplication = () => {
           "documentDate": 1761350400000,
           "isMutationInCourt": "NO",
           "caseDetails": "",
-          "reasonForTransfer": "PATTACERTIFICATE",
+          "reasonForTransfer": namantaranPurposeInput,
           "marketValue": 4000,
           "isPropertyUnderGovtPossession": "NO"
         },
@@ -2949,12 +3056,27 @@ const NamantaranApplication = () => {
       console.log("CHeCK API CALL ",data)
       // const [isSuccess, setIsSuccess] = useState(false);
       setIsSuccess(true);
-      history.replace("/digit-ui/citizen/pt/namantaran/bannerResponse");   
+
+      
+
+        // history.push({
+        //     pathname: `/digit-ui/employee/pt/success-applications/${applicationNumber}`, // 👈 send via query params
+        //     state: {data} // 👈 also send via state if needed
+        // });
+ 
+
+          const ackNo =data?.Properties?.[0]?.acknowldgementNumber;
+
+
+      history.replace("/digit-ui/citizen/pt/namantaran/bannerResponse",{
+      ackNo: ackNo,
+    });   
  
       },
       onError: (error) => {
           // history.replace("/digit-ui/citizen/pt/namantaran/bannerResponse");   
         console.log("CHeCK API CALLllllllllllllllllllllll ",error)
+      
       },
     });
     
@@ -3577,6 +3699,8 @@ const NamantaranApplication = () => {
 
 
   const handleOwnershipTypeChange2 = (val) => {
+
+    console.log("VALUE===",val)
 
     setOwnershipType2(val.code);
 

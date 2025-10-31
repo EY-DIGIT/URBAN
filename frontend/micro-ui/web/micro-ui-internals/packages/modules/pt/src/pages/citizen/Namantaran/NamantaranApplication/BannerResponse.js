@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
  
 const successModal = {
   border: "1px solid #ddd",
@@ -57,6 +58,8 @@ const downloadSection = {
  
 const BannerResponse = () => {
 
+  const location = useLocation();
+  const ackNo = location?.state?.ackNo;
        const history = useHistory();
 
   const backClickSearch=()=>{
@@ -85,7 +88,7 @@ const BannerResponse = () => {
         <p style={{ color: "gray", marginTop: "30px" }}>
           Application ID
 <br />
-<strong style={{ marginTop: "30px" }}>IM-PT-2025-000123</strong>
+<strong style={{ marginTop: "30px" }}>{ackNo}</strong>
 </p>
  
         <button style={successButton}  onClick={backClickSearch}>Home</button>

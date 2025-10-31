@@ -143,6 +143,7 @@ import SearchApplication from "./pages/citizen/Namantaran/SearchApplication/Sear
 import NamantaranApplication from "./pages/citizen/Namantaran/NamantaranApplication";
 import SuccessPages from "./pages/citizen/Namantaran/NamantaranApplication/SuccessPage"
 import BannerResponse from "./pages/citizen/Namantaran/NamantaranApplication/BannerResponse";
+import TrackApplicationNamantaran from "./pages/citizen/Namantaran/SearchApplication/TrackApplicationNamantaran";
 
 //Citizen Services
 import CitizenServicesCards from "./pages/citizen/CitizenServices/CitizenServicesLandingCards"
@@ -283,6 +284,7 @@ const componentsToRegister = {
   SearchApplication,
   BannerResponse,
   NamantaranApplication,
+  TrackApplicationNamantaran,
   SuccessPages,
   PaymentForm,
   CitizenServicesCards,

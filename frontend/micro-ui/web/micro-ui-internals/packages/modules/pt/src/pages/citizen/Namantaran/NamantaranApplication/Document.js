@@ -545,12 +545,12 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
           {renderFileInput("COURTORDER", "Past Sale Deed/Property Tax Receipt (Ancestor's Name)", true)}
 
 
-          {renderFileInput("photoId", "Court Order", true)}
+          {renderFileInput("others_courtOrder", "Court Order", true)}
 
-          {renderFileInput("photoId", "Aadhaar Card", true)}
-          {renderFileInput("ownershipDoc", "Death Certificate", true)}
-          {renderFileInput("ownershipDoc", "Last Paid Property Tax Receipt", true)}
-          {renderFileInput("ownershipDoc", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
+          {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
+          {renderFileInput("others_DeathCertificate", "Death Certificate", true)}
+          {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
+          {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
         </div> :
         <div></div>
       }
@@ -566,13 +566,13 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
 
           {renderFileInput("DHARANADHIKAR", "Electricity Bill", true)}
 
-          {renderFileInput("photoId", "Goverment Office Correspondence", true)}
-          {renderFileInput("photoId", "Census 2011 Address Proof", true)}
+          {renderFileInput("others_GovermentOfficeCorrespondence", "Goverment Office Correspondence", true)}
+          {renderFileInput("others_Census2011AddressProof", "Census 2011 Address Proof", true)}
 
-          {renderFileInput("photoId", "Voter List Entry", true)}
-          {renderFileInput("ownershipDoc", "Aadhaar Card", true)}
-          {renderFileInput("ownershipDoc", "Last Paid Property Tax Receipt", true)}
-          {renderFileInput("ownershipDoc", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
+          {renderFileInput("others_VoterListEntry", "Voter List Entry", true)}
+          {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
+          {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
+          {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
         </div> :
         <div></div>
       }
@@ -586,15 +586,15 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
           }}
         >
           {renderFileInput("REGISTEREDUNREGISTEREDWILL", "Past Sale Deed/Property Tax Receipt (Ancestor's Name)", true)}
-          {renderFileInput("photoId", "Will Document", true)}
-          {renderFileInput("ownershipDoc", "Aadhaar Card", true)}
-          {renderFileInput("photoId", "Death Certificate", true)}
-          {renderFileInput("photoId", "3 Witness Statements", true)}
+          {renderFileInput("others_WillDocument", "Will Document", true)}
+          {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
+          {renderFileInput("others_DeathCertificate", "Death Certificate", true)}
+          {renderFileInput("others_3WitnessStatements", "3 Witness Statements", true)}
 
-          {renderFileInput("photoId", "Ownership Document Of Previous Owner", true)}
+          {renderFileInput("others_OwnershipDocumentOfPreviousOwner", "Ownership Document Of Previous Owner", true)}
 
-          {renderFileInput("ownershipDoc", "Last Paid Property Tax Receipt", true)}
-          {renderFileInput("ownershipDoc", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
+          {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
+          {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
         </div> :
         <div></div>
       }
@@ -607,12 +607,12 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
           }}
         >
           {renderFileInput("AUTHORITYLETTER", "Past Sale Deed/Property Tax Receipt (Ancestor's Name)", true)}
-          {renderFileInput("RegisteredAuthorityLetter", "Registered Authority Letter", true)}
-          {renderFileInput("AadhaarCard", "Aadhaar Card", true)}
-          {renderFileInput("OwnershipDocumentOfPreviousOwner", "Ownership Document Of Previous Owner", true)}
-          {renderFileInput("DeathCertificate", "Death Certificate", true)}
-          {renderFileInput("LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
-          {renderFileInput("WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
+          {renderFileInput("others_RegisteredAuthorityLetter", "Registered Authority Letter", true)}
+          {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
+          {renderFileInput("others_OwnershipDocumentOfPreviousOwner", "Ownership Document Of Previous Owner", true)}
+          {renderFileInput("others_DeathCertificate", "Death Certificate", true)}
+          {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
+          {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
         </div> :
         <div></div>
       }
@@ -623,10 +623,10 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
             gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
           }}
         >
-          {renderFileInput("INHERITENCE", "Registered Sale Document", true)}
-          {renderFileInput("AadhaarCard", "Aadhaar Card", true)}
-          {renderFileInput("LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
-          {renderFileInput("WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
+          {renderFileInput("REGISTEREDDEED", "Registered Sale Document", true)}
+          {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
+          {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
+          {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
         </div> :
         <div></div>
       }
@@ -639,9 +639,9 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
           }}
         >
           {renderFileInput("INHERITENCE", "Registered Sale Document", true)}
-          {renderFileInput("AadhaarCard", "Aadhaar Card", true)}
-          {renderFileInput("LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
-          {renderFileInput("WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
+          {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
+          {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
+          {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}
         </div> :
         <div></div>
       }
