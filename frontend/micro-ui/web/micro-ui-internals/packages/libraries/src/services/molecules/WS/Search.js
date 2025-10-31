@@ -41,7 +41,7 @@ const getAddress = (address, t) => {
 const getOwnerNames = (propertyData) => {
   const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
   const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
-  return getOwnersList ? getOwnersList : t("NA");
+  return getOwnersList ? getOwnersList : ("NA");
 }
 
 const checkUserExist = async (userInfo) => {
@@ -120,7 +120,11 @@ export const WSSearch = {
   applicationDetails: async (t, tenantId, applicationNumber, serviceType = "WATER", userInfo, config = {}) => {
 
     const filters = { applicationNumber };
-
+    let Employee = true
+if (userInfo?.info?.mobileNumber && userInfo?.info?.type ==="CITIZEN") {
+  filters.mobileNumber = userInfo?.info?.mobileNumber;
+  Employee = false
+}
     let propertyids = "",
       consumercodes = "",
       businessIds = "";
@@ -158,10 +162,20 @@ export const WSSearch = {
 
     config = { enabled: propertyids !== "" ? true : false };
 
-    const properties = await WSSearch.property(tenantId, propertyfilter);
+    //const properties = await WSSearch.property(tenantId, propertyfilter);
+    const shouldSearch =
+  propertyfilter && Object.keys(propertyfilter).length > 0;
 
-    const billData = await WSSearch.searchBills(tenantId, consumercodes);
+const properties = shouldSearch
+  ? await WSSearch.property(tenantId, propertyfilter)
+  : null;
 
+    //const billData = await WSSearch.searchBills(tenantId, consumercodes);
+let billData = null;
+
+if (consumercodes && consumercodes.trim() !== "") {
+  billData = await WSSearch.searchBills(tenantId, consumercodes);
+}
     if (filters?.applicationNumber) businessIds = filters?.applicationNumber;
 
     const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
@@ -257,7 +271,11 @@ export const WSSearch = {
     if (colletionData?.Payments?.length == 0 && fetchBillData?.Bill?.length == 0) {
       if (isVisible) {
         if (serviceType == "WATER" && response?.WaterConnection?.length > 0) {
-          estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+          if(Employee)
+          {
+            estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+          }
+          
         }
         if (serviceType !== "WATER" && response?.SewerageConnections?.length > 0) {
           estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);

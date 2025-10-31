@@ -101,11 +101,34 @@ export const usePaymentUpdate = ({ egId }, businessService, config) => {
     const payments = await Digit.PaymentService.getReciept(transaction.Transaction[0].tenantId, businessService, {
       consumerCodes: transaction.Transaction[0].consumerCode,
     });
+    
     return { payments, applicationNo: transaction.Transaction[0].consumerCode, txnStatus: transaction.Transaction[0].txnStatus };
   };
+  
 
   return useQuery(["paymentUpdate", egId], () => getPaymentData(egId), config);
 };
+export const updateWSPaymentStatus = async (tenantId, applicationNo) => {
+  const workflow = {
+    waterWorkflowRequest: {
+      tenantId,
+      applicationNo,
+      processInstance: {
+        action: "PAY",
+        comment: "Forwarded to next step"
+      }
+    }
+  };
+
+  try {
+    return await Digit.WSService.wsUpdatestatus(workflow, "WS");
+  } catch (error) {
+    console.error("WS Payment Update Error:", error);
+    return null;
+  }
+};
+
+
 
 export const useGetPaymentRulesForBusinessServices = (tenantId) => {
   return useQuery(["getPaymentRules", tenantId], () => Digit.MDMSService.getPaymentRules(tenantId));

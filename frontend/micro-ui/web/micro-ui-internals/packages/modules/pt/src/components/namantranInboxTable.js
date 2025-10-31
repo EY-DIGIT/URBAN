@@ -51,7 +51,10 @@ const PTinboxTable = () => {
                             <th style={headerStyle}>Property ID</th>
                             <th style={headerStyle}>Owner Name</th>
                             <th style={headerStyle}>Application Type</th>
+                            <th style={headerStyle}>Payment Status</th>
+                            <th style={headerStyle}>Last Date for Objection</th>
                             <th style={headerStyle}>Status</th>
+
                             <th style={headerStyle}>Action</th>
                         </tr>
                     </thead>
@@ -90,7 +93,8 @@ const PTinboxTable = () => {
                                         <td style={cellStyle}>
                                             {t(applicationType) === "CREATE" ? "New Property" : t(applicationType)}
                                         </td>
-
+                                        <td style={{textAlign:"center"}}>-</td>
+                                        <td style={{textAlign:"center"}}>-</td>
                                         <td style={cellStyle}>  <span className={`status-badge status-${(status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                             {/* {t(status && `WF_PT_${status}`) || status || "NA"} */}
                                             {status === "ACTIVE"

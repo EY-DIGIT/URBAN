@@ -39,6 +39,7 @@ const ApplicationDetails = (props) => {
     businessService,
     closeToast,
     moduleCode,
+    ActionButton,
     timelineStatusPrefix,
     forcedActionPrefix,
     statusAttribute,
@@ -176,10 +177,7 @@ const ApplicationDetails = (props) => {
           setIsEnableLoader(false);
           setShowToast({ key: "error", error });          
           setTimeout(closeToast, 5000);
-          history.push({
-            pathname: `/digit-ui/employee/ws/success-applications/${applicationNumber}`, // 👈 send via query params
-            state: {data} // 👈 also send via state if needed
-        });
+         
         },
         onSuccess: (data, variables) => {
           sessionStorage.removeItem("WS_SESSION_APPLICATION_DETAILS");
@@ -261,7 +259,7 @@ const ApplicationDetails = (props) => {
             paymentsList={paymentsList}
             showTimeLine={showTimeLine}
             oldValue={oldValue}
-            isInfoLabel={isInfoLabel}
+            isInfoLabel={isInfoLabel}           
           />):(<ApplicationDetailsContentVerifier
             applicationDetails={applicationDetails}
             workflowDetails={workflowDetails}
@@ -333,7 +331,7 @@ const ApplicationDetails = (props) => {
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />
            {
-            moduleCode === "WS"?
+            (moduleCode === "WS")  ?
           <ApplicationDetailsActionBarWs
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
@@ -344,6 +342,7 @@ const ApplicationDetails = (props) => {
             ActionBarStyle={ActionBarStyle}
             MenuStyle={MenuStyle}
             applicationData={applicationData}
+             ActionButton={ActionButton}
           />
           :
            <ApplicationDetailsActionBar

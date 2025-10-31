@@ -59,7 +59,8 @@ function ApplicationDetailsContentVerifier({
 }) {
   const { t } = useTranslation();
    const history = useHistory();
-  console.log("workflowDetails", workflowDetails)
+    const { data: storeData } = Digit.Hooks.useStore.getInitData();
+    const { stateInfo } = storeData || {};
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
@@ -783,16 +784,16 @@ function ApplicationDetailsContentVerifier({
               <tr>
                 <th style={{
                   ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
-                }}>{t("Namantran Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                }}>{t("Namantran Fees (₹)")}<span className="mandatory" style={{color:"red"}}>*</span></th>
                 <th style={{
                   ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
-                }}>{t("Rajwad Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                }}>{t("Rajwad Fees (₹)")}<span className="mandatory" style={{color:"red"}}>*</span></th>
                 <th style={{
                   ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
-                }}>{t("Advertisement (Vigyapan) Fees (₹)")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                }}>{t("Advertisement (Vigyapan) Fees (₹)")}<span className="mandatory" style={{color:"red"}}>*</span></th>
                 <th style={{
                   ...styles.tableHeader, fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "130%", letterSpacing: "0", fontStyle: "normal",
-                }}>{t("Actions")}<span className="mandatory" style={styles.mandatory}>*</span></th>
+                }}>{t("Actions")}<span className="mandatory" style={{color:"red"}}></span></th>
               </tr>
             </thead>
             <tbody>
@@ -804,46 +805,14 @@ function ApplicationDetailsContentVerifier({
                 </td>
 
                 <td style={styles.tableCell}>
-                  <select
-                    disabled={true}
-                    style={{
-                      ...styles.select, appearance: "auto",
-                      WebkitAppearance: "auto",
-                      MozAppearance: "auto",
-                    }}
-                  // value={unit.usageFactor}
-                  // onChange={(e) => handleUnitChange(index, "usageFactor", e.target.value)}
-                  >
-                    <option value="" disabled>{t("Select")}</option>
-                    {/* {occupancyTypes.map((item) => (
-                            <option key={item.code} value={item.code}>
-                              {t(item.i18nKey)}
-                            </option>
-                          ))} */}
-                  </select>
+                 null
                 </td>
 
                 <td style={styles.tableCell}>
-                  <select
-                    disabled={true}
-                    style={{
-                      ...styles.select, appearance: "auto",
-                      WebkitAppearance: "auto",
-                      MozAppearance: "auto",
-                    }}
-                  // value={unit.floorNo}
-                  // onChange={(e) => handleUnitChange(index, "floorNo", e.target.value)}
-                  >
-                    <option value="" disabled>{t("Select")}</option>
-                    {/* {floorList.map((floor) => (
-                            <option key={floor.code} value={floor.code}>
-                              {t(floor.i18nKey)}
-                            </option>
-                          ))} */}
-                  </select>
+                null
                 </td>
                 <td style={styles.tableCell}>
-                  <a href="/digit-ui/employee/pt/CalculateFees">View</a>
+                  <a href="/digit-ui/employee/pt/CalculateFees"><img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px", height: "30px" }} /></a>
                 </td>
 
               </tr>

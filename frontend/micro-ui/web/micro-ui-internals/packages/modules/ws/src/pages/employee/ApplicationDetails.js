@@ -41,11 +41,12 @@ const ApplicationDetails = () => {
   const isMobile = window.Digit.Utils.browser.isMobile();
   const [showOptions, setShowOptions] = useState(false);
   let filters = func.getQueryStringParams(location.search);
-  const applicationNumber = filters?.applicationNumber;
+  const applicationNumber = id ;// filters?.applicationNumber;
  // const applicationNumber = "WS_AP/1013/2025-26/000126";
-  const serviceType = filters?.service;
+  const serviceType = "WATER";//filters?.service;
   const menuRef = useRef();
-
+const user = Digit.UserService.getUser();
+const mobileNumber = user?.info?.mobileNumber
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
@@ -85,7 +86,7 @@ const ApplicationDetails = () => {
     userInfo,
     { privacy: Digit.Utils.getPrivacyObject() }
   );
-console.log("applicationDetails", applicationDetails)
+console.log("applicationDetails12", applicationDetails)
   function checkforPrivacyenablement() {
     if (
       !isLoading &&
@@ -335,108 +336,108 @@ console.log("applicationDetails", applicationDetails)
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
-  const handleEstimateDownload = async () => {
-    if (applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId) {
-      getFiles([applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId], Digit.ULBService.getCurrentTenantId());
-    } else {
-      const warningCount = sessionStorage.getItem("WARINIG_COUNT") || "0";
-      const warningCountDetails = JSON.parse(warningCount);
-      if (warningCountDetails == 0) {
-        const filters = { applicationNumber };
-        const response = await Digit.WSService.search({
-          tenantId: tenantId,
-          filters: { ...filters },
-          businessService: serviceType == "WATER" ? "WS" : "SW",
-        });
-        let details = serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0];
-        if (details?.additionalDetails?.estimationFileStoreId) {
-          getFiles([details?.additionalDetails?.estimationFileStoreId], Digit.ULBService.getCurrentTenantId());
-        } else {
-          sessionStorage.setItem("WARINIG_COUNT", warningCountDetails ? warningCountDetails + 1 : 1);
-          setTimeout(() => {
-            sessionStorage.setItem("WARINIG_COUNT", "0");
-          }, 60000);
-          setShowWaringToast({
-            isError: false,
-            isWarning: true,
-            key: "warning",
-            message: t("WS_WARNING_FILESTOREID_PLEASE_TRY_AGAIN_SOMETIME_LABEL"),
-          });
-        }
-      } else if (!showWaringToast) {
-        setShowWaringToast({ isError: false, isWarning: true, key: "warning", message: t("WS_WARNING_FILESTOREID_PLEASE_TRY_AGAIN_SOMETIME_LABEL") });
-      }
-    }
-  };
+  // const handleEstimateDownload = async () => {
+  //   if (applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId) {
+  //     getFiles([applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId], Digit.ULBService.getCurrentTenantId());
+  //   } else {
+  //     const warningCount = sessionStorage.getItem("WARINIG_COUNT") || "0";
+  //     const warningCountDetails = JSON.parse(warningCount);
+  //     if (warningCountDetails == 0) {
+  //       const filters = { applicationNumber };
+  //       const response = await Digit.WSService.search({
+  //         tenantId: tenantId,
+  //         filters: { ...filters },
+  //         businessService: serviceType == "WATER" ? "WS" : "SW",
+  //       });
+  //       let details = serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0];
+  //       if (details?.additionalDetails?.estimationFileStoreId) {
+  //         getFiles([details?.additionalDetails?.estimationFileStoreId], Digit.ULBService.getCurrentTenantId());
+  //       } else {
+  //         sessionStorage.setItem("WARINIG_COUNT", warningCountDetails ? warningCountDetails + 1 : 1);
+  //         setTimeout(() => {
+  //           sessionStorage.setItem("WARINIG_COUNT", "0");
+  //         }, 60000);
+  //         setShowWaringToast({
+  //           isError: false,
+  //           isWarning: true,
+  //           key: "warning",
+  //           message: t("WS_WARNING_FILESTOREID_PLEASE_TRY_AGAIN_SOMETIME_LABEL"),
+  //         });
+  //       }
+  //     } else if (!showWaringToast) {
+  //       setShowWaringToast({ isError: false, isWarning: true, key: "warning", message: t("WS_WARNING_FILESTOREID_PLEASE_TRY_AGAIN_SOMETIME_LABEL") });
+  //     }
+  //   }
+  // };
 
-  const wsEstimateDownloadObject = {
-    order: 1,
-    label: t("WS_ESTIMATION_NOTICE"),
-    onClick: handleEstimateDownload,
-  };
+  // const wsEstimateDownloadObject = {
+  //   order: 1,
+  //   label: t("WS_ESTIMATION_NOTICE"),
+  //   onClick: handleEstimateDownload,
+  // };
 
-  const sanctionDownloadObject = {
-    order: 2,
-    label: t("WS_SANCTION_LETTER"),
-    onClick: () => getFiles([applicationDetails?.applicationData?.additionalDetails?.sanctionFileStoreId], Digit.ULBService.getCurrentTenantId()),
-  };
+  // const sanctionDownloadObject = {
+  //   order: 2,
+  //   label: t("WS_SANCTION_LETTER"),
+  //   onClick: () => getFiles([applicationDetails?.applicationData?.additionalDetails?.sanctionFileStoreId], Digit.ULBService.getCurrentTenantId()),
+  // };
 
-  const applicationDownloadObject = {
-    order: 3,
-    label: t("WS_APPLICATION"),
-    onClick: handleDownloadPdf,
-  };
+  // const applicationDownloadObject = {
+  //   order: 3,
+  //   label: t("WS_APPLICATION"),
+  //   onClick: handleDownloadPdf,
+  // };
 
-  const appFeeDownloadReceipt = {
-    order: 4,
-    label: t("DOWNLOAD_RECEIPT_HEADER"),
-    onClick: () =>
-      getRecieptSearch(
-        applicationDetails?.applicationData?.tenantId ? applicationDetails?.applicationData?.tenantId : Digit.ULBService.getCurrentTenantId(),
-        reciept_data?.Payments?.[0],
-        applicationDetails?.applicationData?.applicationNo,
-        receiptKey
-      ),
-  };
+  // const appFeeDownloadReceipt = {
+  //   order: 4,
+  //   label: t("DOWNLOAD_RECEIPT_HEADER"),
+  //   onClick: () =>
+  //     getRecieptSearch(
+  //       applicationDetails?.applicationData?.tenantId ? applicationDetails?.applicationData?.tenantId : Digit.ULBService.getCurrentTenantId(),
+  //       reciept_data?.Payments?.[0],
+  //       applicationDetails?.applicationData?.applicationNo,
+  //       receiptKey
+  //     ),
+  // };
 
-  const applicationFeeReceipt = {
-    order: 4,
-    label: t("WS_APLICATION_RECEIPT"),
-    onClick: async () => {
-      const ConnectionDetailsfile = await Digit.PaymentService.generatePdf(
-        tenantId,
-        { WaterConnection: [applicationDetails?.applicationData] },
-        "ws-consolidatedacknowlegment"
-      );
-      const file = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: ConnectionDetailsfile.filestoreIds[0] });
-      window.open(file[ConnectionDetailsfile.filestoreIds[0]], "_blank");
-    },
-  };
+  // const applicationFeeReceipt = {
+  //   order: 4,
+  //   label: t("WS_APLICATION_RECEIPT"),
+  //   onClick: async () => {
+  //     const ConnectionDetailsfile = await Digit.PaymentService.generatePdf(
+  //       tenantId,
+  //       { WaterConnection: [applicationDetails?.applicationData] },
+  //       "ws-consolidatedacknowlegment"
+  //     );
+  //     const file = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: ConnectionDetailsfile.filestoreIds[0] });
+  //     window.open(file[ConnectionDetailsfile.filestoreIds[0]], "_blank");
+  //   },
+  // };
 
-  switch (appStatus) {
-    case "PENDING_FOR_DOCUMENT_VERIFICATION":
-    case "PENDING_FOR_CITIZEN_ACTION":
-    case "PENDING_FOR_FIELD_INSPECTION":
-      dowloadOptions = [applicationDownloadObject];
-      break;
-    case "PENDING_APPROVAL_FOR_CONNECTION":
-    case "PENDING_FOR_PAYMENT":
-      dowloadOptions = [applicationDownloadObject, wsEstimateDownloadObject];
-      break;
-    case "PENDING_FOR_CONNECTION_ACTIVATION":
-    case "CONNECTION_ACTIVATED":
-      if (applicationDetails?.applicationData?.applicationType?.includes("NEW_") && reciept_data?.Payments?.length > 0)
-        dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject, appFeeDownloadReceipt];
-      else dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
-      break;
-    case "REJECTED":
-      dowloadOptions = [applicationDownloadObject];
-      break;
+  // switch (appStatus) {
+  //   case "PENDING_FOR_DOCUMENT_VERIFICATION":
+  //   case "PENDING_FOR_CITIZEN_ACTION":
+  //   case "PENDING_FOR_FIELD_INSPECTION":
+  //     dowloadOptions = [applicationDownloadObject];
+  //     break;
+  //   case "PENDING_APPROVAL_FOR_CONNECTION":
+  //   case "PENDING_FOR_PAYMENT":
+  //     dowloadOptions = [applicationDownloadObject, wsEstimateDownloadObject];
+  //     break;
+  //   case "PENDING_FOR_CONNECTION_ACTIVATION":
+  //   case "CONNECTION_ACTIVATED":
+  //     if (applicationDetails?.applicationData?.applicationType?.includes("NEW_") && reciept_data?.Payments?.length > 0)
+  //       dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject, appFeeDownloadReceipt];
+  //     else dowloadOptions = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
+  //     break;
+  //   case "REJECTED":
+  //     dowloadOptions = [applicationDownloadObject];
+  //     break;
 
-    default:
-      dowloadOptions = [applicationDownloadObject];
-      break;
-  }
+  //   default:
+  //     dowloadOptions = [applicationDownloadObject];
+  //     break;
+  // }
 
   const closeMenu = () => {
     setShowOptions(false);
@@ -475,6 +476,7 @@ console.log("applicationDetails", applicationDetails)
           workflowDetails={workflowDetails}
           businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}
           moduleCode="WS"
+          ActionButton={true}
           showToast={showToast}
           setShowToast={setShowToast}
           closeToast={closeToast}

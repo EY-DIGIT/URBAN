@@ -107,11 +107,11 @@ const WaterCardsLanding = () => {
                             }}
                         >
                             {[
-                                // {
-                                //     label: t("NEW_WS_APPLICATION"),
-                                //     image: "new_application",
-                                //     url: "/digit-ui/employee/ws/new-application",
-                                // },
+                                {
+                                    label: t("NEW_WS_APPLICATION"),
+                                    image: "new_application",
+                                    url: "/digit-ui/citizen/ws/new-application",
+                                },
                                 {
                                     label: t("TRACK_APPLICATION"),
                                     image: "file_search",
