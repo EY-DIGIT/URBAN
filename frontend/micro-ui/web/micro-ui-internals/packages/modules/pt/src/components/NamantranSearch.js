@@ -593,6 +593,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                             <th className="backGround23">Property ID</th>
                                             <th className="backGround23">Owner Name</th>
                                             <th className="backGround23">Application Type</th>
+                                              <th className="backGround23">Payment Status</th>
+                                            <th className="backGround23">Last Date for Objection</th>
                                             <th className="backGround23">Status</th>
                                             <th className="backGround23">Action</th>
                                         </tr>
@@ -709,7 +711,8 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
     ? t("PT_NEW_PROPERTY")
     : t(item.creationReason || item.applicationType)}
 </td>
-
+<td>-</td>
+<td>-</td>
                                                         <td>
                                                             <span className={`status-badge status-${(item.status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                                                 {/* {t(item.status && `WF_PT_${item.status}`) || item.status || "NA"} */}
