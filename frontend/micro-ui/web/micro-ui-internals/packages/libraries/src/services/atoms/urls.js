@@ -88,6 +88,13 @@ const Urls = {
     cfsearch: "/service-request/service/v1/_search",
   },
 
+  death: {
+    create: "/birth-death-services/common/savedeathimport",
+    search: "/birth-death-services/death/_search",
+    update: "/birth-death-services/common/updatebirthimport",
+    download: "/birth-death-services/death/_download",
+  },
+
   dss: {
     dashboardConfig: "/dashboard-analytics/dashboard/getDashboardConfig",
     getCharts: "/dashboard-analytics/dashboard/getChartV2",

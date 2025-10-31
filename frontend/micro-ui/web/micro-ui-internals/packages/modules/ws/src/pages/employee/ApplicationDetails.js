@@ -41,7 +41,7 @@ const ApplicationDetails = () => {
   const isMobile = window.Digit.Utils.browser.isMobile();
   const [showOptions, setShowOptions] = useState(false);
   let filters = func.getQueryStringParams(location.search);
-  const applicationNumber = filters?.applicationNumber;
+  const applicationNumber = id ;// filters?.applicationNumber;
  // const applicationNumber = "WS_AP/1013/2025-26/000126";
   const serviceType = "WATER";//filters?.service;
   const menuRef = useRef();

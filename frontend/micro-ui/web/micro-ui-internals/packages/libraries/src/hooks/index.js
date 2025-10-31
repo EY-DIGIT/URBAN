@@ -264,6 +264,12 @@ import useToCheckPrivacyEnablement from "./ws/useToCheckPrivacyEnablement";
 import useWSConfigMDMS from "./ws/useWSConfigMDMS";
 import useFeedBackSearch from "./useFeedBackSearch";
 import useBPAInboxV1 from "./obps/useBPAInboxV1";
+
+import useDeathApplicationActions from "./death/useApplicationActions";
+import useDeathSearch from "./death/useDeathSearch";
+import useCreateApplicationActions from "./death/useCreateApplicationActions";
+import useDownloadActions from "./death/useDownloadCertificateActions";
+
 export * from "./payment";
 const pgr = {
   useComplaintDetails,
@@ -354,6 +360,13 @@ const pt = {
   useGenericViewProperty,
   useRatingAndFeedbackMDMS,
   useServiceSearchCF,
+};
+
+const death = {
+  useDeathApplicationActions,
+  useDeathSearch,
+  useCreateApplicationActions,
+  useDownloadActions,
 };
 
 const dss = {
@@ -559,6 +572,7 @@ const Hooks = {
   pgr,
   fsm,
   pt,
+  death,
   dss,
   mcollect,
   hrms,
