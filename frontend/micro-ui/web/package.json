@@ -12,7 +12,8 @@
     "micro-ui-internals/packages/modules/core",
     "micro-ui-internals/packages/modules/common",
     "micro-ui-internals/packages/modules/pgr",
-    "micro-ui-internals/packages/modules/tl"
+    "micro-ui-internals/packages/modules/tl",
+    "micro-ui-internals/packages/modules/death"
   ],
   "engines": {
     "node": ">=14"
@@ -35,6 +36,7 @@
     "@egovernments/digit-ui-module-hrms":"1.7.40",
     "@egovernments/digit-ui-module-core":"1.7.40",
     "@egovernments/digit-ui-module-dss":"1.7.40",
+    "@egovernments/digit-ui-module-death": "1.7.40",
     "@egovernments/digit-ui-react-components":"1.7.40",
     "babel-loader": "8.1.0",
     "clean-webpack-plugin": "4.0.0",

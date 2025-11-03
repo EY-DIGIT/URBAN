@@ -18,6 +18,7 @@
     "@egovernments/digit-ui-module-obps":"^1.4.0",
     "@egovernments/digit-ui-module-pgr":"^1.4.0",
     "@egovernments/digit-ui-module-pt":"^1.4.0",
+    "@egovernments/digit-ui-module-death":"^1.4.0",
     "@egovernments/digit-ui-module-receipts":"^1.4.0",
     "@egovernments/digit-ui-module-tl":"^1.4.0",
     "@egovernments/digit-ui-module-ws":"^1.4.0",

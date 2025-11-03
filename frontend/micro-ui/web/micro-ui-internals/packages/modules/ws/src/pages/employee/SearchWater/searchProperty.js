@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, Link } from "react-router-dom";
 import { Toast, Dropdown } from "@egovernments/digit-ui-react-components";
-import styles from "../NewApplication/IndexStyle"
+import { Styles} from "../../../utils/cssHelper";
+import  {toSentenceCase}  from "../../../utils/masterdataconvertHelper"
 //import Popup from "../PaymentPopUp/PaymentPopUp"
 
 const SearchWater = ({ onSelect }) => {
@@ -280,19 +281,19 @@ const SearchWater = ({ onSelect }) => {
     >
       {/* <div style={containerStyle}> */}
       <div className="main-container">
-        <h4 style={headingStyle}>{t("SEARCH_WATER_APPLICATION")}</h4>
-        <div style={rowStyle}>
-          <div style={inputGroupWrapper}>
+        <h4 style={Styles.headingStyle}>{t("SEARCH_WATER_APPLICATION")}</h4>
+        <div style={Styles.rowStyle}>
+          <div style={Styles.inputGroupWrapper}>
 
             <div>
-              <label style={labelStyle}>
+              <label style={Styles.labelStyle}>
                 {t("WATER_APPLICATION")} <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="text"
                 id="applicationIdInput"
                 placeholder={t("Enter Application Number")}
-                style={inputStyle}
+                style={Styles.inputStyle}
 
               />
             </div>
@@ -300,13 +301,13 @@ const SearchWater = ({ onSelect }) => {
             {/* <div style={orStyle}>OR</div> */}
 
             <div>
-              <label style={labelStyle}>
+              <label style={Styles.labelStyle}>
                 {t("Mobile Number")} <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 type="text"
                 placeholder={t("Mobile Number")}
-                style={inputStyle}
+                style={Styles.inputStyle}
                 value={formValue?.mobileNumber || ""}
                 onChange={(e) =>
                   setFormValue((prev) => ({
@@ -319,10 +320,10 @@ const SearchWater = ({ onSelect }) => {
             </div>
             {/* Zone No */}
             <div className="form-field" style={{ paddingTop: "25px", width: "250px" }} >
-              <label style={labelStyle}>Zone</label>
+              <label style={Styles.labelStyle}>Zone</label>
 
               <Dropdown
-                style={styles.widthInput}
+                style={Styles.widthInput}
                 t={t}
                 option={zones}
                 //selected={formData.zone}
@@ -338,14 +339,14 @@ const SearchWater = ({ onSelect }) => {
             </div>
             {/* Application No */}
             <div className="form-field" style={{ paddingTop: "25px", width: "250px" }} >
-              <label style={labelStyle}>Ward</label>
+              <label style={Styles.labelStyle}>Ward</label>
               <Dropdown
-                style={styles.widthInput}
+                style={Styles.widthInput}
                 t={t}
                 option={wards}
                 selected={formData.Ward}
                 select={(option) => {
-                  handleInputChange('Ward', option.code)
+                  handleInputChange('Ward', option)
 
                 }}
                 optionKey="name"
@@ -359,13 +360,11 @@ const SearchWater = ({ onSelect }) => {
         </div>
 
       </div>
-      <div style={buttonGroupStyle}>
-        <button onClick={handleClear} style={clearButtonStyle}>
+      <div style={Styles.buttonGroupStyle}>
+        <button onClick={handleClear} style={Styles.clearButtonStyle}>
           {t("CITIZEN_CLEAR_BUTTON")}
         </button>
-        {/* <button onClick={onPropertySearch} style={findButtonStyle}>
-              {t("CITIZEN_FIND_BUTTON")}
-            </button> */}
+        
         <button
           onClick={() => {
             const propertyId = document.getElementById("applicationIdInput").value;
@@ -376,28 +375,29 @@ const SearchWater = ({ onSelect }) => {
             }));
             onPropertySearch();
           }}
-          style={findButtonStyle}
+          style={Styles.findButtonStyle}
         >
           {t("CITIZEN_FIND_BUTTON")}
         </button>
       </div>
       {/* Results Table */}
       {searchResults && searchResults.length > 0 && (
-        <div style={paymentSectionStyle}>
+        <div style={Styles.paymentSectionStyle}>
           {/* <h3 style={paymentHeadingStyle}>{t("PAYMENT")}</h3> */}
 
-          <table style={tableStyle}>
+          <table style={Styles.tableStyle}>
             <thead>
               <tr>
-                <th style={thStyle}>{t("APPLICATION_NUMBER")}</th>
-                <th style={thStyle}>{t("OWNER_NAME")}</th>
-                <th style={thStyle}>{t("Address")}</th>
-                <th style={thStyle}>{t("Ward")}</th>
-                <th style={thStyle}>{t("Zone")}</th>
-                <th style={thStyle}>{t("Coloney")}</th>
-                <th style={thStyle}>{t("Status")}</th>
-                <th style={thStyle}>{t("Application Type")}</th>
-                <th style={{ ...thStyle, textAlign: "center" }}>{t("ACTION")}</th>
+                <th style={Styles.thStyle}>{t("APPLICATION_NUMBER")}</th>
+                <th style={Styles.thStyle}>{t("OWNER_NAME")}</th>
+                <th style={Styles.thStyle}>{t("CONNECTION_NUMBER")}</th>
+                <th style={Styles.thStyle}>{t("Address")}</th>
+                <th style={Styles.thStyle}>{t("Ward")}</th>
+                <th style={Styles.thStyle}>{t("Zone")}</th>
+                {/* <th style={Styles.thStyle}>{t("Coloney")}</th> */}
+                <th style={Styles.thStyle}>{t("Status")}</th>
+                <th style={Styles.thStyle}>{t("Application Type")}</th>
+                <th style={{ ...Styles.thStyle, textAlign: "center" }}>{t("ACTION")}</th>
               </tr>
             </thead>
             <tbody>
@@ -405,29 +405,33 @@ const SearchWater = ({ onSelect }) => {
                 const owner = property.owners?.[0] || {};
                 return (
                   <tr key={property.applicationNo}>
-                    <td style={tdStyle}>
+                    <td style={Styles.tdStyle}>
                       <span className="link">
-                        <Link to={`/digit-ui/employee/ws/application-details?applicationNumber=${property.applicationNo}`}>
+                        <Link to={`/digit-ui/employee/ws/application-details/${property.applicationNo}`}>
                           {property.applicationNo}
                         </Link>
                         {/* {item.acknowldgementNumber || item.applicationNo} */}
                       </span>
                     </td>
-                    <td style={tdStyle}>{property.ConsumerName || "-"}</td>
-                    <td style={tdStyle}>{property.Address || "-"}</td>
-                    <td style={tdStyle}>{property.ward || "-"}</td>
-                    <td style={tdStyle}>{property.zone || "-"}</td>
-                    <td style={tdStyle}>{property.locality || "-"}</td>
-                    <td style={tdStyle}>
-                      <span className={`status-badge status-${(property.status || '').toLowerCase().replace(/\s+/g, '')}`}>
-
-                        {property.applicationStatus}
-                      </span>
+                    <td style={Styles.tdStyle}>{property.ConsumerName || "-"}</td>
+                     <td style={Styles.tdStyle}>{property?.ConsumerNumber || "-"}</td>
+                      {/* <td style={Styles.tdStyle}>{
+                      property.applicationStatus ==="APPROVED"? property.ConsumerNumber: "-"
+                      }</td> */}
+                    <td style={Styles.tdStyle}>{property.Address || "-"}</td>
+                    <td style={Styles.tdStyle}>{property.ward || "-"}</td>
+                    <td style={Styles.tdStyle}>{property.zone || "-"}</td>
+                  
+                    <td style={Styles.tdStyle}>
+                     <span style={property.applicationStatus ==="APPROVED"? Styles.statusActive:property.applicationStatus ==="REJECTED"? Styles.statusInactive:Styles.statusInWorkflow}>
+                                           
+                                           {toSentenceCase(property.applicationStatus) || "-"}
+                                           </span>
                     </td>
-                    <td style={tdStyle}>{property.applicationType || "-"}</td>
-                    <td style={{ ...tdStyle, textAlign: "center" }}>
+                    <td style={Styles.tdStyle}>{property.applicationType || "-"}</td>
+                    <td style={{ ...Styles.tdStyle, textAlign: "center" }}>
                       <span className="link">
-                        <Link to={`/digit-ui/employee/ws/application-details?applicationNumber=${property.applicationNo}`}>
+                        <Link to={`/digit-ui/employee/ws/application-details/${property.applicationNo}`}>
                           <img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px", height: "30px" }} />
                         </Link>
                       </span>
@@ -440,18 +444,18 @@ const SearchWater = ({ onSelect }) => {
 
           {/* Pagination Controls */}
           {totalPages > 1 && data && data.length > 0 && (
-            <div style={paginationContainer}>
-              <div style={paginationInfo}>
+            <div style={Styles.paginationContainer}>
+              <div style={Styles.paginationInfo}>
                 Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, data.length)} of {data.length} results
               </div>
 
-              <div style={paginationControls}>
+              <div style={Styles.paginationControls}>
                 <button
                   onClick={handlePrevious}
                   disabled={currentPage === 1}
                   style={{
-                    ...paginationButton,
-                    ...(currentPage === 1 ? disabledButtonStyle : {})
+                    ...Styles.paginationButton,
+                    ...(currentPage === 1 ? Styles.disabledButtonStyle : {})
                   }}
                 >
                   Previous
@@ -459,14 +463,14 @@ const SearchWater = ({ onSelect }) => {
 
                 {getPageNumbers().map((number, index) => (
                   number === '...' ? (
-                    <span key={`dots-${index}`} style={paginationDots}>...</span>
+                    <span key={`dots-${index}`} style={Styles.paginationDots}>...</span>
                   ) : (
                     <button
                       key={number}
                       onClick={() => handlePageChange(number)}
                       style={{
-                        ...paginationButton,
-                        ...(currentPage === number ? activePageButton : {})
+                        ...Styles.paginationButton,
+                        ...(currentPage === number ? Styles.activePageButton : {})
                       }}
                     >
                       {number}
@@ -478,8 +482,8 @@ const SearchWater = ({ onSelect }) => {
                   onClick={handleNext}
                   disabled={currentPage === totalPages}
                   style={{
-                    ...paginationButton,
-                    ...(currentPage === totalPages ? disabledButtonStyle : {})
+                    ...Styles.paginationButton,
+                    ...(currentPage === totalPages ? Styles.disabledButtonStyle : {})
                   }}
                 >
                   Next
@@ -519,198 +523,3 @@ const SearchWater = ({ onSelect }) => {
 
 export default SearchWater;
 
-// -------------------------------------------
-// STYLES
-// -------------------------------------------
-const containerStyle = {
-  background: "#fff",
-  borderRadius: "10px",
-  padding: "20px 30px",
-  maxWidth: "1000px",
-  fontFamily: "sans-serif",
-};
-
-const headingStyle = {
-  margin: "0 0 24px 0",
-  fontFamily: "Barlow, sans-serif",
-  fontWeight: 600,
-  fontSize: "20px",
-  color: "#6B133F",
-};
-
-const rowStyle = {
-  alignItems: "flex-end",
-  gap: "50px",
-  flexWrap: "wrap",
-};
-
-const inputGroupWrapper = {
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  flexWrap: "wrap",
-};
-
-const labelStyle = {
-  display: "block",
-  marginBottom: "8px",
-  fontFamily: "Noto Sans, sans-serif",
-  fontWeight: 400,
-  fontSize: "14px",
-  color: "#505050",
-};
-
-const inputStyle = {
-  width: "300px",
-  padding: "10px 14px",
-  borderRadius: "4px",
-  border: "1px solid #D6D5D4",
-  backgroundColor: "#F7F7F7",
-  fontSize: "14px",
-  outline: "none",
-  transition: "all 0.2s",
-};
-
-const orStyle = {
-  fontWeight: "bold",
-  color: "#555",
-};
-
-const buttonGroupStyle = {
-  display: "flex",
-  gap: "12px",
-  marginTop: "20px",
-};
-
-const baseButtonStyle = {
-  padding: "8px 32px",
-  borderRadius: "4px",
-  fontSize: "14px",
-  fontWeight: 500,
-  cursor: "pointer",
-  transition: "all 0.2s",
-  border: "none",
-  minWidth: "80px",
-};
-
-const clearButtonStyle = {
-  ...baseButtonStyle,
-  backgroundColor: "#6B133F",
-  color: "#fff",
-};
-
-const findButtonStyle = {
-  ...baseButtonStyle,
-  backgroundColor: "#6B133F",
-  color: "#fff",
-};
-
-const paymentSectionStyle = {
-  marginTop: "32px",
-  padding: "0 20px"
-};
-
-const paymentHeadingStyle = {
-  margin: "0 0 16px 0",
-  fontFamily: "Barlow, sans-serif",
-  fontWeight: 600,
-  fontSize: "18px",
-  color: "#000",
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
-  backgroundColor: "#fff",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  borderRadius: "8px",
-  overflow: "hidden",
-};
-
-const thStyle = {
-  backgroundColor: "#E8D4DE",
-  padding: "12px 16px",
-  textAlign: "left",
-  fontWeight: 500,
-  fontSize: "14px",
-  color: "#505050",
-  borderBottom: "1px solid #E0E0E0",
-};
-
-const tdStyle = {
-  padding: "12px 16px",
-  fontSize: "14px",
-  color: "#333",
-  borderBottom: "1px solid #F0F0F0",
-};
-
-const payButtonStyle = {
-  backgroundColor: "#fff",
-  border: "1px solid #6B133F",
-  color: "#6B133F",
-  padding: "6px 24px",
-  borderRadius: "20px",
-  cursor: "pointer",
-  fontSize: "14px",
-  fontWeight: 500,
-  transition: "all 0.2s",
-};
-
-const noResultsStyle = {
-  padding: "32px",
-  textAlign: "center",
-  backgroundColor: "#fff",
-  borderRadius: "8px",
-  color: "#666",
-};
-
-// Pagination styles
-const paginationContainer = {
-  marginTop: "20px",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  flexWrap: "wrap",
-  gap: "16px"
-};
-
-const paginationInfo = {
-  color: "#666",
-  fontSize: "14px",
-};
-
-const paginationControls = {
-  display: "flex",
-  alignItems: "center",
-  gap: "8px",
-};
-
-const paginationButton = {
-  padding: "6px 12px",
-  border: "1px solid #D6D5D4",
-  backgroundColor: "#fff",
-  color: "#333",
-  borderRadius: "4px",
-  cursor: "pointer",
-  fontSize: "14px",
-  transition: "all 0.2s",
-  minWidth: "32px",
-};
-
-const activePageButton = {
-  backgroundColor: "#6B133F",
-  color: "#fff",
-  border: "1px solid #6B133F", // ✅ shorthand replaces both border & borderColor
-};
-
-
-const disabledButtonStyle = {
-  opacity: 0.5,
-  cursor: "not-allowed",
-  backgroundColor: "#f5f5f5",
-};
-
-const paginationDots = {
-  padding: "0 8px",
-  color: "#666",
-};

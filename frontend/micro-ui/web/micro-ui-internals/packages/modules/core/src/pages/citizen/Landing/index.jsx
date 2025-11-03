@@ -705,6 +705,85 @@ const RevenueServices = () => {
                         }
                     }
                 }
+                //  }
+                // },
+                // "Rental": {
+                //   "metadata": {
+                //     "ROLE": [
+                //       "SUPERUSER",
+                //       "employee",
+                //       "BILL_COLLECTOR_RENTAL",
+                //       "ARO_RENTAL",
+                //       "DC_RENTAL",
+                //       "Bill_Collector_Rental",
+                //       "citizen"
+                //     ],
+                //     "Icon": "rental_1",
+                //     "URL": {
+                //       "citizen": "dashboard/rental",
+                //       "employee": "dashboard/rental"
+                //     },
+                //     "other_data": "Rental services",
+                //     "matadata": "Rental metadata"
+                //   },
+                //   "SUB_MENU": {}
+                // },
+                // "Water": {
+                //   "metadata": {
+                //     "ROLE": [
+                //       "SUPERUSER",
+                //       "employee",
+                //       "WS_CLERK",
+                //       "WS_APPROVER",
+                //       "WS_FIELD_INSPECTOR",
+                //       "WS_DOC_VERIFIER",
+                //       "WS_CEMP",
+                //       "citizen"
+                //     ],
+                //     "Icon": "water_1",
+                //     "URL": {
+                //       "employee": "",
+                //       "citizen": "/digit-ui/citizen/ws/water/Actions"
+                //     },
+                //     "other_data": "Water services",
+                //     "matadata": "Water metadata"
+                //   },
+                //   "SUB_MENU": {}
+                // },
+                // "Complaint": {
+                //   "metadata": {
+                //     "ROLE": [
+                //       "SUPERUSER",
+                //       "employee",
+                //       "WS_CLERK",
+                //       "WS_APPROVER",
+                //       "WS_FIELD_INSPECTOR",
+                //       "WS_DOC_VERIFIER",
+                //       "WS_CEMP",
+                //       "citizen"
+                //     ],
+                //     "Icon": "water_1",
+                //     "URL": {
+                //       "employee": "",
+                //       "citizen": "/digit-ui/citizen/pgr-home"
+                //     },
+                //     "other_data": "Water services",
+                //     "matadata": "Water metadata"
+                //   },
+                //   "SUB_MENU": {
+                //     "searchApplication": {
+                //       "Name": "Search Application",
+                //       "ROLE": [
+                //         "billcollector",
+                //         "ARO",
+                //         "employee"
+                //       ],
+                //       "URL": "/digit-ui/employee/pgr/inbox",
+                //       "Icon": "namantranIcon"
+                //     },
+                //     "newComplaint": {
+                //       "Name": "New Complaint",
+                //       "ROLE": [
 
             }
         }

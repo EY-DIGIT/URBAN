@@ -432,7 +432,26 @@ const EmployeeHome = ({ modules }) => {
                 "other_data": "Water services",
                 "matadata": "Water metadata"
               },
-              "SUB_MENU": {}
+              "SUB_MENU": {
+                 "New_Property": {
+                  "Name": "New Property",
+                  "ROLE": [
+                    "billcollector",
+                    "employee"
+                  ],
+                  "URL": "/digit-ui/employee/ws/WaterLandingPage",
+                  "Icon": "newPropertyIcon"
+                },
+                "cashDesk": {
+                  "Name": "CashDesk",
+                  "ROLE": [
+
+                    "employee"
+                  ],
+                  "URL": "/digit-ui/employee/ws/searchTax",
+                  "Icon": "cashDesk"
+                },
+              }
             },
             "Complaint": {
               "metadata": {

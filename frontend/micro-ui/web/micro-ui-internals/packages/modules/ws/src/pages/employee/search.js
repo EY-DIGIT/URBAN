@@ -117,8 +117,8 @@ const Search = () => {
   const [formData, setFormData] = useState(defaultValues);
   const [searchBy, setSearchBy] = useState("searchId");
   const [showToast, setShowToast] = useState(null);
-  const SearchComponent = memo(Digit.ComponentRegistryService.getComponent("PropertySearchForm"));
-  const SearchResultComponent = memo(Digit.ComponentRegistryService.getComponent("PropertySearchResults"));
+  const SearchComponent = memo(Digit.ComponentRegistryService.getComponent("WaterSearchForm"));
+  const SearchResultComponent = memo(Digit.ComponentRegistryService.getComponent("WaterSearchResults"));
   const { data: ptSearchConfig, isLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "DIGIT-UI", "HelpText", {
     select: (data) => {
       return data?.["DIGIT-UI"]?.["HelpText"]?.[0]?.PT;
@@ -150,7 +150,7 @@ const Search = () => {
   });
   return (
     <React.Fragment>
-      <Header>{t("SEARCH_PROPERTY")}</Header>
+      <Header>{t("SEARCH_WATER_TAX")}</Header>
       <SearchComponent
         t={t}
         payload={formData}
