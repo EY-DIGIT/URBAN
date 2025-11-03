@@ -75,17 +75,6 @@ const Home = () => {
     window.location.replace(stateInfo?.BAPURL);
 
   }
-    const stateCode = Digit.ULBService.getStateId();
-
-    useEffect(
-    () =>
-      Digit.LocalizationService.getLocale({
-        modules: ["rainmaker-pt"],
-        locale: Digit.StoreData.getCurrentLanguage(),
-        tenantId: stateCode,
-      }),
-    []
-  );
 
 
 

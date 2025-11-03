@@ -59,9 +59,14 @@ import RenewTrade from "./pages/citizen/Renewal/renewTrade";
 import SearchTradeComponent from "./pages/citizen/SearchTrade";
 import SelectTradeUnitsInitial from "./pageComponents/SelectTradeUnitsInitial";
 import TLTradeUnitsEmployeeInitial from "./pageComponents/TLTradeUnitsEmployeeInitial";
+import TLActions from "./pages/citizen/Tradelicences/TLActions";
+import TLApplication from "./pages/citizen/Tradelicences/TLApplication";
 
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
+
+import SuccessModal from "./pages/citizen/Tradelicences/SuccessModal";
+//import BirthSuccessModal from "./pages/citizen/Tradelicences/BirthSuccessModal";
 
 export const TLModule = ({ stateCode, userType, tenants }) => {
   const { path, url } = useRouteMatch();
@@ -162,6 +167,10 @@ const componentsToRegister = {
   SelectOtherTradeDetails,
   SelectTradeUnitsInitial,
   TLTradeUnitsEmployeeInitial,
+  TLActions,
+  TLApplication,
+  SuccessModal: SuccessModal,
+  //BirthSuccessModal: BirthSuccessModal,
 };
 
 export const initTLComponents = () => {
