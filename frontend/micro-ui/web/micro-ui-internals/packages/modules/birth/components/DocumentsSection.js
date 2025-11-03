@@ -75,7 +75,7 @@ const AttachmentsSection = () => {
 
   return (
     
-    <div style={styles.card}>
+    <div style={{ ...styles.card, marginLeft: "10px", marginRight: "10px", marginTop: "10px", marginBottom: "10px" }}>
       <div style={{color: "rgb(107, 19, 63)", fontSize: "14px"}}>Please Select Relationship With Child<span className="mandatory" style={styles.mandatory}>*</span></div>
       <div className="form-section" style={styles.formSection}>
 

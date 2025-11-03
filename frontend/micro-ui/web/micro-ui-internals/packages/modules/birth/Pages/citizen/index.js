@@ -13,7 +13,7 @@ const App = () => {
   const { path, url, ...match } = useRouteMatch();
   const { t } = useTranslation();
 
-  const DeathCertificate = Digit?.ComponentRegistryService?.getComponent("DeathCertificate");
+  //const DeathCertificate = Digit?.ComponentRegistryService?.getComponent("DeathCertificate");
   const BirthCardsLanding = Digit?.ComponentRegistryService?.getComponent("BirthCardsLanding");
   const SearchApplication = Digit?.ComponentRegistryService?.getComponent("SearchApplication");
   const NewbornDetailsSection = Digit?.ComponentRegistryService?.getComponent("NewbornDetailsSection");

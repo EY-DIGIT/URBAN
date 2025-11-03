@@ -66,7 +66,7 @@ import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
 import SuccessModal from "./pages/citizen/Tradelicences/SuccessModal";
-import BirthSuccessModal from "./pages/citizen/Tradelicences/BirthSuccessModal";
+//import BirthSuccessModal from "./pages/citizen/Tradelicences/BirthSuccessModal";
 
 export const TLModule = ({ stateCode, userType, tenants }) => {
   const { path, url } = useRouteMatch();
@@ -170,7 +170,7 @@ const componentsToRegister = {
   TLActions,
   TLApplication,
   SuccessModal: SuccessModal,
-  BirthSuccessModal: BirthSuccessModal,
+  //BirthSuccessModal: BirthSuccessModal,
 };
 
 export const initTLComponents = () => {

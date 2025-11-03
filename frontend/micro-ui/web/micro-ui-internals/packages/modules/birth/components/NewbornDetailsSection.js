@@ -11,7 +11,8 @@ const NewbornDetailsSection = () => {
   };
 
   return (
-    <div style={styles.card}>
+    
+    <div style={{ ...styles.card, marginLeft: "10px", marginRight: "10px", marginTop: "10px", marginBottom: "10px" }}>
       <div style={styles.assessmentStyle}>Newborn Details</div>
 
       <div className="form-section" style={styles.formSection}>

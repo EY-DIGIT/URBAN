@@ -11,14 +11,15 @@ import SpecialDocumentsSection from "./SpecialDocumentsSection";
 import OtherDocumentsSection from "./OtherDocumentsSection";
 import SelfDeclarationSection from "./SelfDeclarationSection";
 import ItemDetailsSection from "./ItemDetailsSection";
-//Birth certificate components strats here
-import SearchApplication from "./SearchApplication";
-import NewbornDetailsSection from "./NewbornDetailsSection";
-import AttachmentsSection from "./AttachmentsSection";
-import OtherDetailsSection from "./OtherDetailsSection";
-import DocumentsSection from "./DocumentsSection";
-import BirthLandingPage from "./BirthLandingPage";
-import DocumentsActionSection from "./DocumentsActionSection";
+
+//Birth certificate components starts here
+//import SearchApplication from "./SearchApplication";
+//import NewbornDetailsSection from "./NewbornDetailsSection";
+//import AttachmentsSection from "./AttachmentsSection";
+//import OtherDetailsSection from "./OtherDetailsSection";
+//import DocumentsSection from "./DocumentsSection";
+//import BirthLandingPage from "./BirthLandingPage";
+//import DocumentsActionSection from "./DocumentsActionSection";
 
 const TLApplication = () => {
   return (
@@ -81,48 +82,42 @@ const TLApplication = () => {
         </div>
         
         {/* Birth Certificate Components ///////////////////////////////*/}
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}></div>
             <SearchApplication />
-        </div>
+        </div> */}
 
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}>Newborn Details</div>
             <NewbornDetailsSection />
-        </div>
+        </div> */}
 
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}>Attachments<br/>
                 <p style={{fontSize: "10px", color: "#555555"}}>( *Accepted File Type : JPG/PNG/PDF **Maximum File Size 2MB)</p></div>
             <AttachmentsSection />
-        </div>
+        </div> */}
 
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}>Other Details<br/>
                 <p style={{fontSize: "10px", color: "#555555"}}>Relative’s/Reporters Details Relationship With Child </p></div>
             <OtherDetailsSection />
-        </div>
+        </div> */}
 
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}>Documents</div>
             <DocumentsSection />
-        </div>
+        </div> */}
 
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}></div>
             <BirthLandingPage />
-        </div>
+        </div> */}
 
-        <div style={styles.card}>
-            <div style={styles.assessmentStyle}>Other Details<br/>
-                <p style={{fontSize: "10px", color: "#555555"}}>Relative’s/Reporters Details Relationship With Child </p></div>
-            <OtherDetailsSection />
-        </div>
-
-        <div style={styles.card}>
+        {/* <div style={styles.card}>
             <div style={styles.assessmentStyle}>Documents</div>
             <DocumentsActionSection />
-        </div>
+        </div> */}
 
     </div>
   );

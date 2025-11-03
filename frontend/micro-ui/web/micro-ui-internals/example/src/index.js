@@ -92,7 +92,7 @@ const initDigitUI = () => {
     BillsModule,
     BirthModule,
     BirthLinks,  // Component
-    ...BirthComponents
+    ...BirthComponents,
 
     // TLModule,
     // TLLinks,

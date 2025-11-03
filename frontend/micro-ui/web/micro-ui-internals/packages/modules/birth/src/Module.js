@@ -3,14 +3,11 @@ import { useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CitizenHomeCard } from "@egovernments/digit-ui-react-components";
 import BirthCardsLanding from "../Pages/BirthCertLanding";
-import DeathCertificate from "../Pages/NewDeathCertificateApplicationForm";
+//import DeathCertificate from "../Pages/NewDeathCertificateApplicationForm";
 import CitizenApp from "../Pages/citizen/index.js";
 import { Header, PTIcon } from "@egovernments/digit-ui-react-components";
-//import Hello from "../components/Hello.jsx";
 import SearchApplication from "../components/SearchApplication.js";
 import NewbornDetailsSection from "../components/NewbornDetailsSection.js";
-//import AttachmentsSection from "../components/Attachmentssection.js";
-//import OtherDetailsSection from "../components/OtherDetailsSection.js";
 import DocumentsSection from "../components/DocumentsSection.js";
 import SuccessModal from "../components/Successmodal.js";
 //import ApplicationDetailsSection from "../components/Applicationdetailssection.jsx";
@@ -117,12 +114,9 @@ console.log("Determined userType in Birth Module:", userType);
 
 const componentsToRegister = {
   BirthCardsLanding,
-  DeathCertificate,
-  //Hello,
+  //DeathCertificate,
   SearchApplication,
   NewbornDetailsSection,
-  //AttachmentsSection,
-  //OtherDetailsSection,
   DocumentsSection,
   SuccessModal,
   //ApplicationDetailsSection,
