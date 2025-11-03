@@ -21,6 +21,7 @@ import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initWSComponents } from "@egovernments/digit-ui-module-ws";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 import { initBillsComponents, BillsModule } from "@egovernments/digit-ui-module-bills";
+import { BirthModule, birthLinks, BirthLinks, BirthComponents } from "@egovernments/digit-ui-module-birth";
 
 // Import BOTH deathLinks (array) and DeathLinks (component)
 import { DeathModule, deathLinks, DeathLinks, DeathComponents } from "@egovernments/digit-ui-module-death";
@@ -50,6 +51,7 @@ const enabledModules = [
   "Bills",
   "SW",
   "BillAmendment",
+  "Birth",
   "Death"
 ];
 
@@ -88,6 +90,12 @@ const initDigitUI = () => {
     HRMSModule,
     ReceiptsModule,
     BillsModule,
+    BirthModule,
+    BirthLinks,  // Component
+    ...BirthComponents,
+
+    // TLModule,
+    // TLLinks,
     DeathModule,
     DeathLinks,  // Component
     ...DeathComponents
@@ -131,6 +139,8 @@ const initDigitUI = () => {
 };
 
 initLibraries().then(() => {
+  window?.Digit.ModuleRegistryService?.register("Birth", BirthModule);
+  window?.Digit.LinkRegistryService?.registerLinks(birthLinks);
   window?.Digit.ModuleRegistryService?.register("Death", DeathModule);
   window?.Digit.LinkRegistryService?.registerLinks(deathLinks);
 

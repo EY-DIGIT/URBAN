@@ -11,7 +11,7 @@ export const PTService = {
       userService: auth === false ? auth : true,
       params: { tenantId, ...filters },
     }),
-  fetchPaymentDetails: ({ tenantId, consumerCodes ,auth=true}) =>
+  fetchPaymentDetails: ({ tenantId, consumerCodes, auth = true }) =>
     Request({
       url: Urls.pt.fetch_payment_details,
       useCache: false,
@@ -42,7 +42,7 @@ export const PTService = {
       params: {},
       auth: true,
     }),
-    updateContent: (details, tenantId) =>
+  updateContent: (details, tenantId) =>
     Request({
       url: Urls.pt.update_content,
       data: details,
@@ -56,6 +56,16 @@ export const PTService = {
   ptCalculationEstimate: (details, tenantId) =>
     Request({
       url: Urls.pt.pt_calculation_estimate,
+      data: details,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  ptMutationEstimate: (details, tenantId) =>
+    Request({
+      url: Urls.pt.pt_mutation_estimate,
       data: details,
       useCache: false,
       userService: true,
@@ -101,44 +111,44 @@ export const PTService = {
       params: { tenantId },
       auth: true,
     }),
-  PTOpenSearch : ({ tenantId, filters }) =>
-  Request({
-   url: Urls.pt.search,
-   useCache: false,
-   method: "POST",
-   auth: false ,
-   userService: false,
-   params: { tenantId, ...filters },
- }),
-    cfcreate: (details, tenantId) =>
-        Request({
-          url: Urls.pt.cfcreate,
-          data: details,
-          useCache: false,
-          setTimeParam: false,
-          userService: true,
-          method: "POST",
-          params: {},
-          auth: true,
-        }),
-    cfdefinitionsearch: ({ filters, auth }) =>
+  PTOpenSearch: ({ tenantId, filters }) =>
+    Request({
+      url: Urls.pt.search,
+      useCache: false,
+      method: "POST",
+      auth: false,
+      userService: false,
+      params: { tenantId, ...filters },
+    }),
+  cfcreate: (details, tenantId) =>
+    Request({
+      url: Urls.pt.cfcreate,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
+  cfdefinitionsearch: ({ filters, auth }) =>
     Request({
       url: Urls.pt.cfdefinitionsearch,
       useCache: false,
       method: "POST",
       auth: auth === false ? auth : true,
       userService: auth === false ? auth : true,
-      data: {...filters},
+      data: { ...filters },
       //params: { tenantId, ...filters },
     }),
-    cfsearch: ({ filters, auth }) =>
+  cfsearch: ({ filters, auth }) =>
     Request({
       url: Urls.pt.cfsearch,
       useCache: false,
       method: "POST",
       auth: auth === false ? auth : true,
       userService: auth === false ? auth : true,
-      data: {...filters},
+      data: { ...filters },
       //params: { tenantId, ...filters },
     }),
 };

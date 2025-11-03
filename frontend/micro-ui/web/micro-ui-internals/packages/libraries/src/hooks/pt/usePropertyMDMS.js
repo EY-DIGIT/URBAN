@@ -8,6 +8,9 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
   const usePropertyEssentialTax = () => {
       return useQuery("PT_ESSENTIAL_CATEGORY", () => MdmsService.getPropertyEssentialTax(tenantId, moduleCode, type), config);
   }
+ const usePropertyAdvertisementRates = () => {
+      return useQuery("PT_ADVERTISEMENT_RATES", () => MdmsService.getPropertyAdvertisementRates(tenantId, moduleCode, type), config);
+  }
 
   const usePropertyOwnerShipCategory = () => {
     return useQuery("PT_OWNER_TYPE", () => MdmsService.getPropertyOwnerShipCategory(tenantId, moduleCode, type), config);
@@ -62,6 +65,8 @@ const usePropertyMDMS = (tenantId, moduleCode, type, config = {}) => {
       return usePropertyOwnerType();
       case "EssentialTax":
       return usePropertyEssentialTax();
+      case "AdvertisementRates":
+      return usePropertyAdvertisementRates();
     case "SubOwnerShipCategory":
       return useSubOwnerShipCategory();
     case "AssessmentYear":
