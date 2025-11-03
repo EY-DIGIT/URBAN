@@ -488,7 +488,7 @@ useEffect(() => {
     },
 
     {
-      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Ownership Details</h3></div>,
+      title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>New Ownership Details</h3></div>,
       content:
         <div >
           {/* <div style={styles.sectionTitle}>Ownership Details</div> */}
