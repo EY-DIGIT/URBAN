@@ -638,7 +638,7 @@ const AttachmentsSection = ({ t = (label) => label, handleFileChange, formErrors
             gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
           }}
         >
-          {renderFileInput("INHERITENCE", "Registered Sale Document", true)}
+          {renderFileInput("INHERITENCE", "Succession Order", true)}
           {renderFileInput("others_AadhaarCard", "Aadhaar Card", true)}
           {renderFileInput("others_LastPaidPropertyTaxReceipt", "Last Paid Property Tax Receipt", true)}
           {renderFileInput("others_WaterChargesReceipt/AffidavitInCaseOfNoConnection", "Water Charges Receipt/Affidavit In Case Of No Connection", true)}

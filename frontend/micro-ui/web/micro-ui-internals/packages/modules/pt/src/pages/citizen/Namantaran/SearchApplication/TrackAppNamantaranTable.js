@@ -473,7 +473,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
             <div className="main-container">
                 <div className="page-content-wrapper">
                     <div className="search-header">
-                        <h2>Search Application</h2>
+                        <h2>Track Application</h2>
                     </div>
 
                     <div>
