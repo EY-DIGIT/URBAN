@@ -1,7 +1,9 @@
 
 import React, { useEffect, useState } from "react";
+import { useHistory, Link } from "react-router-dom";
 
 const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, removeUnit, styles, formErrors ,handleOwner,isNewOwner}) => {
+   const history = useHistory();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
@@ -111,6 +113,12 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
     }
   }, [isLoadingO, OccupancyData]);
 
+  const backClickSearch=()=>{
+    console.log("ABCDFH BILL BACK")
+      history.push(`/digit-ui/citizen/pt/namantaran/search`);
+      // /digit-ui/citizen/pt/namantaran/search
+  }
+
   return (
     <div style={{ marginTop: "1rem", borderRadius: '10px' }}>
       {/* <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
@@ -155,6 +163,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                      pointerEvents: "none", opacity: 0.6 
                     }}
                     value={unit.usageType}
                     onChange={(e) => handleUnitChange(index, "usageType", e.target.value)}
@@ -174,6 +183,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                          pointerEvents: "none", opacity: 0.6 
                     }}
                     value={unit.usageFactor}
                     onChange={(e) => handleUnitChange(index, "usageFactor", e.target.value)}
@@ -193,6 +203,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                          pointerEvents: "none", opacity: 0.6 
                     }}
                     value={unit.floorNo}
                     onChange={(e) => handleUnitChange(index, "floorNo", e.target.value)}
@@ -212,6 +223,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                          pointerEvents: "none", opacity: 0.6 
                     }}
                     value={unit.constructionType}
                     onChange={(e) => handleUnitChange(index, "constructionType", e.target.value)}
@@ -232,6 +244,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                          pointerEvents: "none", opacity: 0.6 
                     }}
                     placeholder={t("Enter")}
                     value={unit.area}
@@ -245,6 +258,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                          pointerEvents: "none", opacity: 0.6 
                     }}
                     value={unit.fromYear || ""}
                     onChange={(e) => {
@@ -270,6 +284,7 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
                       ...styles.select, appearance: "auto",
                       WebkitAppearance: "auto",
                       MozAppearance: "auto",
+                          pointerEvents: "none", opacity: 0.6 
                     }}
                     value={unit.toYear || ""}
                     onChange={(e) => handleUnitChange(index, "toYear", e.target.value)}
@@ -304,17 +319,17 @@ const PropertyDetailsTableSection = ({ t, unit, handleUnitChange, addUnit, remov
         </p>
       )}
 
-      <div style={{ textAlign: "right", marginTop: "0.5rem" }}>
+      {/* <div style={{ textAlign: "right", marginTop: "0.5rem" }}>
         <a href="#" style={styles.addMoreLink} onClick={(e) => { e.preventDefault(); addUnit(); }}>
           {t("Add more")}
         </a>
-      </div>
+      </div> */}
 
 
 
     {!isNewOwner?  <div style={buttonGroupStyle}>
                         <button
-                        //  onClick={handleClear}
+                         onClick={backClickSearch}
                           style={clearButtonStyle}>
                             {t("Back")}
                         </button>

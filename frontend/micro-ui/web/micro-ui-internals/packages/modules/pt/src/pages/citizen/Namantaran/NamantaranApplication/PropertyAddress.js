@@ -143,6 +143,8 @@ const PropertyAddress = ({
           value={addressDetails.doorNo}
           onChange={handleInputChange}
           placeholder={t("Enter")}
+           disabled
+            readonly
         />
         {formErrors?.doorNo && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.doorNo}</p>}
       </div>
@@ -158,6 +160,8 @@ const PropertyAddress = ({
           value={addressDetails.address}
           onChange={handleInputChange}
           placeholder={t("Enter")}
+           disabled
+            readonly
         />
         {formErrors?.address && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.address}</p>}
       </div>
@@ -173,6 +177,8 @@ const PropertyAddress = ({
           value={addressDetails.pincode}
           onChange={handleInputChange}
           placeholder={t("Enter")}
+           disabled
+            readonly
         />
         {formErrors?.pincode && <p style={{ color: "red", fontSize: "12px" }}>{formErrors.pincode}</p>}
       </div>
@@ -183,10 +189,13 @@ const PropertyAddress = ({
           {t("Zone")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
-          style={styles.widthInput}
+          // style={styles.widthInput}
+          style={{ ...styles.widthInput, pointerEvents: "none", opacity: 0.6 }}
           t={t}
           option={zones}
           selected={addressDetails.zone}
+           disabled
+            readonly
           select={(option) => {
             handleDropdownChange("zone", option);
 
@@ -218,9 +227,12 @@ const PropertyAddress = ({
           {t("Ward")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
-          style={styles.widthInput}
+          // style={styles.widthInput}
+          style={{ ...styles.widthInput, pointerEvents: "none", opacity: 0.6 }}
           t={t}
           option={wards}
+           disabled
+            readonly
           selected={addressDetails.ward}
           select={(option) => {
             handleDropdownChange("ward", option);
@@ -249,9 +261,12 @@ const PropertyAddress = ({
           {t("Colony")}<span className="mandatory" style={styles.mandatory}>*</span>
         </div>
         <Dropdown
-          style={styles.widthInput}
+          // style={styles.widthInput}
+          style={{ ...styles.widthInput, pointerEvents: "none", opacity: 0.6 }}
           t={t}
           option={colonies}
+           disabled
+            readonly
           selected={addressDetails.colony}
           select={(option) => {
             handleDropdownChange("colony", option);

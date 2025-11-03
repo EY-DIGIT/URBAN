@@ -283,7 +283,7 @@ export default {
     height: "35px",
     borderWidth: "1px",
     borderRadius: "6px",
-    // border: "1px solid #D9D9D9",
+    border: "1px solid #D2D2D280",
     // boxShadow: "0px 4px 4px 0px #00000040",
     // background: "#A3BBF347",
        background: "#D2D2D280",

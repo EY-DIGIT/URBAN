@@ -106,15 +106,19 @@ if (owner.aadhaar !== fixedAadhaar) {
                 selected={salutationOptions.find(opt => opt.code === owner.title)}
                 select={(val) => updateOwner(index, "title", val.code)}
                 optionKey="name"
-                style={styles.dropdown30}
+                // style={styles.dropdown30}
+
+                        style={{ ...styles.dropdown30, pointerEvents: "none",opacity: 0.6}}
                 placeholder={t("Mr")}
                 placeholderStyle={{ color: "#000" }}
+                disabled
               />
               <TextInput
                 style={styles.textBox}
                 placeholder={t("Enter")}
                 value={owner.name}
                 onChange={(e) => handleOwnerNameChange(index, "name", e.target.value)}
+                disabled
               />
             </div>
             {/* ✅ CHANGE THIS: Use the dynamic key */}
@@ -134,14 +138,17 @@ if (owner.aadhaar !== fixedAadhaar) {
                 selected={salutationOptionsHindi.find(opt => opt.code === owner.hindiTitle)}
                 select={(val) => updateOwner(index, "hindiTitle", val.code)}
                 optionKey="name"
-                style={styles.dropdown30}
+                // style={styles.dropdown30}
+                   style={{ ...styles.dropdown30, pointerEvents: "none",opacity: 0.6}}
                 placeholder={t("श्री")}
+                disabled
               />
               <TextInput
                 style={styles.textBox}
                 placeholder={t("यहाँ लिखें")}
                 value={owner.hindiName}
                 onChange={(e) => handleOwnerNameChange(index, "hindiName", e.target.value)}
+                disabled
               />
             </div>
             {/* ✅ CHANGE THIS: Use the dynamic key */}
@@ -196,7 +203,8 @@ if (owner.aadhaar !== fixedAadhaar) {
   }}
               optionKey="name"
               placeholder={t("Select")}
-              style={styles.widthInput}
+              // style={styles.widthInput}
+                      style={{ ...styles.widthInput, pointerEvents: "none",opacity: 0.6}}
             />
 
             {formErrors?.relationship && (
@@ -214,7 +222,9 @@ if (owner.aadhaar !== fixedAadhaar) {
               value={owner.fatherHusbandName}
               onChange={(e) => handleOwnerNameChange(index, "fatherHusbandName", e.target.value)}
               placeholder={t("Enter")}
-              disabled={owner.relationship === "Not applicable"}
+              // disabled={owner.relationship === "Not applicable"}
+              disabled
+              readonly
             />
   {owner.relationship==="Not applicable"?
          "":  <div>  {formErrors[`owner-${index}-fatherHusbandName`] && (
@@ -237,6 +247,7 @@ if (owner.aadhaar !== fixedAadhaar) {
               onChange={(e) => handleOwnerEmailChange(index, e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
+              disabled
             />
             {formErrors[`owner-${index}-email`] && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-email`]}</p>
@@ -252,6 +263,7 @@ if (owner.aadhaar !== fixedAadhaar) {
               onChange={(e) => handleOwnerContactChange(index, "mobile", e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
+              disabled
             />
             {formErrors[`owner-${index}-mobile`] && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-mobile`]}</p>
@@ -266,6 +278,7 @@ if (owner.aadhaar !== fixedAadhaar) {
               onChange={(e) => handleOwnerContactChange(index, "altNumber", e.target.value)}
               style={styles.widthInput}
               placeholder={t("Enter")}
+              disabled
             />
             {formErrors[`owner-${index}-altNumber`] && (
               <p style={{ color: "red", fontSize: "12px" }}>{formErrors[`owner-${index}-altNumber`]}</p>
@@ -319,8 +332,11 @@ if (owner.aadhaar !== fixedAadhaar) {
               value={owner.samagraID}
               onChange={(e) => updateOwner(index, "samagraID", e.target.value)}
               style={styles.widthInput}
-              disabled={owner.noSamagra === true}
+              // disabled={owner.noSamagra === true}
               placeholder={t("Enter")}
+               disabled
+              
+            readonly
             />
             <div style={{ marginTop: "4px" }}>
               <label style={{ fontSize: "14px" }}>
@@ -329,6 +345,8 @@ if (owner.aadhaar !== fixedAadhaar) {
                   checked={owner.noSamagra}
                   onChange={(e) => updateOwner(index, "noSamagra", e.target.checked)}
                   style={{ marginRight: "8px" }}
+                  readonly
+                  disabled
                 />
                 {t("I don't have Samagra ID")}
               </label>
@@ -354,8 +372,12 @@ if (owner.aadhaar !== fixedAadhaar) {
           <div style={styles.poppinsLabel}>
             {t("Property Category")} <span className="mandatory" style={styles.mandatory}>*</span>
           </div>
+
+       
+
           <Dropdown
-            style={styles.widthInput}
+            // style={styles.widthInput}
+            style={{ ...styles.widthInput, pointerEvents: "none",opacity: 0.6}}
             t={t}
             option={propertyCategoryOptions}
             
@@ -363,6 +385,8 @@ if (owner.aadhaar !== fixedAadhaar) {
             select={propertyCategoryInputChange}
             optionKey="name"
             placeholder={t("Select")}
+            disabled
+            readonly
           />
           {formErrors?.propertyCategoryInput && (
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
@@ -376,7 +400,8 @@ if (owner.aadhaar !== fixedAadhaar) {
             {t("Provide Ownership Details")} <span className="mandatory" style={styles.mandatory}>*</span>
           </div>
           <Dropdown
-            style={styles.widthInput}
+            // style={styles.widthInput}
+                    style={{ ...styles.widthInput, pointerEvents: "none",opacity: 0.6}}
             t={t}
             option={dropdownOptions}
             // selected={"ownershipType"}
@@ -384,6 +409,8 @@ if (owner.aadhaar !== fixedAadhaar) {
             select={handleOwnershipTypeChange}
             optionKey="name"
             placeholder={t("Select")}
+             disabled
+            readonly
           />
           {formErrors?.ownershipType && (
             <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
@@ -399,6 +426,7 @@ if (owner.aadhaar !== fixedAadhaar) {
             value={registryId}
             onChange={(e) => handleRestryIdChange(e.target.value)}
             style={styles.widthInput}
+            disabled
 
           />
           {formErrors?.registryId && (

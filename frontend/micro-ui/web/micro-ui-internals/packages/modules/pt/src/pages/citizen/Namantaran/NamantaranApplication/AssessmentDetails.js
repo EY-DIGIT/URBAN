@@ -39,13 +39,15 @@ const AssessmentDetailsSection = ({
       <div style={styles.flex30}>
         <div style={styles.poppinsLabel}>{t("Road Factor")}<span className="mandatory" style={styles.mandatory}>*</span></div>
         <Dropdown
-          style={styles.widthInput}
+          // style={styles.widthInput}
+          style={{ ...styles.widthInput, pointerEvents: "none", opacity: 0.6 }}
           t={t}
           option={RoadFactorList} // dynamic list
           selected={RoadFactorList.find(item => item.code === assessmentDetails?.roadFactor)}
           select={handleRoadFactorChange}
           optionKey="name"
           placeholder={t("Select")}
+          readonly
         />
         {formErrors?.roadFactor && (
           <p style={{ color: "red", fontSize: "12px" }}>{formErrors.roadFactor}</p>
@@ -74,6 +76,7 @@ const AssessmentDetailsSection = ({
           onChange={handleAssessmentInputChange}
           placeholder={t("Enter")}
           type="text"
+          disabled
         />
          {formErrors?.plotArea && (
           <p style={{ color: "red", fontSize: "12px" }}>{formErrors.plotArea}</p>

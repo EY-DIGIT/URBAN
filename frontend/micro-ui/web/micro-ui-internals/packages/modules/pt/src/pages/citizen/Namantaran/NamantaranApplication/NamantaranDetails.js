@@ -5,7 +5,8 @@ const NamantaranDetails = ({
   t,
   
   styles,
-  formErrors
+  formErrors,
+  namantaranPurposeInput,namantaranPurposeInputChange,propertyIdData
 }) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: RoadFactors, isLoading } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "RoadFactor");
@@ -59,14 +60,18 @@ const NamantaranDetails = ({
           style={styles.widthInput}
           t={t}
           option={ReasonForTransferList} // dynamic list
-        //   selected={RoadFactorList.find(item => item.code === assessmentDetails?.roadFactor)}
-        //   select={handleRoadFactorChange}
+     
+
+            selected={ReasonForTransferList.find(opt => opt.code === namantaranPurposeInput)}
+            select={namantaranPurposeInputChange}
           optionKey="name"
           placeholder={t("Select")}
         />
-        {formErrors?.roadFactor && (
-          <p style={{ color: "red", fontSize: "12px" }}>{formErrors.roadFactor}</p>
-        )}
+        {formErrors?.namantaranPurposeInput && (
+            <p style={{ color: "red", fontSize: "12px", marginTop: "4px" }}>
+              {formErrors.namantaranPurposeInput}
+            </p>
+          )}
       </div>
 
       {/* Property ID */}
@@ -75,9 +80,11 @@ const NamantaranDetails = ({
         <TextInput
           style={styles.widthInput}
           name="oldPropertyId"
-          // value={assessmentDetails.oldPropertyId}
+          value={propertyIdData}
           // onChange={handleAssessmentInputChange}
           placeholder={t("Enter")}
+          disabled
+          readonly
         />
       </div>
 
