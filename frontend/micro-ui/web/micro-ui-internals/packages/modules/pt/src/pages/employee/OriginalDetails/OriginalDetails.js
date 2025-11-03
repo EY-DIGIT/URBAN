@@ -24,7 +24,6 @@ const OriginalDetails = () => {
     generalDetails
   } = location.state || {};
 
-  console.log("All Owners Data in OriginalDetails:", generalDetails);
   // ✅ Filter only primary owners
   const primaryOwners = generalDetails?.owners;
   const address = generalDetails?.address || {};

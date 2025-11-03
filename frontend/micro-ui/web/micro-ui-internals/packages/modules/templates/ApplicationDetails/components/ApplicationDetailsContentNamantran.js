@@ -43,6 +43,7 @@ import AddressSection from "./Verifier/AddressSection";
 import { useState } from "react";
 import LocationDetails from "./LocationDetailss";
 import { useLocation, useHistory } from "react-router-dom";
+import { PaymentService } from "../../../../../packages/libraries/src/services/elements/Payment";
 function ApplicationDetailsContentVerifier({
   applicationDetails,
   workflowDetails,
@@ -60,7 +61,12 @@ function ApplicationDetailsContentVerifier({
   const { t } = useTranslation();
    const history = useHistory();
     const { data: storeData } = Digit.Hooks.useStore.getInitData();
+    
     const { stateInfo } = storeData || {};
+    const [billDemandDetails, setBillDemandDetails] = useState([]);
+  const [rajwadFees, setRajwadFees] = useState(null);
+  const [advertisementFees, setAdvertisementFees] = useState(null);
+
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
@@ -206,7 +212,53 @@ function ApplicationDetailsContentVerifier({
       return ""
     }
   }
-  console.log("applicationDetails", applicationDetails)
+  const tenantIdss = Digit.ULBService.getCurrentTenantId();
+useEffect(() => {
+    const fetchBillDetails = async () => {
+      try {
+        const businessService = "PT.MUTATION";
+        const { Demands } = await PaymentService.demandSearch(
+          tenantIdss,
+          applicationData?.acknowldgementNumber,
+          businessService
+        );
+
+        if (Demands?.length > 0) {
+          const demand = Demands[0];
+          const details = demand.demandDetails || [];
+
+          // 🔹 Namantran Fees (PT_MUTATION_FEE)
+          const mutationFee = details
+            .filter((d) => d.taxHeadMasterCode === "PT_MUTATION_FEE")
+            .reduce((sum, d) => sum + d.taxAmount, 0);
+
+          // 🔹 Rajwad Fees (sum of DOC, VIKRAY_PATRA, ABHILEKH)
+          const rajwadTotal = details
+            .filter((d) =>
+              [
+                "PT_MUTATION_FEE_REGISTRY_DOC",
+                "PT_MUTATION_FEE_REGISTRY_VIKRAY_PATRA",
+                "PT_MUTATION_FEE_REGISTRY_ABHILEKH",
+              ].includes(d.taxHeadMasterCode)
+            )
+            .reduce((sum, d) => sum + d.taxAmount, 0);
+
+          // 🔹 Advertisement Fees
+          const advertisementFee = details
+            .filter((d) => d.taxHeadMasterCode === "PT_MUTATION_FEE_ADVERTIESMENT")
+            .reduce((sum, d) => sum + d.taxAmount, 0);
+
+          setBillDemandDetails(mutationFee);
+          setRajwadFees(rajwadTotal);
+          setAdvertisementFees(advertisementFee);
+        }
+      } catch (err) {
+        console.error("Error fetching bill:", err);
+      }
+    };
+
+    fetchBillDetails();
+  }, [tenantIdss, applicationData]);
 
   const application = applicationDetails?.applicationData || {};
   const additionalDetailsT = applicationDetails?.additionalDetails || {};
@@ -279,16 +331,12 @@ function ApplicationDetailsContentVerifier({
   const displayEssentialTax = getEssentialTaxDisplay(application?.essentialTax);
 
   const [showFather, setShowFather] = useState("");
-  // console.log("DROPDOWNOPTION==",formErrors)
+ 
   const propertyCategoryOptions = (PropertyCategory || []).map((item) => ({
 
     code: item.code,
     name: t(item.name),
   }))
-
-  console.log("propertyCategoryOptions==", RoadFactorList);
-
-
 
 
   const [boundaryData, setBoundaryData] = useState(null);
@@ -301,9 +349,6 @@ function ApplicationDetailsContentVerifier({
       try {
         const tenantId = Digit.ULBService.getCurrentTenantId();
         const response = await Digit.LocationService.getRevenueLocalities(tenantId);
-
-        console.log("🔍 Raw TenantBoundary Response:", response?.TenantBoundary);
-
         const cityBoundary = response?.TenantBoundary?.[0]?.boundary?.[0];
         if (cityBoundary?.children?.length > 0) {
           setBoundaryData(cityBoundary);
@@ -385,16 +430,21 @@ function ApplicationDetailsContentVerifier({
     const tenantIdValid = tenantId && tenantId !== "undefined";
 
     if (propertyIdValid && tenantIdValid) {
-      console.log("✅ Fetching bill with:", {
-        propertyId: applicationData.propertyId,
-        tenantId,
-      });
+     ;
       fetchBill();
     }
   }, [applicationData?.propertyId, tenantId]);
 
   const [openIndex, setOpenIndex] = useState(0);
-
+   const handleSendCalculate = () => {
+    history.push({
+      pathname: "/digit-ui/employee/pt/CalculateFees",
+      state: {
+        generalDetails: application,
+        billAmount: billAmount,
+      },
+    });
+  };
   const items = [
     {
       title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Namantaran Application</h3></div>,
@@ -622,7 +672,7 @@ function ApplicationDetailsContentVerifier({
                   {(application?.units || []).map((unit, index) => {
 
                     const floor = floorList.find(f => f.code === unit?.floorNo.toString());
-                    console.log("FLOOR KYA AAYA=", floor);
+                 
 
                     return (
                       <tr key={index}>
@@ -799,20 +849,19 @@ function ApplicationDetailsContentVerifier({
             <tbody>
               {/* {unit.map((unit, index) => ( */}
               <tr >
-
                 <td style={styles.tableCell}>
                   {billAmount}
                 </td>
 
                 <td style={styles.tableCell}>
-                 null
+                 {rajwadFees}
                 </td>
 
                 <td style={styles.tableCell}>
-                null
+                {advertisementFees}
                 </td>
                 <td style={styles.tableCell}>
-                  <a href="/digit-ui/employee/pt/CalculateFees"><img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px", height: "30px" }} /></a>
+                  <div style={{cursor:"pointer"}} onClick={handleSendCalculate}><img src={stateInfo?.uiImageAssets?.action_icon} alt="Property" style={{ width: "20px", height: "30px" }} /></div>
                 </td>
 
               </tr>
@@ -826,6 +875,7 @@ function ApplicationDetailsContentVerifier({
             <TextInput
               //  value={propertyId}
               // onChange={handleRestryIdChange}
+              value={(billAmount || 0) + (rajwadFees || 0) + (advertisementFees || 0)}
               style={styles.widthInput}
 
             />
@@ -954,6 +1004,7 @@ function ApplicationDetailsContentVerifier({
       },
     });
   };
+
   return (
     <div >
       {/* For UM-4418 changes */}

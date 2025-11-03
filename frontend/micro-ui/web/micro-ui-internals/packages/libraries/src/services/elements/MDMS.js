@@ -403,6 +403,21 @@ const getPropertyEssentialTaxCriteria = (tenantId, moduleCode, type) => ({
     ],
   },
 });
+
+
+const getPropertyAdvertisementRatesCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [{ name: "AdvertisementRates" }],
+      },
+    ],
+  },
+});
+
 const getSubPropertyOwnerShipCategoryCriteria = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -1864,6 +1879,9 @@ export const MdmsService = {
   },
   getPropertyEssentialTax: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyEssentialTaxCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getPropertyAdvertisementRates: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getPropertyAdvertisementRatesCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getPropertySubOwnerShipCategory: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getSubPropertyOwnerShipCategoryCriteria(tenantId, moduleCode, type), moduleCode);
