@@ -621,16 +621,14 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         </td>
                                                         <td>
                                                             {/* {result.propertyId || result.uniqueId} */}
-                                                              {result.status === "ACTIVE" ? (
+                                                             
                                                 <a
                                                     href={`/digit-ui/employee/pt/PropertyNamantran/${result?.propertyId}`}
                                                     style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                                 >
                                                     {result?.propertyId}
                                                 </a>
-                                            ) : (
-                                                "--"
-                                            )}
+                                         
                                                             </td>
                                                         <td>
                                                             {result.owners ?
@@ -690,16 +688,14 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                                         </td>
                                                         <td>
                                                             {/* {item.propertyId || item.uniqueId} */}
-                                                            {item.status === "ACTIVE" ? (
+                                                           
                                                 <a
                                                     href={`/digit-ui/employee/pt/PropertyNamantran/${item?.propertyId}`}
                                                     style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                                 >
                                                     {item?.propertyId}
                                                 </a>
-                                            ) : (
-                                                "--"
-                                            )}
+                                         
                                                             </td>
                                                         <td>
                                                             {item.owners ?

@@ -78,16 +78,14 @@ const PTinboxTable = () => {
                                         <td style={cellStyle}>{applicationNo}</td>
                                         <td style={cellStyle}>
 
-                                            {status === "ACTIVE" ? (
+                                          
                                                 <a
                                                     href={`/digit-ui/employee/pt/PropertyNamantran/${propertyId}`}
                                                     style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
                                                 >
                                                     {propertyId}
                                                 </a>
-                                            ) : (
-                                                "--"
-                                            )}
+                                         
                                         </td>
                                         <td style={cellStyle}>{ownerNames}</td>
                                         <td style={cellStyle}>
