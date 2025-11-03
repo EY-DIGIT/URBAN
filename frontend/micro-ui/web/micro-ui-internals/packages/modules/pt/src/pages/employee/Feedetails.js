@@ -92,6 +92,7 @@ const CalculateFees = () => {
   };
 
   const handleAdChange = (field, value) => {
+    console.log("Ad Change:", field, value);
     setAdData((prev) => ({
       ...prev,
       [field]: value,
@@ -312,7 +313,7 @@ const CalculateFees = () => {
                   onChange={(e) => {
                     const selectedCode = e.target.value;
                     const selectedNewspaper = (Menu?.PropertyTax?.AdvertisementRates || []).find(
-                      (item) => item.code === selectedCode
+                      (item) => item.name === selectedCode
                     );
                     handleAdChange("newspaper", selectedCode);
                     handleAdChange("rate", selectedNewspaper?.rate || "");
