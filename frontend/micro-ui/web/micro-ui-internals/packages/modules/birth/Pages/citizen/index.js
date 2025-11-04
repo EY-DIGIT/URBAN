@@ -18,7 +18,7 @@ const App = () => {
   const SearchApplication = Digit?.ComponentRegistryService?.getComponent("SearchApplication");
   const NewbornDetailsSection = Digit?.ComponentRegistryService?.getComponent("NewbornDetailsSection");
   const DocumentsSection = Digit?.ComponentRegistryService?.getComponent("DocumentsSection");
-  const SuccessModal = Digit?.ComponentRegistryService?.getComponent("SuccessModal");
+  const SuccessModal = Digit?.ComponentRegistryService?.getComponent("Successmodal");
 
   const stateCode = Digit.ULBService.getStateId();
 
