@@ -596,6 +596,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
                                               <th className="backGround23">Payment Status</th>
                                             <th className="backGround23">Last Date for Objection</th>
                                             <th className="backGround23">Status</th>
+                                            <th className="backGround23"> Current Level</th>
                                             <th className="backGround23">Action</th>
                                         </tr>
                                     </thead>
@@ -656,6 +657,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
 
                                                             </span>
                                                         </td>
+                                                        <td>-</td>
                                                        <td>
                                                             <span className="link">
                                                                 <Link to={`/digit-ui/employee/pt/PropertyNamantran/${result.propertyId}`}>
@@ -724,6 +726,7 @@ const PTSearchApplication = ({ tenantId, isLoading, t = (text) => text, onSubmit
 
                                                             </span>
                                                         </td>
+                                                        <td></td>
                                                         <td>
                                                             <span className="link">
                                                                 <Link to={`/digit-ui/employee/pt/PropertyNamantran/${item.propertyId}`}>

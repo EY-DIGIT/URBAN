@@ -204,7 +204,8 @@ const CalculateFees = () => {
 
                     {/* Rate per page */}
                     <td style={styles.tableCell}>
-                      {doc.ratePerPage}
+                      {/* {doc.ratePerPage} */}
+                      INR 5/page
                     </td>
 
                     {/* Pages uploaded */}

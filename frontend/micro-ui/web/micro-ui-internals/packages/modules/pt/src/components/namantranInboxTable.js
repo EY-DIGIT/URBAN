@@ -54,7 +54,7 @@ const PTinboxTable = () => {
                             <th style={headerStyle}>Payment Status</th>
                             <th style={headerStyle}>Last Date for Objection</th>
                             <th style={headerStyle}>Status</th>
-
+                            <th style={headerStyle}>Current Level</th>
                             <th style={headerStyle}>Action</th>
                         </tr>
                     </thead>
@@ -78,21 +78,21 @@ const PTinboxTable = () => {
                                         <td style={cellStyle}>{applicationNo}</td>
                                         <td style={cellStyle}>
 
-                                          
-                                                <a
-                                                    href={`/digit-ui/employee/pt/PropertyNamantran/${propertyId}`}
-                                                    style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
-                                                >
-                                                    {propertyId}
-                                                </a>
-                                         
+
+                                            <a
+                                                href={`/digit-ui/employee/pt/PropertyNamantran/${propertyId}`}
+                                                style={{ color: "#1d70b8", textDecoration: "underline", cursor: "pointer" }}
+                                            >
+                                                {propertyId}
+                                            </a>
+
                                         </td>
                                         <td style={cellStyle}>{ownerNames}</td>
                                         <td style={cellStyle}>
                                             {t(applicationType) === "CREATE" ? "New Property" : t(applicationType)}
                                         </td>
-                                        <td style={{textAlign:"center"}}>-</td>
-                                        <td style={{textAlign:"center"}}>-</td>
+                                        <td style={{ textAlign: "center" }}>-</td>
+                                        <td style={{ textAlign: "center" }}>-</td>
                                         <td style={cellStyle}>  <span className={`status-badge status-${(status || '').toLowerCase().replace(/\s+/g, '')}`}>
                                             {/* {t(status && `WF_PT_${status}`) || status || "NA"} */}
                                             {status === "ACTIVE"
@@ -101,6 +101,7 @@ const PTinboxTable = () => {
                                                     ? "In Progress"
                                                     : t(status && `WF_PT_${status}`) || status || "--"}
                                         </span></td>
+                                        <td>-</td>
                                         <td style={cellStyle}>
                                             <a
                                                 href={`/digit-ui/employee/pt/PropertyNamantran/${propertyId}`}
