@@ -44,6 +44,7 @@ import { useState } from "react";
 import LocationDetails from "./LocationDetailss";
 import { useLocation, useHistory } from "react-router-dom";
 import { PaymentService } from "../../../../../packages/libraries/src/services/elements/Payment";
+import LatLong from "./LatLong";  
 function ApplicationDetailsContentVerifier({
   applicationDetails,
   workflowDetails,
@@ -906,7 +907,8 @@ useEffect(() => {
       title: <div ><h3 style={{ color: "#6B133F", fontWeight: "700" }}>Location Details</h3></div>,
       content:
         <div >
-          <LocationDetails latLong={address?.geoLocation} />
+          {/* <LocationDetails latLong={address?.geoLocation} /> */}
+          <LatLong applicationData={applicationData} />
         </div>
     },
     // {
