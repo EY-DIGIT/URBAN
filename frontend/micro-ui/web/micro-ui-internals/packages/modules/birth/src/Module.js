@@ -9,7 +9,7 @@ import { Header, PTIcon } from "@egovernments/digit-ui-react-components";
 import SearchApplication from "../components/SearchApplication.js";
 import NewbornDetailsSection from "../components/NewbornDetailsSection.js";
 import DocumentsSection from "../components/DocumentsSection.js";
-import SuccessModal from "../components/Successmodal.js";
+// import SuccessModal from "../components/Successmodal.js";
 //import ApplicationDetailsSection from "../components/Applicationdetailssection.jsx";
 
 console.log("Loaded Death Module");
@@ -118,7 +118,7 @@ const componentsToRegister = {
   SearchApplication,
   NewbornDetailsSection,
   DocumentsSection,
-  SuccessModal,
+  // SuccessModal,
   //ApplicationDetailsSection,
 };
 

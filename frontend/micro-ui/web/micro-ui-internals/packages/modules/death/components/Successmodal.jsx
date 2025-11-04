@@ -1,6 +1,6 @@
 import React from "react";
 
-const SuccessModal = ({ t, applicationNumber, applicationId, onClose }) => {
+const Successmodal = ({ t, applicationNumber, applicationId, onClose }) => {
     return (
         <div style={styles.overlay}>
             <div style={styles.modal}>
@@ -149,4 +149,4 @@ if (typeof document !== "undefined") {
     document.head.appendChild(style);
 }
 
-export default SuccessModal;
+export default Successmodal;
